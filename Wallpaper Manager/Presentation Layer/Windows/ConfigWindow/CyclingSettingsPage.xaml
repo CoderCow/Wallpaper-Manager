@@ -1,0 +1,217 @@
+<!-- 
+  THIS FILE IS PROVIDED UNDER THE TERMS OF THE CREATIVE COMMONS PUBLIC LICENSE WHICH CAN BE FOUND IN THE PROVIDED License.txt 
+  FILE. IT IS PROTECTED BY COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS AUTHORIZED UNDER ITS 
+  LICENSE OR COPYRIGHT LAW IS PROHIBITED.
+  
+  Written by David-Kay Posmyk (KayPosmyk@gmx.de)
+-->
+  
+<Page 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:Common.Presentation="clr-namespace:Common.Presentation;assembly=Common4.0"
+  xmlns:Common.Windows.Controls="clr-namespace:Common.Windows.Controls;assembly=Common4.0"
+  
+  xmlns:local="clr-namespace:WallpaperManager.Presentation"
+  xmlns:Data="clr-namespace:WallpaperManager.Data"
+  
+  x:Class="WallpaperManager.Presentation.CyclingSettingsPage"
+  Title="Cycling"
+  SnapsToDevicePixels="True"
+>
+  <Page.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="..\..\Resources\Dialog.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      
+      <!-- Image Resources -->
+      <BitmapImage x:Key="Images.MultiMonitorBehaviour1" UriSource="..\..\Resources\Images\Multi Monitor Behaviour 1.png" />
+      <BitmapImage x:Key="Images.MultiMonitorBehaviour2" UriSource="..\..\Resources\Images\Multi Monitor Behaviour 2.png" />
+      <BitmapImage x:Key="Images.MultiMonitorBehaviour3" UriSource="..\..\Resources\Images\Multi Monitor Behaviour 3.png" />
+      
+      <!-- ToolTips -->
+      <ToolTip x:Key="ToolTips.AutocycleInterval">
+        <local:ToolTipData
+          Title="Autocycle Interval"
+          Content="If random cycling is enabled, this value defines the time between each random cycle."
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.LastActiveListSize">
+        <local:ToolTipData
+          Title="Memorize Last Cycled Wallpapers"
+          Content="If random cycling is enabled, this value defines how many wallpapers are memorized to prevent them from being cycled over and over again."
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="For example: If this value is set to 30% and wallpaper A had just been applied then at least 30% of all your wallpapers have to be cycled until wallpaper A can be applied again."
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.CycleAfterDisplaySettingsChanged">
+        <local:ToolTipData
+          Title="Cycle After Display Settings Changed"
+          Content="If checked, Wallpaper Mananger will immediately perform a random cycle after the Windows Display Settings (like the resolution) have been changed."
+        />
+      </ToolTip>
+    </ResourceDictionary>
+  </Page.Resources>
+  
+  <!-- Taken Alt+X Keys: G,C,M,I,E,D,A,O,S -->
+  <StackPanel Orientation="Vertical">
+    <GroupBox Header="General">
+      <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+          <Label Content="_Interval for automatic cycling: " Target="{Binding ElementName=txtAutocycleInterval}" />
+          
+          <Common.Windows.Controls:TimeSpanTextBox 
+            Name="txtAutocycleInterval"
+            MinWidth="65" 
+            MinValue="00:00:10" MaxValue="02.00:00:00" DragValueSmall="00:00:10" DragValueLarge="00:01:00"
+            VerticalAlignment="Center" 
+            ToolTip="{StaticResource ToolTips.AutocycleInterval}"
+          >
+            <TextBox.Text>
+              <Binding Path="Configuration.AutocycleInterval" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                <Binding.ValidationRules>
+                  <Common.Presentation:TimeSpanValidationRule MinValue="00:00:10" MaxValue="02.00:00:00" />
+                </Binding.ValidationRules>
+              </Binding>
+            </TextBox.Text>
+          </Common.Windows.Controls:TimeSpanTextBox>
+        </StackPanel>
+        
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
+          <Label 
+            Content="M_emorize "
+            Target="{Binding ElementName=txtLastActiveListSize}" 
+            Grid.Column="0" Grid.Row="3"
+          />
+          <Common.Windows.Controls:NumericTextBox 
+            Name="txtLastActiveListSize"
+            MinValue="1" MaxValue="80"
+            DragValueSmall="1" DragValueLarge="5"
+            AllowsRationalNumber="True"
+            MaxWidth="50" MinWidth="40" 
+            VerticalAlignment="Center"
+            ToolTip="{StaticResource ToolTips.LastActiveListSize}"
+          >
+            <TextBox.Text>
+              <Binding Path="Configuration.LastActiveListSize" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                <Binding.ValidationRules>
+                  <Common.Presentation:NumberValidationRule AllowsRationalNumber="True" MinValue="1" MaxValue="80" />
+                </Binding.ValidationRules>
+              </Binding>
+            </TextBox.Text>
+          </Common.Windows.Controls:NumericTextBox>
+          
+          <TextBlock VerticalAlignment="Center" Text=" % of the last wallpapers cycled." />
+        </StackPanel>
+        
+        <CheckBox 
+          Content="Cycle immediately when the _display settings have changed."
+          IsChecked="{Binding Configuration.CycleAfterDisplaySettingsChanged}"
+          ToolTip="{StaticResource ToolTips.CycleAfterDisplaySettingsChanged}"
+        />
+      </StackPanel>
+    </GroupBox>
+
+    <GroupBox Header="Multi-Monitor Behaviour" IsEnabled="{x:Static Data:AppEnvironment.IsMultiscreenSystem}">
+      <StackPanel Orientation="Vertical">
+        <TextBlock Margin="0,0,0,4" Text="Use the following method when appling single screen wallpapers: " />
+        
+        <StackPanel Orientation="Horizontal">
+          <Image Width="100" Height="160" Margin="3,3,6,2">
+            <Image.Style>
+              <Style TargetType="{x:Type Image}">
+                <Style.Triggers>
+                  <DataTrigger 
+                    Binding="{Binding Configuration.WallpaperChangeType}" 
+                    Value="{x:Static Data:WallpaperChangeType.ChangeAll}"
+                  >
+                    <Setter Property="Source" Value="{StaticResource Images.MultiMonitorBehaviour1}" />
+                  </DataTrigger>
+                  <DataTrigger 
+                    Binding="{Binding Configuration.WallpaperChangeType}" 
+                    Value="{x:Static Data:WallpaperChangeType.ChangeOneByOne}"
+                  >
+                    <Setter Property="Source" Value="{StaticResource Images.MultiMonitorBehaviour3}" />
+                  </DataTrigger>
+                  <DataTrigger 
+                    Binding="{Binding Configuration.WallpaperChangeType}" 
+                    Value="{x:Static Data:WallpaperChangeType.ChangeAllCloned}"
+                  >
+                    <Setter Property="Source" Value="{StaticResource Images.MultiMonitorBehaviour2}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </Image.Style>
+          </Image>
+          
+          <StackPanel Orientation="Vertical">
+            <RadioButton 
+              Name="rdbWallpaperChangeType_ChangeAll"
+              IsChecked="{Binding 
+                Path=Configuration.WallpaperChangeType, 
+                Converter={StaticResource Global.IsValueAsBooleanConverter}, 
+                ConverterParameter={x:Static Data:WallpaperChangeType.ChangeAll},
+                Mode=TwoWay
+              }"
+              Margin="2,4,2,4"
+            >
+              <TextBlock>
+                <Run>Change All Monitors</Run><LineBreak />
+                <Label 
+                  Content="Uses different wallpapers for _all monitors on each cycle."
+                  Padding="0" 
+                  Target="{Binding ElementName=rdbWallpaperChangeType_ChangeAll}" 
+                />
+              </TextBlock>
+            </RadioButton>
+            
+            <RadioButton
+              Name="rdbWallpaperChangeType_ChangeOneByOne"
+              IsChecked="{Binding 
+                Path=Configuration.WallpaperChangeType, 
+                Converter={StaticResource Global.IsValueAsBooleanConverter}, 
+                ConverterParameter={x:Static Data:WallpaperChangeType.ChangeOneByOne},
+                Mode=TwoWay
+              }"
+              Margin="2,4,2,4"
+            >
+              <TextBlock>
+                <Run>Change One Monitor</Run><LineBreak />
+                <Label 
+                  Content="Changes the wallpaper of only _one monitor on each cycle."
+                  Padding="0" 
+                  Target="{Binding ElementName=rdbWallpaperChangeType_ChangeOneByOne}"
+                />
+              </TextBlock>
+            </RadioButton>
+            
+            <RadioButton
+              Name="rdbWallpaperChangeType_ChangeAllCloned"
+              IsChecked="{Binding 
+                Path=Configuration.WallpaperChangeType, 
+                Converter={StaticResource Global.IsValueAsBooleanConverter}, 
+                ConverterParameter={x:Static Data:WallpaperChangeType.ChangeAllCloned},
+                Mode=TwoWay
+              }"
+              Margin="2,4,2,4"
+            >
+              <TextBlock>
+                <Run>Clone All Monitors</Run><LineBreak />
+                <Label 
+                  Content="Uses the _same wallpaper for any monitor on each cycle."
+                  Padding="0" 
+                  Target="{Binding ElementName=rdbWallpaperChangeType_ChangeAllCloned}"
+                />
+              </TextBlock>
+            </RadioButton>
+          </StackPanel>
+        </StackPanel>
+      </StackPanel>
+    </GroupBox>
+  </StackPanel>
+</Page>

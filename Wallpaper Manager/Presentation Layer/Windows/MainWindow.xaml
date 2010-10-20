@@ -1,0 +1,784 @@
+<!-- 
+  THIS FILE IS PROVIDED UNDER THE TERMS OF THE CREATIVE COMMONS PUBLIC LICENSE WHICH CAN BE FOUND IN THE PROVIDED License.txt 
+  FILE. IT IS PROTECTED BY COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS AUTHORIZED UNDER ITS 
+  LICENSE OR COPYRIGHT LAW IS PROHIBITED.
+  
+  Written by David-Kay Posmyk (KayPosmyk@gmx.de)
+-->
+  
+<Window 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+  xmlns:Common.IO="clr-namespace:Common.IO;assembly=Common" 
+  xmlns:Common.Presentation="clr-namespace:Common.Presentation;assembly=Common4.0" 
+  xmlns:Common.Windows.Controls="clr-namespace:Common.Windows.Controls;assembly=Common4.0" 
+  
+  xmlns:local="clr-namespace:WallpaperManager.Presentation" 
+  xmlns:PresentationInterface="clr-namespace:WallpaperManager.ApplicationInterface"
+  
+  x:Class="WallpaperManager.Presentation.MainWindow" 
+  Title="Wallpaper Manager" 
+  Width="670" 
+  MinWidth="670" 
+  Height="500" 
+  MinHeight="300" 
+  WindowStartupLocation="CenterScreen" 
+  SnapsToDevicePixels="True" 
+  AllowDrop="True" 
+  DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+>
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="..\Resources\Theme.GradualBlack.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+
+      <!-- Image Resources -->
+      <BitmapImage x:Key="Icons.Category" UriSource="../Resources/Icons/Category.png" />
+      <BitmapImage x:Key="Icons.SynchronizedCategory" UriSource="../Resources/Icons/Synchronized Category.png" />
+      <BitmapImage x:Key="Icons.Remove" UriSource="../Resources/Icons/Remove.png" />
+      <BitmapImage x:Key="Icons.Rename" UriSource="../Resources/Icons/Rename.png" />
+      <BitmapImage x:Key="Icons.StartCycling" UriSource="../Resources/Icons/Start Cycling.png" />
+      <BitmapImage x:Key="Icons.StopCycling" UriSource="../Resources/Icons/Stop Cycling.png" />
+      <BitmapImage x:Key="Icons.Wallpaper" UriSource="../Resources/Icons/Wallpaper.png" />
+      <BitmapImage x:Key="Images.ImageError" UriSource="../Resources/Images/Image Load Error.png" />
+
+      <!-- Converters / Validation Rules -->
+      <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+      <local:WallpaperPlacementConverter x:Key="WallpaperPlacementConverter" />
+      <Common.Presentation:BooleanToStringConverter x:Key="BooleanToYesNoConverter" TrueString="Yes" FalseString="No" />
+      <Common.Presentation:BooleanToStringConverter 
+        x:Key="BooleanToEnabledDisabledConverter" TrueString="Enabled" FalseString="Disabled"
+      />
+      <local:WallpaperFileNameToStringConverter x:Key="WallpaperFileNameToStringConverter" />
+      <local:WallpaperVMlistConverter x:Key="WallpaperVMlistConverter" />
+    
+      <!-- ToolTips -->
+      <ToolTip x:Key="ToolTips.Cycling.Start">
+        <local:ToolTipData
+          Title="Start Autocycling of Wallpapers"
+          Content="Starts the automatic cycling process of wallpapers. (Hotkeys: F3)"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Cycling.Stop">
+        <local:ToolTipData
+          Title="Stops Autocycling of Wallpapers"
+          Content="Stops the automatic cycling process of wallpapers. (Hotkeys: F4)"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Cycling.CycleNext">
+        <local:ToolTipData
+          Title="Cycle Next Wallpaper"
+          Content="Applies the next wallpaper on the Windows Desktop. (Hotkeys: F5)"
+        />
+      </ToolTip>
+      
+      <!-- Category Related -->
+      <ToolTip x:Key="ToolTips.Categories.AddCategoryOrSyncFolder">
+        <local:ToolTipData
+          Title="Add Wallpaper Category"
+          Content="Adds a new Wallpaper Category to the list. (Hotkeys: Ctrl+Q)"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="Hold the Shift-Key to add a Synchronized Folder."
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Categories.AddCategory">
+        <local:ToolTipData
+          Title="Add Wallpaper Category"
+          Content="Adds a new Wallpaper Category to the list. (Hotkeys: Ctrl+Q)"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Categories.AddSynchronizedFolder">
+        <local:ToolTipData
+          Title="Add Synchronized Folder"
+          Content="Adds a new Synchronized Folder to the list."
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="A Synchronized Folder observes a specified directory of the file system for changes and synchronizes its content with the wallpaper list."
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Categories.Rename">
+        <local:ToolTipData
+          Title="Rename Wallpaper Category"
+          Content="Renames the selected Wallpaper Category. (Hotkeys: F2 or Ctrl+R)"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Categories.Remove">
+        <local:ToolTipData
+          Title="Remove Wallpaper Category"
+          Content="Removes the selected Wallpaper Category. (Hotkeys: Delete)"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="Hold the Shift-Key to remove without confirmation dialog."
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Categories.ConfigureWallpaperDefaultSettings">
+        <local:ToolTipData
+          Title="Configure Wallpaper Default Settings"
+          Content="Configures the default settings used for wallpapers added to the selected Wallpaper Category."
+        />
+      </ToolTip>
+      
+      <!-- Wallpaper Related -->
+      <ToolTip x:Key="ToolTips.Wallpaper.AddWallpaper">
+        <local:ToolTipData
+          Title="Add Wallpaper(s)"
+          Content="Adds new wallpapers to the list. (Hotkeys: Ctrl+W)"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="If the selected Wallpaper Category is a Synchronized Folder then the Wallpaper Image will be copied into it."
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Wallpaper.UseAsWallpaper">
+        <local:ToolTipData
+          Title="Use as Wallpaper"
+          Content="Apply the selected wallpapers on the Windows Desktop."
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Wallpaper.OpenFolder">
+        <local:ToolTipData
+          Title="Open Wallpaper's Folder"
+          Content="Opens the containing folder of the selected wallpaper(s) in Windows Explorer."
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Wallpaper.Configure">
+        <local:ToolTipData
+          Title="Configure Wallpaper(s)"
+          Content="Changes the configuration settings of the selected wallpapers. (Hotkeys: Enter)"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Wallpaper.Remove">
+        <local:ToolTipData
+          Title="Remove Wallpaper(s)"
+          Content="Removes the selected wallpapers from list. (Hotkey: Delete)"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Wallpaper.RemovePhsysically">
+        <local:ToolTipData
+          Title="Remove Wallpaper(s) from Hard Disk"
+          Content="Remove the selected wallpapers and their assigned physical image files. (Hotkey: Shift+Delete)"
+          NoteIcon="{StaticResource Global.Icons.Warning}"
+          NoteText="The images won't be moved to the recycle bin and will be deleted permanently!"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Wallpaper.ImageError">
+        <local:ToolTipData
+          Title="Wallpaper Image Error"
+          Content="An error occured when trying to read the wallpaper's image."
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.SynchronizedCategory">
+        <local:ToolTipData Title="Synchronized Folder" Content="{Binding Path=Category.SynchronizedDirectory}" />
+      </ToolTip>
+      
+      <!-- Other ToolTips -->
+      <ToolTip x:Key="ToolTips.Tools.Configure">
+        <local:ToolTipData
+          Title="Configure Wallpaper Manager"
+          Content="Configures Wallpaper Mananger. (Hotkey: F10)"
+        />
+      </ToolTip>
+      
+      <!-- Styles / Templates -->
+      <DataTemplate DataType="{x:Type PresentationInterface:WallpaperCategoryVM}">
+        <StackPanel MinHeight="24" Orientation="Horizontal">
+          <StackPanel.InputBindings>
+            <MouseBinding MouseAction="LeftDoubleClick" Command="{x:Static local:MainWindow.RenameCategoryCommand}" />  
+          </StackPanel.InputBindings>
+          
+          <CheckBox Margin="4" VerticalAlignment="Center" IsChecked="{Binding Path=Category.IsActivated, Mode=TwoWay}" />
+          
+          <Image Margin="4,4,2,4" VerticalAlignment="Center" >
+            <Image.Style>
+              <Style TargetType="{x:Type Image}">
+                <Setter Property="Source" Value="{StaticResource Icons.Category}" />
+                
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding Path=IsSynchronizedCategory}" Value="True">
+                    <Setter Property="Source" Value="{StaticResource Icons.SynchronizedCategory}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </Image.Style>
+          </Image>
+          
+          <TextBlock Margin="2,4,2,4" VerticalAlignment="Center" Text="{Binding Path=Category.Name}" />
+          
+          <StackPanel.Style>
+            <Style TargetType="{x:Type StackPanel}">
+              <Style.Resources>
+                <!-- Define a new empty Style to override the ToolTip Style defined in the global resources. -->
+                <Style TargetType="{x:Type ToolTip}" />
+              </Style.Resources>
+            
+              <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsSynchronizedCategory}" Value="True">
+                  <Setter Property="ToolTip" Value="{Binding Path=Category.SynchronizedDirectoryPath}" />
+                </DataTrigger>
+              </Style.Triggers>
+            </Style>
+          </StackPanel.Style>
+        </StackPanel>
+      </DataTemplate>
+
+      <DataTemplate DataType="{x:Type PresentationInterface:WallpaperVM}">
+        <Border Name="brdBackground">
+        <Grid Margin="4,6,8,6" VerticalAlignment="Center">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="60" MaxWidth="60" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="100" /> <!-- TODO: Do not use fixed size for Columns which contain text -->
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+          
+          <Grid.InputBindings>
+            <MouseBinding MouseAction="LeftDoubleClick" Command="{x:Static local:MainWindow.WallpaperClickActionCommand}" />
+          </Grid.InputBindings>
+
+          <CheckBox 
+            Margin="0,2,2,2"
+            VerticalAlignment="Center" 
+            IsChecked="{Binding Path=Wallpaper.IsActivated, Mode=TwoWay}" 
+            Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"
+          />
+
+          <Image 
+            Name="imgThumbnail"
+            Source="{Binding Path=Thumbnail, ValidatesOnDataErrors=True}" 
+            Width="60"
+            Height="40"
+            Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"
+          >
+            <Validation.ErrorTemplate>
+              <ControlTemplate />
+            </Validation.ErrorTemplate>
+          </Image>
+          
+          <TextBlock 
+            Text="{Binding Path=Wallpaper.ImagePath, Converter={StaticResource WallpaperFileNameToStringConverter}}"
+            HorizontalAlignment="Left"
+            TextWrapping="NoWrap"
+            TextTrimming="CharacterEllipsis"
+            Width="220"
+            MaxWidth="220"
+            Margin="4,0,0,0" 
+            Grid.Column="2" Grid.Row="0" 
+          />
+          <TextBlock Margin="2,0,2,0" Grid.Column="3" Grid.Row="0">
+            <!-- 
+              Note: The reason why TextBlock instances were used here instead of Run instaces is
+              because Run objects doesn't support any click events so our doubleclick input binding for 
+              the item wouldn't work properly.
+            -->
+            <TextBlock Text="Priority: " />
+            <TextBlock Text="{Binding Path=Wallpaper.Priority}" />
+          </TextBlock>
+
+          <TextBlock Margin="2,0,2,0" Grid.Column="2" Grid.Row="2">
+            <TextBlock Text="Placement: " Margin="2,0,2,0"  />
+            <TextBlock Text="{Binding Path=Wallpaper.Placement, Converter={StaticResource WallpaperPlacementConverter}}" />
+          </TextBlock>
+          <TextBlock Margin="2,0,2,0" Grid.Column="3" Grid.Row="2">
+            <TextBlock Text="Multiscreen: " />
+            <TextBlock Text="{Binding Path=Wallpaper.IsMultiscreen, Converter={StaticResource BooleanToYesNoConverter}}" />
+          </TextBlock>
+        </Grid>
+        </Border>
+        
+        <DataTemplate.Triggers>
+          <DataTrigger Binding="{Binding Path=IsApplied}" Value="True">
+            <Setter TargetName="brdBackground" Property="Background" Value="#22FF0000" />
+          </DataTrigger>
+
+          <Trigger SourceName="imgThumbnail" Property="Validation.HasError" Value="True">
+            <Setter TargetName="imgThumbnail" Property="Stretch" Value="None" />
+            <Setter TargetName="imgThumbnail" Property="Source" Value="{StaticResource Images.ImageError}" />
+            <Setter TargetName="imgThumbnail" Property="ToolTip" Value="{StaticResource ToolTips.Wallpaper.ImageError}" />
+          </Trigger>
+        </DataTemplate.Triggers>
+      </DataTemplate>
+    </ResourceDictionary>
+  </Window.Resources>
+
+  <Window.Style>
+    <StaticResource ResourceKey="Theme.GradualBlack" />
+  </Window.Style>
+
+  <Window.CommandBindings>
+    <!-- Category Command Bindings -->
+    <!-- 
+      The Add CategoryOrSyncFolder-Command adds a synchronized folder instead of an usual category when the user holds the 
+      Shift-Key.
+    -->
+    <CommandBinding 
+      Command="{x:Static local:MainWindow.AddCategoryOrSyncFolderCommand}" 
+      CanExecute="AddCategoryOrSyncFolderCommand_CanExecute" Executed="AddCategoryOrSyncFolderCommand_Executed" 
+    />
+    
+    <CommandBinding 
+      Command="{x:Static local:MainWindow.AddCategoryCommand}" 
+      CanExecute="AddCategoryCommand_CanExecute" Executed="AddCategoryCommand_Executed" 
+    />
+    
+    <CommandBinding 
+      Command="{x:Static local:MainWindow.AddSynchronizedCategoryCommand}" 
+      CanExecute="AddSynchronizedCategoryCommand_CanExecute" Executed="AddSynchronizedCategoryCommand_Executed" 
+    />
+
+    <CommandBinding 
+      Command="{x:Static local:MainWindow.ConfigureWallpaperDefaultSettingsCommand}" 
+      CanExecute="ConfigureWallpaperDefaultSettingsCommand_CanExecute" 
+      Executed="ConfigureWallpaperDefaultSettingsCommand_Executed"
+    />
+
+    <CommandBinding 
+      Command="{x:Static local:MainWindow.RenameCategoryCommand}" 
+      CanExecute="RenameCategoryCommand_CanExecute" Executed="RenameCategoryCommand_Executed" 
+    />
+    
+    <CommandBinding 
+      Command="{x:Static local:MainWindow.RemoveCategoryCommand}" 
+      CanExecute="RemoveCategoryCommand_CanExecute" Executed="RemoveCategoryCommand_Executed" 
+    />
+    
+    <!-- Wallpaper Command Bindings -->
+    <CommandBinding
+      Command="{x:Static local:MainWindow.WallpaperClickActionCommand}" 
+      CanExecute="WallpaperClickActionCommand_CanExecute" Executed="WallpaperClickActionCommand_Executed" 
+    />
+    
+    <CommandBinding 
+      Command="{x:Static local:MainWindow.AddWallpapersCommand}" 
+      CanExecute="AddWallpapersCommand_CanExecute" Executed="AddWallpapersCommand_Executed" 
+    />
+    
+    <CommandBinding 
+      Command="{x:Static local:MainWindow.ApplyWallpapersCommand}" 
+      CanExecute="ApplyWallpapersCommand_CanExecute" Executed="ApplyWallpapersCommand_Executed" 
+    />
+
+    <CommandBinding 
+      Command="{x:Static local:MainWindow.OpenWallpapersFolderCommand}" 
+      CanExecute="OpenWallpapersFolderCommand_CanExecute" Executed="OpenWallpapersFolderCommand_Executed" 
+    />
+
+    <CommandBinding 
+      Command="{x:Static local:MainWindow.ConfigureWallpapersCommand}" 
+      CanExecute="ConfigureWallpapersCommand_CanExecute" Executed="ConfigureWallpapersCommand_Executed" 
+    />
+
+    <CommandBinding 
+      Command="{x:Static local:MainWindow.RemoveWallpapersCommand}" 
+      CanExecute="RemoveWallpapersCommand_CanExecute" Executed="RemoveWallpapersCommand_Executed" 
+    />
+
+    <CommandBinding 
+      Command="{x:Static local:MainWindow.RemoveWallpapersPhysicallyCommand}" 
+      CanExecute="RemoveWallpapersPhysicallyCommand_CanExecute" Executed="RemoveWallpapersPhysicallyCommand_Executed" 
+    />
+  </Window.CommandBindings>
+  
+  <Window.InputBindings>
+    <KeyBinding Key="Escape" Command="{Binding ApplicationVM.CloseCommand}" />
+    <KeyBinding Key="F3" Command="{Binding ApplicationVM.WallpaperChangerVM.StartCyclingCommand}" />
+    <KeyBinding Key="F4" Command="{Binding ApplicationVM.WallpaperChangerVM.StopCyclingCommand}" />
+    <KeyBinding Key="F5" Command="{Binding ApplicationVM.WallpaperChangerVM.CycleNextCommand}" />
+    <KeyBinding Modifiers="Ctrl" Key="Q" Command="{x:Static local:MainWindow.AddSynchronizedCategoryCommand}" />
+    <KeyBinding Modifiers="Ctrl" Key="W" Command="{x:Static local:MainWindow.AddWallpapersCommand}" />
+    <KeyBinding Key="Enter" Command="{x:Static local:MainWindow.ConfigureWallpapersCommand}" />
+    <KeyBinding Key="F10" Command="{Binding ApplicationVM.ShowConfigurationCommand}" />
+  </Window.InputBindings>
+  
+  <Grid HorizontalAlignment="Stretch">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition MinWidth="100" Width="200" MaxWidth="200" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    
+    <DockPanel LastChildFill="True" Margin="0,0,0,4" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+      <ToolBar MinHeight="27" DockPanel.Dock="Right">
+        <Button 
+          Command="{x:Static local:MainWindow.AddCategoryOrSyncFolderCommand}" 
+          ToolTip="{StaticResource ToolTips.Categories.AddCategoryOrSyncFolder}"
+        >
+          <StackPanel Orientation="Horizontal">
+            <Image Source="{StaticResource Icons.Category}" />
+            <TextBlock Text="Add Category" Margin="4,0,0,0" Foreground="#FFEEEEEE" />
+          </StackPanel>
+        </Button>
+        
+        <Button 
+          Command="{x:Static local:MainWindow.AddWallpapersCommand}" ToolTip="{StaticResource ToolTips.Wallpaper.AddWallpaper}"
+        >
+          <StackPanel Orientation="Horizontal">
+            <Image Source="{StaticResource Icons.Wallpaper}" />
+            
+            <TextBlock Text="Add Wallpaper(s)" Margin="4,0,0,0">
+              <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="Foreground" Value="#FFEEEEEE" />
+                  
+                  <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                      <Setter Property="Foreground" Value="#FFAAAAAA" />
+                    </Trigger>
+                  </Style.Triggers>
+                </Style>
+              </TextBlock.Style>
+            </TextBlock>
+          </StackPanel>
+        </Button>
+      </ToolBar>
+
+      <Menu>
+        <MenuItem Header="C_ycling">
+          <MenuItem 
+            Header="_Start Autocycling" 
+            Command="{Binding ApplicationVM.WallpaperChangerVM.StartCyclingCommand}"
+            ToolTip="{StaticResource ToolTips.Cycling.Start}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Icons.StartCycling}" />
+            </MenuItem.Icon>
+            
+            <MenuItem.Style>
+              <Style TargetType="{x:Type MenuItem}">
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding Path=ApplicationVM.WallpaperChangerVM.IsAutocycling}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </MenuItem.Style>
+          </MenuItem>
+
+          <MenuItem 
+            Header="Sto_p Autocycling" 
+            Command="{Binding ApplicationVM.WallpaperChangerVM.StopCyclingCommand}"
+            ToolTip="{StaticResource ToolTips.Cycling.Stop}"
+            Visibility="{Binding
+              Path=ApplicationVM.WallpaperChangerVM.IsAutocycling, Converter={StaticResource BooleanToVisibilityConverter}
+            }"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Icons.StopCycling}" />
+            </MenuItem.Icon>
+          </MenuItem>
+          
+          <Separator />
+
+          <MenuItem 
+            Header="Cycle _Next" 
+            Command="{Binding ApplicationVM.WallpaperChangerVM.CycleNextCommand}"
+            ToolTip="{StaticResource ToolTips.Cycling.CycleNext}"
+          />
+        </MenuItem>
+
+        <MenuItem Header="_Category">
+          <MenuItem 
+            Header="_Add Category..." 
+            Command="{x:Static local:MainWindow.AddCategoryCommand}"
+            ToolTip="{StaticResource ToolTips.Categories.AddCategory}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Icons.Category}" />
+            </MenuItem.Icon>
+          </MenuItem>
+          
+          <MenuItem 
+            Header="Add _Synchronized Folder..." 
+            Command="{x:Static local:MainWindow.AddSynchronizedCategoryCommand}"
+            ToolTip="{StaticResource ToolTips.Categories.AddSynchronizedFolder}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Icons.SynchronizedCategory}" />
+            </MenuItem.Icon>
+          </MenuItem>
+
+          <Separator />
+
+          <MenuItem 
+            Header="Wallpaper Default Settings..." 
+            Command="{x:Static local:MainWindow.ConfigureWallpaperDefaultSettingsCommand}"
+            ToolTip="{StaticResource ToolTips.Categories.ConfigureWallpaperDefaultSettings}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Global.Icons.Configuration}" />
+            </MenuItem.Icon>
+          </MenuItem>
+          
+          <Separator />
+
+          <MenuItem 
+            Header="Re_name Category..." 
+            Command="{x:Static local:MainWindow.RenameCategoryCommand}"
+            ToolTip="{StaticResource ToolTips.Categories.Rename}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Icons.Rename}" />
+            </MenuItem.Icon>
+          </MenuItem>
+
+          <MenuItem 
+            Header="_Remove Category" 
+            Command="{x:Static local:MainWindow.RemoveCategoryCommand}"
+            ToolTip="{StaticResource ToolTips.Categories.Remove}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Icons.Remove}" />
+            </MenuItem.Icon>
+          </MenuItem>
+        </MenuItem>
+
+        <MenuItem Header="_Wallpaper">
+          <MenuItem 
+            Header="_Add Wallpaper(s)..." 
+            Command="{x:Static local:MainWindow.AddWallpapersCommand}"
+            ToolTip="{StaticResource ToolTips.Wallpaper.AddWallpaper}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Icons.Wallpaper}" />
+            </MenuItem.Icon>
+          </MenuItem>
+
+          <Separator />
+
+          <MenuItem 
+            Header="_Use as Wallpaper" 
+            Command="{x:Static local:MainWindow.ApplyWallpapersCommand}"
+            ToolTip="{StaticResource ToolTips.Wallpaper.UseAsWallpaper}"
+          />
+
+          <MenuItem 
+            Header="Open Wallpaper's Folder" 
+            Command="{x:Static local:MainWindow.OpenWallpapersFolderCommand}" 
+            ToolTip="{StaticResource ToolTips.Wallpaper.OpenFolder}"
+          />
+
+          <Separator />
+
+          <MenuItem 
+            Header="Configure Wallpaper(s)..." 
+            Command="{x:Static local:MainWindow.ConfigureWallpapersCommand}"
+            ToolTip="{StaticResource ToolTips.Wallpaper.Configure}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Global.Icons.Configuration}" />
+            </MenuItem.Icon>
+          </MenuItem>
+          
+          <Separator />
+
+          <MenuItem 
+            Header="_Remove Wallpaper(s)" 
+            Command="{x:Static local:MainWindow.RemoveWallpapersCommand}"
+            ToolTip="{StaticResource ToolTips.Wallpaper.Remove}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Icons.Remove}" />
+            </MenuItem.Icon>
+          </MenuItem>
+          
+          <MenuItem
+            Header="Remove Wallpaper(s) from Hard _Disk" 
+            Command="{x:Static local:MainWindow.RemoveWallpapersPhysicallyCommand}"
+            ToolTip="{StaticResource ToolTips.Wallpaper.RemovePhsysically}"
+          />
+        </MenuItem>
+
+        <MenuItem Header="_Tools">
+          <MenuItem 
+            Header="_Options..." 
+            Command="{Binding ApplicationVM.ShowConfigurationCommand}"
+            ToolTip="{StaticResource ToolTips.Tools.Configure}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Global.Icons.Configuration}" />
+            </MenuItem.Icon>
+          </MenuItem>
+        </MenuItem>
+
+        <MenuItem Header="Help">
+          <MenuItem Header="Changelog..." Command="{Binding ApplicationVM.ShowChangelogCommand}" />
+
+          <MenuItem Header="Check for Updates..." Command="{Binding ApplicationVM.UpdateCheckCommand}" />
+          
+          <Separator />
+
+          <MenuItem Header="About..." Command="{Binding ApplicationVM.ShowAboutCommand}">
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Global.Icons.About}" />
+            </MenuItem.Icon>
+          </MenuItem>
+        </MenuItem>
+      </Menu>
+    </DockPanel>
+
+    <ListBox 
+      Margin="4,2,4,0"
+      ItemsSource="{Binding Path=ApplicationVM.WallpaperCategoryCollectionVM}"
+      SelectedIndex="{Binding Path=ApplicationVM.WallpaperCategoryCollectionVM.SelectedCategoryVMIndex, Mode=TwoWay}"
+      Grid.Column="0" Grid.Row="1"
+    >
+      <ListBox.InputBindings>
+        <KeyBinding Key="Space" Command="{Binding ApplicationVM.WallpaperCategoryCollectionVM.ActivateDeactivateSelectedCommand}" />
+        <KeyBinding Modifiers="Ctrl" Key="R" Command="{x:Static local:MainWindow.RenameCategoryCommand}" />
+        <KeyBinding Key="F2" Command="{x:Static local:MainWindow.RenameCategoryCommand}" />
+        <KeyBinding Key="Delete" Command="{x:Static local:MainWindow.RemoveCategoryCommand}" />
+        <KeyBinding Modifiers="Shift" Key="Delete" Command="{x:Static local:MainWindow.RemoveCategoryCommand}" />
+      </ListBox.InputBindings>
+      
+      <ListBox.ContextMenu>
+        <ContextMenu>
+          <MenuItem 
+            Header="Wallpaper Default Settings..." 
+            Command="{x:Static local:MainWindow.ConfigureWallpaperDefaultSettingsCommand}"
+            ToolTip="{StaticResource ToolTips.Categories.ConfigureWallpaperDefaultSettings}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Global.Icons.Configuration}" />
+            </MenuItem.Icon>
+          </MenuItem>
+        
+          <Separator />
+        
+          <MenuItem 
+            Header="Rename Category" 
+            Command="{x:Static local:MainWindow.RenameCategoryCommand}"
+            ToolTip="{StaticResource ToolTips.Categories.Rename}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Icons.Rename}" />
+            </MenuItem.Icon>
+          </MenuItem>
+          
+          <MenuItem 
+            Header="Remove Category" 
+            Command="{x:Static local:MainWindow.RemoveCategoryCommand}"
+            ToolTip="{StaticResource ToolTips.Categories.Remove}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Icons.Remove}" />
+            </MenuItem.Icon>
+          </MenuItem>
+        </ContextMenu>
+      </ListBox.ContextMenu>
+    </ListBox>
+    
+    <GridSplitter Width="4" Background="Transparent" Grid.Column="0" Grid.Row="1" />
+    
+    <Common.Windows.Controls:ListBoxEx
+      x:Name="lbxWallpaper"
+      ItemsSource="{Binding ApplicationVM.WallpaperCategoryCollectionVM.SelectedCategoryVM}"
+      SelectionMode="Extended"
+      SelectedItems="{Binding 
+        ApplicationVM.WallpaperCategoryCollectionVM.SelectedCategoryVM.SelectedWallpaperVMs, 
+        Mode=TwoWay, 
+        Converter={StaticResource WallpaperVMlistConverter}
+      }"
+      Margin="0,2,4,0"
+      Grid.Column="1" Grid.Row="1"
+    >
+      <ListBox.InputBindings>
+        <KeyBinding Key="Space" Command="{Binding ApplicationVM.WallpaperCategoryCollectionVM.ActivateDeactivateSelectedCommand}" />
+        <KeyBinding Key="Delete" Command="{x:Static local:MainWindow.RemoveWallpapersCommand}" />
+        <KeyBinding 
+          Modifiers="Shift" Key="Delete" Command="{x:Static local:MainWindow.RemoveWallpapersPhysicallyCommand}" 
+        />
+      </ListBox.InputBindings>
+      
+      <ListBox.ContextMenu>
+        <ContextMenu>
+          <MenuItem 
+            Header="Use as Wallpaper" 
+            Command="{x:Static local:MainWindow.ApplyWallpapersCommand}"
+            ToolTip="{StaticResource ToolTips.Wallpaper.UseAsWallpaper}"
+          />
+
+          <MenuItem 
+            Header="Open Wallpaper's Folder" 
+            Command="{x:Static local:MainWindow.OpenWallpapersFolderCommand}" 
+            ToolTip="{StaticResource ToolTips.Wallpaper.OpenFolder}"
+          />
+
+          <Separator />
+
+          <MenuItem 
+            Header="Configure Wallpaper..." 
+            Command="{x:Static local:MainWindow.ConfigureWallpapersCommand}"
+            ToolTip="{StaticResource ToolTips.Wallpaper.Configure}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Global.Icons.Configuration}" />
+            </MenuItem.Icon>
+          </MenuItem>
+          
+          <Separator />
+          
+          <MenuItem 
+            Header="Remove Wallpaper" 
+            Command="{x:Static local:MainWindow.RemoveWallpapersCommand}"
+            ToolTip="{StaticResource ToolTips.Wallpaper.Remove}"
+          >
+            <MenuItem.Icon>
+              <Image Source="{StaticResource Icons.Remove}" />
+            </MenuItem.Icon>
+          </MenuItem>
+          
+          <MenuItem
+            Header="Remove Wallpaper from Hard Disk" 
+            Command="{x:Static local:MainWindow.RemoveWallpapersPhysicallyCommand}"
+            ToolTip="{StaticResource ToolTips.Wallpaper.RemovePhsysically}"
+          />
+        </ContextMenu>
+      </ListBox.ContextMenu>
+    </Common.Windows.Controls:ListBoxEx>
+
+    <StatusBar Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2">
+      <StatusBarItem>
+        <TextBlock Margin="0,0,10,0">
+          <Run Text="Autocycling: " />
+          <TextBlock 
+            Text="{Binding
+              Path=ApplicationVM.WallpaperChangerVM.IsAutocycling, Converter={StaticResource BooleanToEnabledDisabledConverter}
+            }" 
+          />
+        </TextBlock>
+      </StatusBarItem>
+    
+      <StatusBarItem>
+        <TextBlock Margin="0,0,10,0">
+          <Run Text="Wallpapers: " />
+          <TextBlock Text="{Binding Path=ApplicationVM.WallpaperCategoryCollectionVM.Categories.AllWallpapersCount}" />
+        </TextBlock>
+      </StatusBarItem>
+    
+      <StatusBarItem>
+        <TextBlock Margin="0,0,10,0">
+          <Run Text="Selected: " />
+          <TextBlock Text="{Binding Path=ApplicationVM.WallpaperCategoryCollectionVM.SelectedCategoryVM.SelectedWallpaperVMs.Count}" />
+        </TextBlock>
+      </StatusBarItem>
+    </StatusBar>
+  </Grid>
+</Window>

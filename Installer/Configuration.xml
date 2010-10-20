@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WallpaperManagerConfiguration Version="1.0" xmlns="WallpaperManager.Configuration">
+  <General>
+    <CycleAfterStartup>False</CycleAfterStartup>
+    <TerminateAfterStartup>False</TerminateAfterStartup>
+    <StartAutoCyclingAfterStartup>False</StartAutoCyclingAfterStartup>
+    <AutoCycleInterval>00:00:30</AutoCycleInterval>
+    <WallpaperChangeType>ChangeAll</WallpaperChangeType>
+    <MinimizeAfterStart>False</MinimizeAfterStart>
+  </General>
+  <WallpaperCategories />
+</WallpaperManagerConfiguration>

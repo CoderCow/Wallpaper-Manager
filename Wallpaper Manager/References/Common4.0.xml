@@ -1,0 +1,1699 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Common4.0</name>
+    </assembly>
+    <members>
+        <member name="T:Common.Windows.Controls.ListBoxEx">
+            <summary>
+              Extended <see cref="T:System.Windows.Controls.ListBox"/> control with a bindable 
+              <see cref="P:Common.Windows.Controls.ListBoxEx.SelectedItems">SelectedItems property</see>.
+            </summary>
+            <remarks>
+              This extended version of the <see cref="T:System.Windows.Controls.ListBox"/> control allows to bind a collection to the 
+              <see cref="P:Common.Windows.Controls.ListBoxEx.SelectedItems">SelectedItems property</see>.
+            </remarks>
+            <threadsafety static="false" instance="false"/>
+        </member>
+        <member name="F:Common.Windows.Controls.ListBoxEx.SelectedItemsProperty">
+            <summary>
+              Identifies the <see cref="P:Common.Windows.Controls.ListBoxEx.SelectedItems"/> dependency property. 
+            </summary>
+            <value>
+              The identifier for the <see cref="P:Common.Windows.Controls.ListBoxEx.SelectedItems"/> dependency property.
+            </value>
+        </member>
+        <member name="M:Common.Windows.Controls.ListBoxEx.OnSelectedItemsChanged">
+            <summary>
+              Invoked when the <see cref="P:Common.Windows.Controls.ListBoxEx.SelectedItems"/> dependency property is changed.
+            </summary>
+        </member>
+        <member name="M:Common.Windows.Controls.ListBoxEx.OnSelectionChanged(System.Windows.Controls.SelectionChangedEventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="P:Common.Windows.Controls.ListBoxEx.SelectedItems">
+            <summary>
+              Gets or sets the currently selected items. This is a dependency property.
+            </summary>
+            <value>
+              A collection of the currently selected items.
+            </value>
+            <returns>
+              Returns a collection of the currently selected items.
+            </returns>
+        </member>
+        <member name="T:Common.Windows.Controls.DragableTextBoxBase`1">
+            <summary>
+              Extended <see cref="T:System.Windows.Controls.TextBox"/> which allows to change the value using mouse-dragging.
+            </summary>
+            <typeparam name="ValueType">
+              The type of the containing value.
+            </typeparam>
+            <inheritdoc/>
+        </member>
+        <member name="F:Common.Windows.Controls.DragableTextBoxBase`1.MinValueProperty">
+            <summary>
+              Identifies the <see cref="P:Common.Windows.Controls.DragableTextBoxBase`1.MinValue"/> dependency property. 
+            </summary>
+        </member>
+        <member name="F:Common.Windows.Controls.DragableTextBoxBase`1.MaxValueProperty">
+            <summary>
+              Identifies the <see cref="P:Common.Windows.Controls.DragableTextBoxBase`1.MaxValue"/> dependency property. 
+            </summary>
+        </member>
+        <member name="F:Common.Windows.Controls.DragableTextBoxBase`1.DragValueSmallProperty">
+            <summary>
+              Identifies the <see cref="P:Common.Windows.Controls.DragableTextBoxBase`1.DragValueSmall"/> dependency property. 
+            </summary>
+        </member>
+        <member name="F:Common.Windows.Controls.DragableTextBoxBase`1.DragValueLargeProperty">
+            <summary>
+              Identifies the <see cref="P:Common.Windows.Controls.DragableTextBoxBase`1.DragValueLarge"/> dependency property. 
+            </summary>
+        </member>
+        <member name="F:Common.Windows.Controls.DragableTextBoxBase`1.value">
+            <summary>
+              <inheritdoc cref="P:Common.Windows.Controls.DragableTextBoxBase`1.Value" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Windows.Controls.DragableTextBoxBase`1.allowedInputExpression">
+            <summary>
+              <inheritdoc cref="P:Common.Windows.Controls.DragableTextBoxBase`1.AllowedInputExpression" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Windows.Controls.DragableTextBoxBase`1.lastDragPoint">
+            <summary>
+              The last position of the current drag process.
+            </summary>
+        </member>
+        <member name="F:Common.Windows.Controls.DragableTextBoxBase`1.isDragging">
+            <summary>
+              <c>true</c> if a mouse dragging is actually in process; otherwise <c>false</c>.
+            </summary>
+        </member>
+        <member name="F:Common.Windows.Controls.DragableTextBoxBase`1.DragStartEvent">
+            <summary>
+              Identifies the <see cref="E:Common.Windows.Controls.DragableTextBoxBase`1.DragStart"/> <see cref="T:System.Windows.RoutedEvent">Routed Event</see>.
+            </summary>
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.OnDragStartEvent">
+            <summary>
+             Invoked when an unhandled <see cref="E:Common.Windows.Controls.DragableTextBoxBase`1.DragStart"/> <see cref="T:System.Windows.RoutedEvent">Routed Event</see> reaches an element 
+             in its route that is derived from this class. Implement this method to add class handling for this event.
+            </summary>
+        </member>
+        <member name="F:Common.Windows.Controls.DragableTextBoxBase`1.DragEndEvent">
+            <summary>
+              Identifies the <see cref="E:Common.Windows.Controls.DragableTextBoxBase`1.DragEnd"/> <see cref="T:System.Windows.RoutedEvent">Routed Event</see>.
+            </summary>
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.OnDragEndEvent">
+            <summary>
+             Invoked when an unhandled <see cref="E:Common.Windows.Controls.DragableTextBoxBase`1.DragEnd"/> <see cref="T:System.Windows.RoutedEvent">Routed Event</see> reaches an element 
+             in its route that is derived from this class. Implement this method to add class handling for this event.
+            </summary>
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.#ctor">
+            <summary>
+              Initializes a new instance of the <see cref="T:Common.Windows.Controls.DragableTextBoxBase`1"/> class.
+            </summary>
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.OnPreviewTextInput(System.Windows.Input.TextCompositionEventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.OnMouseDown(System.Windows.Input.MouseButtonEventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.OnMouseMove(System.Windows.Input.MouseEventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.OnMouseUp(System.Windows.Input.MouseButtonEventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.OnMouseEnter(System.Windows.Input.MouseEventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.TryParseFromString(System.String,`0@)">
+            <summary>
+              Converts a string to the given <typeparamref name="ValueType" />.
+            </summary>
+            <param name="stringValue">
+              The string value.
+            </param>
+            <returns>
+              The converted <typeparamref name="ValueType" />.
+            </returns>
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.IncreaseValue(`0)">
+            <summary>
+              Increases the value by the given amount.
+            </summary>
+            <param name="increaseBy">
+              The amount of how much the value should be increased.
+            </param>
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.DecreaseValue(`0)">
+            <summary>
+              Decreases the value by the given amount.
+            </summary>
+            <param name="decreaseBy">
+              The amount of how much the value should be decreased.
+            </param>
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.OnMinValueChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+              Occurs when <see cref="P:Common.Windows.Controls.DragableTextBoxBase`1.MinValue"/> has changed.
+              Sets <see cref="P:Common.Windows.Controls.DragableTextBoxBase`1.Value"/> to <see cref="F:Common.Windows.Controls.DragableTextBoxBase`1.MinValueProperty"/> if the new min value is too small.
+            </summary>
+            <param name="sender">
+              The object of which the property has changed.
+            </param>
+            <param name="e">
+              The <see cref="T:System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.
+            </param>
+        </member>
+        <member name="M:Common.Windows.Controls.DragableTextBoxBase`1.OnMaxValueChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+              Occurs when <see cref="P:Common.Windows.Controls.DragableTextBoxBase`1.MaxValue"/> has changed.
+              Sets <see cref="P:Common.Windows.Controls.DragableTextBoxBase`1.Value"/> to <see cref="F:Common.Windows.Controls.DragableTextBoxBase`1.MaxValueProperty"/> if the new max value is too large.
+            </summary>
+            <param name="sender">
+              The object of which the property has changed.
+            </param>
+            <param name="e">
+              The <see cref="T:System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.
+            </param>
+        </member>
+        <member name="P:Common.Windows.Controls.DragableTextBoxBase`1.Value">
+            <summary>
+              Gets or sets the current value.
+            </summary>
+            <value>
+              The current value.
+            </value>
+        </member>
+        <member name="P:Common.Windows.Controls.DragableTextBoxBase`1.MinValue">
+            <summary>
+              Gets or sets the minimum allowed value for this text box.
+              This is a <see cref="T:System.Windows.DependencyProperty">Dependency Property</see>.
+            </summary>
+            <value>
+              The minimum allowed value for this text box.
+            </value>
+        </member>
+        <member name="P:Common.Windows.Controls.DragableTextBoxBase`1.MaxValue">
+            <summary>
+              Gets or sets the maximum allowed value for this text box.
+              This is a <see cref="T:System.Windows.DependencyProperty">Dependency Property</see>.
+            </summary>
+            <value>
+              The maximum allowed value for this text box.
+            </value>
+        </member>
+        <member name="P:Common.Windows.Controls.DragableTextBoxBase`1.DragValueSmall">
+            <summary>
+              Gets or sets the small value with which <see cref="P:Common.Windows.Controls.DragableTextBoxBase`1.Value"/> is changed when dragging.
+              This is a <see cref="T:System.Windows.DependencyProperty">Dependency Property</see>.
+            </summary>
+            <value>
+              The small value with which <see cref="P:Common.Windows.Controls.DragableTextBoxBase`1.Value"/> is changed when dragging.
+            </value>
+        </member>
+        <member name="P:Common.Windows.Controls.DragableTextBoxBase`1.DragValueLarge">
+            <summary>
+              Gets or sets the large value with which <see cref="P:Common.Windows.Controls.DragableTextBoxBase`1.Value"/> is changed when dragging.
+              This is a <see cref="T:System.Windows.DependencyProperty">Dependency Property</see>.
+            </summary>
+            <value>
+              The small value with which <see cref="P:Common.Windows.Controls.DragableTextBoxBase`1.Value"/> is changed when dragging.
+            </value>
+        </member>
+        <member name="P:Common.Windows.Controls.DragableTextBoxBase`1.AllowedInputExpression">
+            <summary>
+              Gets or sets the regular expression for the allowed input.
+            </summary>
+            <value>
+              The regular expression for the allowed input.
+            </value>
+        </member>
+        <member name="E:Common.Windows.Controls.DragableTextBoxBase`1.DragStart">
+            <summary>
+              Occurs when the user starts a drag process.
+            </summary>
+        </member>
+        <member name="E:Common.Windows.Controls.DragableTextBoxBase`1.DragEnd">
+            <summary>
+              Occurs when the user ends a drag process.
+            </summary>
+        </member>
+        <member name="T:Common.ComponentModel.LightPropertyBinding">
+            <summary>
+              Binds data of one or more properties between two objects.
+            </summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="F:Common.ComponentModel.LightPropertyBinding.bindings">
+            <summary>
+              <inheritdoc cref="P:Common.ComponentModel.LightPropertyBinding.Bindings" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.#cctor">
+            <summary>
+              Initializes static members of the <see cref="T:Common.ComponentModel.LightPropertyBinding">PropertySynchronizer Class</see>.
+            </summary>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.Register(System.ComponentModel.INotifyPropertyChanged,System.Object,System.Collections.Generic.ICollection{Common.ComponentModel.LightBoundProperty})">
+            <summary>
+              Registeres a new light property binding for the given <see cref="T:Common.ComponentModel.LightBoundProperty"/> objects.
+            </summary>
+            <inheritdoc cref="M:Common.ComponentModel.LightPropertyBinding.#ctor(System.ComponentModel.INotifyPropertyChanged,System.Object,System.Collections.Generic.ICollection{Common.ComponentModel.LightBoundProperty})"/>
+            
+            <overloads>
+              <summary>
+                Registers a light property binding.
+              </summary>
+            </overloads>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.Register(System.ComponentModel.INotifyPropertyChanged,System.Object,Common.ComponentModel.LightBoundProperty)">
+            <summary>
+              Registeres a new light property binding for the given property.
+            </summary>
+            <inheritdoc/>
+            <param name="property">
+              The property to be bound.
+            </param>
+            <exception cref="T:System.ArgumentException">
+              The given property is not bindable on the <paramref name="source"/> or <paramref name="target"/> object.
+            </exception>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.Register(System.ComponentModel.INotifyPropertyChanged,System.Object,System.String)">
+            <summary>
+              Registeres a new light property binding for the given property.
+            </summary>
+            <inheritdoc/>
+            <param name="propertyName">
+              The property name to be bound. Has to be equal on the <paramref name="source"/> and <param name="target"/> object.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+              <paramref name="source"/> or <paramref name="target"/> or <paramref name="propertyName"/> is <c>null</c>.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+              <paramref name="propertyName"/> is empty.
+            </exception>
+            <inheritdoc cref="M:Common.ComponentModel.LightPropertyBinding.Register(System.ComponentModel.INotifyPropertyChanged,System.Object,Common.ComponentModel.LightBoundProperty)" select="exception"/>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.Register(System.ComponentModel.INotifyPropertyChanged,System.Object)">
+            <summary>
+              Registeres a new light property binding for all bindable properties with the same name on a source and target type.
+            </summary>
+            <inheritdoc />
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.DeregisterAll(System.ComponentModel.INotifyPropertyChanged,System.Object)">
+            <summary>
+              Deregisters all properties bound to a specific source and target.
+            </summary>
+            <param name="source">
+              The source object of the binding. Set to <c>null</c> to unbind all properties bound to <paramref name="target"/>.
+            </param>
+            <param name="target">
+              The destination object of the binding. Set to <c>null</c> to unbind all properties bound to <paramref name="source"/>.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+              <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.
+            </exception>
+            
+            <overloads>
+              <summary>
+                Deregisters all properties bound to a specific source, target or both.
+              </summary>
+            </overloads>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.DeregisterAll(System.ComponentModel.INotifyPropertyChanged)">
+            <inheritdoc />
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.DeregisterAll(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="F:Common.ComponentModel.LightPropertyBinding.source">
+            <summary>
+              <inheritdoc cref="P:Common.ComponentModel.LightPropertyBinding.Source" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.ComponentModel.LightPropertyBinding.target">
+            <summary>
+              <inheritdoc cref="P:Common.ComponentModel.LightPropertyBinding.Target" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.ComponentModel.LightPropertyBinding.propertyData">
+            <summary>
+              <inheritdoc cref="P:Common.ComponentModel.LightPropertyBinding.PropertyData" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.ComponentModel.LightPropertyBinding.isRegistered">
+            <summary>
+              <inheritdoc cref="P:Common.ComponentModel.LightPropertyBinding.IsRegistered" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.#ctor(System.ComponentModel.INotifyPropertyChanged,System.Object,System.Collections.Generic.ICollection{Common.ComponentModel.LightBoundProperty})">
+            <summary>
+              Initializes a new instance of the <see cref="T:Common.ComponentModel.LightPropertyBinding">PropertySynchronizer Class</see>.
+            </summary>
+            <param name="source">
+              <inheritdoc cref="P:Common.ComponentModel.LightPropertyBinding.Source" select="../value/node()"/>
+            </param>
+            <param name="target">
+              <inheritdoc cref="P:Common.ComponentModel.LightPropertyBinding.Target" select="../value/node()"/>
+            </param>
+            <param name="properties">
+              The set of <see cref="T:Common.ComponentModel.LightBoundProperty"/> instances describing the properties to be bound. Set to <c>null</c> to
+              bind all properties with the same name.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+              <paramref name="source"/> or <paramref name="target"/> or <paramref name="properties"/> is <c>null</c>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+              A given property in the <paramref name="properties"/> is not bindable on the <paramref name="source"/> or 
+              <paramref name="target"/> object.
+            </exception>
+            <seealso cref="T:Common.ComponentModel.LightBoundProperty">LightBoundProperty Structure</seealso>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.IsPropertyBindable(System.Reflection.PropertyInfo,System.Boolean,System.Boolean)">
+            <summary>
+              Checks whether a properties value can be get or set by reflection.
+            </summary>
+            <param name="propertyInfo">
+              The reflected <see cref="T:System.Reflection.PropertyInfo"/> instance used to check the property.
+            </param>
+            <param name="checkGet">
+              A <see cref="T:System.Boolean"/> indicating whether the properties Get-Accessor should be checked.
+            </param>
+            <param name="checkSet">
+              A <see cref="T:System.Boolean"/> indicating whether the properties Set-Accessor should be checked.
+            </param>
+            <returns>
+              A <see cref="T:System.Boolean"/> indicating whether the properies value can be get or set by reflection.
+            </returns>
+            <seealso cref="T:System.Reflection.PropertyInfo">PropertyInfo Class</seealso>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.UpdateTargetNow">
+            <summary>
+              Immediately sets all property values for the <see cref="P:Common.ComponentModel.LightPropertyBinding.Target"/> object equal to the respective property values of 
+              the <see cref="P:Common.ComponentModel.LightPropertyBinding.Source"/> object.
+            </summary>
+            <inheritdoc select="exception[@cref=&quot;InvalidOperationException&quot;]"/>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.UpdateTargetNow(Common.ComponentModel.LightPropertyBinding.BoundPropertyData)">
+            <summary>
+              Immediately sets the value of the given property for the <see cref="P:Common.ComponentModel.LightPropertyBinding.Target"/> object equal to the respective property 
+              value of the <see cref="P:Common.ComponentModel.LightPropertyBinding.Source"/> object.
+            </summary>
+            <param name="propertyBinding">
+              The property binding to synchronize.
+            </param>
+            <exception cref="T:System.InvalidOperationException">
+              This binding is not registered or an error occured while synchronizing a value.
+            </exception>
+            
+            <overloads>
+              <summary>
+                Immediately sets property values for the <see cref="P:Common.ComponentModel.LightPropertyBinding.Target"/> object equal to the respective property values of 
+                the <see cref="P:Common.ComponentModel.LightPropertyBinding.Source"/> object.
+              </summary>
+            </overloads>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.UpdateTargetNow(System.String)">
+            <inheritdoc/>
+            <param name="sourcePropertyName">
+              The name of the bound property on the <see cref="P:Common.ComponentModel.LightPropertyBinding.Source"/> object.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+              <paramref name="sourcePropertyName"/> is <c>null</c>.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+              There is no property with the name <paramref name="sourcePropertyName"/> bound on the <see cref="P:Common.ComponentModel.LightPropertyBinding.Source"/> object.
+            </exception>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.Deregister">
+            <summary>
+              Deregisters the property binding.
+            </summary>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.ReceiveWeakEvent(System.Type,System.Object,System.EventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="P:Common.ComponentModel.LightPropertyBinding.Bindings">
+            <summary>
+              Gets the collection of registered <see cref="T:Common.ComponentModel.LightPropertyBinding"/> instances.
+            </summary>
+            <value>
+              The collection of registered <see cref="T:Common.ComponentModel.LightPropertyBinding"/> instances.
+            </value>
+        </member>
+        <member name="P:Common.ComponentModel.LightPropertyBinding.Source">
+            <summary>
+              Gets the first (or source) object to be synchronized.
+            </summary>
+            <value>
+              The first (or source) object to be synchronized.
+            </value>
+        </member>
+        <member name="P:Common.ComponentModel.LightPropertyBinding.Target">
+            <summary>
+              Gets the first (or source) object to be synchronized.
+            </summary>
+            <value>
+              The first (or source) object to be synchronized.
+            </value>
+        </member>
+        <member name="P:Common.ComponentModel.LightPropertyBinding.PropertyData">
+            <summary>
+              Gets the collection containing the <see cref="T:Common.ComponentModel.LightPropertyBinding.BoundPropertyData"/> instances holding the property data needed for
+              the reflection and binding process.
+            </summary>
+            <value>
+              The collection containing the <see cref="T:Common.ComponentModel.LightPropertyBinding.BoundPropertyData"/> instances holding the property data needed for
+              the reflection and binding process.
+            </value>
+            <seealso cref="T:Common.ComponentModel.LightBoundProperty">LightBoundProperty Structure</seealso>
+        </member>
+        <member name="P:Common.ComponentModel.LightPropertyBinding.IsRegistered">
+            <summary>
+              Gets a <see cref="T:System.Boolean"/> indicating whether the binding is registered or not.
+            </summary>
+            <value>
+              Indicates whether the binding is registered or not.
+            </value>
+        </member>
+        <member name="F:Common.ComponentModel.LightPropertyBinding.BoundPropertyData.sourceInfo">
+            <summary>
+              <inheritdoc cref="P:Common.ComponentModel.LightPropertyBinding.BoundPropertyData.SourceInfo" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.ComponentModel.LightPropertyBinding.BoundPropertyData.targetInfo">
+            <summary>
+              <inheritdoc cref="P:Common.ComponentModel.LightPropertyBinding.BoundPropertyData.TargetInfo" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.ComponentModel.LightPropertyBinding.BoundPropertyData.#ctor(System.Reflection.PropertyInfo,System.Reflection.PropertyInfo)">
+            <summary>
+              Initializes a new instance of the <see cref="T:Common.ComponentModel.LightPropertyBinding.BoundPropertyData">BoundPropertyData Class</see>.
+            </summary>
+            <param name="sourceInfo">
+              <inheritdoc cref="P:Common.ComponentModel.LightPropertyBinding.BoundPropertyData.SourceInfo" select="../value/node()"/>
+            </param>
+            <param name="targetInfo">
+              <inheritdoc cref="P:Common.ComponentModel.LightPropertyBinding.BoundPropertyData.TargetInfo" select="../value/node()"/>
+            </param>
+        </member>
+        <member name="P:Common.ComponentModel.LightPropertyBinding.BoundPropertyData.SourceInfo">
+            <summary>
+              Gets or sets the <see cref="T:System.Reflection.PropertyInfo"/> instance of the source object.
+            </summary>
+            <value>
+              The <see cref="T:System.Reflection.PropertyInfo"/> instance of the source object.
+            </value>
+        </member>
+        <member name="P:Common.ComponentModel.LightPropertyBinding.BoundPropertyData.TargetInfo">
+            <summary>
+              Gets or sets the <see cref="T:System.Reflection.PropertyInfo"/> instance of the target object.
+            </summary>
+            <value>
+              The <see cref="T:System.Reflection.PropertyInfo"/> instance of the target object.
+            </value>
+        </member>
+        <member name="T:Common.Drawing.GraphicsExtensions">
+            <summary>
+              Provides extension methods for <see cref="T:System.Drawing.Graphics"/> objects.
+            </summary>
+            <threadsafety static="false"/>
+        </member>
+        <member name="M:Common.Drawing.GraphicsExtensions.DrawImageCentered(System.Drawing.Graphics,System.Drawing.Image,System.Drawing.Rectangle)">
+            <summary>
+              Draws an image object centered into the given rectangle.
+            </summary>
+            <remarks>
+              <note type="caution">
+                If the image is too large to fit into the destination rectangle it will overflow. Use 
+                <see cref="M:System.Drawing.Graphics.SetClip(System.Drawing.Rectangle)"/> before executing this method to draw it clipped.
+              </note>
+            </remarks>
+            <param name="destGraphics">The destination graphics object.</param>
+            <param name="image">The image to draw.</param>
+            <param name="destRectangle">The destination rectangle.</param>
+        </member>
+        <member name="M:Common.Drawing.GraphicsExtensions.DrawImageUniformed(System.Drawing.Graphics,System.Drawing.Image,System.Drawing.Rectangle)">
+            <summary>
+              Draws an image object uniformed into the given rectangle.
+            </summary>
+            <inheritdoc cref="M:Common.Drawing.GraphicsExtensions.DrawImageCentered(System.Drawing.Graphics,System.Drawing.Image,System.Drawing.Rectangle)"/>
+        </member>
+        <member name="M:Common.Drawing.GraphicsExtensions.DrawImageUniformedToFill(System.Drawing.Graphics,System.Drawing.Image,System.Drawing.Rectangle)">
+            <summary>
+              Draws an image object uniform to fill into the given rectangle.
+            </summary>
+            <inheritdoc cref="M:Common.Drawing.GraphicsExtensions.DrawImageCentered(System.Drawing.Graphics,System.Drawing.Image,System.Drawing.Rectangle)"/>
+        </member>
+        <member name="M:Common.Drawing.GraphicsExtensions.DrawImageTiled(System.Drawing.Graphics,System.Drawing.Image,System.Drawing.Rectangle)">
+            <summary>
+              Draws an image object tiled into the given rectangle.
+            </summary>
+            <inheritdoc cref="M:Common.Drawing.GraphicsExtensions.DrawImageCentered(System.Drawing.Graphics,System.Drawing.Image,System.Drawing.Rectangle)"/>
+        </member>
+        <member name="T:Common.Presentation.ColorStringValidationRule">
+            <summary>
+              A rule which checks if a <see cref="T:System.String"/> object can be converted to a <see cref="T:System.Drawing.Color"/> object.
+            </summary>
+            <remarks>
+              The <see cref="M:Common.Presentation.ColorStringValidationRule.Validate(System.Object,System.Globalization.CultureInfo)"/> method uses <see cref="T:System.Drawing.ColorTranslator"/> to parse the value which 
+              supports formats like "#AARRGGBB", "#RRGGBB", "#ARGB", "#RGB" or "Colorname".
+            </remarks>
+            <threadsafety static="false" instance="false"/>
+        </member>
+        <member name="F:Common.Presentation.ColorStringValidationRule.allowTransparency">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.ColorStringValidationRule.AllowTransparency" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.ColorStringValidationRule.allowNullAndEmpty">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.ColorStringValidationRule.AllowNullAndEmpty" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.ColorStringValidationRule.Validate(System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Performs validation checks on the given <paramref name="value"/>.
+            </summary>
+            <param name="value">
+              The <see cref="T:System.String"/> value from the binding target to check.
+            </param>
+            <param name="cultureInfo">
+              The culture to use in this rule.
+            </param>
+            <returns>
+              A <see cref="T:System.Windows.Controls.ValidationResult"/> object.
+            </returns>
+        </member>
+        <member name="P:Common.Presentation.ColorStringValidationRule.AllowTransparency">
+            <summary>
+              Gets or sets a value indicating whether a color string containing transparency information is allowed or not.
+            </summary>
+            <value>
+              <c>true</c> whether a color string containing transparency information is allowed; otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Common.Presentation.ColorStringValidationRule.AllowNullAndEmpty">
+            <summary>
+              Gets or sets a value indicating whether <c>null</c> and an empty string is allowed or not.
+            </summary>
+            <value>
+              <c>true</c> whether <c>null</c> and an empty string is allowed; otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Common.Presentation.ArithmeticOperationConverter">
+            <summary>
+              Applies the <see cref="P:Common.Presentation.ArithmeticOperationConverter.OperationKind"/> with the given value using the given parameter and returns the operation's 
+              result.
+            </summary>
+            <threadsafety static="false" instance="false"/>
+        </member>
+        <member name="F:Common.Presentation.ArithmeticOperationConverter.operationKind">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.ArithmeticOperationConverter.OperationKind" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.ArithmeticOperationConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Applies the <see cref="P:Common.Presentation.ArithmeticOperationConverter.OperationKind"/> with the given <paramref name="value"/> using the given 
+              <paramref name="parameter"/>and returns the operation's result.
+            </summary>
+            <inheritdoc cref="M:System.Windows.Data.IValueConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)"/>
+        </member>
+        <member name="M:Common.Presentation.ArithmeticOperationConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Applies the reverse <see cref="P:Common.Presentation.ArithmeticOperationConverter.OperationKind"/> with the given <paramref name="value"/> using the given 
+              <paramref name="parameter"/>and returns the operation's result.
+            </summary>
+            <inheritdoc cref="M:System.Windows.Data.IValueConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)"/>
+        </member>
+        <member name="P:Common.Presentation.ArithmeticOperationConverter.OperationKind">
+            <summary>
+              Gets or sets the kind of arithmetic operation.
+            </summary>
+            <value>
+              The kind of arithmetic operation.
+            </value>
+        </member>
+        <member name="T:Common.Presentation.ToolTipData">
+            <summary>
+              Contains tooltip related data supposed to be used within a <see cref="T:System.Windows.DataTemplate"/>.
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.ToolTipData.TitleProperty">
+            <summary>
+              Identifies the <see cref="P:Common.Presentation.ToolTipData.Title"/> <see cref="T:System.Windows.DependencyProperty">Dependency Property</see>. 
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.ToolTipData.ContentProperty">
+            <summary>
+              Identifies the <see cref="P:Common.Presentation.ToolTipData.Content"/> <see cref="T:System.Windows.DependencyProperty">Dependency Property</see>.
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.ToolTipData.MaxWidthProperty">
+            <summary>
+              Identifies the <see cref="!:MaxWidth"/> <see cref="T:System.Windows.DependencyProperty">Dependency Property</see>.
+            </summary>
+        </member>
+        <member name="P:Common.Presentation.ToolTipData.Title">
+            <summary>
+              Gets or sets the tooltip's title text.
+              This is a <see cref="T:System.Windows.DependencyProperty">Dependency Property</see>.
+            </summary>
+            <value>
+              The tooltip's title text.
+            </value>
+        </member>
+        <member name="P:Common.Presentation.ToolTipData.Content">
+            <summary>
+              Gets or sets the tooltip's content.
+              This is a <see cref="T:System.Windows.DependencyProperty">Dependency Property</see>.
+            </summary>
+            <value>
+              The tooltip's content.
+            </value>
+        </member>
+        <member name="T:Common.ExceptionMessages">
+            <threadsafety static="false" instance="false" />
+        </member>
+        <member name="M:Common.ExceptionMessages.GetPropertyNotBindable(System.String,Common.VariableType,System.String,System.String,System.Boolean)">
+            <summary>
+              Returns a string saying that a property is not bindable.
+            </summary>
+            <param name="typeName">
+              The name of the type to be bound.
+            </param>
+            <param name="propertyName">
+              The name of the property to be bound.
+            </param>
+            <param name="onSource">
+              A <see cref="T:System.Boolean"/> indicating whether the property is a property on the source object.
+            </param>
+            <!-- No matching elements were found for the following include tag --><include path="CommonDoc/ExceptionMessages/Methods/VeriableParams/node()" file="../Documentation/Common.xml"/>
+            <returns>
+              A string saying that a property is not bindable.
+            </returns>
+            <!-- No matching elements were found for the following include tag --><include path="CommonDoc/ExceptionMessages/Methods/PathParam/node()" file="../Documentation/Common.xml"/>
+        </member>
+        <member name="M:Common.ExceptionMessages.GetPropertyNotBound(System.String,Common.VariableType,System.String,System.String)">
+            <summary>
+              Returns a string saying that a property is not bound.
+            </summary>
+            <param name="typeName">
+              The name of the type where a binding is expected.
+            </param>
+            <param name="propertyName">
+              The name of the property which is expected to be bound.
+            </param>
+            <!-- No matching elements were found for the following include tag --><include path="CommonDoc/ExceptionMessages/Methods/VeriableParams/node()" file="../Documentation/Common.xml"/>
+            <returns>
+              A string saying that a property is not bound.
+            </returns>
+            <!-- No matching elements were found for the following include tag --><include path="CommonDoc/ExceptionMessages/Methods/PathParam/node()" file="../Documentation/Common.xml"/>
+        </member>
+        <member name="M:Common.ExceptionMessages.GetNoBindablePropertiesFound(System.String,Common.VariableType,System.String)">
+            <summary>
+              Returns a string saying that no bindable properties were found.
+            </summary>
+            <param name="typeName">
+              The name of the type to be bound.
+            </param>
+            <!-- No matching elements were found for the following include tag --><include path="CommonDoc/ExceptionMessages/Methods/VeriableParams/node()" file="../Documentation/Common.xml"/>
+            <returns>
+              A string saying that no bindable properties were found.
+            </returns>
+            <!-- No matching elements were found for the following include tag --><include path="CommonDoc/ExceptionMessages/Methods/PathParam/node()" file="../Documentation/Common.xml"/>
+        </member>
+        <member name="M:Common.ExceptionMessages.GetPropertyBindingFailed(System.String,System.String)">
+            <summary>
+              Returns a string saying that the property binding failed.
+            </summary>
+            <param name="typeName">
+              The name of the relating type.
+            </param>
+            <param name="propertyName">
+              The name of the property to be bound.
+            </param>
+            <!-- No matching elements were found for the following include tag --><include path="CommonDoc/ExceptionMessages/Methods/VeriableParams/node()" file="../Documentation/Common.xml"/>
+            <returns>
+              A string saying that the property binding failed.
+            </returns>
+            <!-- No matching elements were found for the following include tag --><include path="CommonDoc/ExceptionMessages/Methods/PathParam/node()" file="../Documentation/Common.xml"/>
+        </member>
+        <member name="M:Common.ExceptionMessages.GetPropertyBindingNotRegistered(System.String,Common.VariableType,System.String,System.String)">
+            <summary>
+              Returns a string saying that the property binding has been deregistered already.
+            </summary>
+            <param name="sourceTypeName">
+              The name of the existing autostart entry.
+            </param>
+            <param name="targetTypeName">
+              The name of the existing autostart entry.
+            </param>
+            <!-- No matching elements were found for the following include tag --><include path="CommonDoc/ExceptionMessages/Methods/VeriableParams/node()" file="../Documentation/Common.xml"/>
+            <returns>
+              A string saying that the property binding has been deregistered already.
+            </returns>
+            <!-- No matching elements were found for the following include tag --><include path="CommonDoc/ExceptionMessages/Methods/PathParam/node()" file="../Documentation/Common.xml"/>
+        </member>
+        <member name="T:Common.Drawing.RectangleExtensions">
+            <summary>
+              Provides extension methods for <see cref="T:System.Drawing.Rectangle">Rectangles</see>.
+            </summary>
+            <threadsafety static="false"/>
+        </member>
+        <member name="M:Common.Drawing.RectangleExtensions.Scale(System.Drawing.Rectangle,System.Double)">
+            <summary>
+              Creates a new <see cref="T:System.Drawing.Rectangle"/> scaled by the given <paramref name="factor"/>.
+            </summary>
+            <param name="source">The source <see cref="T:System.Drawing.Rectangle"/>.</param>
+            <param name="factor">The scale factor.</param>
+            <returns>
+              A new <see cref="T:System.Drawing.Rectangle"/> scaled by the given <paramref name="factor"/>.
+            </returns>
+        </member>
+        <member name="M:Common.Drawing.RectangleExtensions.ScaleFull(System.Drawing.Rectangle,System.Double)">
+            <summary>
+              Creates a new <see cref="T:System.Drawing.Rectangle"/> multiplicated by the given <paramref name="factor"/>.
+            </summary>
+            <param name="source">The source <see cref="T:System.Drawing.Rectangle"/>.</param>
+            <param name="factor">The multiplication factor.</param>
+            <returns>
+              A new <see cref="T:System.Drawing.Rectangle"/> multiplicated by the given <paramref name="factor"/>.
+            </returns>
+        </member>
+        <member name="M:Common.Drawing.RectangleExtensions.Center(System.Drawing.Rectangle,System.Int32,System.Int32)">
+            <summary>
+              Creates a new <see cref="T:System.Drawing.Rectangle"/> centered inside the 
+              <paramref name="source">source</paramref> <see cref="T:System.Drawing.Rectangle"/>.
+            </summary>
+            <param name="source">The source <see cref="T:System.Drawing.Rectangle"/>.</param>
+            <param name="contentWidth">The width value of new <see cref="T:System.Drawing.Rectangle"/>.</param>
+            <param name="contentHeight">The height value of new <see cref="T:System.Drawing.Rectangle"/>.</param>
+            <returns>
+              A new <see cref="T:System.Drawing.Rectangle"/> centered inside the 
+              <paramref name="source">source</paramref> <see cref="T:System.Drawing.Rectangle"/>.
+            </returns>
+        </member>
+        <member name="M:Common.Drawing.RectangleExtensions.Uniform(System.Drawing.Rectangle,System.Int32,System.Int32)">
+            <summary>
+              Creates a new <see cref="T:System.Drawing.Rectangle"/> stretched (with keeping ratio) inside the 
+              <paramref name="source">source</paramref> <see cref="T:System.Drawing.Rectangle"/>.
+            </summary>
+            <inheritdoc cref="M:Common.Drawing.RectangleExtensions.Center(System.Drawing.Rectangle,System.Int32,System.Int32)"/>
+            <returns>
+              A new <see cref="T:System.Drawing.Rectangle"/> stretched (with keeping ratio) inside the 
+              <paramref name="source">source</paramref> <see cref="T:System.Drawing.Rectangle"/>.
+            </returns>
+        </member>
+        <member name="M:Common.Drawing.RectangleExtensions.UniformToFill(System.Drawing.Rectangle,System.Int32,System.Int32)">
+            <summary>
+              Creates a new <see cref="T:System.Drawing.Rectangle"/> uniform to fill (with keeping ratio) inside the 
+              <paramref name="source">source</paramref> <see cref="T:System.Drawing.Rectangle"/>.
+            </summary>
+            <inheritdoc cref="M:Common.Drawing.RectangleExtensions.Center(System.Drawing.Rectangle,System.Int32,System.Int32)"/>
+            <returns>
+              A new <see cref="T:System.Drawing.Rectangle"/> uniform to fill (with keeping ratio) inside the 
+              <paramref name="source">source</paramref> <see cref="T:System.Drawing.Rectangle"/>.
+            </returns>
+        </member>
+        <member name="T:Common.Presentation.PathToStringConverter">
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="F:Common.Presentation.PathToStringConverter.DefaultNoneString">
+            <summary>
+              Represents the string representation for the <c>true</c> value.
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.PathToStringConverter.DefaultPathFormatString">
+            <summary>
+              Represents the string representation for the <c>false</c> value.
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.PathToStringConverter.noneString">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.PathToStringConverter.NoneString" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.PathToStringConverter.pathFormatString">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.PathToStringConverter.PathFormatString" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.PathToStringConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Converts a <see cref="T:Common.IO.Path"/> value to <see cref="T:System.String"/>.
+            </summary>
+            <inheritdoc cref="M:System.Windows.Data.IValueConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)"/>
+        </member>
+        <member name="M:Common.Presentation.PathToStringConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Converts a <see cref="T:System.String"/> value to <see cref="T:Common.IO.Path"/>.
+            </summary>
+            <inheritdoc cref="M:System.Windows.Data.IValueConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)"/>
+        </member>
+        <member name="T:Common.Presentation.IsValueAsBooleanConverter">
+            <threadsafety static="false" instance="false" />
+        </member>
+        <member name="F:Common.Presentation.IsValueAsBooleanConverter.isNot">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.IsValueAsBooleanConverter.IsNot" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="P:Common.Presentation.IsValueAsBooleanConverter.IsNot">
+            <summary>
+              Gets or sets a <see cref="T:System.Boolean"/> indicating whether the value should be checked for non-equality.
+            </summary>
+            <value>
+              A <see cref="T:System.Boolean"/> indicating whether the value should be checked for non-equality.
+            </value>
+        </member>
+        <member name="T:Common.Presentation.TimeSpanValidationRule">
+            <summary>
+              A rule which checks a <see cref="T:System.TimeSpan"/> object in the definable ways.
+            </summary>
+            <threadsafety static="false" instance="false"/>
+        </member>
+        <member name="F:Common.Presentation.TimeSpanValidationRule.minValue">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.TimeSpanValidationRule.MinValue" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.TimeSpanValidationRule.maxValue">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.TimeSpanValidationRule.MaxValue" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.TimeSpanValidationRule.#ctor">
+            <summary>
+              Initializes static members of the <see cref="T:Common.Presentation.NumberValidationRule"/> class.
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.TimeSpanValidationRule.Validate(System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Performs validation checks on the given <paramref name="value"/>.
+            </summary>
+            <param name="value">
+              The <see cref="T:System.String"/> or <see cref="T:System.TimeSpan"/> value from the binding target to check.
+            </param>
+            <param name="cultureInfo">
+              The culture to use in this rule.
+            </param>
+            <returns>
+              A <see cref="T:System.Windows.Controls.ValidationResult"/> object.
+            </returns>
+        </member>
+        <member name="P:Common.Presentation.TimeSpanValidationRule.MinValue">
+            <summary>
+              Gets or sets the type of number to be checked for.
+            </summary>
+            <value>
+              The type of number to be checked for.
+            </value>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+              Attempted to set a value which is greater than <see cref="P:Common.Presentation.TimeSpanValidationRule.MaxValue"/>.
+            </exception>
+        </member>
+        <member name="P:Common.Presentation.TimeSpanValidationRule.MaxValue">
+            <summary>
+              Gets or sets the type of number to be checked for.
+            </summary>
+            <value>
+              The type of number to be checked for.
+            </value>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+              Attempted to set a value which is lower than <see cref="P:Common.Presentation.TimeSpanValidationRule.MinValue"/>.
+            </exception>
+        </member>
+        <member name="T:Common.Presentation.DelegateCommand">
+            <summary>
+              This class allows delegating the commanding logic to methods passed as parameters,
+              and enables a View to bind commands to objects that are not part of the element tree.
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand.#ctor(System.Action)">
+            <summary>
+              Constructor
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand.#ctor(System.Action,System.Func{System.Boolean})">
+            <summary>
+              Constructor
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand.#ctor(System.Action,System.Func{System.Boolean},System.Boolean)">
+            <summary>
+              Constructor
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand.CanExecute">
+            <summary>
+              Method to determine if the command can be executed
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand.Execute">
+            <summary>
+              Execution of the command
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand.RaiseCanExecuteChanged">
+            <summary>
+              Raises the CanExecuteChaged event
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand.OnCanExecuteChanged">
+            <summary>
+              Protected virtual method to raise CanExecuteChanged event
+            </summary>
+        </member>
+        <member name="P:Common.Presentation.DelegateCommand.IsAutomaticRequeryDisabled">
+            <summary>
+              Property to enable or disable CommandManager's automatic requery on this command
+            </summary>
+        </member>
+        <member name="E:Common.Presentation.DelegateCommand.CanExecuteChanged">
+            <summary>
+              ICommand.CanExecuteChanged implementation
+            </summary>
+        </member>
+        <member name="T:Common.Presentation.DelegateCommand`1">
+            <summary>
+              This class allows delegating the commanding logic to methods passed as parameters,
+              and enables a View to bind commands to objects that are not part of the element tree.
+            </summary>
+            <typeparam name="T">Type of the parameter passed to the delegates</typeparam>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand`1.#ctor(System.Action{`0})">
+            <summary>
+              Constructor
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand`1.#ctor(System.Action{`0},System.Func{`0,System.Boolean})">
+            <summary>
+              Constructor
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand`1.#ctor(System.Action{`0},System.Func{`0,System.Boolean},System.Boolean)">
+            <summary>
+              Constructor
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand`1.CanExecute(`0)">
+            <summary>
+              Method to determine if the command can be executed
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand`1.Execute(`0)">
+            <summary>
+              Execution of the command
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand`1.RaiseCanExecuteChanged">
+            <summary>
+              Raises the CanExecuteChaged event
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.DelegateCommand`1.OnCanExecuteChanged">
+            <summary>
+              Protected virtual method to raise CanExecuteChanged event
+            </summary>
+        </member>
+        <member name="P:Common.Presentation.DelegateCommand`1.IsAutomaticRequeryDisabled">
+            <summary>
+              Property to enable or disable CommandManager's automatic requery on this command
+            </summary>
+        </member>
+        <member name="E:Common.Presentation.DelegateCommand`1.CanExecuteChanged">
+            <summary>
+              ICommand.CanExecuteChanged implementation
+            </summary>
+        </member>
+        <member name="T:Common.Presentation.CommandManagerHelper">
+            <summary>
+              This class contains methods for the CommandManager that help avoid memory leaks by
+              using weak references.
+            </summary>
+        </member>
+        <member name="T:Common.Presentation.NotBooleanConverter">
+            <threadsafety static="false" instance="false" />
+        </member>
+        <member name="M:Common.Presentation.NotBooleanConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Converts a <c>true</c> value to a <c>false</c> value and other way round.
+            </summary>
+            <inheritdoc cref="M:System.Windows.Data.IValueConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)"/>
+        </member>
+        <member name="M:Common.Presentation.NotBooleanConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Converts a <c>true</c> value to a <c>false</c> value and other way round.
+            </summary>
+            <inheritdoc cref="M:System.Windows.Data.IValueConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)"/>
+        </member>
+        <member name="T:Common.Windows.Controls.NumericTextBox">
+            <inheritdoc />
+        </member>
+        <member name="F:Common.Windows.Controls.NumericTextBox.allowsRationalNumber">
+            <summary>
+              <inheritdoc cref="P:Common.Windows.Controls.NumericTextBox.AllowsRationalNumber" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.Windows.Controls.NumericTextBox.#cctor">
+            <summary>
+              Initializes static members of the <see cref="T:Common.Windows.Controls.NumericTextBox"/> class.
+            </summary>
+        </member>
+        <member name="M:Common.Windows.Controls.NumericTextBox.OnMinValueChanged(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+              Occurs when <see cref="!:MinValue"/> has changed.
+              Sets <see cref="P:Common.Windows.Controls.NumericTextBox.Value"/> to <see cref="!:MinValueProperty"/> if the new min value is too small.
+            </summary>
+            <param name="sender">
+              The object of which the property has changed.
+            </param>
+            <param name="e">
+              The <see cref="T:System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.
+            </param>
+        </member>
+        <member name="M:Common.Windows.Controls.NumericTextBox.#ctor">
+            <summary>
+              Initializes a new instance of the <see cref="T:Common.Windows.Controls.NumericTextBox"/> class.
+            </summary>
+        </member>
+        <member name="M:Common.Windows.Controls.NumericTextBox.TryParseFromString(System.String,System.Double@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Common.Windows.Controls.NumericTextBox.IncreaseValue(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="M:Common.Windows.Controls.NumericTextBox.DecreaseValue(System.Double)">
+            <inheritdoc />
+        </member>
+        <member name="P:Common.Windows.Controls.NumericTextBox.AllowsRationalNumber">
+            <summary>
+              Gets or sets a value indicating whether this TextBox accepts rational numbers.
+            </summary>
+            <value>
+              <c>true</c> if this TextBox accepts rational numbers; otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Common.Windows.Controls.NumericTextBox.Value">
+            <inheritdoc />
+        </member>
+        <member name="T:Common.Presentation.CommandReference">
+            <summary>
+              This class facilitates associating a key binding in XAML markup to a command
+              defined in a View Model by exposing a Command dependency property.
+              The class derives from Freezable to work around a limitation in WPF when data-binding from XAML.
+            </summary>
+        </member>
+        <member name="T:Common.NumberEx">
+            <threadsafety static="false" instance="false" />
+        </member>
+        <member name="T:Common.CharEx">
+            <summary>
+              Defines a set of extension methods for <see cref="T:System.Char"/>, <see cref="!:Char[]"/> and generic collections 
+              of <see cref="T:System.Char"/>.
+            </summary>
+            <threadsafety static="false" instance="false"/>
+        </member>
+        <member name="T:Common.Presentation.DependencyObjectEx">
+            <summary>
+              Defines a set of extension methods for <see cref="T:System.Windows.DependencyObject">Dependency Objects</see>.
+            </summary>
+            <threadsafety static="false" instance="false"/>
+        </member>
+        <member name="T:Common.ComponentModel.LightBoundProperty">
+            <summary>
+              Contains data related to a synchronized property.
+            </summary>
+            <threadsafety static="true" instance="false" />
+        </member>
+        <member name="F:Common.ComponentModel.LightBoundProperty.sourceName">
+            <summary>
+              <inheritdoc cref="P:Common.ComponentModel.LightBoundProperty.SourceName" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.ComponentModel.LightBoundProperty.targetName">
+            <summary>
+              <inheritdoc cref="P:Common.ComponentModel.LightBoundProperty.TargetName" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.ComponentModel.LightBoundProperty.#ctor(System.String,System.String)">
+            <summary>
+              Initializes a new instance of the <see cref="T:Common.ComponentModel.LightBoundProperty">LightBoundProperty Structure</see>.
+            </summary>
+            <param name="sourceName">
+              <inheritdoc cref="P:Common.ComponentModel.LightBoundProperty.SourceName" select="../value/node()"/>
+            </param>
+            <param name="targetName">
+              <inheritdoc cref="P:Common.ComponentModel.LightBoundProperty.TargetName" select="../value/node()"/>
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+              <paramref name="sourceName"/> or <paramref name="targetName"/> is <c>null</c>.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+              <paramref name="sourceName"/> or <paramref name="targetName"/> is an empty string.
+            </exception>
+        </member>
+        <member name="M:Common.ComponentModel.LightBoundProperty.#ctor(System.String)">
+            <inheritdoc/>
+            <param name="name">
+              The name of the property to be bound.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+              <paramref name="name"/> is <c>null</c>.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+              <paramref name="name"/> is an empty string.
+            </exception>
+        </member>
+        <member name="P:Common.ComponentModel.LightBoundProperty.SourceName">
+            <summary>
+              Gets the name of the property of the source object to be bound.
+            </summary>
+            <value>
+              The name of the property of the source object to be bound.
+            </value>
+            <exception cref="T:System.ArgumentNullException">
+              Attempted to set a <c>null</c> value.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+              Attempted to set an empty string.
+            </exception>
+        </member>
+        <member name="P:Common.ComponentModel.LightBoundProperty.TargetName">
+            <summary>
+              Gets or sets the name of the property of the target object to be bound.
+            </summary>
+            <value>
+              The name of the property of the target object to be bound.
+            </value>
+            <exception cref="T:System.ArgumentNullException">
+              Attempted to set a <c>null</c> value.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+              Attempted to set an empty string.
+            </exception>
+        </member>
+        <member name="T:Common.Presentation.BooleanToStringConverter">
+            <summary>
+              Converts the defined strings to and from <see cref="T:System.Boolean"/>.
+            </summary>
+            <remarks>
+              The string case will be ignored due the comparision.
+            </remarks>
+            <threadsafety static="false" instance="false"/>
+        </member>
+        <member name="F:Common.Presentation.BooleanToStringConverter.DefaultTrueString">
+            <summary>
+              Represents the string representation for the <c>true</c> value.
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.BooleanToStringConverter.DefaultFalseString">
+            <summary>
+              Represents the string representation for the <c>false</c> value.
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.BooleanToStringConverter.trueString">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.BooleanToStringConverter.TrueString" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.BooleanToStringConverter.falseString">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.BooleanToStringConverter.FalseString" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.BooleanToStringConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Converts a <see cref="T:System.Boolean"/> value to <see cref="T:System.String"/>.
+            </summary>
+            <inheritdoc cref="M:System.Windows.Data.IValueConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)"/>
+        </member>
+        <member name="M:Common.Presentation.BooleanToStringConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Converts a <see cref="T:System.String"/> value to <see cref="T:System.Boolean"/>.
+            </summary>
+            <inheritdoc cref="M:System.Windows.Data.IValueConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)"/>
+        </member>
+        <member name="P:Common.Presentation.BooleanToStringConverter.TrueString">
+            <summary>
+              Gets or sets the string representation of <c>true</c>.
+            </summary>
+            <value>
+              The string representation of <c>true</c>.
+            </value>
+            <exception cref="T:System.ArgumentNullException">
+              Attempt to set a <c>null</c> value.
+            </exception>
+        </member>
+        <member name="P:Common.Presentation.BooleanToStringConverter.FalseString">
+            <summary>
+              Gets or sets the string representation of <c>false</c>.
+            </summary>
+            <value>
+              The string representation of <c>false</c>.
+            </value>
+            <exception cref="T:System.ArgumentNullException">
+              Attempt to set a <c>null</c> value.
+            </exception>
+        </member>
+        <member name="T:Common.Windows.Controls.TimeSpanTextBox">
+            <inheritdoc />
+        </member>
+        <member name="M:Common.Windows.Controls.TimeSpanTextBox.#cctor">
+            <summary>
+              Initializes static members of the <see cref="T:Common.Windows.Controls.TimeSpanTextBox"/> class.
+            </summary>
+        </member>
+        <member name="M:Common.Windows.Controls.TimeSpanTextBox.#ctor">
+            <summary>
+              Initializes a new instance of the <see cref="T:Common.Windows.Controls.TimeSpanTextBox"/> class.
+            </summary>
+        </member>
+        <member name="M:Common.Windows.Controls.TimeSpanTextBox.TryParseFromString(System.String,System.TimeSpan@)">
+            <inheritdoc />
+        </member>
+        <member name="M:Common.Windows.Controls.TimeSpanTextBox.IncreaseValue(System.TimeSpan)">
+            <inheritdoc />
+        </member>
+        <member name="M:Common.Windows.Controls.TimeSpanTextBox.DecreaseValue(System.TimeSpan)">
+            <inheritdoc />
+        </member>
+        <member name="P:Common.Windows.Controls.TimeSpanTextBox.Value">
+            <inheritdoc />
+        </member>
+        <member name="T:Common.Presentation.StringValidationRule">
+            <summary>
+              A rule which checks a <see cref="T:System.String"/> object in the definable ways.
+            </summary>
+            <threadsafety static="false" instance="false"/>
+        </member>
+        <member name="F:Common.Presentation.StringValidationRule.commonCharSet">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.StringValidationRule.CommonCharSet" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.StringValidationRule.allowNull">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.StringValidationRule.AllowNull" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.StringValidationRule.allowWhitespacesOnly">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.StringValidationRule.AllowWhitespacesOnly" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.StringValidationRule.allowWhitespacesAtStart">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.StringValidationRule.AllowWhitespacesAtStart" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.StringValidationRule.allowWhitespacesAtEnd">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.StringValidationRule.AllowWhitespacesAtEnd" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.StringValidationRule.allowedMinLength">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.StringValidationRule.AllowedMinLength" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.StringValidationRule.allowedMaxLength">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.StringValidationRule.AllowedMaxLength" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.StringValidationRule.allowedCharacters">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.StringValidationRule.AllowedCharacters" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.StringValidationRule.disallowedCharacters">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.StringValidationRule.DisallowedCharacters" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.StringValidationRule.#cctor">
+            <summary>
+              Initializes static members of the <see cref="T:Common.Presentation.StringValidationRule"/> class.
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.StringValidationRule.Validate(System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Performs validation checks on the given <paramref name="value"/>.
+            </summary>
+            <param name="value">
+              The <see cref="T:System.String"/> value from the binding target to check.
+            </param>
+            <param name="cultureInfo">
+              The culture to use in this rule.
+            </param>
+            <returns>
+              A <see cref="T:System.Windows.Controls.ValidationResult"/> object.
+            </returns>
+        </member>
+        <member name="P:Common.Presentation.StringValidationRule.CommonCharSet">
+            <summary>
+              Gets a collection of common characters (ASCII index 32 to 126, Ä, ä, Ö, ö, Ü, ü, ß, ', §, °).
+            </summary>
+            <value>
+              A collection of common characters (ASCII index 32 to 126, Ä, ä, Ö, ö, Ü, ü, ß, ', §, °).
+            </value>
+        </member>
+        <member name="P:Common.Presentation.StringValidationRule.AllowNull">
+            <summary>
+              Gets or sets a value indicating whether <c>null</c> is allowed or not.
+              Default value: <c>false</c>.
+            </summary>
+            <value>
+              <c>true</c> whether <c>null</c> is allowed; otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Common.Presentation.StringValidationRule.AllowEmpty">
+            <summary>
+              Gets or sets a value indicating whether an <see cref="F:System.String.Empty">empty string</see> is allowed or not.
+              Default value: <c>true</c>.
+            </summary>
+            <value>
+              <c>true</c> whether an <see cref="F:System.String.Empty">empty string</see> is allowed; otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Common.Presentation.StringValidationRule.AllowWhitespacesOnly">
+            <summary>
+              Gets or sets a value indicating whether only whitespaces are allowed in a string or not.
+              Default value: <c>true</c>.
+            </summary>
+            <value>
+              <c>true</c> whether only whitespaces are allowed; otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Common.Presentation.StringValidationRule.AllowWhitespacesAtStart">
+            <summary>
+              Gets or sets a value indicating whether whitespaces at the start of a string are allowed or not.
+              Default value: <c>true</c>.
+            </summary>
+            <value>
+              <c>true</c> whether whitespaces at the start of a string are allowed; otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Common.Presentation.StringValidationRule.AllowWhitespacesAtEnd">
+            <summary>
+              Gets or sets a value indicating whether whitespaces at the end of a string are allowed or not.
+              Default value: <c>true</c>.
+            </summary>
+            <value>
+              <c>true</c> whether whitespaces at the end of a string are allowed; otherwise <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Common.Presentation.StringValidationRule.AllowedMinLength">
+            <summary>
+              Gets or sets the allowed minimum length of a string.
+              Default value: <c>0</c>.
+            </summary>
+            <value>
+              The allowed minimum length of a string.
+            </value>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+              Attempted to set a value which is below <c>0</c> or greater than <see cref="P:Common.Presentation.StringValidationRule.AllowedMaxLength"/>.
+            </exception>
+        </member>
+        <member name="P:Common.Presentation.StringValidationRule.AllowedMaxLength">
+            <summary>
+              Gets or sets the allowed maximum length of a string.
+              Default value: <c>0</c> (unlimited).
+            </summary>
+            <remarks>
+              Set to <c>0</c> to set no limit for the <see cref="T:System.String"/>'s length.
+            </remarks>
+            <value>
+              The allowed maximum length of a string.
+            </value>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+              Attempted to set a value which is lower than <see cref="P:Common.Presentation.StringValidationRule.AllowedMinLength"/>.
+            </exception>
+        </member>
+        <member name="P:Common.Presentation.StringValidationRule.AllowedCharacters">
+            <summary>
+              Gets a collection of characters allowed in the string.
+              Default value: <see cref="!:StringValidationRule.Char32To126CharSet"/>.
+            </summary>
+            <value>
+              A collection of characters allowed in the string.
+            </value>
+        </member>
+        <member name="P:Common.Presentation.StringValidationRule.DisallowedCharacters">
+            <summary>
+              Gets a collection of characters allowed in the string.
+            </summary>
+            <value>
+              A collection of characters allowed in the string.
+            </value>
+        </member>
+        <member name="M:Common.DelegateExtensions.ReverseInvoke(System.EventHandler,System.Object,System.EventArgs)">
+            <summary>
+              Invokes the delegates of this <see cref="T:System.EventHandler"/> in reversed order.
+            </summary>
+            <param name="handler">
+              The <see cref="T:System.EventHandler"/> which delegates should be invoked.
+            </param>
+            
+        </member>
+        <member name="M:Common.DelegateExtensions.ReverseInvoke``1(System.EventHandler{``0},System.Object,System.EventArgs)">
+            <summary>
+              Invokes the delegates of this <see cref="T:System.EventHandler`1"/> in reversed order.
+            </summary>
+            <typeparam name="T">
+              The type of the <see cref="T:System.EventArgs"/> type used for the <see cref="T:System.EventHandler"/>.
+            </typeparam>
+            <param name="handler">
+              The <see cref="T:System.EventHandler`1"/> which delegates should be invoked.
+            </param>
+            
+        </member>
+        <member name="T:Common.Presentation.CommandExceptionEventArgs">
+            <summary>
+              Provides command exception event related data.
+            </summary>
+            <threadsafety static="true" instance="false"/>
+            <seealso cref="T:System.Windows.Input.ICommand">ICommand Interface</seealso>
+        </member>
+        <member name="F:Common.Presentation.CommandExceptionEventArgs.command">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.CommandExceptionEventArgs.Command" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.CommandExceptionEventArgs.#ctor(System.Windows.Input.ICommand,System.Exception)">
+            <summary>
+              Initializes a new instance of the <see cref="T:Common.Presentation.CommandExceptionEventArgs">CommandExceptionEventArgs Class</see>.
+            </summary>
+            <param name="command">
+              <inheritdoc cref="P:Common.Presentation.CommandExceptionEventArgs.Command" select="../value/node()"/>
+            </param>
+            <inheritdoc/>
+            <exception cref="T:System.ArgumentNullException">
+              <paramref name="command"/> or <paramref name="exception"/> is <c>null</c>.
+            </exception>
+            <seealso cref="T:System.Windows.Input.ICommand">ICommand Interface</seealso>
+        </member>
+        <member name="M:Common.Presentation.CommandExceptionEventArgs.ToString">
+            <inheritdoc />
+        </member>
+        <member name="P:Common.Presentation.CommandExceptionEventArgs.Command">
+            <summary>
+              Gets the <see cref="T:System.Windows.Input.ICommand"/> which rised an exception.
+            </summary>
+            <value>
+              The <see cref="T:System.Windows.Input.ICommand"/> which rised an exception.
+            </value>
+            <seealso cref="T:System.Windows.Input.ICommand">ICommand Interface</seealso>
+        </member>
+        <member name="T:Common.Presentation.ArithmeticOperation">
+            <summary>
+              Specifies the kind of arithmetic operation.
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.ArithmeticOperation.Addition">
+            <summary>
+              Addition operation (+).
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.ArithmeticOperation.Subtraction">
+            <summary>
+              Subtraction operation (-).
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.ArithmeticOperation.Multiplication">
+            <summary>
+              Multiplication operation (*).
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.ArithmeticOperation.Division">
+            <summary>
+              Division operation (/).
+            </summary>
+        </member>
+        <member name="T:Common.Presentation.VersionFormatConverter">
+            <summary>
+              Converts a <see cref="T:System.Version"/> instance to and from a <see cref="T:System.String"/> instance.
+            </summary>
+            <threadsafety static="true" instance="false"/>
+        </member>
+        <member name="F:Common.Presentation.VersionFormatConverter.DefaultStringFormat">
+            <summary>
+              Represents the default <see cref="P:Common.Presentation.VersionFormatConverter.StringFormat"/>.
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.VersionFormatConverter.stringFormat">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.VersionFormatConverter.StringFormat" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.VersionFormatConverter.#ctor(System.String)">
+            <summary>
+              Initializes a new instance of the 
+              <see cref="T:Common.Presentation.VersionFormatConverter">VersionFormatConverter Class</see> using the given 
+              <paramref name="stringFormat"/>.
+            </summary>
+            <param name="stringFormat">
+              <inheritdoc cref="P:Common.Presentation.VersionFormatConverter.StringFormat" select="../value/node()"/>
+            </param>
+            
+            <overloads>
+              <summary>
+                Initializes a new instance of the 
+                <see cref="T:Common.Presentation.VersionFormatConverter">VersionFormatConverter Class</see>.
+              </summary>
+            </overloads>
+        </member>
+        <member name="M:Common.Presentation.VersionFormatConverter.#ctor">
+            <summary>
+              Initializes a new instance of the 
+              <see cref="T:Common.Presentation.VersionFormatConverter">VersionFormatConverter Class</see> using the 
+              <see cref="F:Common.Presentation.VersionFormatConverter.DefaultStringFormat"/>.
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.VersionFormatConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Converts a <see cref="T:System.Version"/> instance to a <see cref="T:System.String"/> instance.
+            </summary>
+            <inheritdoc cref="M:System.Windows.Data.IValueConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)"/>
+        </member>
+        <member name="M:Common.Presentation.VersionFormatConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Converts a <see cref="T:System.String"/> instance to a <see cref="T:System.Version"/> instance.
+            </summary>
+            <inheritdoc cref="M:System.Windows.Data.IValueConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)"/>
+            <exception cref="T:System.NotImplementedException">
+              always.
+            </exception>
+        </member>
+        <member name="P:Common.Presentation.VersionFormatConverter.StringFormat">
+            <summary>
+              Gets or sets the the string representing the format of the converted <see cref="T:System.Version"/>.
+            </summary>
+            <value>
+              The the string representing the format of the converted <see cref="T:System.Version"/>.
+            </value>
+            <exception cref="T:System.ArgumentNullException">
+              Attempted to set a <c>null</c> value.
+            </exception>
+        </member>
+        <member name="T:Common.Presentation.NumberValidationRule">
+            <summary>
+              A rule which checks a number object in the definable ways.
+            </summary>
+            <threadsafety static="false" instance="false" />
+        </member>
+        <member name="F:Common.Presentation.NumberValidationRule.allowsRationalNumber">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.NumberValidationRule.AllowsRationalNumber" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.NumberValidationRule.minValue">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.NumberValidationRule.MinValue" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="F:Common.Presentation.NumberValidationRule.maxValue">
+            <summary>
+              <inheritdoc cref="P:Common.Presentation.NumberValidationRule.MaxValue" select="../value/node()"/>
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.NumberValidationRule.#ctor">
+            <summary>
+              Initializes static members of the <see cref="T:Common.Presentation.NumberValidationRule"/> class.
+            </summary>
+        </member>
+        <member name="M:Common.Presentation.NumberValidationRule.Validate(System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Performs validation checks on the given <paramref name="value"/>.
+            </summary>
+            <param name="value">
+              The <see cref="T:System.String"/> or <see cref="T:System.Decimal"/> value from the binding target to check.
+            </param>
+            <param name="cultureInfo">
+              The culture to use in this rule.
+            </param>
+            <returns>
+              A <see cref="T:System.Windows.Controls.ValidationResult"/> object.
+            </returns>
+        </member>
+        <member name="P:Common.Presentation.NumberValidationRule.AllowsRationalNumber">
+            <summary>
+              Gets or sets a <see cref="T:System.Boolean"/> indicating whether rational numbers are valid or not.
+            </summary>
+            <value>
+              A <see cref="T:System.Boolean"/> indicating whether rational numbers are valid or not.
+            </value>
+        </member>
+        <member name="P:Common.Presentation.NumberValidationRule.MinValue">
+            <summary>
+              Gets or sets the type of number to be checked for.
+            </summary>
+            <value>
+              The type of number to be checked for.
+            </value>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+              Attempted to set a value which is greater than <see cref="P:Common.Presentation.NumberValidationRule.MaxValue"/>.
+            </exception>
+        </member>
+        <member name="P:Common.Presentation.NumberValidationRule.MaxValue">
+            <summary>
+              Gets or sets the type of number to be checked for.
+            </summary>
+            <value>
+              The type of number to be checked for.
+            </value>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+              Attempted to set a value which is lower than <see cref="P:Common.Presentation.NumberValidationRule.MinValue"/>.
+            </exception>
+        </member>
+        <member name="T:Common.Presentation.ColorToHtmlStringConverter">
+            <summary>
+              Converts a <see cref="T:System.Drawing.Color"/> value to and from a <see cref="T:System.String"/> value.
+            </summary>
+            <threadsafety static="false" instance="false"/>
+        </member>
+        <member name="M:Common.Presentation.ColorToHtmlStringConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Converts a <see cref="T:System.Drawing.Color"/> value to a <see cref="T:System.String"/> value.
+            </summary>
+            <inheritdoc cref="M:System.Windows.Data.IValueConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)"/>
+        </member>
+        <member name="M:Common.Presentation.ColorToHtmlStringConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+              Converts a <see cref="T:System.String"/> value to a <see cref="T:System.Drawing.Color"/> value.
+            </summary>
+            <inheritdoc cref="M:System.Windows.Data.IValueConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)"/>
+        </member>
+    </members>
+</doc>

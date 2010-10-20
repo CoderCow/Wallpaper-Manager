@@ -1,0 +1,360 @@
+<!-- 
+  THIS FILE IS PROVIDED UNDER THE TERMS OF THE CREATIVE COMMONS PUBLIC LICENSE WHICH CAN BE FOUND IN THE PROVIDED License.txt 
+  FILE. IT IS PROTECTED BY COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS AUTHORIZED UNDER ITS 
+  LICENSE OR COPYRIGHT LAW IS PROHIBITED.
+  
+  Written by David-Kay Posmyk (KayPosmyk@gmx.de)
+-->
+  
+<Window
+  x:Class="WallpaperManager.Presentation.ConfigTextOverlaysWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:Common.Presentation="clr-namespace:Common.Presentation;assembly=Common4.0"
+  xmlns:Common.Windows.Controls="clr-namespace:Common.Windows.Controls;assembly=Common4.0"
+  
+  xmlns:local="clr-namespace:WallpaperManager.Presentation"
+  xmlns:Data="clr-namespace:WallpaperManager.Data"
+  
+  Title="Configure Text Overlays"
+  Icon="..\..\Resources\Icons\Configuration.png"
+  WindowStartupLocation="CenterOwner"
+  MinWidth="300"
+  MaxWidth="600"
+  WindowStyle="SingleBorderWindow"
+  ResizeMode="NoResize"
+  SizeToContent="WidthAndHeight"
+  ShowInTaskbar="False"
+  DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+>
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="..\..\Resources\Dialog.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      
+      <!-- Converters / Validation Rules / Command References -->
+      <Common.Presentation:ColorToHtmlStringConverter x:Key="ColorToHtmlStringConverter" />
+      
+      <Common.Presentation:ColorStringValidationRule x:Key="ColorStringValidationRule" AllowTransparency="True" />
+      
+      <Common.Presentation:CommandReference 
+        x:Key="CommandReference.RemoveOverlayText"
+        Command="{Binding 
+          RelativeSource ={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, 
+          Path=ConfigTextOverlaysVM.RemoveOverlayTextCommand
+        }"
+      />
+
+      <!-- Styles / Templates -->
+      <Style x:Key="Footer.Button" TargetType="{x:Type Button}">
+        <Setter Property="Margin" Value="0,3,6,3" />
+        <Setter Property="MinWidth" Value="80" />
+      </Style>
+      
+      <Style x:Key="EditFieldPropertiesButton" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Content" Value="..." />
+        <Setter Property="MaxWidth" Value="25" />
+        <Setter Property="Margin" Value="2,4,2,4" />
+        <Setter Property="Padding" Value="4,0,4,0" />
+      </Style>
+      
+      <ToolTip x:Key="ToolTips.ForeColor">
+        <local:ToolTipData 
+          Title="Text Color"
+          Content="The color of the overlay text."
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.BorderColor">
+        <local:ToolTipData 
+          Title="Text Border-Color"
+          Content="The color of the overlay text's border."
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="Its recommended to set the Border-Color into a huge contrast difference to the text's color to make sure that the text can be seen on any wallpaper."
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.HOffset">
+        <local:ToolTipData 
+          Title="Horizontal Text Offset"
+          Content="This value moves the text on the horizontal axis by the given pixels."
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.VOffset">
+        <local:ToolTipData 
+          Title="Vertical Text Offset"
+          Content="This value moves the text on the horizontal axis by the given pixels."
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+        />
+      </ToolTip>
+    </ResourceDictionary>
+  </Window.Resources>
+  
+  <Window.CommandBindings>
+    <CommandBinding 
+      Command="{x:Static local:ConfigTextOverlaysWindow.SelectFontCommand}" 
+      CanExecute="SelectFontCommand_CanExecute" Executed="SelectFontCommand_Executed"
+    />
+    <CommandBinding 
+      Command="{x:Static local:ConfigTextOverlaysWindow.SelectForeColorCommand}" 
+      CanExecute="SelectForeColorCommand_CanExecute" Executed="SelectForeColorCommand_Executed" 
+    />
+    <CommandBinding 
+      Command="{x:Static local:ConfigTextOverlaysWindow.SelectBorderColorCommand}" 
+      CanExecute="SelectBorderColorCommand_CanExecute" Executed="SelectBorderColorCommand_Executed" 
+    />
+  </Window.CommandBindings>
+  
+  <StackPanel Orientation="Vertical">
+    <!-- Taken Alt+X Keys: A,R,P,F,C,B,H,V -->
+    <Grid DataContext="{Binding Path=ConfigTextOverlaysVM}" Margin="5,5,5,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+      
+      <ListBox 
+        Name="lstOverlayTexts"
+        ItemsSource="{Binding Path=OverlayTextCollection}"
+        SelectedIndex="{Binding Path=SelectedItemIndex}"
+        Margin="1,1,3,1"
+        MaxHeight="150"
+        TabIndex="10" 
+        Grid.Column="0" Grid.Row="0"
+      >
+        <ListBox.InputBindings>
+          <KeyBinding Key="Delete" Command="{StaticResource CommandReference.RemoveOverlayText}" />
+        </ListBox.InputBindings>
+        
+        <ListBox.ItemTemplate>
+          <DataTemplate DataType="{x:Type Data:WallpaperOverlayText}">
+            <TextBlock Name="txtItemText" Text="{Binding Path=Format}" />
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      
+      <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
+        <Button Content="_Add" Command="{Binding AddOverlayTextCommand}" Margin="2" TabIndex="20" />
+        <Button Content="_Remove" Command="{Binding RemoveOverlayTextCommand}" Margin="2" TabIndex="30" />
+      </StackPanel>
+      
+      <GroupBox 
+        Header="Overlay Text Settings" 
+        DataContext="{Binding Path=SelectedItem}" 
+        Margin="0,10,0,0"
+        IsEnabled="{Binding 
+          ElementName=lstOverlayTexts, Path=SelectedIndex, 
+          Converter={StaticResource Global.IsNotValueAsBooleanConverter}, ConverterParameter=-1
+        }"
+        Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+      >
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+          
+          <Label 
+            Content="_Format: " 
+            Target="{Binding ElementName=txtFormat}"
+            TabIndex="40"
+            Grid.Column="0" Grid.Row="0"
+          />
+          <TextBox 
+            Name="txtFormat"
+            TabIndex="50"
+            Grid.Column="1" Grid.Row="0"
+            ToolTipService.ShowDuration="120000"
+          >
+            <TextBox.Text>
+              <Binding Path="Format" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                <Binding.ValidationRules>
+                  <Common.Presentation:StringValidationRule AllowEmpty="False" AllowWhitespacesOnly="False" AllowedMaxLength="300" />
+                </Binding.ValidationRules>
+              </Binding>
+            </TextBox.Text>
+          
+            <TextBox.ToolTip>
+              <ToolTip MaxWidth="600" Style="{x:Null}">
+                <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
+                  <Run Text="Text Format" FontWeight="Bold" /><LineBreak />
+                  The format of the text to be displayed.<LineBreak />
+                  <LineBreak />
+                  %WallpaperX% - The filename of the wallpaper (without ext.), where the X is the monitor number.<LineBreak />
+                  %WallpaperFileX% - The filename of the wallpaper (with ext.), where the X is the monitor number.<LineBreak />
+                  %WallpaperPathX% - The full path of the wallpaper, where the X is the monitor number.<LineBreak />
+                  %Date% - The current date.<LineBreak />
+                  %DateFmt% - The current date formatted (e.g. August 12, 2010).<LineBreak />
+                  %Time% - The current time.<LineBreak />
+                  %DayOfWeek% - The current day of the week.<LineBreak />
+                  %UserName% - The name of the current logged on user.<LineBreak />
+                  %MachineName% - The computer name.<LineBreak />
+                  %OSVersion% - The current Windows version.<LineBreak />
+                  %SystemRuntime% - The time-span since the system is running.<LineBreak />
+                  %SystemRuntimeFmt% - The time-span since the system is running formatted. (e.g. 2 hours, 22 minutes)<LineBreak />
+                  %SystemStartTime% - The time of day when the system started to run.<LineBreak />
+                  %SystemStartTimeD% - The time and date when the system started to run.<LineBreak />
+                  %SystemStartTimeDFmt% - The time and date when the system started to run formatted.<LineBreak />
+                  %LB% - Line break.
+                </TextBlock>
+              </ToolTip>
+            </TextBox.ToolTip>
+          </TextBox>
+          
+          <Label 
+            Content="_Position: " 
+            Target="{Binding ElementName=cboPosition}"
+            TabIndex="60"
+            Grid.Column="0" Grid.Row="1"
+          />
+          <ComboBox
+            Name="cboPosition"
+            SelectedValue="{Binding Path=Position, Mode=TwoWay}"
+            SelectedValuePath="Tag"
+            TabIndex="70"
+            Grid.Column="1" Grid.Row="1"
+          >
+            <ComboBoxItem Content="Top Left" Tag="{x:Static Data:OverlayTextPosition.TopLeft}" />
+            <ComboBoxItem Content="Top Middle" Tag="{x:Static Data:OverlayTextPosition.TopMiddle}" />
+            <ComboBoxItem Content="Top Right" Tag="{x:Static Data:OverlayTextPosition.TopRight}" />
+            <ComboBoxItem Content="Bottom Left" Tag="{x:Static Data:OverlayTextPosition.BottomLeft}" />
+            <ComboBoxItem Content="Bottom Middle" Tag="{x:Static Data:OverlayTextPosition.BottomMiddle}" />
+            <ComboBoxItem Content="Bottom Right" Tag="{x:Static Data:OverlayTextPosition.BottomRight}" />
+          </ComboBox>
+          
+          <Label 
+            Content="_Font: " 
+            Target="{Binding ElementName=btnSelectFont}"
+            TabIndex="80"
+            Grid.Column="0" Grid.Row="2"
+          />
+          <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2">
+            <TextBox Text="{Binding Path=FontName, Mode=OneWay}" IsReadOnly="True" TabIndex="90" />
+            <Button 
+              Name="btnSelectFont"
+              TabIndex="100"
+              Command="{x:Static local:ConfigTextOverlaysWindow.SelectFontCommand}"
+              Style="{StaticResource EditFieldPropertiesButton}"
+            /> 
+          </StackPanel>
+          
+          <Label 
+            Content="_Color: " 
+            Target="{Binding ElementName=btnSelectForeColor}"
+            TabIndex="110"
+            Grid.Column="0" Grid.Row="3"
+          />
+          <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
+            <TextBox MinWidth="70" ToolTip="{StaticResource ToolTips.ForeColor}" TabIndex="120">
+              <TextBox.Text>
+                <Binding
+                  Path="ForeColor"
+                  Mode="TwoWay"
+                  Converter="{StaticResource ColorToHtmlStringConverter}"
+                  UpdateSourceTrigger="PropertyChanged"
+                >
+                  <Binding.ValidationRules>
+                    <StaticResource ResourceKey="ColorStringValidationRule" />
+                  </Binding.ValidationRules>
+                </Binding>
+              </TextBox.Text>
+            </TextBox>
+            
+            <Button 
+              Name="btnSelectForeColor"
+              TabIndex="130"
+              Command="{x:Static local:ConfigTextOverlaysWindow.SelectForeColorCommand}"
+              Style="{StaticResource EditFieldPropertiesButton}"
+            /> 
+          </StackPanel>
+          
+          <Label 
+            Content="_Border Color: " 
+            Target="{Binding ElementName=btnSelectBorderColor}"
+            TabIndex="140"
+            Grid.Column="0" Grid.Row="4"
+          />
+          <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4">
+            <TextBox MinWidth="70" ToolTip="{StaticResource ToolTips.BorderColor}" TabIndex="150">
+              <TextBox.Text>
+                <Binding
+                  Path="BorderColor"
+                  Mode="TwoWay"
+                  Converter="{StaticResource ColorToHtmlStringConverter}"
+                  UpdateSourceTrigger="PropertyChanged"
+                >
+                  <Binding.ValidationRules>
+                    <StaticResource ResourceKey="ColorStringValidationRule" />
+                  </Binding.ValidationRules>
+                </Binding>
+              </TextBox.Text>
+            </TextBox>
+            
+            <Button 
+              Name="btnSelectBorderColor"
+              TabIndex="160"
+              Command="{x:Static local:ConfigTextOverlaysWindow.SelectBorderColorCommand}"
+              Style="{StaticResource EditFieldPropertiesButton}"
+            /> 
+          </StackPanel>
+          
+          <Label 
+            Content="_Horizontal Offset: " 
+            Target="{Binding ElementName=txtHorizontalOffset}"
+            TabIndex="170"
+            Grid.Column="0" Grid.Row="5"
+          />
+          <Common.Windows.Controls:NumericTextBox 
+            Name="txtHorizontalOffset"
+            Text="{Binding Path=HorizontalOffset, Mode=TwoWay}"
+            MinValue="-9999" MaxValue="9999" DragValueSmall="1" DragValueLarge="5"
+            HorizontalAlignment="Left"
+            MinWidth="50"
+            ToolTip="{StaticResource ToolTips.HOffset}"
+            TabIndex="180"
+            Grid.Column="1" Grid.Row="5"
+          />
+          
+          <Label 
+            Content="_Vertical Offset: " 
+            Target="{Binding ElementName=txtVerticalOffset}"
+            TabIndex="190"
+            Grid.Column="0" Grid.Row="6"
+          />
+          <Common.Windows.Controls:NumericTextBox 
+            Name="txtVerticalOffset"
+            Text="{Binding Path=VerticalOffset, Mode=TwoWay}"
+            MinValue="-9999" MaxValue="9999" DragValueSmall="1" DragValueLarge="5"
+            HorizontalAlignment="Left"
+            MinWidth="50"
+            ToolTip="{StaticResource ToolTips.VOffset}"
+            TabIndex="200"
+            Grid.Column="1" Grid.Row="6"
+          />
+        </Grid>
+      </GroupBox>
+    </Grid>
+  
+    <StackPanel Margin="8" Orientation="Horizontal" FlowDirection="RightToLeft" Style="{StaticResource Dialog.ButtonPanel}">
+      <Button Content="OK" IsDefault="True" IsCancel="True" TabIndex="1000" />
+    </StackPanel>
+  </StackPanel>
+</Window>
