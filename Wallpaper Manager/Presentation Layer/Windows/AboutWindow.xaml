@@ -78,6 +78,7 @@
         <RowDefinition Height="Auto" />
         <RowDefinition Height="18" />
         <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
         <RowDefinition Height="10" />
       </Grid.RowDefinitions>
       
@@ -127,6 +128,11 @@
       <TextBlock Grid.Column="0" Grid.Row="11" Grid.ColumnSpan="2">
         <Hyperlink Tag="http://www.WallpaperManager.de.vu">
           Visit Wallpaper Manager Website
+        </Hyperlink>
+      </TextBlock>
+      <TextBlock Grid.Column="0" Grid.Row="12" Grid.ColumnSpan="2">
+        <Hyperlink Tag="https://sourceforge.net/projects/wallpaperman/">
+          Visit Wallpaper Manager on Source Forge
         </Hyperlink>
       </TextBlock>
     </Grid>
