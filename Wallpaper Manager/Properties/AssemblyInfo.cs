@@ -50,8 +50,8 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.528.0")]
-[assembly: AssemblyFileVersion("2.0.528.0")]
+[assembly: AssemblyVersion("2.0.529.0")]
+[assembly: AssemblyFileVersion("2.0.529.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
 [assembly: GuidAttribute("47E92347-58F0-4881-AB6B-2F9FC2362B76")]
 [assembly: CLSCompliant(true)]

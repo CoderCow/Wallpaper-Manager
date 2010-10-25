@@ -43,14 +43,14 @@
       <ToolTip x:Key="ToolTips.Startup.StartMinimized">
         <local:ToolTipData
           Title="Start Minimized"
-          Content="If checked, Wallpaper Manager will be started minimized."
+          Content="If checked, Wallpaper Manager will be started without showing the main window."
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Startup.CycleAfterStartup">
         <local:ToolTipData
-          Title="Start Minimized"
-          Content="If checked, Wallpaper Manager will perform one cycle immediately after it has been started."
+          Title="Cycle After Startup"
+          Content="If checked, Wallpaper Manager will perform one cycle immediately after it have been started."
         />
       </ToolTip>
       
