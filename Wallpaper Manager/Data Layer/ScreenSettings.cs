@@ -5,6 +5,7 @@
 // Written by David-Kay Posmyk (KayPosmyk@gmx.de)
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
@@ -287,7 +288,7 @@ namespace WallpaperManager.Data {
     public override String ToString() {
       return StringGenerator.FromListKeyed(
         new String[] { "Cycle Randomly", "Margins", "Static Wallpaper" },
-        new Object[] { this.CycleRandomly, this.Margins, this.StaticWallpaper }
+        (IList<Object>)new Object[] { this.CycleRandomly, this.Margins, this.StaticWallpaper }
       );
     }
     #endregion

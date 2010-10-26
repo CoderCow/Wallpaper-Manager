@@ -264,15 +264,15 @@ namespace WallpaperManager.Data {
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
     private void FileSystemWatcher_Renamed(Object sender, RenamedEventArgs e) {
       if (e.OldFullPath != e.FullPath) {
-        Action<Path> code = delegate(Path newPath) {
-          Int32 wallpaperIndex = this.IndexOfByImagePath(newPath);
+        Action<Path, Path> code = (oldPath, newPath) => {
+          Int32 wallpaperIndex = this.IndexOfByImagePath(oldPath);
 
           if (wallpaperIndex != -1) {
             this[wallpaperIndex].ImagePath = newPath;
           }
         };
 
-        this.InvokeDispatcher.Invoke(DispatcherPriority.Background, code, new Path(e.FullPath));
+        this.InvokeDispatcher.Invoke(DispatcherPriority.Background, code, new Path(e.OldFullPath), new Path(e.FullPath));
       }
     }
 

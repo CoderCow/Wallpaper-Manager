@@ -5,7 +5,7 @@
 // Written by David-Kay Posmyk (KayPosmyk@gmx.de)
 
 using System;
-
+using System.Collections.Generic;
 using Common;
 
 using WallpaperManager.Data;
@@ -122,7 +122,7 @@ namespace WallpaperManager.Application {
     public override String ToString() {
       return StringGenerator.FromListKeyed(
         new String[] { "Version", "Critical Message", "Info Message" },
-        new Object[] { this.Version, this.CriticalMessage, this.InfoMessage }
+        (IList<Object>)new Object[] { this.Version, this.CriticalMessage, this.InfoMessage }
       );
     }
     #endregion

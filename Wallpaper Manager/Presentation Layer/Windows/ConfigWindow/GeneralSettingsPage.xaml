@@ -65,7 +65,7 @@
       
       <ToolTip x:Key="ToolTips.Startup.StartAutocyclingAfterStartup">
         <local:ToolTipData
-          Title="Terminate After Startup"
+          Title="Start Autocycling After Startup"
           Content="If checked, Wallpaper Manager will run the autocycling process of wallpapers after startup."
         />
       </ToolTip>

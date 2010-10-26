@@ -903,82 +903,86 @@ namespace WallpaperManager.Presentation {
       // TODO: Exception Handling
       Icon newOverlayIcon = null;
       try {
-        if (!this.DisplayCycleTimeAsIconOverlay) {
-          newOverlayIcon = AppEnvironment.IconFromEmbeddedResource(MainWindow.AutocyclingActivatedIconResName);
-        } else {
-          TimeSpan timeSpanUntilNextCycle = this.ApplicationVM.WallpaperChangerVM.TimeSpanUntilNextCycle;
+        if (this.ApplicationVM.WallpaperChangerVM.IsAutocycling) {
+          if (!this.DisplayCycleTimeAsIconOverlay) {
+            newOverlayIcon = AppEnvironment.IconFromEmbeddedResource(MainWindow.AutocyclingActivatedIconResName);
+          } else {
+            TimeSpan timeSpanUntilNextCycle = this.ApplicationVM.WallpaperChangerVM.TimeSpanUntilNextCycle;
 
-          if (timeSpanUntilNextCycle.Seconds > 0) {
-            String timeOverlayText;
+            if (timeSpanUntilNextCycle.Seconds > 0) {
+              String timeOverlayText;
 
-            if (timeSpanUntilNextCycle.TotalMinutes > 60) {
-              if (timeSpanUntilNextCycle.TotalHours > 9) {
-                timeOverlayText = "9h";
-              } else {
-                timeOverlayText = Math.Round(timeSpanUntilNextCycle.TotalHours + 1, 0) + "h";
-              }
-            } else if (timeSpanUntilNextCycle.TotalMinutes > 10) {
-              timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalMinutes + 1).ToString(CultureInfo.CurrentCulture);
-            } else if (timeSpanUntilNextCycle.TotalSeconds > 60) {
-              timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalMinutes + 1) + "m";
-            } else if (timeSpanUntilNextCycle.TotalSeconds > 10) {
-              timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalSeconds).ToString(CultureInfo.CurrentCulture);
-            } else {
-              timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalSeconds) + "s";
-            }
-
-            // Prevent the icon from being updated if it is not required.
-            if (this.lastOverlayIconText != timeOverlayText) {
-              Brush timeOverlayBackgroundBrush = null;
-              Bitmap timeOverlayBitmap = null;
-              Graphics timeOverlayGraphics = null;
-
-              try {
-                timeOverlayBitmap = new Bitmap(16, 16);
-                timeOverlayGraphics = Graphics.FromImage(timeOverlayBitmap);
-
-                if (timeSpanUntilNextCycle.TotalSeconds > 60) {
-                  timeOverlayBackgroundBrush = new SolidBrush(Color.FromArgb(160, 0, 0, 0));
+              if (timeSpanUntilNextCycle.TotalMinutes > 60) {
+                if (timeSpanUntilNextCycle.TotalHours > 9) {
+                  timeOverlayText = "9h";
                 } else {
-                  timeOverlayBackgroundBrush = new SolidBrush(Color.FromArgb(160, 255, 0, 0));
+                  timeOverlayText = Math.Round(timeSpanUntilNextCycle.TotalHours + 1, 0) + "h";
                 }
-
-                timeOverlayGraphics.SmoothingMode = SmoothingMode.AntiAlias;
-                timeOverlayGraphics.FillEllipse(timeOverlayBackgroundBrush, 0, 0, 16, 16);
-                timeOverlayGraphics.DrawString(
-                  timeOverlayText,
-                  MainWindow.IconOverlayTextFont,
-                  MainWindow.IconOverlayTextColor,
-                  new RectangleF(0, 1, 18, 16),
-                  MainWindow.IconOverlayTextFormat
-                );
-                timeOverlayGraphics.Flush();
-
-                // For an unknown reason, the Icon.FromHandle method tends to throw a random(?) ExternalException sometimes.
-                // Update: It seems like it happend when the method is called too many times in a row, so it could be possible 
-                //         that old icons won't get disposed correctly.
-                try {
-                  newOverlayIcon = System.Drawing.Icon.FromHandle(timeOverlayBitmap.GetHicon());
-                } catch (ExternalException) {
-                  return;
-                }
-              } finally {
-                if (timeOverlayBackgroundBrush != null) {
-                  timeOverlayBackgroundBrush.Dispose();
-                }
-                if (timeOverlayBitmap != null) {
-                  timeOverlayBitmap.Dispose();
-                }
-                if (timeOverlayGraphics != null) {
-                  timeOverlayGraphics.Dispose();
-                }
+              } else if (timeSpanUntilNextCycle.TotalMinutes > 10) {
+                timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalMinutes + 1).ToString(CultureInfo.CurrentCulture);
+              } else if (timeSpanUntilNextCycle.TotalSeconds > 60) {
+                timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalMinutes + 1) + "m";
+              } else if (timeSpanUntilNextCycle.TotalSeconds > 10) {
+                timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalSeconds).ToString(CultureInfo.CurrentCulture);
+              } else {
+                timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalSeconds) + "s";
               }
 
-              this.lastOverlayIconText = timeOverlayText;
+              // Prevent the icon from being updated if it is not required.
+              if (this.lastOverlayIconText != timeOverlayText) {
+                Brush timeOverlayBackgroundBrush = null;
+                Bitmap timeOverlayBitmap = null;
+                Graphics timeOverlayGraphics = null;
+
+                try {
+                  timeOverlayBitmap = new Bitmap(16, 16);
+                  timeOverlayGraphics = Graphics.FromImage(timeOverlayBitmap);
+
+                  if (timeSpanUntilNextCycle.TotalSeconds > 60) {
+                    timeOverlayBackgroundBrush = new SolidBrush(Color.FromArgb(160, 0, 0, 0));
+                  } else {
+                    timeOverlayBackgroundBrush = new SolidBrush(Color.FromArgb(160, 255, 0, 0));
+                  }
+
+                  timeOverlayGraphics.SmoothingMode = SmoothingMode.AntiAlias;
+                  timeOverlayGraphics.FillEllipse(timeOverlayBackgroundBrush, 0, 0, 16, 16);
+                  timeOverlayGraphics.DrawString(
+                    timeOverlayText,
+                    MainWindow.IconOverlayTextFont,
+                    MainWindow.IconOverlayTextColor,
+                    new RectangleF(0, 1, 18, 16),
+                    MainWindow.IconOverlayTextFormat
+                    );
+                  timeOverlayGraphics.Flush();
+
+                  // For an unknown reason, the Icon.FromHandle method tends to throw a random(?) ExternalException sometimes.
+                  // Update: It seems like it happend when the method is called too many times in a row, so it could be possible 
+                  //         that old icons won't get disposed correctly.
+                  try {
+                    newOverlayIcon = System.Drawing.Icon.FromHandle(timeOverlayBitmap.GetHicon());
+                  } catch (ExternalException) {
+                    return;
+                  }
+                } finally {
+                  if (timeOverlayBackgroundBrush != null) {
+                    timeOverlayBackgroundBrush.Dispose();
+                  }
+                  if (timeOverlayBitmap != null) {
+                    timeOverlayBitmap.Dispose();
+                  }
+                  if (timeOverlayGraphics != null) {
+                    timeOverlayGraphics.Dispose();
+                  }
+                }
+
+                this.lastOverlayIconText = timeOverlayText;
+              }
             }
           }
+        } else {
+          newOverlayIcon = AppEnvironment.IconFromEmbeddedResource(MainWindow.AutocyclingDeactivatedIconResName);
         }
-            
+
         TaskbarManager.Instance.SetOverlayIcon(this, newOverlayIcon, MainWindow.AutocyclingActivatedOverlayAccessibilityText);
       } finally {
         if (newOverlayIcon != null) {
@@ -990,7 +994,7 @@ namespace WallpaperManager.Presentation {
     }
     #endregion
 
-    #region Methods: WallpapersVM_AddWallpaperException, OnDrop, OnClosing
+    #region Methods: WallpapersVM_AddWallpaperException, OnDrop, OnClosing, ApplicationVM_RequestViewClose
     // TODO: Reimplement MainWindow.WallpapersVM_AddWallpaperException.
     /*/// <summary>
     ///   Handles the <see cref="WallpaperCategoryVM.AddWallpaperException" /> event of the 
@@ -1051,6 +1055,15 @@ namespace WallpaperManager.Presentation {
       }
 
       base.OnClosing(e);
+    }
+
+    /// <summary>
+    ///   Handles the <see cref="WallpaperManager.ApplicationInterface.ApplicationVM.RequestViewClose" /> event of an 
+    ///   <see cref="WallpaperManager.ApplicationInterface.ApplicationVM" />.
+    /// </summary>
+    /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
+    private void ApplicationVM_RequestViewClose(Object sender, EventArgs e) {
+      this.Close();
     }
     #endregion
 
@@ -1129,20 +1142,11 @@ namespace WallpaperManager.Presentation {
     }
     #endregion
 
-    /// <summary>
-    ///   Handles the <see cref="WallpaperManager.ApplicationInterface.ApplicationVM.RequestViewClose" /> event of an 
-    ///   <see cref="WallpaperManager.ApplicationInterface.ApplicationVM" />.
-    /// </summary>
-    /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
-    private void ApplicationVM_RequestViewClose(Object sender, EventArgs e) {
-      this.Close();
-    }
-
     #region INotifyPropertyChanged Implementation
     /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
     public event PropertyChangedEventHandler PropertyChanged;
 
-    /// <include path='CommonDoc/INotifyPropertyChanged/Methods/OnPropertyChanged/*' file='..\..\..\Documentation\Common.xml' />
+    /// <commondoc select='INotifyPropertyChanged/Methods/OnPropertyChanged/*' />
     protected virtual void OnPropertyChanged(String propertyName) {
       if (this.PropertyChanged != null) {
         this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));

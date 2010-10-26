@@ -18,6 +18,7 @@
 
   <Style TargetType="{x:Type CheckBox}">
     <Setter Property="Margin" Value="2" />
+    <Setter Property="ToolTipService.InitialShowDelay" Value="1500" />
     <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
     <Setter Property="ToolTipService.ShowDuration" Value="13000" />
   </Style>
@@ -25,12 +26,14 @@
   <Style TargetType="{x:Type ComboBox}">
     <Setter Property="Margin" Value="1,3,1,3" />
     <Setter Property="Padding" Value="6,4,4,4" />
+    <Setter Property="ToolTipService.InitialShowDelay" Value="1500" />
     <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
     <Setter Property="ToolTipService.ShowDuration" Value="13000" />
   </Style>
   
   <Style TargetType="{x:Type RadioButton}">
     <Setter Property="Margin" Value="2,2,2,2" />
+    <Setter Property="ToolTipService.InitialShowDelay" Value="1500" />
     <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
     <Setter Property="ToolTipService.ShowDuration" Value="13000" />
   </Style>
@@ -43,18 +46,21 @@
   
   <Style TargetType="{x:Type Button}">
     <Setter Property="Padding" Value="4,2,4,2" />
+    <Setter Property="ToolTipService.InitialShowDelay" Value="1500" />
     <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
     <Setter Property="ToolTipService.ShowDuration" Value="13000" />
   </Style>
   
   <Style TargetType="{x:Type TextBlock}">
     <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="ToolTipService.InitialShowDelay" Value="1500" />
     <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
     <Setter Property="ToolTipService.ShowDuration" Value="13000" />
   </Style>
 
   <Style TargetType="{x:Type TextBox}">
     <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="ToolTipService.InitialShowDelay" Value="1500" />
     <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
     <Setter Property="ToolTipService.ShowDuration" Value="13000" />
   </Style>

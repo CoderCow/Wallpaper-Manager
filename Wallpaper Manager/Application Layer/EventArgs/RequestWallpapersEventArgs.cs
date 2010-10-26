@@ -53,7 +53,7 @@ namespace WallpaperManager.Application {
     public override String ToString() {
       return StringGenerator.FromListKeyed(
         new String[] { "Wallpapers" },
-        new Object[] { this.Wallpapers.Count }
+        (IList<Object>)new Object[] { this.Wallpapers.Count }
       );
     }
     #endregion

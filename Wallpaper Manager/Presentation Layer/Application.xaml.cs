@@ -517,10 +517,10 @@ namespace WallpaperManager.Presentation {
           base.MainWindow.WindowState = WindowState.Minimized;
         }
 
-        // Note: Don't use the Closed-Event here because the MainWindow will be already be set to null when the event is raised.
-        base.MainWindow.Closing += delegate {
-          this.MainWindow.Dispose();
-          LightPropertyBinding.DeregisterAll(null, this.MainWindow);
+        base.MainWindow.Closed += (sender, e) => {
+          Presentation.MainWindow mainWindow = (Presentation.MainWindow)sender;
+          LightPropertyBinding.DeregisterAll(null, mainWindow);
+          mainWindow.Dispose();
 
           this.WriteConfigFile();
           GC.Collect();

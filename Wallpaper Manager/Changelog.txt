@@ -1,15 +1,22 @@
+Version 2.0 Revision 1:
+  [+] Added the link to Wallpaper Manager's source forge page to the about window.
+  [-] Fixed a bug causing renaming of wallpapers in Synchronized Folders not taking effect in the wallpaper list.
+  [-] Fixed a bug causing the Drag & Drop feature work incorrectly with Synchronized Folders.
+  [-] Fixed a few bugs related to the Main Window's overlay icon.
+  [-] Fixed several small bugs.
+
 Version 2.0:
   [+] This project is now open source.
-	[+] Improved the auto update function to support multiple update servers now.
-	[*] Ported to .NET Framework 4.0.
-	[*] Updated the skin of the Main- and About Window.
-	[*] Lots of internal code cleanup.
-	[-] Fixed a bug causing the auto update to be canceled when the system had been rebooted due the bootstrapper installation.
-	[-] Fixed a bug causing assigned single click actions of the tray icon to execute even on right clicks.
-	[-] Fixed a bug causing the "Show Wallpaper Manager" menu of the tray icon to execute the double click action instead of showing the main window for some system configurations.
-	[-] Fixed a bug causing the single and double click action to be executed when performing a double click on the tray icon for some system configurations.
-	[-] Fixed a bug causing a read error on rational font size values of Wallpaper Overlay Texts.
-	[-] Fixed several small bugs.
+  [+] Improved the auto update function to support multiple update servers now.
+  [*] Ported to .NET Framework 4.0. 
+  [*] Updated the skin of the Main- and About Window.
+  [*] Lots of internal code cleanup.
+  [-] Fixed a bug causing the auto update to be canceled when the system had been rebooted due the bootstrapper installation.
+  [-] Fixed a bug causing assigned single click actions of the tray icon to execute even on right clicks.
+  [-] Fixed a bug causing the "Show Wallpaper Manager" menu of the tray icon to execute the double click action instead of showing the main window for some system configurations.
+  [-] Fixed a bug causing the single and double click action to be executed when performing a double click on the tray icon for some system configurations.
+  [-] Fixed a bug causing a read error on rational font size values of Wallpaper Overlay Texts.
+  [-] Fixed several small bugs.
 
 Version 1.9 Revision 1:
   [-] Fixed a bug causing to detect Windows XP / 2003 Server systems as Windows 7 which could cause lots of errors in some cases.

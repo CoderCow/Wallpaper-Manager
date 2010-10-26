@@ -5,6 +5,7 @@
 // Written by David-Kay Posmyk (KayPosmyk@gmx.de)
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 using Common;
@@ -159,7 +160,7 @@ namespace WallpaperManager.Data {
     public override String ToString() {
       return StringGenerator.FromListKeyed(
         new String[] { "Left", "Right", "Top", "Bottom" },
-        new Object[] { this.Left, this.Right, this.Top, this.Bottom }
+        (IList<Object>)new Object[] { this.Left, this.Right, this.Top, this.Bottom }
       );
     }
     #endregion

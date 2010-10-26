@@ -5,6 +5,7 @@
 // Written by David-Kay Posmyk (KayPosmyk@gmx.de)
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -230,7 +231,7 @@ namespace WallpaperManager.Data {
     public override String ToString() {
       return StringGenerator.FromListKeyed(
         new String[] { "ImagePath" },
-        new Object[] { this.ImagePath }
+        (IList<Object>)new Object[] { this.ImagePath }
       );
     }
     #endregion
