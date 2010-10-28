@@ -1,4 +1,8 @@
+// Uncomment to use the configuration file in the app's directory instead of the users app data directory.
+// #def LocalConfig
+
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -23,7 +27,12 @@ namespace WallpaperManager.Data {
     public const String AppGuid = "{47e92347-58f0-4881-ab6b-2f9fc2362b76}";
     #endregion
 
-    #region Constants: ConfigurationFilename, ChangelogFileName, AppliedWallpaperFilename
+    #region Constants: DebugFilename, ConfigurationFilename, ChangelogFileName, AppliedWallpaperFilename
+    /// <summary>
+    ///   Represents the filename of the application's configuration file.
+    /// </summary>
+    private const String DebugFilename = "Debug.txt";
+    
     /// <summary>
     ///   Represents the filename of the application's configuration file.
     /// </summary>
@@ -104,6 +113,29 @@ namespace WallpaperManager.Data {
     }
     #endregion
 
+    #region Property: DebugFilePath
+    /// <summary>
+    ///   <inheritdoc cref="DebugFilePath" select='../value/node()' />
+    /// </summary>
+    private Path debugFilePath;
+
+    /// <summary>
+    ///   Gets the <see cref="Path" /> of the application's debug file.
+    /// </summary>
+    /// <value>
+    ///   The <see cref="Path" /> of the application's debug file.
+    /// </value>
+    public Path DebugFilePath {
+      get {
+        if (this.debugFilePath == Path.None) {
+          this.debugFilePath = Path.Concat(this.AppPath, AppEnvironment.DebugFilename);
+        }
+
+        return this.debugFilePath;
+      }
+    }
+    #endregion
+
     #region Property: ConfigFilePath
     /// <summary>
     ///   <inheritdoc cref="ConfigFilePath" select='../value/node()' />
@@ -118,16 +150,15 @@ namespace WallpaperManager.Data {
     /// </value>
     /// <remarks>
     ///   This <see cref="Path" /> usually points to a configuration Wallpaper Manager directory in the common repository for 
-    ///   application-specific data for the current roaming user. However, if DEBUG is defined, it will point to a 
+    ///   application-specific data for the current roaming user. However, if the LocalConfig symbol is defined, it will point to a 
     ///   configuration file which is in the same directory as the executeable file.
     /// </remarks>
     public Path ConfigFilePath {
       get {
         if (this.configFilePath == Path.None) {
-          #if !DEBUG
+          #if !LocalConfig
           this.configFilePath = Path.Concat(this.AppDataPath, AppEnvironment.ConfigurationFilename);
           #else
-          // In debug mode, we use the configuration which is in same directory as the executeable file.
           this.configFilePath = Path.Concat(this.AppPath, AppEnvironment.ConfigurationFilename);
           #endif
         }
@@ -231,6 +262,17 @@ namespace WallpaperManager.Data {
     }
     #endregion
 
+    #region Method: DebugWriteAppInfoInternal
+    /// <inheritdoc />
+    protected override void DebugWriteAppInfoInternal() {
+      base.DebugWriteAppInfoInternal();
+
+      Debug.WriteLine("Multiscreen system: " + AppEnvironment.IsMultiscreenSystem);
+      Debug.WriteLine("Use default settings defined: " + this.IsUseDefaultSettingsDefined);
+      Debug.WriteLine("No Auto termination defined: " + this.IsNoAutoTerminateDefined);
+    }
+    #endregion
+
     #region Static Method: IconFromEmbeddedResource
     /// <summary>
     ///   Gets an <see cref="Icon" /> instance from an embedded icons resource.
@@ -284,7 +326,7 @@ namespace WallpaperManager.Data {
           iconStream.Dispose();
         }
       }
-      #endregion
     }
+    #endregion
   }
 }

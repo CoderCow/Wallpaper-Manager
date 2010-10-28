@@ -254,6 +254,9 @@ namespace WallpaperManager.Presentation {
       using (new Mutex(true, AppEnvironment.AppGuid, out Application.isFirstInstance)) {
         Application.current = new Application();
         Application.Current.environment = new AppEnvironment();
+        Debug.Listeners.Add(new TextWriterTraceListener(Application.Current.Environment.DebugFilePath));
+        Debug.WriteLine("Listeners registered.");
+        Application.Current.Environment.DebugWriteAppInfo();
 
         Application.Current.InitializeComponent();
         Application.Current.Run();
@@ -280,23 +283,29 @@ namespace WallpaperManager.Presentation {
       // and the application will therefore close when the window closes.
       this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
-      #if !DEBUG
       // Register global error handler.
       this.DispatcherUnhandledException += this.Application_DispatcherUnhandledException;
-      #endif
 
+      Debug.WriteLine("-- Application init process --");
+      Debug.Indent();
       // We want only one instance being run at the same time because multiple instances could result in a mess of autocycles.
       // TODO: If another instance is already running, bring its main window to the front.
       if (!Application.isFirstInstance) {
+        Debug.WriteLine("Detected another running instance of the application.");
         DialogManager.ShowGeneral_AppAlreadyRunning(null);
+        Debug.Unindent();
         this.Shutdown();
 
         return;
       }
 
+      Debug.WriteLine("First step.");
       // Check whether the Use Default Settings argument is defined.
       if (!this.Environment.IsUseDefaultSettingsDefined) {
         if (!File.Exists(this.Environment.ConfigFilePath)) {
+          Debug.Write("Configuration file at \"");
+          Debug.Write(this.Environment.ConfigFilePath);
+          Debug.WriteLine("\" not found. Using default settings.");
           DialogManager.ShowConfig_FileNotFound(this.MainWindow, this.Environment.ConfigFilePath);
 
           this.configuration = new Configuration();
@@ -318,7 +327,9 @@ namespace WallpaperManager.Presentation {
           #endif
         }
       }
-    
+      
+      Debug.WriteLine("Second step.");
+      Debug.Flush();
       this.wallpaperChanger = new WallpaperChanger(
         this.Environment.AppliedWallpaperFilePath, this.Configuration.General.ScreensSettings
       );
@@ -355,6 +366,8 @@ namespace WallpaperManager.Presentation {
         this.ApplicationVM_RequestTerminateApplication
       );
       
+      Debug.WriteLine("Third step.");
+      Debug.Flush();
       // Cycle and start autocycling if requested.
       try {
         if (this.Configuration.General.StartAutocyclingAfterStartup) {
@@ -403,6 +416,8 @@ namespace WallpaperManager.Presentation {
         }
       }
 
+      Debug.WriteLine("Fourth step.");
+      Debug.Flush();
       this.notifyIcon = new NotifyIconManager(this.ApplicationViewModel);
 
       // Register light property bindings which make sure that the NotifyIconManager gets always updated with any changed 
@@ -424,6 +439,10 @@ namespace WallpaperManager.Presentation {
       updateManager.DownloadUpdateSuccessful += this.UpdateManager_DownloadUpdateSuccessful;
       updateManager.DownloadUpdateError += this.UpdateManager_DownloadUpdateError;
       updateManager.BeginVersionCheck();
+
+      Debug.WriteLine("Initialization succeeded.");
+      Debug.Unindent();
+      Debug.Flush();
     }
 
     /// <summary>
@@ -431,6 +450,8 @@ namespace WallpaperManager.Presentation {
     /// </summary>
     /// <inheritdoc />
     protected override void OnExit(ExitEventArgs e) {
+      Debug.WriteLine("Shutting down application.");
+      Debug.Flush();
       this.Dispose();
 
       base.OnExit(e);
@@ -879,6 +900,7 @@ namespace WallpaperManager.Presentation {
         return;
       }
 
+      #if !DEBUG
       if (e.Exception is SecurityException) {
         DialogManager.ShowGeneral_MissingFrameworkRights(this.MainWindow, e.Exception.ToString());
       } else if (e.Exception is DirectoryNotFoundException) {
@@ -892,7 +914,11 @@ namespace WallpaperManager.Presentation {
       }
 
       e.Handled = true;
-      return;
+      #else
+      Debug.Write("Exception ");
+      Debug.WriteLine(e.Exception.ToString());
+      Debug.Flush();
+      #endif
     }
 
     /// <summary>

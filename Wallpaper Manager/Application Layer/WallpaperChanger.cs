@@ -8,12 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Security;
 using System.Security.Permissions;
 using System.Windows.Threading;
+using System.Linq;
+using Common.Diagnostics;
 using Microsoft.Win32;
 
 using Common;
@@ -704,8 +707,11 @@ namespace WallpaperManager.Application {
         throw new ObjectDisposedException(ExceptionMessages.GetThisObjectIsDisposed());
       }
 
+      Debug.WriteLine("-- Starting random wallpaper picking --");
+      Debug.Indent();
       // If all screens should display static wallpapers anyway, we have nearly nothing to do here.
       if (this.ScreensSettings.AllStatic) {
+        Debug.WriteLine("Applying by using a dummy wallpaper because all screens should display static wallpapers.");
         // Build by using a dummy wallpaper.
         this.BuildAndApplyWallpaper(new[] { new[] { new Wallpaper() } }, false);
         this.ActiveWallpapersAccessor = new List<Wallpaper>();
@@ -718,6 +724,7 @@ namespace WallpaperManager.Application {
           throw new ArgumentException(ExceptionMessages.GetCollectionContainsNullItem("wallpapersToPickFrom"));
         }
       } else {
+        Debug.WriteLine("No wallpapers given, starting a request.");
         wallpapersToPickFrom = this.OnRequestWallpapers();
 
         if (wallpapersToPickFrom.Contains(null)) {
@@ -727,6 +734,10 @@ namespace WallpaperManager.Application {
       if (wallpapersToPickFrom.Count == 0) {
         throw new InvalidOperationException(ExceptionMessages.GetNotEnoughtWallpapersToCycle());
       }
+      Debug.Write(wallpapersToPickFrom.Count);
+      Debug.WriteLine(" wallpapers given to pick from.");
+      Debug.WriteLine("Performing first pick step...");
+      Debug.Flush();
 
       #region First: Filter, enumerate the wallpapers and accumulate the priority values
       Random random = new Random();
@@ -813,6 +824,8 @@ namespace WallpaperManager.Application {
       #endregion
 
       #region Second filerting by single- or multiscreen wallpapers and organizing the filter list.
+      Debug.WriteLine("Performing second pick step...");
+      Debug.Flush();
       // And filter the list again by whether single- or multiscreen wallpapers...
       // Note: The filtered list cannot be empty since, for example, multiscreenMode cannot be true if 
       //       there are no multiscreen wallpapers.
@@ -853,6 +866,9 @@ namespace WallpaperManager.Application {
       this.lastCycledWallpapers.MaximumSize = lastWallpapersMaximum;
       
       #region Pick the wallpapers by priority.
+      Debug.WriteLine("Performing third pick step...");
+      Debug.Flush();
+
       // Enumerate some more information before starting the random picking.
       Byte maxPriority;
       Int32 requiredWallpapersToPick;
@@ -951,6 +967,10 @@ namespace WallpaperManager.Application {
         pickedWallpapers.AddRange(pickedWallpapersForScreen[i]);
       }
 
+      Debug.Write(pickedWallpapers.Count);
+      Debug.WriteLine(" wallpapers picked. Starting build...");
+      Debug.Flush();
+      Debug.Unindent();
       // Finally build the image and apply it on the Windows Desktop.
       this.BuildAndApplyWallpaper(pickedWallpapersForScreen, !multiscreenMode);
 
@@ -1011,8 +1031,13 @@ namespace WallpaperManager.Application {
         throw new ObjectDisposedException(ExceptionMessages.GetThisObjectIsDisposed());
       }
 
+      Debug.WriteLine("-- Starting non-random wallpaper picking --");
+      Debug.Indent();
+
       // First, we have nearly nothing to do here if all screens should display static wallpapers anyway.
       if (this.ScreensSettings.AllStatic) {
+        Debug.WriteLine("Applying by using a dummy wallpaper because all screens should display static wallpapers.");
+
         // Build by using a dummy wallpaper.
         this.BuildAndApplyWallpaper(new[] { new[] { new Wallpaper() } }, false);
         this.ActiveWallpapersAccessor = new List<Wallpaper>();
@@ -1054,6 +1079,9 @@ namespace WallpaperManager.Application {
       List<Wallpaper> wallpapersToUseFinally = new List<Wallpaper>();
       #region Pick the Wallpapers we need.
       if (containsMultiscreen) {
+        Debug.WriteLine("1 wallpaper picked. Starting build...");
+        Debug.Unindent();
+        Debug.Flush();
         this.BuildAndApplyWallpaper(new[] { new[] { wallpapersToUse[0] } }, false);
         wallpapersToUseFinally.Add(wallpapersToUse[0]);
       } else {
@@ -1075,6 +1103,10 @@ namespace WallpaperManager.Application {
           }
         }
 
+        Debug.Write(wallpapersToUseFinally.Count);
+        Debug.WriteLine(" wallpapers picked. Starting build...");
+        Debug.Unindent();
+        Debug.Flush();
         this.BuildAndApplyWallpaper(wallpapersToUseByScreen, true);
       }
       #endregion
@@ -1102,6 +1134,8 @@ namespace WallpaperManager.Application {
     ///   Performs actions generally done after a cycle.
     /// </summary>
     private void CyclePostActions() {
+      Debug.WriteLine("Running cycle post actions.");
+
       // Restart the autochange timer to avoid that the timer cycles right after the user may have just cycled manually.
       if (this.IsAutocycling) {
         this.StopCycling();
@@ -1109,9 +1143,6 @@ namespace WallpaperManager.Application {
       }
 
       this.lastCycleTime = DateTime.Now;
-
-      // Explicitly release pending managed resources of the cycle since we won't need them anymore.
-      GC.Collect();
     }
     #endregion
 
@@ -1178,53 +1209,71 @@ namespace WallpaperManager.Application {
         throw new NotSupportedException(ExceptionMessages.GetCyclingAlreadyInProgress());
       }
 
-      WallpaperChanger.buildWallpaperWorker = new BackgroundWorker() { WorkerSupportsCancellation = true };
+      WallpaperChanger.buildWallpaperWorker = new BackgroundWorker();
       WallpaperChanger.buildWallpaperWorkerCaller = this;
       List<Wallpaper>[] wallpapersToUseSync = new List<Wallpaper>[wallpapersToUse.Count];
 
+      Debug.WriteLine("Preparing build with the following wallpapers:");
+      Debug.Indent();
       for (Int32 i = 0; i < wallpapersToUse.Count; i++) {
         wallpapersToUseSync[i] = new List<Wallpaper>(wallpapersToUse[i].Count);
-
+        
         // Clone all Wallpaper-objects of the collection to make them thread safe for the background worker's thread.
         foreach (Wallpaper wallpaper in wallpapersToUse[i]) {
-          wallpapersToUseSync[i].Add((Wallpaper)wallpaper.Clone());
+          Wallpaper clonedWallpaper = (Wallpaper)wallpaper.Clone();
+          DebugHelper.WriteObjectPropertyData(clonedWallpaper);
+          wallpapersToUseSync[i].Add(clonedWallpaper);
         }
       }
+      Debug.Unindent();
+      Debug.Flush();
 
       WallpaperChanger.buildWallpaperWorker.DoWork += delegate(Object sender, DoWorkEventArgs e) {
         Object[] args = (Object[])e.Argument;
         IList<Wallpaper>[] wallpapersToUseLocal = (IList<Wallpaper>[])args[0];
         Boolean applyMultipleLocal = (Boolean)args[1];
-
-        // Use the current WallpaperBuilder to create the wallpaper image file.
+        Image wallpaperImage;
+        
+        Debug.WriteLine("[BuildThread] Building wallpaper...");
+        Debug.Flush();
+        // Use the current WallpaperBuilder to create the wallpaper image file.);
         if (!applyMultipleLocal) {
-          e.Result = this.WallpaperBuilder.CreateMultiscreenFromSingle(wallpapersToUseLocal[0][0], 1.0f, true);
+          wallpaperImage = this.WallpaperBuilder.CreateMultiscreenFromSingle(wallpapersToUseLocal[0][0], 1.0f, true);
         } else {
-          e.Result = this.WallpaperBuilder.CreateMultiscreenFromMultiple(wallpapersToUseLocal, 1.0f, true);
+          wallpaperImage = this.WallpaperBuilder.CreateMultiscreenFromMultiple(wallpapersToUseLocal, 1.0f, true);
         }
+
+        Debug.WriteLine("[BuildThread] Saving wallpaper image...");
+        Debug.Flush();
+        wallpaperImage.Save(this.AppliedWallpaperFilePath, ImageFormat.Bmp);
+        Debug.WriteLine("[BuildThread] Applying wallpaper on Windows Desktop...");
+        Debug.Flush();
+        Desktop.SetWallpaper(this.AppliedWallpaperFilePath, WallpaperArrangement.Tile);
       };
 
       WallpaperChanger.buildWallpaperWorker.RunWorkerCompleted += delegate(Object sender, RunWorkerCompletedEventArgs e) {
         try {
+          if (e.Cancelled) {
+            return;
+          }
           if (e.Error != null) {
             throw e.Error;
           }
-
-          if (!e.Cancelled) {
-            ((Image)e.Result).Save(this.AppliedWallpaperFilePath, ImageFormat.Bmp);
-            Desktop.SetWallpaper(this.AppliedWallpaperFilePath, WallpaperArrangement.Tile);
-          }
+          Debug.WriteLine("Build completed successfully.");
         } finally {
-          if (e.Result != null) {
-            ((IDisposable)e.Result).Dispose();
-          }
           ((BackgroundWorker)sender).Dispose();
           WallpaperChanger.buildWallpaperWorker = null;
           WallpaperChanger.buildWallpaperWorkerCaller = null;
+          Debug.WriteLine("-- Build worker disposed --");
+          Debug.Flush();
+
+          // Explicitly release pending managed resources of the cycle and build.
+          GC.Collect();
         }
       };
 
-      buildWallpaperWorker.RunWorkerAsync(new Object[] { wallpapersToUse, applyMultiple });
+      Debug.WriteLine("-- Starting build worker --");
+      WallpaperChanger.buildWallpaperWorker.RunWorkerAsync(new Object[] { wallpapersToUse, applyMultiple });
     }
     #endregion
 

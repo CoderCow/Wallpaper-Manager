@@ -6,6 +6,7 @@
 
 using System;
 using System.Globalization;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -702,7 +703,7 @@ namespace WallpaperManager.Presentation {
     }
     #endregion
 
-    #region General Dialogs
+    #region Error Dialogs
     /// <summary>
     ///   Creates and shows a dialog saying that a file could not be found or the application doesn't have
     ///   the required rights to access it.
@@ -960,7 +961,7 @@ namespace WallpaperManager.Presentation {
     public static void ShowGeneral_UnhandledException(Window owner, String exceptionDetailText) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
         owner, "Unhandled Exception Occured", 
-        "Wallpaper Manager encountered an unhandled exception, see Exception Details for more information.",
+        String.Format("Wallpaper Manager {0} encountered an unhandled exception, see Exception Details for more information.", Assembly.GetAssembly(typeof(DialogManager)).GetName().Version),
         TaskDialogButtons.OK, null
       );
 

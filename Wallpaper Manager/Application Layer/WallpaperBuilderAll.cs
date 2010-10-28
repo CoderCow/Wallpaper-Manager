@@ -63,7 +63,7 @@ namespace WallpaperManager.Application {
       if (wallpapers.Contains(null)) {
         throw new ArgumentException(ExceptionMessages.GetCollectionContainsNullItem("wallpapers"));
       }
-      
+
       // This is the collection of Wallpapers which is finally given to the generator method.
       // Note that the order of the Wallpapers in this collection has to be equal with the screen order.
       List<Wallpaper> usedWallpapers = new List<Wallpaper>(this.ScreensSettings.Count);
