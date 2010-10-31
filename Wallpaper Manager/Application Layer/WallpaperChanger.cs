@@ -81,16 +81,21 @@ namespace WallpaperManager.Application {
     private static WallpaperChanger buildWallpaperWorkerCaller;
     #endregion
 
-    #region Fields: lastActiveWallpapers, lastCycleTime, wallpaperImagePath, buildWallpaperWorker
+    #region Fields: lastActiveWallpapers, lastCycleTime, wallpaperImagePath, buildWallpaperWorker, random
     /// <summary>
     ///   A collection of the last applied <see cref="Wallpaper" /> objects.
     /// </summary>
     private readonly LastActiveWallpaperCollection lastCycledWallpapers;
 
     /// <summary>
-    ///   The <see cref="DateTime">time</see> when the last cycle was performed. <c>null</c> if there was no cycle yet.
+    ///   The time when the last cycle was performed. <c>null</c> if there was no cycle yet.
     /// </summary>
     private DateTime? lastCycleTime;
+
+    /// <summary>
+    ///   The <see cref="Random" /> object used to randomize the cycle process.
+    /// </summary>
+    private Random random;
     #endregion
 
     #region Properties: WallpaperBuilder, WallpaperChangeType
@@ -518,6 +523,8 @@ namespace WallpaperManager.Application {
 
       this.wallpaperBuilder = this.NewWallpaperBuilderByChangeType(WallpaperChangeType.ChangeAll);
       SystemEvents.DisplaySettingsChanged += this.System_DisplaySettingsChanged;
+
+      this.random = new Random();
     }
     #endregion
 
@@ -740,8 +747,6 @@ namespace WallpaperManager.Application {
       Debug.Flush();
 
       #region First: Filter, enumerate the wallpapers and accumulate the priority values
-      Random random = new Random();
-
       // The highest priority value of multi- and singlescreen wallpapers.
       Byte maxMultiscreenPriority = new Byte();
       Byte maxSinglescreenPriority = new Byte();
@@ -755,40 +760,40 @@ namespace WallpaperManager.Application {
       // later, but there are no activated wallpaper for screen 2, then we can't perform a cycle.)
       Int32[] sumSinglescreenByScreen = new Int32[this.ScreensSettings.Count];
 
-      // Filter out any not activated or priority = 0 wallpapers and randomize them. Also measure some data.
+      // Filter out any not activated or priority <= 0 wallpapers and also measure some data.
       List<Wallpaper> filteredWallpapers = new List<Wallpaper>(wallpapersToPickFrom.Count);
-
       for (Int32 i = 0; i < wallpapersToPickFrom.Count; i++) {
         Wallpaper wallpaper = wallpapersToPickFrom[i];
 
-        if (wallpaper.IsActivated && wallpaper.Priority != 0) {
-          if (wallpaper.IsMultiscreen) {
-            if (wallpaper.Priority > maxMultiscreenPriority) {
-              maxMultiscreenPriority = wallpaper.Priority;
-            }
+        if (!wallpaper.IsActivated || wallpaper.Priority <= 0) {
+          continue;
+        }
 
-            sumMultiscreenPriority += wallpaper.Priority;
-          } else {
-            if (wallpaper.Priority > maxSinglescreenPriority) {
-              maxSinglescreenPriority = wallpaper.Priority;
-            }
-
-            sumSinglescreenPriority += wallpaper.Priority;
-            
-            for (Int32 x = 0; x < this.ScreensSettings.Count; x++) {
-              if (!wallpaper.DisabledScreens.Contains(x)) {
-                sumSinglescreenByScreen[x]++;
-              }
-            }
+        if (wallpaper.IsMultiscreen) {
+          if (wallpaper.Priority > maxMultiscreenPriority) {
+            maxMultiscreenPriority = wallpaper.Priority;
           }
 
-          // Add the filtered Wallpaper at a random position.
-          filteredWallpapers.Insert(random.Next(0, filteredWallpapers.Count + 1), wallpaper);
+          sumMultiscreenPriority += wallpaper.Priority;
+        } else {
+          if (wallpaper.Priority > maxSinglescreenPriority) {
+            maxSinglescreenPriority = wallpaper.Priority;
+          }
+
+          sumSinglescreenPriority += wallpaper.Priority;
+            
+          for (Int32 x = 0; x < this.ScreensSettings.Count; x++) {
+            if (!wallpaper.DisabledScreens.Contains(x)) {
+              sumSinglescreenByScreen[x]++;
+            }
+          }
         }
+
+        filteredWallpapers.Insert(this.random.Next(0, filteredWallpapers.Count + 1), wallpaper);
       }
       #endregion
 
-      // No way to cycle when there are no useable Wallpapers...
+      // No way to cycle when there are no useable Wallpapers.
       if (filteredWallpapers.Count == 0) {
         throw new InvalidOperationException(ExceptionMessages.GetNotEnoughtWallpapersToCycle(1));
       }
@@ -801,7 +806,7 @@ namespace WallpaperManager.Application {
       }
 
       #region Decide whether to pick a Multiscreen- or Singlescreen-Wallpaper(s)
-      // True is a Multiscreen-Wallpaper should be picked.
+      // Indicates whether a Multiscreen-Wallpaper should be picked.
       Boolean multiscreenMode;
 
       // The decision is simple if there are no Singlescreen- or Multiscreen-Wallpapers (both can't be).
@@ -812,23 +817,21 @@ namespace WallpaperManager.Application {
         // picking accuracy.
         sumSinglescreenPriority /= requiredWallpaperCount;
 
-        Int32 minSumPriority = random.Next(1, sumMultiscreenPriority + sumSinglescreenPriority + 1);
+        Int32 minSumPriority = this.random.Next(1, sumMultiscreenPriority + sumSinglescreenPriority + 1);
+        multiscreenMode = (sumMultiscreenPriority < minSumPriority);
+      }
 
-        // 50/50 chance whether to check the Multiscreen or the Singlescreen sum first.
-        if (random.Next(1, 3) == 1) {
-          multiscreenMode = (minSumPriority < sumMultiscreenPriority);
-        } else {
-          multiscreenMode = !(minSumPriority < sumSinglescreenPriority);
-        }
+      if (multiscreenMode) {
+        requiredWallpaperCount = 1;
       }
       #endregion
 
       #region Second filerting by single- or multiscreen wallpapers and organizing the filter list.
       Debug.WriteLine("Performing second pick step...");
       Debug.Flush();
-      // And filter the list again by whether single- or multiscreen wallpapers...
-      // Note: The filtered list cannot be empty since, for example, multiscreenMode cannot be true if 
-      //       there are no multiscreen wallpapers.
+      // And filter the list again by single- or multiscreen wallpapers.
+      // Note: The filtered list cannot be empty because multiscreenMode cannot be true if there are no multiscreen wallpapers 
+      //       and neither be false if there are no singlescreen wallpapers.
       for (Int32 i = 0; i < filteredWallpapers.Count; i++) {
         if (filteredWallpapers[i].IsMultiscreen != multiscreenMode) {
           filteredWallpapers.RemoveAt(i);
@@ -840,7 +843,8 @@ namespace WallpaperManager.Application {
       filteredWallpapers.Sort(new Comparison<Wallpaper>((a, b) => a.Priority.CompareTo(b.Priority)));
       #endregion
 
-      // No way to cycle when there are not enough useable wallpapers.
+      // TODO: This check should not be necessary.
+      // No way to cycle when there are not enought usable wallpapers.
       if (filteredWallpapers.Count == 0) {
         throw new InvalidOperationException(ExceptionMessages.GetNotEnoughtWallpapersToCycle(2));
       }
@@ -857,7 +861,7 @@ namespace WallpaperManager.Application {
         }
       }
 
-      // Refresh the maximum size of the Last Activate Wallpapers collection since the amount of cycleable Wallpapers may 
+      // Refresh the maximum size of the last activate wallpapers collection since the amount of cycleable Wallpapers may 
       // have changed.
       Int32 lastWallpapersMaximum = (filteredWallpapers.Count * (this.LastActiveListSize / 100));
       if (lastWallpapersMaximum == 0) {
@@ -871,14 +875,11 @@ namespace WallpaperManager.Application {
 
       // Enumerate some more information before starting the random picking.
       Byte maxPriority;
-      Int32 requiredWallpapersToPick;
 
       if (multiscreenMode) {
         maxPriority = maxMultiscreenPriority;
-        requiredWallpapersToPick = 1;
       } else {
         maxPriority = maxSinglescreenPriority;
-        requiredWallpapersToPick = requiredWallpaperCount;
       }
 
       // We genereally do not want to pick Wallpapers from the last cycles again, but we can't consider the last active 
@@ -890,7 +891,7 @@ namespace WallpaperManager.Application {
         }
       }
 
-      Boolean considerLastActives = (filteredWallpapers.Count >= (lastActiveWallpapersCount + requiredWallpapersToPick));
+      Boolean considerLastActives = (filteredWallpapers.Count >= (lastActiveWallpapersCount + requiredWallpaperCount));
 
       // The Wallpapers picked for each screen (only 1 items when picking a Multiscreen-Wallpaper.
       List<Wallpaper>[] pickedWallpapersForScreen;
@@ -908,8 +909,8 @@ namespace WallpaperManager.Application {
       Int32 pickedWallpapersCount = 0;
 
       // Finally pick the Wallpapers.
-      while (pickedWallpapersCount < requiredWallpapersToPick) {
-        Byte minPriority = (Byte)random.Next(1, maxPriority + 1);
+      while (pickedWallpapersCount < requiredWallpaperCount) {
+        Byte minPriority = (Byte)this.random.Next(1, maxPriority + 1);
 
         if (filteredWallpapers.Count == 0) {
           throw new InvalidOperationException(ExceptionMessages.GetNotEnoughtWallpapersToCycle(5));
@@ -918,35 +919,35 @@ namespace WallpaperManager.Application {
           Wallpaper wallpaper = filteredWallpapers[i];
           
           if (!(considerLastActives && this.lastCycledWallpapers.Contains(wallpaper))) {
-            if (filteredWallpapers[i].Priority >= minPriority) {
-              if (filteredWallpapers[i].EvaluateCycleConditions()) {
-                Boolean picked = false;
+            if (filteredWallpapers[i].Priority < minPriority) {
+              // Keep the Wallpaper in the list.
+              continue;
+            }
 
-                if (multiscreenMode) {
-                  pickedWallpapersForScreen[0].Add(wallpaper);
-                  picked = true;
-                } else {
-                  for (Int32 x = 0; x < this.ScreensSettings.Count; x++) {
-                    if (!wallpaper.DisabledScreens.Contains(x)) {
-                      if (pickedWallpapersForScreen[x].Count < requiredWallpapersByScreen[x]) {
-                        pickedWallpapersForScreen[x].Add(wallpaper);
-                        picked = true;
-                        break;
-                      }
+            if (filteredWallpapers[i].EvaluateCycleConditions()) {
+              Boolean picked = false;
+
+              if (multiscreenMode) {
+                pickedWallpapersForScreen[0].Add(wallpaper);
+                picked = true;
+              } else {
+                for (Int32 x = 0; x < this.ScreensSettings.Count; x++) {
+                  if (!wallpaper.DisabledScreens.Contains(x)) {
+                    if (pickedWallpapersForScreen[x].Count < requiredWallpapersByScreen[x]) {
+                      pickedWallpapersForScreen[x].Add(wallpaper);
+                      picked = true;
+                      break;
                     }
                   }
                 }
+              }
 
-                if (picked) {
-                  pickedWallpapersCount++;
-                  if (pickedWallpapersCount >= requiredWallpapersToPick) {
-                    break;
-                  }
+              if (picked) {
+                pickedWallpapersCount++;
+                if (pickedWallpapersCount >= requiredWallpaperCount) {
+                  break;
                 }
               }
-            } else {
-              // Keep the Wallpaper in list.
-              continue;
             }
           }
 
