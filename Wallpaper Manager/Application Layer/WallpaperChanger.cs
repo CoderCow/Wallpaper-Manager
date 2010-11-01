@@ -15,7 +15,6 @@ using System.Globalization;
 using System.Security;
 using System.Security.Permissions;
 using System.Windows.Threading;
-using System.Linq;
 using Common.Diagnostics;
 using Microsoft.Win32;
 
@@ -226,7 +225,7 @@ namespace WallpaperManager.Application {
     public Byte LastActiveListSize {
       get { return this.lastActiveListSize; }
       set {
-        if (!value.IsBetween((Byte)1, WallpaperChanger.LastActiveListSizeMax)) {
+        if (!value.IsBetween(1, WallpaperChanger.LastActiveListSizeMax)) {
           throw new ArgumentOutOfRangeException(ExceptionMessages.GetValueOutOfRange(
             null, value, 
             1.ToString(CultureInfo.CurrentCulture), 
@@ -908,51 +907,74 @@ namespace WallpaperManager.Application {
 
       Int32 pickedWallpapersCount = 0;
 
-      // Finally pick the Wallpapers.
+      // Finally pick the wallpapers.
+      Boolean considerConditions = true;
+      Boolean considerPriority = true;
+      Boolean considerDisabledScreens = (this.WallpaperChangeType != WallpaperChangeType.ChangeAllCloned);
       while (pickedWallpapersCount < requiredWallpaperCount) {
         Byte minPriority = (Byte)this.random.Next(1, maxPriority + 1);
-
-        if (filteredWallpapers.Count == 0) {
-          throw new InvalidOperationException(ExceptionMessages.GetNotEnoughtWallpapersToCycle(5));
-        }
+        
         for (Int32 i = 0; i < filteredWallpapers.Count; i++) {
           Wallpaper wallpaper = filteredWallpapers[i];
-          
-          if (!(considerLastActives && this.lastCycledWallpapers.Contains(wallpaper))) {
-            if (filteredWallpapers[i].Priority < minPriority) {
-              // Keep the Wallpaper in the list.
+
+          if (pickedWallpapersCount >= requiredWallpaperCount) {
+            break;
+          }
+
+          if (
+            (considerLastActives && this.lastCycledWallpapers.Contains(wallpaper)) ||
+            (considerConditions && !filteredWallpapers[i].EvaluateCycleConditions())
+          ) {
+            // We shouldn't remove too many wallpapers.
+            if (filteredWallpapers.Count == requiredWallpaperCount) {
+              considerLastActives = false;
+              considerConditions = false;
+              considerPriority = false;
+              considerDisabledScreens = false;
+            } else {
+              filteredWallpapers.RemoveAt(i);
+              i--;
               continue;
-            }
-
-            if (filteredWallpapers[i].EvaluateCycleConditions()) {
-              Boolean picked = false;
-
-              if (multiscreenMode) {
-                pickedWallpapersForScreen[0].Add(wallpaper);
-                picked = true;
-              } else {
-                for (Int32 x = 0; x < this.ScreensSettings.Count; x++) {
-                  if (!wallpaper.DisabledScreens.Contains(x)) {
-                    if (pickedWallpapersForScreen[x].Count < requiredWallpapersByScreen[x]) {
-                      pickedWallpapersForScreen[x].Add(wallpaper);
-                      picked = true;
-                      break;
-                    }
-                  }
-                }
-              }
-
-              if (picked) {
-                pickedWallpapersCount++;
-                if (pickedWallpapersCount >= requiredWallpaperCount) {
-                  break;
-                }
-              }
             }
           }
 
-          filteredWallpapers.RemoveAt(i);
-          i--;
+          if (considerPriority && filteredWallpapers[i].Priority < minPriority) {
+            // Keep the wallpaper in the list.
+            continue;
+          }
+          
+          if (multiscreenMode) {
+            pickedWallpapersForScreen[0].Add(wallpaper);
+            pickedWallpapersCount = 1;
+
+            break;
+          }
+
+          for (Int32 x = 0; x < this.ScreensSettings.Count; x++) {
+            if (considerDisabledScreens && wallpaper.DisabledScreens.Contains(x)) {
+              continue;
+            }
+
+            if (pickedWallpapersForScreen[x].Count >= requiredWallpapersByScreen[x]) {
+              continue;
+            }
+
+            pickedWallpapersForScreen[x].Add(wallpaper);
+            filteredWallpapers.RemoveAt(i);
+            i--;
+                
+            pickedWallpapersCount++;
+            break;
+          }
+        }
+
+        if (pickedWallpapersCount >= requiredWallpaperCount) {
+          break;
+        }
+
+        // Note: This exception should never be thrown.
+        if (filteredWallpapers.Count == 0) {
+          throw new InvalidOperationException(ExceptionMessages.GetNotEnoughtWallpapersToCycle(5));
         }
       }
       #endregion

@@ -1,3 +1,8 @@
+Verison 2.0 Revision 2:
+  [-] Fixed several critical autocycling bugs (related Bug-Tracker-IDs: 3096271, 3098180).
+  [-] Fixed a bug causing an unhandled exception when a update server was unreachable.
+  [-] Fixed a bug causing to show error dialogs on update checking during application startup.
+
 Version 2.0 Revision 1:
   [+] Added the link to Wallpaper Manager's source forge page to the about window.
   [-] Fixed a bug causing renaming of wallpapers in Synchronized Folders not taking effect in the wallpaper list.

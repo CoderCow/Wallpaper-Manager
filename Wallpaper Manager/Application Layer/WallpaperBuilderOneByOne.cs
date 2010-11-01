@@ -32,7 +32,28 @@ namespace WallpaperManager.Application {
 
         // Check whether we can use the last layout for the next cycle.
         if (this.LastScreenLayout.Count == this.ScreensSettings.Count) {
-          requiredWallpapersByScreen[this.LastChangedScreenIndex] = 1;
+          // We start searching for a screen which requires a random wallpaper from the last screen cycled + 1.
+          Byte currentScreenIndex = (Byte)(this.LastChangedScreenIndex + 1);
+
+          // Find a screen which requests a random Wallpaper.
+          for (Int32 i = 0; i < this.ScreensSettings.Count; i++) {
+            // Did we reach the last screen?
+            if (currentScreenIndex >= this.ScreensSettings.Count) {
+              currentScreenIndex = 0;
+            }
+
+            // We want to use a random Wallpaper if random cycling is requested or if a Static Wallpaper should be used but its
+            // cycle conditions don't match.
+            if (
+              this.ScreensSettings[currentScreenIndex].CycleRandomly || 
+              !this.ScreensSettings[currentScreenIndex].StaticWallpaper.EvaluateCycleConditions()
+            ) {
+              requiredWallpapersByScreen[currentScreenIndex] = 1;
+              break;
+            }
+
+            currentScreenIndex++;
+          }
         } else {
           for (Int32 i = 0; i < this.ScreensSettings.Count; i++) {
             // We want to use a random Wallpaper if random cycling is requested or if a Static Wallpaper should be used but its
@@ -69,7 +90,7 @@ namespace WallpaperManager.Application {
     protected Byte LastChangedScreenIndex {
       get { return this.lastChangedScreenIndex; }
       set {
-        if (!value.IsBetween(0, this.ScreensSettings.Count - 1)) {
+        if (!value.IsBetween(0, (Byte)(this.ScreensSettings.Count - 1))) {
           throw new ArgumentOutOfRangeException(ExceptionMessages.GetValueOutOfRange(
             null, value, 
             0.ToString(CultureInfo.CurrentCulture), (this.ScreensSettings.Count - 1).ToString(CultureInfo.CurrentCulture)
@@ -134,7 +155,7 @@ namespace WallpaperManager.Application {
       // Check if we can use the last layout and if so, change just one of the Wallpapers in it.
       if ((this.LastScreenLayout.Count == this.ScreensSettings.Count) && (!this.ScreensSettings.AllStatic)) {
         // We start searching for a screen which requires a random wallpaper from the last screen cycled + 1.
-        Int32 currentScreenIndex = this.LastChangedScreenIndex + 1;
+        Byte currentScreenIndex = (Byte)(this.LastChangedScreenIndex + 1);
 
         // Find a screen which requests a random Wallpaper.
         for (Int32 i = 0; i < this.ScreensSettings.Count; i++) {
@@ -149,7 +170,6 @@ namespace WallpaperManager.Application {
             this.ScreensSettings[currentScreenIndex].CycleRandomly || 
             !this.ScreensSettings[currentScreenIndex].StaticWallpaper.EvaluateCycleConditions()
           ) {
-            this.LastChangedScreenIndex = (Byte)currentScreenIndex;
             break;
           }
 
@@ -157,7 +177,8 @@ namespace WallpaperManager.Application {
         }
 
         // Change the screen which requires a random Wallpaper in the layout.
-        this.LastScreenLayout[this.LastChangedScreenIndex] = wallpapers[this.LastChangedScreenIndex][0];
+        this.LastScreenLayout[currentScreenIndex] = wallpapers[currentScreenIndex][0];
+        this.LastChangedScreenIndex = currentScreenIndex;
 
         // Regenerate the changed screen layout.
         Image wallpaper = this.CreateMultiscreenFromMultipleInternal(this.LastScreenLayout, scaleFactor, useWindowsFix);

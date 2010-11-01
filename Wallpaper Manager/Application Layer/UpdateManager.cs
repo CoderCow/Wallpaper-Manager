@@ -375,7 +375,7 @@ namespace WallpaperManager.Application {
         if (error == null) {
           successfulResultData = new VersionCheckSuccessfulEventArgs(
             (currentAppVersion < mostRecentVersion), mostRecentVersion, criticalMessage, infoMessage
-            );
+          );
         }
         e.Result = new Tuple<Exception,VersionCheckSuccessfulEventArgs>(error, successfulResultData);
       };

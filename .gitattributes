@@ -123,6 +123,7 @@ Wallpaper[!!-~]Manager/References/Common.pdb -text
 Wallpaper[!!-~]Manager/References/Common4.0.dll -text
 Wallpaper[!!-~]Manager/References/Common4.0.pdb -text
 Wallpaper[!!-~]Manager/References/Core.snk -text
+Wallpaper[!!-~]Manager/References/Microsoft.Contracts.dll -text
 Wallpaper[!!-~]Manager/References/Microsoft.WindowsAPICodePack.Shell.XML -text
 Wallpaper[!!-~]Manager/References/Microsoft.WindowsAPICodePack.Shell.dll -text
 Wallpaper[!!-~]Manager/References/Microsoft.WindowsAPICodePack.Shell.pdb -text

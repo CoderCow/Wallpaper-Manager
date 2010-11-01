@@ -437,7 +437,13 @@ namespace WallpaperManager.Presentation {
         }
       };
       updateManager.DownloadUpdateSuccessful += this.UpdateManager_DownloadUpdateSuccessful;
-      updateManager.DownloadUpdateError += this.UpdateManager_DownloadUpdateError;
+      updateManager.DownloadUpdateError += (senderLocal, eLocal) => {
+        if (eLocal.Exception is WebException || eLocal.Exception is FormatException) {
+          eLocal.IsHandled = true;
+        }
+
+        this.UpdateManager_DownloadUpdateError(senderLocal, eLocal);
+      };
       updateManager.BeginVersionCheck();
 
       Debug.WriteLine("Initialization succeeded.");
@@ -762,7 +768,7 @@ namespace WallpaperManager.Presentation {
       String resultKey = DialogManager.ShowUpdate_Available(
         this.MainWindow, this.Environment.AppVersion.ToString(), e.Version.ToString(), e.CriticalMessage, e.InfoMessage
       );
-          
+      
       switch (resultKey) {
         case "Install":
           Window updateDownloadingWindow = DialogManager.ShowUpdate_Downloading(this.MainWindow);
@@ -789,6 +795,10 @@ namespace WallpaperManager.Presentation {
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
     private void UpdateManager_VersionCheckError(Object sender, ExceptionEventArgs e) {
+      if (e.IsHandled) {
+        return;
+      }
+
       if (e.Exception is WebException) {
         DialogManager.ShowUpdate_UnableToConnect(this.MainWindow);
         e.IsHandled = true;
@@ -826,6 +836,14 @@ namespace WallpaperManager.Presentation {
         if (DialogManager.ShowUpdate_UpdateFileNotFound(this.MainWindow) == TaskDialogButtons.Yes) {
           Process.Start(AppEnvironment.WebsiteUrl);
         }
+
+        e.IsHandled = true;
+        return;
+      }
+
+      if (e.Exception is WebException) {
+        DialogManager.ShowUpdate_UnableToConnect(this.MainWindow);
+
         e.IsHandled = true;
         return;
       }

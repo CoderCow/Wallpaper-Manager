@@ -192,7 +192,7 @@ namespace WallpaperManager.Data {
     public Byte LastActiveListSize {
       get { return this.lastActiveListSize; }
       set {
-        if (!value.IsBetween((Byte)1, WallpaperChanger.LastActiveListSizeMax)) {
+        if (!value.IsBetween(1, WallpaperChanger.LastActiveListSizeMax)) {
           throw new ArgumentOutOfRangeException(ExceptionMessages.GetValueOutOfRange(
             null, value, 
             1.ToString(CultureInfo.CurrentCulture), 
