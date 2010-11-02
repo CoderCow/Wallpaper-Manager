@@ -90,6 +90,13 @@ namespace WallpaperManager.Presentation {
     private static Boolean isFirstInstance;
     #endregion
 
+    #region Fields: propertyBindingManager
+    /// <summary>
+    ///   The <see cref="LightPropertyBindingManager" /> used to register bindings between the configuration and related objects.
+    /// </summary>
+    private LightPropertyBindingManager propertyBindingManager;
+    #endregion
+
     #region Static Property: Current
     /// <summary>
     ///   The Application object for the current <see cref="AppDomain" />. 
@@ -327,12 +334,14 @@ namespace WallpaperManager.Presentation {
           #endif
         }
       }
+
+      this.propertyBindingManager = new LightPropertyBindingManager();
       
       Debug.WriteLine("Second step.");
       Debug.Flush();
       this.wallpaperChanger = new WallpaperChanger(
         this.Environment.AppliedWallpaperFilePath, this.Configuration.General.ScreensSettings
-      );
+        );
       this.WallpaperChanger.RequestWallpapers += (senderLocal, eLocal) => {
         eLocal.Wallpapers.AddRange(this.Configuration.WallpaperCategories.GetAllWallpapers());
       };
@@ -340,7 +349,7 @@ namespace WallpaperManager.Presentation {
 
       // Register light property bindings which make sure that the WallpaperChanger gets always updated with any changed 
       // configuration settings related to it.
-      LightPropertyBinding.Register(
+      this.propertyBindingManager.Register(
         this.Configuration.General, this.WallpaperChanger, new[] {
           new LightBoundProperty("WallpaperChangeType"),
           new LightBoundProperty("AutocycleInterval"),
@@ -422,7 +431,7 @@ namespace WallpaperManager.Presentation {
 
       // Register light property bindings which make sure that the NotifyIconManager gets always updated with any changed 
       // configuration settings related to it.
-      LightPropertyBinding.Register(
+      this.propertyBindingManager.Register(
         this.Configuration.General, this.NotifyIcon, new[] {
           new LightBoundProperty("TrayIconSingleClickAction"), 
           new LightBoundProperty("TrayIconDoubleClickAction")
@@ -532,7 +541,8 @@ namespace WallpaperManager.Presentation {
         
         // Register light property bindings which make sure that the MainWindow gets always updated with any changed 
         // configuration settings.
-        LightPropertyBinding.Register(
+        LightPropertyBindingManager propertyBindings = new LightPropertyBindingManager();
+        propertyBindings.Register(
           this.Configuration.General, base.MainWindow, new[] {
             new LightBoundProperty("DisplayCycleTimeAsIconOverlay"), 
             new LightBoundProperty("MinimizeOnClose"),
@@ -546,7 +556,7 @@ namespace WallpaperManager.Presentation {
 
         base.MainWindow.Closed += (sender, e) => {
           Presentation.MainWindow mainWindow = (Presentation.MainWindow)sender;
-          LightPropertyBinding.DeregisterAll(null, mainWindow);
+          propertyBindings.DeregisterAll(null, mainWindow);
           mainWindow.Dispose();
 
           this.WriteConfigFile();
@@ -1010,13 +1020,8 @@ namespace WallpaperManager.Presentation {
     protected virtual void Dispose(Boolean disposing) {
       if (!this.isDisposed) {
         if (disposing) {
-          if (this.WallpaperChanger != null) {
-            LightPropertyBinding.DeregisterAll(null, this.WallpaperChanger);
-            this.wallpaperChanger.Dispose();
-          }
-          if (this.NotifyIcon != null) {
-            LightPropertyBinding.DeregisterAll(null, this.NotifyIcon);
-            this.notifyIcon.Dispose();
+          if (this.propertyBindingManager != null) {
+            this.propertyBindingManager.Dispose();
           }
         }
       }

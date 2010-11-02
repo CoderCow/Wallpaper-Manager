@@ -408,11 +408,11 @@ namespace WallpaperManager.Data {
                 evaluatedText.AppendLine();
                 break;
               default:
-                if ((parameter.Length > 9) && (parameter.StartsWith("WALLPAPER", StringComparison.OrdinalIgnoreCase))) {
+                if (parameter.Length > 9 && parameter.StartsWith("WALLPAPER", StringComparison.OrdinalIgnoreCase)) {
                   Int32 screenIndex;
 
                   if (Int32.TryParse(parameter.Substring(9), out screenIndex)) {
-                    if (screenIndex >= wallpapers.Count) {
+                    if (screenIndex > wallpapers.Count || screenIndex <= 0) {
                       screenIndex = 1;
                     }
 
@@ -422,11 +422,12 @@ namespace WallpaperManager.Data {
                     }
                   }
                 }
-                if ((parameter.Length > 13) && (parameter.StartsWith("WALLPAPERFILE", StringComparison.OrdinalIgnoreCase))) {
+
+                if (parameter.Length > 13 && parameter.StartsWith("WALLPAPERFILE", StringComparison.OrdinalIgnoreCase)) {
                   Int32 screenIndex;
 
                   if (Int32.TryParse(parameter.Substring(13), out screenIndex)) {
-                    if (screenIndex >= wallpapers.Count) {
+                    if (screenIndex > wallpapers.Count || screenIndex <= 0) {
                       screenIndex = 1;
                     }
                     
@@ -436,11 +437,12 @@ namespace WallpaperManager.Data {
                     }
                   }
                 }
-                if ((parameter.Length > 13) && (parameter.StartsWith("WALLPAPERPATH", StringComparison.OrdinalIgnoreCase))) {
+
+                if (parameter.Length > 13 && parameter.StartsWith("WALLPAPERPATH", StringComparison.OrdinalIgnoreCase)) {
                   Int32 screenIndex;
 
                   if (Int32.TryParse(parameter.Substring(13), out screenIndex)) {
-                    if (screenIndex >= wallpapers.Count) {
+                    if (screenIndex > wallpapers.Count || screenIndex <= 0) {
                       screenIndex = 1;
                     }
 
