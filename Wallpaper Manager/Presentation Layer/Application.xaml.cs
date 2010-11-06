@@ -869,6 +869,12 @@ namespace WallpaperManager.Presentation {
         return;
       }
 
+      // Exceptions caused by overlapping cycles are simply ignored.
+      if (e.Exception is NotSupportedException) {
+        e.IsHandled = true;
+        return;
+      }
+
       if (this.HandleCycleException(e.Exception)) {
         e.IsHandled = true;
         return;

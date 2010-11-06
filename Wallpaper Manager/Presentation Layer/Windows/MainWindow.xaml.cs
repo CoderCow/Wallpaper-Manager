@@ -982,7 +982,6 @@ namespace WallpaperManager.Presentation {
         } else {
           newOverlayIcon = AppEnvironment.IconFromEmbeddedResource(MainWindow.AutocyclingDeactivatedIconResName);
         }
-
         TaskbarManager.Instance.SetOverlayIcon(this, newOverlayIcon, MainWindow.AutocyclingActivatedOverlayAccessibilityText);
       } finally {
         if (newOverlayIcon != null) {

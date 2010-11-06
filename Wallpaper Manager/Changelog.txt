@@ -1,5 +1,6 @@
 Verison 2.0 Revision 3:
   [-] Fixed a bug causing overlay texts to display wrong wallpaper names in some cases (related Bug-Tracker-ID: 3101135).
+  [-] Fixed a bug causing an unhandled exception when the screen settings changed multiple times in a row.
 
 Verison 2.0 Revision 2:
   [-] Fixed several critical autocycling bugs (related Bug-Tracker-IDs: 3096271, 3098180).
