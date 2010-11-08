@@ -400,7 +400,7 @@ namespace WallpaperManager.Application {
       this.currentVersionCheckWorker.RunWorkerAsync(new Tuple<String[],Version>(
         new[] { UpdateManager.Update_UpdateInfoPage, UpdateManager.Update_UpdateInfoPageAlt },
         (Version)this.Environment.AppVersion.Clone()
-        ));
+      ));
     }
 
     /// <summary>

@@ -16,7 +16,7 @@
   xmlns:local="clr-namespace:WallpaperManager.Presentation"
   xmlns:Data="clr-namespace:WallpaperManager.Data"
   
-  Title="Configure Text Overlays"
+  Title="{local:LocalizedString ConfigTextOverlays.Title}"
   Icon="..\..\Resources\Icons\Configuration.png"
   WindowStartupLocation="CenterOwner"
   MinWidth="300"
@@ -61,35 +61,35 @@
       
       <ToolTip x:Key="ToolTips.ForeColor">
         <local:ToolTipData 
-          Title="Text Color"
-          Content="The color of the overlay text."
+          Title="{local:LocalizedString ToolTip.OverlayTextColor.Title}"
+          Content="{local:LocalizedString ToolTip.OverlayTextColor.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.BorderColor">
         <local:ToolTipData 
-          Title="Text Border-Color"
-          Content="The color of the overlay text's border."
+          Title="{local:LocalizedString ToolTip.OverlayTextBorderColor.Title}"
+          Content="{local:LocalizedString ToolTip.OverlayTextBorderColor.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="Its recommended to set the Border-Color into a huge contrast difference to the text's color to make sure that the text can be seen on any wallpaper."
+          NoteText="{local:LocalizedString ToolTip.OverlayTextBorderColor.NoteText}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.HOffset">
         <local:ToolTipData 
-          Title="Horizontal Text Offset"
-          Content="This value moves the text on the horizontal axis by the given pixels."
+          Title="{local:LocalizedString ToolTip.OverlayTextHOffset.Title}"
+          Content="{local:LocalizedString ToolTip.OverlayTextHOffset.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.VOffset">
         <local:ToolTipData 
-          Title="Vertical Text Offset"
-          Content="This value moves the text on the horizontal axis by the given pixels."
+          Title="{local:LocalizedString ToolTip.OverlayTextVOffset.Title}"
+          Content="{local:LocalizedString ToolTip.OverlayTextVOffset.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
       </ToolTip>
     </ResourceDictionary>
@@ -143,12 +143,18 @@
       </ListBox>
       
       <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
-        <Button Content="_Add" Command="{Binding AddOverlayTextCommand}" Margin="2" TabIndex="20" />
-        <Button Content="_Remove" Command="{Binding RemoveOverlayTextCommand}" Margin="2" TabIndex="30" />
+        <Button 
+          Content="{local:LocalizedString ConfigTextOverlays.Add}" Command="{Binding AddOverlayTextCommand}" 
+          Margin="2" TabIndex="20" 
+        />
+        <Button 
+          Content="{local:LocalizedString ConfigTextOverlays.Remove}" Command="{Binding RemoveOverlayTextCommand}" 
+          Margin="2" TabIndex="30" 
+        />
       </StackPanel>
       
       <GroupBox 
-        Header="Overlay Text Settings" 
+        Header="{local:LocalizedString ConfigTextOverlays.Group.Settings}" 
         DataContext="{Binding Path=SelectedItem}" 
         Margin="0,10,0,0"
         IsEnabled="{Binding 
@@ -173,7 +179,7 @@
           </Grid.RowDefinitions>
           
           <Label 
-            Content="_Format: " 
+            Content="{local:LocalizedString ConfigTextOverlays.Format}" 
             Target="{Binding ElementName=txtFormat}"
             TabIndex="40"
             Grid.Column="0" Grid.Row="0"
@@ -195,32 +201,32 @@
             <TextBox.ToolTip>
               <ToolTip MaxWidth="600" Style="{x:Null}">
                 <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
-                  <Run Text="Text Format" FontWeight="Bold" /><LineBreak />
-                  The format of the text to be displayed.<LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.Title}" FontWeight="Bold" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.Description}" /><LineBreak />
                   <LineBreak />
-                  %WallpaperX% - The filename of the wallpaper (without ext.), where the X is the monitor number.<LineBreak />
-                  %WallpaperFileX% - The filename of the wallpaper (with ext.), where the X is the monitor number.<LineBreak />
-                  %WallpaperPathX% - The full path of the wallpaper, where the X is the monitor number.<LineBreak />
-                  %Date% - The current date.<LineBreak />
-                  %DateFmt% - The current date formatted (e.g. August 12, 2010).<LineBreak />
-                  %Time% - The current time.<LineBreak />
-                  %DayOfWeek% - The current day of the week.<LineBreak />
-                  %UserName% - The name of the current logged on user.<LineBreak />
-                  %MachineName% - The computer name.<LineBreak />
-                  %OSVersion% - The current Windows version.<LineBreak />
-                  %SystemRuntime% - The time-span since the system is running.<LineBreak />
-                  %SystemRuntimeFmt% - The time-span since the system is running formatted. (e.g. 2 hours, 22 minutes)<LineBreak />
-                  %SystemStartTime% - The time of day when the system started to run.<LineBreak />
-                  %SystemStartTimeD% - The time and date when the system started to run.<LineBreak />
-                  %SystemStartTimeDFmt% - The time and date when the system started to run formatted.<LineBreak />
-                  %LB% - Line break.
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP1}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP2}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP3}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP4}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP5}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP6}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP7}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP8}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP9}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP10}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP11}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP12}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP13}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP14}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP15}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP16}" />
                 </TextBlock>
               </ToolTip>
             </TextBox.ToolTip>
           </TextBox>
           
           <Label 
-            Content="_Position: " 
+            Content="{local:LocalizedString ConfigTextOverlays.Position}" 
             Target="{Binding ElementName=cboPosition}"
             TabIndex="60"
             Grid.Column="0" Grid.Row="1"
@@ -232,16 +238,34 @@
             TabIndex="70"
             Grid.Column="1" Grid.Row="1"
           >
-            <ComboBoxItem Content="Top Left" Tag="{x:Static Data:OverlayTextPosition.TopLeft}" />
-            <ComboBoxItem Content="Top Middle" Tag="{x:Static Data:OverlayTextPosition.TopMiddle}" />
-            <ComboBoxItem Content="Top Right" Tag="{x:Static Data:OverlayTextPosition.TopRight}" />
-            <ComboBoxItem Content="Bottom Left" Tag="{x:Static Data:OverlayTextPosition.BottomLeft}" />
-            <ComboBoxItem Content="Bottom Middle" Tag="{x:Static Data:OverlayTextPosition.BottomMiddle}" />
-            <ComboBoxItem Content="Bottom Right" Tag="{x:Static Data:OverlayTextPosition.BottomRight}" />
+            <ComboBoxItem 
+              Content="{local:LocalizedString ConfigTextOverlays.Position.TopLeft}" 
+              Tag="{x:Static Data:OverlayTextPosition.TopLeft}" 
+            />
+            <ComboBoxItem 
+              Content="{local:LocalizedString ConfigTextOverlays.Position.TopCentered}" 
+              Tag="{x:Static Data:OverlayTextPosition.TopMiddle}" 
+            />
+            <ComboBoxItem 
+              Content="{local:LocalizedString ConfigTextOverlays.Position.TopRight}" 
+              Tag="{x:Static Data:OverlayTextPosition.TopRight}" 
+            />
+            <ComboBoxItem 
+              Content="{local:LocalizedString ConfigTextOverlays.Position.BottomLeft}" 
+              Tag="{x:Static Data:OverlayTextPosition.BottomLeft}" 
+            />
+            <ComboBoxItem 
+              Content="{local:LocalizedString ConfigTextOverlays.Position.BottomCentered}" 
+              Tag="{x:Static Data:OverlayTextPosition.BottomMiddle}" 
+            />
+            <ComboBoxItem 
+              Content="{local:LocalizedString ConfigTextOverlays.Position.BottomRight}" 
+              Tag="{x:Static Data:OverlayTextPosition.BottomRight}" 
+            />
           </ComboBox>
           
           <Label 
-            Content="_Font: " 
+            Content="{local:LocalizedString ConfigTextOverlays.Font}" 
             Target="{Binding ElementName=btnSelectFont}"
             TabIndex="80"
             Grid.Column="0" Grid.Row="2"
@@ -257,7 +281,7 @@
           </StackPanel>
           
           <Label 
-            Content="_Color: " 
+            Content="{local:LocalizedString ConfigTextOverlays.Color}" 
             Target="{Binding ElementName=btnSelectForeColor}"
             TabIndex="110"
             Grid.Column="0" Grid.Row="3"
@@ -287,7 +311,7 @@
           </StackPanel>
           
           <Label 
-            Content="_Border Color: " 
+            Content="{local:LocalizedString ConfigTextOverlays.BorderColor}" 
             Target="{Binding ElementName=btnSelectBorderColor}"
             TabIndex="140"
             Grid.Column="0" Grid.Row="4"
@@ -317,7 +341,7 @@
           </StackPanel>
           
           <Label 
-            Content="_Horizontal Offset: " 
+            Content="{local:LocalizedString ConfigTextOverlays.HOffset}" 
             Target="{Binding ElementName=txtHorizontalOffset}"
             TabIndex="170"
             Grid.Column="0" Grid.Row="5"
@@ -334,7 +358,7 @@
           />
           
           <Label 
-            Content="_Vertical Offset: " 
+            Content="{local:LocalizedString ConfigTextOverlays.VOffset}" 
             Target="{Binding ElementName=txtVerticalOffset}"
             TabIndex="190"
             Grid.Column="0" Grid.Row="6"
@@ -354,7 +378,7 @@
     </Grid>
   
     <StackPanel Margin="8" Orientation="Horizontal" FlowDirection="RightToLeft" Style="{StaticResource Dialog.ButtonPanel}">
-      <Button Content="OK" IsDefault="True" IsCancel="True" TabIndex="1000" />
+      <Button Content="{local:LocalizedString DialogGlobal.Button.OK}" IsDefault="True" IsCancel="True" TabIndex="1000" />
     </StackPanel>
   </StackPanel>
 </Window>

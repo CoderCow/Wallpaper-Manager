@@ -30,82 +30,53 @@ namespace WallpaperManager.Presentation {
     private const String IconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.Main.ico";
     #endregion
 
-    #region Constants: ContextMenu_Show_Name, ContextMenu_Show_Text
+    #region Constants: ContextMenu_Show_Name, ContextMenu_CycleNext_Name, ContextMenu_Options_Name, ContextMenu_StartCycling_Name, ContextMenu_StopCycling_Name, ContextMenu_Exit_Name
     /// <summary>
     ///   Represents the name of the show menu item in the context menu.
     /// </summary>
     private const String ContextMenu_Show_Name = "Show";
-    /// <summary>
-    ///   Represents the text of the show menu item in the context menu.
-    /// </summary>
-    private const String ContextMenu_Show_Text = "Show Wallpaper Manager...";
-    #endregion
 
-    #region Constants: ContextMenu_CycleNext_Name, ContextMenu_CycleNext_Text
     /// <summary>
     ///   Represents the name of the cycle next menu item in the context menu.
     /// </summary>
     private const String ContextMenu_CycleNext_Name = "CycleNext";
-    /// <summary>
-    ///   Represents the text of the cycle next menu item in the context menu.
-    /// </summary>
-    private const String ContextMenu_CycleNext_Text = "Cycle Next Wallpaper";
-    #endregion
 
-    #region Constants: ContextMenu_Options_Name, ContextMenu_Options_Text, ContextMenu_Options_IconResName
     /// <summary>
     ///   Represents the name of the options menu item in the context menu.
     /// </summary>
     private const String ContextMenu_Options_Name = "Options";
-    /// <summary>
-    ///   Represents the text of the options menu item in the context menu.
-    /// </summary>
-    private const String ContextMenu_Options_Text = "Options...";
-    /// <summary>
-    ///   Represents the resource path of the configuration icon.
-    /// </summary>
-    private const String ContextMenu_Options_IconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.Configuration.ico";
-    #endregion
 
-    #region Constants: ContextMenu_StartCycling_Name, ContextMenu_StartCycling_Text, ContextMenu_StartCycling_IconResName
     /// <summary>
     ///   Represents the text of the start cycling menu item in the context menu.
     /// </summary>
     private const String ContextMenu_StartCycling_Name = "StartCycling";
-    /// <summary>
-    ///   Represents the text of the start cycling menu item in the context menu.
-    /// </summary>
-    private const String ContextMenu_StartCycling_Text = "Start Autocycling";
-    /// <summary>
-    ///   Represents the resource path of the start cycling icon.
-    /// </summary>
-    private const String ContextMenu_StartCycling_IconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.StartCycling.ico";
-    #endregion
 
-    #region Constants: ContextMenu_StopCycling_Name, ContextMenu_StopCycling_Text, ContextMenu_StopCycling_IconResName
     /// <summary>
     ///   Represents the name of the stop cycling menu item in the context menu.
     /// </summary>
     private const String ContextMenu_StopCycling_Name = "StopCycling";
-    /// <summary>
-    ///   Represents the text of the stop cycling menu item in the context menu.
-    /// </summary>
-    private const String ContextMenu_StopCycling_Text = "Stop Autocycling";
-    /// <summary>
-    ///   Represents the resource path of the stop cycling icon.
-    /// </summary>
-    private const String ContextMenu_StopCycling_IconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.StopCycling.ico";
-    #endregion
 
-    #region Constants: ContextMenu_Exit_Name, ContextMenu_Exit_Text
     /// <summary>
     ///   Represents the name of the exit menu item in the context menu.
     /// </summary>
     private const String ContextMenu_Exit_Name = "Exit";
+    #endregion
+
+    #region Constants: ContextMenu_Options_IconResName, ContextMenu_StartCycling_IconResName, ContextMenu_StopCycling_IconResName
     /// <summary>
-    ///   Represents the text of the exit menu item in the context menu.
+    ///   Represents the resource path of the configuration icon.
     /// </summary>
-    private const String ContextMenu_Exit_Text = "Exit";
+    private const String ContextMenu_Options_IconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.Configuration.ico";
+
+    /// <summary>
+    ///   Represents the resource path of the start cycling icon.
+    /// </summary>
+    private const String ContextMenu_StartCycling_IconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.StartCycling.ico";
+
+    /// <summary>
+    ///   Represents the resource path of the stop cycling icon.
+    /// </summary>
+    private const String ContextMenu_StopCycling_IconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.StopCycling.ico";
     #endregion
 
     #region Fields: clickTimer, currentBoldedItem, ignoreNextSingleClick
@@ -280,13 +251,13 @@ namespace WallpaperManager.Presentation {
       ToolStripMenuItem menuItem;
 
       // **** Show Menu Item ****
-      menuItem = new ToolStripMenuItem(NotifyIconManager.ContextMenu_Show_Text);
+      menuItem = new ToolStripMenuItem(LocalizationManager.GetLocalizedString("Menu.TrayShowApplication"));
       menuItem.Name = NotifyIconManager.ContextMenu_Show_Name;
       this.wrappedNotifyIcon.ContextMenuStrip.Items.Add(menuItem);
       this.wrappedNotifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
 
       // **** Start Cycling Menu Item ****
-      menuItem = new ToolStripMenuItem(NotifyIconManager.ContextMenu_StartCycling_Text);
+      menuItem = new ToolStripMenuItem(LocalizationManager.GetLocalizedString("Menu.TrayStartAutocycling"));
       menuItem.Name = NotifyIconManager.ContextMenu_StartCycling_Name;
       menuItem.Image = AppEnvironment.IconFromEmbeddedResource(
         NotifyIconManager.ContextMenu_StartCycling_IconResName
@@ -294,7 +265,7 @@ namespace WallpaperManager.Presentation {
       this.wrappedNotifyIcon.ContextMenuStrip.Items.Add(menuItem);
 
       // **** Stop Cycling Menu Item ****
-      menuItem = new ToolStripMenuItem(NotifyIconManager.ContextMenu_StopCycling_Text);
+      menuItem = new ToolStripMenuItem(LocalizationManager.GetLocalizedString("Menu.TrayStopAutocycling"));
       menuItem.Name = NotifyIconManager.ContextMenu_StopCycling_Name;
       menuItem.Image = AppEnvironment.IconFromEmbeddedResource(
         NotifyIconManager.ContextMenu_StopCycling_IconResName
@@ -303,14 +274,14 @@ namespace WallpaperManager.Presentation {
       this.wrappedNotifyIcon.ContextMenuStrip.Items.Add(menuItem);
 
       // **** Cycle Next Menu Item ****
-      menuItem = new ToolStripMenuItem(NotifyIconManager.ContextMenu_CycleNext_Text);
+      menuItem = new ToolStripMenuItem(LocalizationManager.GetLocalizedString("Menu.TrayCycleNext"));
       menuItem.Name = NotifyIconManager.ContextMenu_CycleNext_Name;
       this.wrappedNotifyIcon.ContextMenuStrip.Items.Add(menuItem);
 
       this.wrappedNotifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
 
       // **** Options Menu Item ****
-      menuItem = new ToolStripMenuItem(NotifyIconManager.ContextMenu_Options_Text);
+      menuItem = new ToolStripMenuItem(LocalizationManager.GetLocalizedString("Menu.TrayOptions"));
       menuItem.Name = NotifyIconManager.ContextMenu_Options_Name;
       menuItem.Image = AppEnvironment.IconFromEmbeddedResource(
         NotifyIconManager.ContextMenu_Options_IconResName
@@ -320,7 +291,7 @@ namespace WallpaperManager.Presentation {
       this.wrappedNotifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
 
       // **** Exit Menu Item ****
-      menuItem = new ToolStripMenuItem(NotifyIconManager.ContextMenu_Exit_Text);
+      menuItem = new ToolStripMenuItem(LocalizationManager.GetLocalizedString("Menu.TrayExit"));
       menuItem.Name = NotifyIconManager.ContextMenu_Exit_Name;
       this.wrappedNotifyIcon.ContextMenuStrip.Items.Add(menuItem);
       #endregion

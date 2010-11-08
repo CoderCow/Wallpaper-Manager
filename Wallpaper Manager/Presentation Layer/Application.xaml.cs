@@ -256,7 +256,6 @@ namespace WallpaperManager.Presentation {
     [STAThread]
     private static void Main() {
       Thread.CurrentThread.Name = "Wallpaper Manager STA-Thread";
-      Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
       
       using (new Mutex(true, AppEnvironment.AppGuid, out Application.isFirstInstance)) {
         Application.current = new Application();
@@ -439,20 +438,21 @@ namespace WallpaperManager.Presentation {
       );
 
       UpdateManager updateManager = new UpdateManager(this.Environment);
-      updateManager.VersionCheckSuccessful += (sender, eLocal) => {
+      updateManager.VersionCheckSuccessful += (senderLocal, eLocal) => {
         // Execute the usual update handling, but only if there is actually an update available.
         if (eLocal.IsUpdate) {
-          this.UpdateManager_VersionCheckSuccessful(sender, eLocal);
+          this.UpdateManager_VersionCheckSuccessful(senderLocal, eLocal);
         }
       };
-      updateManager.DownloadUpdateSuccessful += this.UpdateManager_DownloadUpdateSuccessful;
-      updateManager.DownloadUpdateError += (senderLocal, eLocal) => {
+      updateManager.VersionCheckError += (senderLocal, eLocal) => {
         if (eLocal.Exception is WebException || eLocal.Exception is FormatException) {
           eLocal.IsHandled = true;
         }
 
-        this.UpdateManager_DownloadUpdateError(senderLocal, eLocal);
+        this.UpdateManager_VersionCheckError(senderLocal, eLocal);
       };
+      updateManager.DownloadUpdateSuccessful += this.UpdateManager_DownloadUpdateSuccessful;
+      updateManager.DownloadUpdateError += this.UpdateManager_DownloadUpdateError;
       updateManager.BeginVersionCheck();
 
       Debug.WriteLine("Initialization succeeded.");
@@ -706,7 +706,7 @@ namespace WallpaperManager.Presentation {
         wallpapersToConfigure[i] = categoryVM.SelectedWallpaperVMs[i].Wallpaper;
       }
 
-      ConfigWallpaperVM configWallpaperVM = new ConfigWallpaperVM(wallpapersToConfigure, categoryVM.IsSynchronizedCategory);
+      ConfigWallpaperVM configWallpaperVM = new ConfigWallpaperVM(this.configuration.General, wallpapersToConfigure, categoryVM.IsSynchronizedCategory);
       configWallpaperVM.UnhandledCommandException += this.ConfigWallpaperVM_UnhandledCommandException;
 
       ConfigWallpaperWindow configWallpaperWindow = new ConfigWallpaperWindow(
@@ -816,7 +816,7 @@ namespace WallpaperManager.Presentation {
       }
 
       if (e.Exception is FormatException) {
-        if (DialogManager.ShowUpdate_UpdateFileNotFound(this.MainWindow) == TaskDialogButtons.Yes) {
+        if (DialogManager.ShowUpdate_UpdateFileNotFound(this.MainWindow)) {
           Process.Start(AppEnvironment.WebsiteUrl);
         }
         e.IsHandled = true;
@@ -843,7 +843,7 @@ namespace WallpaperManager.Presentation {
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
     private void UpdateManager_DownloadUpdateError(Object sender, ExceptionEventArgs e) {
       if (e.Exception is FormatException) {
-        if (DialogManager.ShowUpdate_UpdateFileNotFound(this.MainWindow) == TaskDialogButtons.Yes) {
+        if (DialogManager.ShowUpdate_UpdateFileNotFound(this.MainWindow)) {
           Process.Start(AppEnvironment.WebsiteUrl);
         }
 

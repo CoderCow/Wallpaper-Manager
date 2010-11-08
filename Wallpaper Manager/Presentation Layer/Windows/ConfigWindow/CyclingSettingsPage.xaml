@@ -16,7 +16,7 @@
   xmlns:Data="clr-namespace:WallpaperManager.Data"
   
   x:Class="WallpaperManager.Presentation.CyclingSettingsPage"
-  Title="Cycling"
+  Title="{local:LocalizedString Config.Group.Cycling}"
   SnapsToDevicePixels="True"
 >
   <Page.Resources>
@@ -33,26 +33,26 @@
       <!-- ToolTips -->
       <ToolTip x:Key="ToolTips.AutocycleInterval">
         <local:ToolTipData
-          Title="Autocycle Interval"
-          Content="If random cycling is enabled, this value defines the time between each random cycle."
+          Title="{local:LocalizedString ToolTip.AutocycleInterval.Title}"
+          Content="{local:LocalizedString ToolTip.AutocycleInterval.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.LastActiveListSize">
         <local:ToolTipData
-          Title="Memorize Last Cycled Wallpapers"
-          Content="If random cycling is enabled, this value defines how many wallpapers are memorized to prevent them from being cycled over and over again."
+          Title="{local:LocalizedString ToolTip.MemorizeLastCycledWPs.Title}"
+          Content="{local:LocalizedString ToolTip.MemorizeLastCycledWPs.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="For example: If this value is set to 30% and wallpaper A had just been applied then at least 30% of all your wallpapers have to be cycled until wallpaper A can be applied again."
+          NoteText="{local:LocalizedString ToolTip.MemorizeLastCycledWPs.NoteText}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.CycleAfterDisplaySettingsChanged">
         <local:ToolTipData
-          Title="Cycle After Display Settings Changed"
-          Content="If checked, Wallpaper Mananger will immediately perform a random cycle after the Windows Display Settings (like the resolution) have been changed."
+          Title="{local:LocalizedString ToolTip.CycleAfterDisplaySettingsChanged.Title}"
+          Content="{local:LocalizedString ToolTip.CycleAfterDisplaySettingsChanged.Description}"
         />
       </ToolTip>
     </ResourceDictionary>
@@ -60,10 +60,10 @@
   
   <!-- Taken Alt+X Keys: G,C,M,I,E,D,A,O,S -->
   <StackPanel Orientation="Vertical">
-    <GroupBox Header="General">
+    <GroupBox Header="{local:LocalizedString Config.Group.General}">
       <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-          <Label Content="_Interval for automatic cycling: " Target="{Binding ElementName=txtAutocycleInterval}" />
+          <Label Content="{local:LocalizedString Config.AutocycleInteval}" Target="{Binding ElementName=txtAutocycleInterval}" />
           
           <Common.Windows.Controls:TimeSpanTextBox 
             Name="txtAutocycleInterval"
@@ -84,7 +84,7 @@
         
         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
           <Label 
-            Content="M_emorize "
+            Content="{local:LocalizedString Config.MemorizeLastCycledWPs1}"
             Target="{Binding ElementName=txtLastActiveListSize}" 
             Grid.Column="0" Grid.Row="3"
           />
@@ -105,21 +105,24 @@
               </Binding>
             </TextBox.Text>
           </Common.Windows.Controls:NumericTextBox>
-          
-          <TextBlock VerticalAlignment="Center" Text=" % of the last wallpapers cycled." />
+
+          <TextBlock VerticalAlignment="Center" Text="{local:LocalizedString Config.MemorizeLastCycledWPs2}" />
         </StackPanel>
         
         <CheckBox 
-          Content="Cycle immediately when the _display settings have changed."
+          Content="{local:LocalizedString Config.CycleAfterDisplaySettingsChanged}"
           IsChecked="{Binding Configuration.CycleAfterDisplaySettingsChanged}"
           ToolTip="{StaticResource ToolTips.CycleAfterDisplaySettingsChanged}"
         />
       </StackPanel>
     </GroupBox>
 
-    <GroupBox Header="Multi-Monitor Behaviour" IsEnabled="{x:Static Data:AppEnvironment.IsMultiscreenSystem}">
+    <GroupBox 
+      Header="{local:LocalizedString Config.Group.MultiMonitorBehavior}" 
+      IsEnabled="{x:Static Data:AppEnvironment.IsMultiscreenSystem}"
+    >
       <StackPanel Orientation="Vertical">
-        <TextBlock Margin="0,0,0,4" Text="Use the following method when appling single screen wallpapers: " />
+        <TextBlock Margin="0,0,0,4" Text="{local:LocalizedString Config.WallpaperChangeType}" />
         
         <StackPanel Orientation="Horizontal">
           <Image Width="100" Height="160" Margin="3,3,6,2">
@@ -161,9 +164,9 @@
               Margin="2,4,2,4"
             >
               <TextBlock>
-                <Run>Change All Monitors</Run><LineBreak />
+                <Run Text="{local:LocalizedString Config.WallpaperChangeType.ChangeAll.Title}" /><LineBreak />
                 <Label 
-                  Content="Uses different wallpapers for _all monitors on each cycle."
+                  Content="{local:LocalizedString Config.WallpaperChangeType.ChangeAll.Description}"
                   Padding="0" 
                   Target="{Binding ElementName=rdbWallpaperChangeType_ChangeAll}" 
                 />
@@ -181,9 +184,9 @@
               Margin="2,4,2,4"
             >
               <TextBlock>
-                <Run>Change One Monitor</Run><LineBreak />
+                <Run Text="{local:LocalizedString Config.WallpaperChangeType.ChangeOneByOne.Title}" /><LineBreak />
                 <Label 
-                  Content="Changes the wallpaper of only _one monitor on each cycle."
+                  Content="{local:LocalizedString Config.WallpaperChangeType.ChangeOneByOne.Description}"
                   Padding="0" 
                   Target="{Binding ElementName=rdbWallpaperChangeType_ChangeOneByOne}"
                 />
@@ -201,9 +204,9 @@
               Margin="2,4,2,4"
             >
               <TextBlock>
-                <Run>Clone All Monitors</Run><LineBreak />
+                <Run Text="{local:LocalizedString Config.WallpaperChangeType.ChangeAllCloned.Title}" /><LineBreak />
                 <Label 
-                  Content="Uses the _same wallpaper for any monitor on each cycle."
+                  Content="{local:LocalizedString Config.WallpaperChangeType.ChangeAllCloned.Description}"
                   Padding="0" 
                   Target="{Binding ElementName=rdbWallpaperChangeType_ChangeAllCloned}"
                 />

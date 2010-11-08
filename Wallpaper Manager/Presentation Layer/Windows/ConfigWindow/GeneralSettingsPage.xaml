@@ -14,7 +14,7 @@
   xmlns:Data="clr-namespace:WallpaperManager.Data"
   
   x:Class="WallpaperManager.Presentation.GeneralSettingsPage"
-  Title="General"
+  Title="{local:LocalizedString Config.Group.General}"
   SnapsToDevicePixels="True"
 >
   <Page.Resources>
@@ -26,86 +26,86 @@
       <!-- Startup ToolTips -->
       <ToolTip x:Key="ToolTips.Startup.StartWithWindows">
         <local:ToolTipData
-          Title="Start With Windows"
-          Content="If checked, Wallpaper Manager will start after the current user logged into his/her Windows account."
+          Title="{local:LocalizedString ToolTip.StartWithWindows.Title}"
+          Content="{local:LocalizedString ToolTip.StartWithWindows.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Startup.StartWithWindows.Error">
         <local:ToolTipData
-          Title="Start With Windows"
-          Content="If checked, Wallpaper Manager will start after the current user logged into his/her Windows account."
+          Title="{local:LocalizedString ToolTip.StartWithWindows.Title}"
+          Content="{local:LocalizedString ToolTip.StartWithWindows.Description}"
           NoteIcon="{StaticResource Global.Icons.Error}"
-          NoteText="No access rights to read the registry value."
+          NoteText="{local:LocalizedString ToolTip.StartWithWindows.NoteText}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Startup.StartMinimized">
         <local:ToolTipData
-          Title="Start Minimized"
-          Content="If checked, Wallpaper Manager will be started without showing the main window."
+          Title="{local:LocalizedString ToolTip.MinimizeAfterStartup.Title}"
+          Content="{local:LocalizedString ToolTip.MinimizeAfterStartup.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Startup.CycleAfterStartup">
         <local:ToolTipData
-          Title="Cycle After Startup"
-          Content="If checked, Wallpaper Manager will perform one cycle immediately after it have been started."
+          Title="{local:LocalizedString ToolTip.CycleAfterStartup.Title}"
+          Content="{local:LocalizedString ToolTip.CycleAfterStartup.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Startup.TerminateAfterStatup">
         <local:ToolTipData
-          Title="Terminate After Startup"
-          Content="If checked, Wallpaper Manager will automatically close itself after it has been started."
+          Title="{local:LocalizedString ToolTip.TerminateAfterStartup.Title}"
+          Content="{local:LocalizedString ToolTip.TerminateAfterStartup.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="Wallpaper Manager will wait about 5 seconds before closing. The 5 seconds timer can be aborted by performing an action like clicking the Tray Icon."
+          NoteText="{local:LocalizedString ToolTip.TerminateAfterStartup.NoteText}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Startup.StartAutocyclingAfterStartup">
         <local:ToolTipData
-          Title="Start Autocycling After Startup"
-          Content="If checked, Wallpaper Manager will run the autocycling process of wallpapers after startup."
+          Title="{local:LocalizedString ToolTip.StartAutocyclingAfterStartup.Title}"
+          Content="{local:LocalizedString ToolTip.StartAutocyclingAfterStartup.Description}"
         />
       </ToolTip>
       
       <!-- Behavior ToolTips -->
       <ToolTip x:Key="ToolTips.Behavior.MinimizeOnClose">
         <local:ToolTipData
-          Title="Minimize on Close"
-          Content="If checked, Wallpaper Manager's main window will always be minimized and be shown in the Windows Task Bar even if the close button is clicked."
+          Title="{local:LocalizedString ToolTip.MinimizeOnClose.Title}"
+          Content="{local:LocalizedString ToolTip.MinimizeOnClose.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Behavior.DisplayCycleTimeAsIconOverlay">
         <local:ToolTipData
-          Title="Display Cycle Time as Icon Overlay"
-          Content="If checked, Wallpaper Manager will show the remaining time for the next random cycle as overlay icon in the Windows Task Bar (Windows 7 only)."
+          Title="{local:LocalizedString ToolTip.DisplayCycleTimeAsIconOverlay.Title}"
+          Content="{local:LocalizedString ToolTip.DisplayCycleTimeAsIconOverlay.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="To make use of this feature, don't close Wallpaper Mananger's main window but minimize it or check the 'Minimize on Close' Box. The icon will only be visible in the Task Bar if you have large icons enabled."
+          NoteText="{local:LocalizedString ToolTip.DisplayCycleTimeAsIconOverlay.NoteText}"
         />
       </ToolTip>
       
       <!-- Default Actions ToolTips -->
       <ToolTip x:Key="ToolTips.DefaultActions.DoubleClickWallpaper">
         <local:ToolTipData
-          Title="Double Click on Wallpaper Action"
-          Content="The action to execute whenever the user double clicks on a wallpaper entry in the list."
+          Title="{local:LocalizedString ToolTip.DoubleClickWallpaperAction.Title}"
+          Content="{local:LocalizedString ToolTip.DoubleClickWallpaperAction.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.DefaultActions.SingleClickTrayIcon">
         <local:ToolTipData
-          Title="Single Click on Tray Icon Action"
-          Content="The action to execute whenever the user clicks on a the Tray Icon."
+          Title="{local:LocalizedString ToolTip.ClickTrayIconAction.Title}"
+          Content="{local:LocalizedString ToolTip.ClickTrayIconAction.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.DefaultActions.DoubleClickTrayIcon">
         <local:ToolTipData
-          Title="Double Click on Tray Icon Action"
-          Content="The action to execute whenever the user double clicks on a the Tray Icon."
+          Title="{local:LocalizedString ToolTip.DoubleClickTrayIconAction.Title}"
+          Content="{local:LocalizedString ToolTip.DoubleClickTrayIconAction.Description}"
         />
       </ToolTip>
     </ResourceDictionary>
@@ -121,10 +121,10 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
-    
+
     <GroupBox Header="Startup" Grid.Column="0" Grid.Row="0">
       <StackPanel Orientation="Vertical">
-        <CheckBox Content="Start with _Windows" IsChecked="{Binding StartWithWindows}">
+        <CheckBox Content="{local:LocalizedString Config.StartWithWindows}" IsChecked="{Binding StartWithWindows}">
           <CheckBox.Style>
             <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
               <Setter Property="ToolTip" Value="{StaticResource ToolTips.Startup.StartWithWindows}" />
@@ -141,7 +141,7 @@
         </CheckBox>
         
         <CheckBox 
-          Content="Start mi_nimized"
+          Content="{local:LocalizedString Config.MinimizeAfterStartup}"
           IsChecked="{Binding Configuration.MinimizeAfterStartup, Mode=TwoWay}"
           ToolTip="{StaticResource ToolTips.Startup.StartMinimized}"
         />
@@ -149,13 +149,13 @@
         <StackPanel Orientation="Horizontal">
           <CheckBox 
             Name="chkCycleAfterStartup" 
-            Content="Cycle a_fter startup"
+            Content="{local:LocalizedString Config.CycleAfterStartup}"
             IsChecked="{Binding Configuration.CycleAfterStartup, Mode=TwoWay}"
             ToolTip="{StaticResource ToolTips.Startup.CycleAfterStartup}"
           />
           
           <CheckBox 
-            Content="... and c_lose application"
+            Content="{local:LocalizedString Config.TerminateAfterStartup}"
             IsChecked="{Binding Configuration.TerminateAfterStartup, Mode=TwoWay}" 
             IsEnabled="{Binding ElementName=chkCycleAfterStartup, Path=IsChecked}"
             Margin="20,2,2,2"
@@ -164,29 +164,29 @@
         </StackPanel>
         
         <CheckBox 
-          Content="Start _autocycling after startup" 
+          Content="{local:LocalizedString Config.StartAutocyclingAfterStartup}" 
           IsChecked="{Binding Path=Configuration.StartAutocyclingAfterStartup, Mode=TwoWay}" 
           ToolTip="{StaticResource ToolTips.Startup.StartAutocyclingAfterStartup}"
         />
       </StackPanel>
     </GroupBox>
-    
-    <GroupBox Header="Behavior" Grid.Column="1" Grid.Row="0">
+
+    <GroupBox Header="{local:LocalizedString Config.Group.Behavior}" Grid.Column="1" Grid.Row="0">
       <StackPanel Orientation="Vertical">
         <CheckBox 
-          Content="Minimize on Close"
+          Content="{local:LocalizedString Config.MinimizeOnClose}"
           IsChecked="{Binding Configuration.MinimizeOnClose, Mode=TwoWay}"
           ToolTip="{StaticResource ToolTips.Behavior.MinimizeOnClose}"
         />
         <CheckBox 
-          Content="Cycle Time as Icon Overlay"
+          Content="{local:LocalizedString Config.CycleTimeAsIconOverlay}"
           IsChecked="{Binding Configuration.DisplayCycleTimeAsIconOverlay, Mode=TwoWay}"
           ToolTip="{StaticResource ToolTips.Behavior.DisplayCycleTimeAsIconOverlay}"
         />
       </StackPanel>
     </GroupBox>
-    
-    <GroupBox Header="Default Actions" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+
+    <GroupBox Header="{local:LocalizedString Config.Group.DefaultActions}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
       <Grid>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto" />
@@ -199,7 +199,7 @@
         </Grid.RowDefinitions>
 
         <Label 
-          Content="Double click on Wall_paper: " 
+          Content="{local:LocalizedString Config.DoubleClickWallpaperAction}" 
           Target="{Binding ElementName=cboDefaultActions_Wallpaper}"
           Grid.Column="0" Grid.Row="0" 
         />
@@ -217,7 +217,7 @@
         </ComboBox>
         
         <Label 
-          Content="Single click on _Tray-Icon: " 
+          Content="{local:LocalizedString Config.ClickTrayIconAction}" 
           Target="{Binding ElementName=cboDefaultActions_TrayIconSingleClick}"
           Grid.Column="0" Grid.Row="1" 
         />
@@ -236,7 +236,7 @@
         </ComboBox>
         
         <Label 
-          Content="Double click on Tray-_Icon: " 
+          Content="{local:LocalizedString Config.DoubleClickTrayIconAction}" 
           Target="{Binding ElementName=cboDefaultActions_TrayIconDoubleClick}"
           Grid.Column="0" Grid.Row="2" 
         />

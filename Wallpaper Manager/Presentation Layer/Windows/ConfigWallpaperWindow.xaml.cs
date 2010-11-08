@@ -36,27 +36,6 @@ namespace WallpaperManager.Presentation {
   public partial class ConfigWallpaperWindow: Window {
     #region Constants: ConfigureWallpapersMode_Title, ConfigureDefaultSettingsMode_Title, ConfigureStaticWallpaperMode_Title
     /// <summary>
-    ///   Defines the title of this window if 
-    ///   <see cref="WallpaperManager.ApplicationInterface.ConfigWallpaperVM.ConfigurationMode" /> is set to 
-    ///   <see cref="ConfigWallpaperMode.ConfigureWallpapers" />.
-    /// </summary>
-    private const String ConfigureWallpapersMode_Title = "Configure Wallpaper(s)";
-
-    /// <summary>
-    ///   Defines the title of this window if 
-    ///   <see cref="WallpaperManager.ApplicationInterface.ConfigWallpaperVM.ConfigurationMode" /> is set to 
-    ///   <see cref="ConfigWallpaperMode.ConfigureDefaultSettings" />.
-    /// </summary>
-    private const String ConfigureDefaultSettingsMode_Title = "Configure Wallpaper Default Settings";
-
-    /// <summary>
-    ///   Defines the title of this window if 
-    ///   <see cref="WallpaperManager.ApplicationInterface.ConfigWallpaperVM.ConfigurationMode" /> is set to 
-    ///   <see cref="ConfigWallpaperMode.ConfigureStaticWallpaper" />.
-    /// </summary>
-    private const String ConfigureStaticWallpaperMode_Title = "Configure Static Wallpaper";
-
-    /// <summary>
     ///   Defines the resource key of the <see cref="BitmapImage" /> which is displayed if no preview can be generated.
     /// </summary>
     private const String NoPreviewImageResourceKey = "Images.NoPreview";
@@ -169,7 +148,7 @@ namespace WallpaperManager.Presentation {
       
       switch (configWallpaperVM.ConfigurationMode) {
         case ConfigWallpaperMode.ConfigureDefaultSettings:
-          this.Title = ConfigWallpaperWindow.ConfigureDefaultSettingsMode_Title;
+          this.Title = LocalizationManager.GetLocalizedString("ConfigDefaultSettings.Title");
           this.lblGeneral_ImagePath.Visibility = Visibility.Collapsed;
           this.pnlGeneral_ImagePath.Visibility = Visibility.Collapsed;
           this.rdbPlacement_AutoDetermine.Visibility = Visibility.Visible;
@@ -177,14 +156,14 @@ namespace WallpaperManager.Presentation {
 
           break;
         case ConfigWallpaperMode.ConfigureStaticWallpaper:
-          this.Title = ConfigWallpaperWindow.ConfigureStaticWallpaperMode_Title;
+          this.Title = LocalizationManager.GetLocalizedString("ConfigStaticWallpaper.Title");
           this.slbPreview.Visibility = Visibility.Collapsed;
           this.ctlMultiscreenSetting.Content = null;
           this.ctlMultiscreenSetting.Visibility = Visibility.Collapsed;
 
           break;
         default:
-          this.Title = ConfigWallpaperWindow.ConfigureWallpapersMode_Title;
+          this.Title = LocalizationManager.GetLocalizedString("ConfigWallpaper.Title");
           this.ctlMultiscreenSetting.Content = this.ctlMultiscreenSetting.Resources["ConfigureWallpapersContent"];
 
           break;

@@ -40,11 +40,6 @@ namespace WallpaperManager.Presentation {
     ///   Represents the filter string used in the "Add Wallpaper(s)" dialog.
     /// </summary>
     public const String WallpaperSelectionDialogFilter = @"JPEG Files (*.jpg, *.jpeg, *.jpe, *.jfef)|*.jpg;*.jpeg;*.jpe;*.jfef|EXIF Files (*.exif)|*.exif|GIF Files (*.gif)|*.gif|PNG Files (*.png)|*.png|TIFF Files (*.tif, *.tiff)|*.tif;*.tiff|Bitmap Files (*.bmp, *.dib)|*.bmp;*.dib|All Supported Files|*.jpg;*.jpeg;*.jpe;*.jfif;*.exif;*.gif;*.png;*.tif;*.tiff;*.bmp;*.dib|All Files|*.*";
-    
-    /// <summary>
-    ///   Represents the name for an automatically created <see cref="WallpaperCategory" />.
-    /// </summary>
-    private const String AutomaticallyCreatedCategoryName = "New Category";
     #endregion
 
     #region Constants: MainIconResName, TimeIconOverlayAccessibilityText, AutocyclingActivatedOverlayAccessibilityText, AutocyclingActivatedIconResName, AutocyclingDeactivatedIconResName
@@ -52,18 +47,6 @@ namespace WallpaperManager.Presentation {
     ///   Represents the resource path of the main icon.
     /// </summary>
     private const String MainIconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.Main.ico";
-
-    /// <summary>
-    ///   Represents the accessibility text which is shown to describe the overlay icon which represents the time until the 
-    ///   next random cycle.
-    /// </summary>
-    private const String TimeIconOverlayAccessibilityText = "The time until the next random cycle.";
-
-    /// <summary>
-    ///   Represents the accessibility text which is shown to describe the overlay icon which represents the time until the 
-    ///   next random cycle.
-    /// </summary>
-    private const String AutocyclingActivatedOverlayAccessibilityText = "Autocycling is activated.";
 
     /// <summary>
     ///   Represents the resource path of the autocycling started icon used as icon overlay.
@@ -311,9 +294,7 @@ namespace WallpaperManager.Presentation {
 
       // Loop showing the input dialog until a valid name is entered or cancel is pressed.
       while (true) {
-        TaskDialogResult dialogResult = DialogManager.ShowCategory_AddNew(this, ref categoryName);
-
-        if (dialogResult.StandardButton == TaskDialogButtons.OK) {
+        if (DialogManager.ShowCategory_AddNew(this, ref categoryName)) {
           WallpaperCategory wallpaperCategory;
 
           try {
@@ -364,9 +345,7 @@ namespace WallpaperManager.Presentation {
 
         // Loop showing the input dialog until a valid name is entered or cancel is pressed.
         while (true) {
-          TaskDialogResult dialogResult = DialogManager.ShowSynchronizedCategory_AddNew(this, ref categoryName);
-
-          if (dialogResult.StandardButton == TaskDialogButtons.OK) {
+          if (DialogManager.ShowSynchronizedCategory_AddNew(this, ref categoryName)) {
             WallpaperCategory wallpaperCategory;
 
             try {
@@ -457,21 +436,20 @@ namespace WallpaperManager.Presentation {
       
       // Loop showing the input dialog until a valid name is entered or cancel is pressed.
       while (true) {
-        TaskDialogResult dialogResult = DialogManager.ShowCategory_Rename(this, ref categoryName);
-        
-        if (dialogResult.StandardButton == TaskDialogButtons.OK) {
-          try {
-            this.ApplicationVM.WallpaperCategoryCollectionVM.RenameSelectedCommand.Execute(categoryName);
-          } catch (ArgumentOutOfRangeException) {
-            DialogManager.ShowCategory_NameInvalidLength(this);
-            continue;
-          } catch (ArgumentException) {
-            DialogManager.ShowCategory_NameInvalid(this);
-            continue;
-          }
+        if (!DialogManager.ShowCategory_Rename(this, ref categoryName)) {
+          break;
         }
 
-        break;
+        try {
+          this.ApplicationVM.WallpaperCategoryCollectionVM.RenameSelectedCommand.Execute(categoryName);
+          break;
+        } catch (ArgumentOutOfRangeException) {
+          DialogManager.ShowCategory_NameInvalidLength(this);
+          continue;
+        } catch (ArgumentException) {
+          DialogManager.ShowCategory_NameInvalid(this);
+          continue;
+        }
       }
     }
     #endregion
@@ -500,11 +478,11 @@ namespace WallpaperManager.Presentation {
     protected virtual void RemoveCategoryCommand_Executed(Object sender, ExecutedRoutedEventArgs e) {
       // If the user is holding shift, we don't show a confirmation dialog.
       if (!Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift)) {
-        TaskDialogResult dialogResult = DialogManager.ShowCategory_WantDelete(
+        Boolean dialogResult = DialogManager.ShowCategory_WantDelete(
           this, this.ApplicationVM.WallpaperCategoryCollectionVM.SelectedCategoryVM.Category.Name
         );
 
-        if (dialogResult.StandardButton != TaskDialogButtons.Yes) {
+        if (!dialogResult) {
           return;
         }
       }
@@ -781,7 +759,7 @@ namespace WallpaperManager.Presentation {
     /// </param>
     /// <seealso cref="RemoveWallpapersPhysicallyCommand" />
     protected virtual void RemoveWallpapersPhysicallyCommand_Executed(Object sender, ExecutedRoutedEventArgs e) {
-      if (DialogManager.ShowWallpaper_WantDeletePhysically(this).StandardButton == TaskDialogButtons.Yes) {
+      if (DialogManager.ShowWallpaper_WantDeletePhysically(this)) {
         try {
           this.ApplicationVM.WallpaperCategoryCollectionVM.SelectedCategoryVM.RemoveSelectedPhysicallyCommand.Execute();
         } catch (FileNotFoundException exception) {
@@ -952,7 +930,7 @@ namespace WallpaperManager.Presentation {
                     MainWindow.IconOverlayTextColor,
                     new RectangleF(0, 1, 18, 16),
                     MainWindow.IconOverlayTextFormat
-                    );
+                  );
                   timeOverlayGraphics.Flush();
 
                   // For an unknown reason, the Icon.FromHandle method tends to throw a random(?) ExternalException sometimes.
@@ -982,7 +960,9 @@ namespace WallpaperManager.Presentation {
         } else {
           newOverlayIcon = AppEnvironment.IconFromEmbeddedResource(MainWindow.AutocyclingDeactivatedIconResName);
         }
-        TaskbarManager.Instance.SetOverlayIcon(this, newOverlayIcon, MainWindow.AutocyclingActivatedOverlayAccessibilityText);
+        TaskbarManager.Instance.SetOverlayIcon(
+          this, newOverlayIcon, LocalizationManager.GetLocalizedString("ToolTip.AutocyclingActivated.Description")
+        );
       } finally {
         if (newOverlayIcon != null) {
           newOverlayIcon.Dispose();
@@ -1008,7 +988,7 @@ namespace WallpaperManager.Presentation {
     private void WallpapersVM_AddWallpaperException(Object sender, ExceptionEventArgs e) {
       if (e.Exception is OutOfMemoryException) {
         // TODO: Somehow include the image's file name here.
-        DialogManager.ShowImage_LoadError(this);
+        DialogManager.ShowWallpaper_LoadError(this);
       }
 
       if (e.Exception is FileNotFoundException) {
@@ -1076,11 +1056,9 @@ namespace WallpaperManager.Presentation {
     /// </returns>
     private Boolean CreateOrSelectCategoryIfNecessary() {
       if (this.ApplicationVM.WallpaperCategoryCollectionVM.Categories.Count == 0) {
-        TaskDialogResult result = DialogManager.ShowCategory_NoCategoryAvailable(this);
-
-        if (result.StandardButton == TaskDialogButtons.Yes) {
+        if (DialogManager.ShowCategory_NoCategoryAvailable(this)) {
           this.ApplicationVM.WallpaperCategoryCollectionVM.AddCategoryCommand.Execute(
-            new WallpaperCategory(MainWindow.AutomaticallyCreatedCategoryName)
+            new WallpaperCategory(LocalizationManager.GetLocalizedString("CategoryData.DefaultName"))
           );
         } else {
           // The user does not want to create a new category, so we cannot continue.
@@ -1128,7 +1106,7 @@ namespace WallpaperManager.Presentation {
         } catch (DirectoryNotFoundException) {
           DialogManager.ShowGeneral_DirectoryNotFound(this, null);
         } catch (IOException) {
-          if (DialogManager.ShowSynchronizedCategory_FileAlreadyExist(this, null).StandardButton == TaskDialogButtons.Yes) {
+          if (DialogManager.ShowSynchronizedCategory_FileAlreadyExist(this, null)) {
             doOverwrite = true;
             goto Retry;
           }

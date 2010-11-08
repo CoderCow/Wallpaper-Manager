@@ -12,7 +12,7 @@
   xmlns:local="clr-namespace:WallpaperManager.Presentation"
   
   x:Class="WallpaperManager.Presentation.ConfigWindow"
-  Title="Configuration"
+  Title="{local:LocalizedString Config.Title}"
   Icon="..\..\Resources\Icons\Configuration.png"
   WindowStyle="SingleBorderWindow"
   ResizeMode="NoResize"
@@ -100,8 +100,11 @@
     </ToolBar>
     
     <StackPanel Margin="8" DockPanel.Dock="Bottom" Style="{StaticResource Dialog.ButtonPanel}">
-      <Button Content="Cancel" IsCancel="True" TabIndex="101" />
-      <Button Content="OK" IsDefault="True" TabIndex="100" Command="{Binding Path=ConfigurationVM.ApplySettingsCommand}" />
+      <Button Content="{local:LocalizedString DialogGlobal.Button.Cancel}" IsCancel="True" TabIndex="101" />
+      <Button 
+        Content="{local:LocalizedString DialogGlobal.Button.OK}" IsDefault="True" TabIndex="100" 
+        Command="{Binding Path=ConfigurationVM.ApplySettingsCommand}" 
+      />
     </StackPanel>
 
     <!-- Note: The Page's DataContext will be bound (by code) to the DataContext of the Frame. -->

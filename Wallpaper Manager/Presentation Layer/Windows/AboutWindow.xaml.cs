@@ -23,22 +23,6 @@ namespace WallpaperManager.Presentation {
   /// </summary>
   /// <threadsafety static="true" instance="false" />
   public partial class AboutWindow: Window {
-    #region Constants: VersionStringFormat
-    /// <summary>
-    ///   Represents the format string for the <see cref="VersionFormatConverter" />.
-    /// </summary>
-    #if BetaBuild
-    protected const String VersionStringFormat = @"{0}.{1} Beta {3}";
-    #else
-    protected const String VersionStringFormat = @"{0}.{1} Revision {3}";
-    #endif
-
-    /// <summary>
-    ///   Represents the format short string for the <see cref="VersionFormatConverter" />.
-    /// </summary>
-    protected const String VersionStringFormatShort = @"{0}.{1}";
-    #endregion
-
     #region Property: Environment
     /// <summary>
     ///   <inheritdoc cref="Environment" select='../value/node()' />
@@ -93,9 +77,13 @@ namespace WallpaperManager.Presentation {
       this.InitializeComponent();
 
       if (environment.AppVersion.Revision != 0) {
-        this.VersionFormatConverter.StringFormat = AboutWindow.VersionStringFormat;
+        #if !BetaBuild
+        this.VersionFormatConverter.StringFormat = LocalizationManager.GetLocalizedString("About.VersionString");
+        #else
+        this.VersionFormatConverter.StringFormat = LocalizationManager.GetLocalizedString("About.VersionStringBeta");
+        #endif
       } else {
-        this.VersionFormatConverter.StringFormat = AboutWindow.VersionStringFormatShort;
+        this.VersionFormatConverter.StringFormat = LocalizationManager.GetLocalizedString("About.VersionStringShort");
       }
 
       BindingOperations.GetBindingExpression(this.txtAppVersion, TextBlock.TextProperty).UpdateTarget();

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 
 using Common;
@@ -21,6 +22,23 @@ namespace WallpaperManager.ApplicationInterface {
   /// <commondoc select='WrappingCollectionViewModels/General/*' params="WrappedType=Wallpaper" />
   /// <threadsafety static="true" instance="false" />
   public class ConfigWallpaperVM: INotifyPropertyChanged {
+    #region Property: GeneralConfiguration
+    /// <summary>
+    ///   <inheritdoc cref="GeneralConfiguration" select='../value/node()' />
+    /// </summary>
+    private readonly GeneralConfig generalConfiguration;
+
+    /// <summary>
+    ///   Gets the <see cref="GeneralConfig" /> instance containing general application configuration data.
+    /// </summary>
+    /// <value>
+    ///   The <see cref="GeneralConfig" /> instance containing general application configuration data.
+    /// </value>
+    public GeneralConfig GeneralConfiguration {
+      get { return this.generalConfiguration; }
+    }
+    #endregion
+
     #region Property: ConfigurationMode
     /// <summary>
     ///   <inheritdoc cref="ConfigurationMode" select='../value/node()' />
@@ -716,6 +734,9 @@ namespace WallpaperManager.ApplicationInterface {
     /// <remarks>
     ///   Call this constructor to configure a collection of <see cref="WallpaperVM" /> instances.
     /// </remarks>
+    /// <param name="generalConfiguration">
+    ///   The <see cref="GeneralConfig" /> instance containing general application configuration data.
+    /// </param>
     /// <param name="wallpapers">
     ///   The collection of <see cref="WallpaperSettingsBase" /> objects to be configured.
     /// </param>
@@ -723,15 +744,6 @@ namespace WallpaperManager.ApplicationInterface {
     ///   A <see cref="Boolean" /> indicating whether the category of the <see cref="Wallpaper" /> instances
     ///   is a <see cref="SynchronizedWallpaperCategory" /> or not.
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <paramref name="wallpapers" /> is <c>null</c>.
-    /// </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///   <paramref name="wallpapers" /> is empty.
-    /// </exception>
-    /// <exception cref="ArgumentException">
-    ///   <paramref name="wallpapers" /> contains a <c>null</c> item.
-    /// </exception>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
     /// 
     /// <overloads>
@@ -739,17 +751,15 @@ namespace WallpaperManager.ApplicationInterface {
     ///     Initializes a new instance of the <see cref="ConfigWallpaperVM" /> class.
     ///   </summary>
     /// </overloads>
-    public ConfigWallpaperVM(ICollection<Wallpaper> wallpapers, Boolean parentIsSynchronizedCategory) {
-      if (wallpapers == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("wallpapers"));
-      }
-      if (wallpapers.Count == 0) {
-        throw new ArgumentOutOfRangeException(ExceptionMessages.GetCollectionIsEmpty("wallpapers"));
-      }
-      if (wallpapers.Contains(null)) {
-        throw new ArgumentException(ExceptionMessages.GetCollectionContainsNullItem("wallpapers"));
-      }
+    public ConfigWallpaperVM(
+      GeneralConfig generalConfiguration, ICollection<Wallpaper> wallpapers, Boolean parentIsSynchronizedCategory
+    ) {
+      Contract.Requires<ArgumentNullException>(generalConfiguration != null);
+      Contract.Requires<ArgumentNullException>(wallpapers != null);
+      Contract.Requires<ArgumentOutOfRangeException>(wallpapers.Count > 0);
+      Contract.Requires<ArgumentException>(!wallpapers.Contains(null));
 
+      this.generalConfiguration = generalConfiguration;
       this.configurationMode = ConfigWallpaperMode.ConfigureWallpapers;
       this.parentIsSynchronizedCategory = parentIsSynchronizedCategory;
 

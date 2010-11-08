@@ -30,11 +30,6 @@ namespace WallpaperManager.Data {
   public class WallpaperOverlayText: INotifyPropertyChanged, ICloneable, IAssignable {
     #region Constants: DefaultFormat, DefaultFontName, DefaultFontSize, DefaultFontStyle, DefaultForeColor, DefaultBorderColor, DefaultPosition
     /// <summary>
-    ///   Represents the default <see cref="Format" /> string.
-    /// </summary>
-    private const String DefaultFormat = "New Overlay Text";
-
-    /// <summary>
     ///   Represents the default font name.
     /// </summary>
     private const String DefaultFontName = "Verdana";
@@ -311,7 +306,7 @@ namespace WallpaperManager.Data {
       this.fontName = WallpaperOverlayText.DefaultFontName;
       this.fontSize = WallpaperOverlayText.DefaultFontSize;
       this.fontStyle = WallpaperOverlayText.DefaultFontStyle;
-      this.format = WallpaperOverlayText.DefaultFormat;
+      this.format = LocalizationManager.GetLocalizedString("OverlayTextData.DefaultFormat");
       this.foreColor = WallpaperOverlayText.DefaultForeColor;
       this.borderColor = WallpaperOverlayText.DefaultBorderColor;
       this.position = WallpaperOverlayText.DefaultPosition;

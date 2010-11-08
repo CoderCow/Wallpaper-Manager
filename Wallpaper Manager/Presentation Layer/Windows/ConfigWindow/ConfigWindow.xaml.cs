@@ -153,6 +153,6 @@ namespace WallpaperManager.Presentation {
         element.DataContext = this.frmContent.DataContext;
       }
     }
-    #endregion    
+    #endregion
   }
 }

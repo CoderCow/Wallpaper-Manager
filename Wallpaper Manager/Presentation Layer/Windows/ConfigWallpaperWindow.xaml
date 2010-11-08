@@ -47,186 +47,178 @@
       <!-- ToolTips -->
       <ToolTip x:Key="ToolTips.General.MultiscreenWallpaper.Auto">
         <local:ToolTipData
-          Title="Auto Determine Multiscreen Wallpaper"
-          Content="If selected, Wallpaper Manager will automatically suggest new wallpapers as single- or multiscreen wallpapers."
+          Title="{local:LocalizedString ToolTip.MultiscreenWallpaper.Auto.Title}"
+          Content="{local:LocalizedString ToolTip.MultiscreenWallpaper.Auto.Description}"
           IsMultiscreenFeature="True"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.General.MultiscreenWallpaper.Yes">
         <local:ToolTipData 
-          Title="Treat Always as Multiscreen Wallpaper"
-          Content="If selected, Wallpaper Manager will treat any added wallpaper as multiscreen wallpaper."
+          Title="{local:LocalizedString ToolTip.MultiscreenWallpaper.Yes.Title}"
+          Content="{local:LocalizedString ToolTip.MultiscreenWallpaper.Yes.Description}"
           IsMultiscreenFeature="True"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.General.MultiscreenWallpaper.No">
         <local:ToolTipData 
-          Title="Treat Never as Multiscreen Wallpaper"
-          Content="If selected, Wallpaper Manager will treat any added wallpaper as singlescreen wallpaper."
+          Title="{local:LocalizedString ToolTip.MultiscreenWallpaper.No.Title}"
+          Content="{local:LocalizedString ToolTip.MultiscreenWallpaper.No.Description}"
           IsMultiscreenFeature="True"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.General.MultiscreenWallpaper">
         <local:ToolTipData 
-          Title="If Multiscreen Wallpaper"
-          Content="If selected, Wallpaper Manager will place the wallpaper over all monitors."
+          Title="{local:LocalizedString ToolTip.MultiscreenWallpaper.YesNo.Title}"
+          Content="{local:LocalizedString ToolTip.MultiscreenWallpaper.YesNo.Description}"
           IsMultiscreenFeature="True"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.General.ImagePath">
         <local:ToolTipData 
-          Title="Image Path"
-          Content="The path to the wallpaper-image."
+          Title="{local:LocalizedString ToolTip.WallpaperImagePath.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperImagePath.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="Right-Click on the button to remove the wallpaper-image."
+          NoteText="{local:LocalizedString ToolTip.WallpaperImagePath.NoteText}"
         />
       </ToolTip>
 
       <ToolTip x:Key="ToolTips.General.Background">
         <local:ToolTipData 
-          Title="Background Color"
-          Content="The color which is displayed behind the image."
+          Title="{local:LocalizedString ToolTip.WallpaperBackgroundColor.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperBackgroundColor.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.General.Priority">
         <local:ToolTipData 
-          Title="Cycle Priority"
-          Content="When cycling randomly, this value defines how often the wallpaper is picked."
+          Title="{local:LocalizedString ToolTip.WallpaperPriority.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperPriority.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
       </ToolTip>
-      
+
       <ToolTip x:Key="ToolTips.CycleConditions.OnlyCycleBetweenStart">
         <local:ToolTipData 
-          Title="Cycle Time Condition"
-          Content="This value defines the time of the day when Wallpaper Mananger should start cycling this wallpaper."
+          Title="{local:LocalizedString ToolTip.OnlyCycleBetweenStart.Title}"
+          Content="{local:LocalizedString ToolTip.OnlyCycleBetweenStart.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
       </ToolTip>
-      
+
       <ToolTip x:Key="ToolTips.CycleConditions.OnlyCycleBetweenStop">
         <local:ToolTipData 
-          Title="Cycle Time of Day Condition"
-          Content="This value defines the time of the day when Wallpaper Mananger should stop cycling this wallpaper."
+          Title="{local:LocalizedString ToolTip.OnlyCycleBetweenStop.Title}"
+          Content="{local:LocalizedString ToolTip.OnlyCycleBetweenStop.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
       </ToolTip>
-      
-      <ToolTip x:Key="ToolTips.CycleConditions.OnlyCycleOnMonitor">
-        <local:ToolTipData 
-          Title="Cycle Time of Day Condition"
-          Content="If checked, Wallpaper Manager will cycle this wallpaper on this monitor."
-          IsMultiscreenFeature="True"
-        />
-      </ToolTip>
-      
+
       <ToolTip x:Key="ToolTips.Placement.Auto">
         <local:ToolTipData 
-          Title="Auto Determine Placement"
-          Content="If selected, Wallpaper Manager will automatically suggest a placement-mode for the new wallpaper."
+          Title="{local:LocalizedString ToolTip.WallpaperPlacement.Auto.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperPlacement.Auto.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Placement.HOffset">
         <local:ToolTipData 
-          Title="Horizontal Offset"
-          Content="This value moves the wallpaper on the horizontal axis by the given pixels."
+          Title="{local:LocalizedString ToolTip.WallpaperVOffset.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperVOffset.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Placement.VOffset">
         <local:ToolTipData 
-          Title="Vertical Offset"
-          Content="This value moves the wallpaper on the vertical axis by the given pixels."
+          Title="{local:LocalizedString ToolTip.WallpaperHOffset.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperHOffset.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Placement.HScale">
         <local:ToolTipData 
-          Title="Horizontal Scale"
-          Content="This value scales the wallpaper on the horizontal axis by the given percentage."
+          Title="{local:LocalizedString ToolTip.WallpaperHScale.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperHScale.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Placement.VScale">
         <local:ToolTipData 
-          Title="Vertical Scale"
-          Content="This value scales the wallpaper on the vertical axis by the given percentage."
+          Title="{local:LocalizedString ToolTip.WallpaperVScale.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperVScale.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="{StaticResource Global.Text.DragableTextBoxInfo}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Effects.HFlip">
         <local:ToolTipData 
-          Title="Flip Wallpaper Horizontally"
-          Content="If checked, the wallpaper will be flipped horizontally when cycled."
+          Title="{local:LocalizedString ToolTip.WallpaperHFlip.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperHFlip.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Effects.VFlip">
         <local:ToolTipData 
-          Title="Flip Wallpaper Vertically"
-          Content="If checked, the wallpaper will be flipped vertically when cycled."
+          Title="{local:LocalizedString ToolTip.WallpaperVFlip.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperVFlip.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Effects.MirrorLeft">
         <local:ToolTipData 
-          Title="Mirror Wallpaper on the Left"
-          Content="If checked, the wallpaper will have a mirror of iteself on its left side when cycled."
+          Title="{local:LocalizedString ToolTip.WallpaperMirrorLeft.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperMirrorLeft.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Effects.MirrorRight">
         <local:ToolTipData 
-          Title="Mirror Wallpaper on the Right"
-          Content="If checked, the wallpaper will have a mirror of iteself on its right side when cycled."
+          Title="{local:LocalizedString ToolTip.WallpaperMirrorRight.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperMirrorRight.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Effects.MirrorTop">
         <local:ToolTipData 
-          Title="Mirror Wallpaper on the Top"
-          Content="If checked, the wallpaper will have a mirror of iteself on its top side when cycled."
+          Title="{local:LocalizedString ToolTip.WallpaperMirrorTop.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperMirrorTop.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.Effects.MirrorBottom">
         <local:ToolTipData 
-          Title="Mirror Wallpaper on the Left"
-          Content="If checked, the wallpaper will have a mirror of iteself on its bottom side when cycled."
+          Title="{local:LocalizedString ToolTip.WallpaperMirrorBottom.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperMirrorBottom.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.ScreenCheckBox">
         <local:ToolTipData 
-          Title="Cycle on This Screen"
-          Content="Check to allow cycling of this wallpaper on this screen."
+          Title="{local:LocalizedString ToolTip.WallpaperCycleOnScreen.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperCycleOnScreen.Description}"
           IsMultiscreenFeature="True"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.ScreenCheckBoxCloneAllCycleMode">
         <local:ToolTipData 
-          Title="Cycle on This Screen"
-          Content="Check to allow cycling of this wallpaper on this screen."
+          Title="{local:LocalizedString ToolTip.WallpaperCycleOnScreen.Title}"
+          Content="{local:LocalizedString ToolTip.WallpaperCycleOnScreen.Description}"
           NoteIcon="{StaticResource Global.Icons.Warning}"
-          NoteText="This feature is disabled because the Wallpaper Cycling Mode is set to Clone All Monitors."
+          NoteText="{local:LocalizedString ToolTip.WallpaperCycleOnScreen.NoteText}"
         />
       </ToolTip>
       
@@ -274,7 +266,7 @@
         
         <Style.Triggers>
           <DataTrigger 
-            Binding="{Binding Source={x:Static Application.Current}, Path=Config.WallpaperChangeType}"
+            Binding="{Binding Path=ConfigWallpaperVM.GeneralConfiguration.WallpaperChangeType}"
             Value="{x:Static Data:WallpaperChangeType.ChangeAllCloned}"
           >
             <Setter Property="ToolTip" Value="{StaticResource ToolTips.ScreenCheckBoxCloneAllCycleMode}" />
@@ -320,7 +312,10 @@
           Background="Transparent"
         />
 
-        <GroupBox Header="General" TabIndex="10" DataContext="{Binding Path=ConfigWallpaperVM}">
+        <GroupBox 
+          Header="{local:LocalizedString ConfigWallpaper.Group.General}" TabIndex="10" 
+          DataContext="{Binding Path=ConfigWallpaperVM}"
+        >
           <Grid>
             <Grid.ColumnDefinitions>
               <ColumnDefinition MinWidth="80" Width="Auto" />
@@ -339,10 +334,10 @@
             <ContentControl x:Name="ctlMultiscreenSetting" Focusable="False" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
               <ContentControl.Resources>
                 <StackPanel x:Key="ConfigureDefaultSettingsContent" Orientation="Horizontal">
-                  <Label Content="Multiscreen wallpaper: " VerticalAlignment="Center" />
+                  <Label Content="{local:LocalizedString ConfigWallpaper.MultiscreenWallpaper}" VerticalAlignment="Center" />
                   
                   <RadioButton 
-                    Content="Auto" 
+                    Content="{local:LocalizedString ConfigWallpaper.MultiscreenWallpaper.Auto}" 
                     IsChecked="{Binding 
                       Path=IsMultiscreen, 
                       Converter={StaticResource Global.IsValueAsBooleanConverter}, 
@@ -356,7 +351,7 @@
                   />
                   
                   <RadioButton 
-                    Content="Yes" 
+                    Content="{local:LocalizedString ConfigWallpaper.MultiscreenWallpaper.Yes}" 
                     IsChecked="{Binding 
                       Path=IsMultiscreen, 
                       Converter={StaticResource Global.IsValueAsBooleanConverter}, 
@@ -370,7 +365,7 @@
                   />
                   
                   <RadioButton 
-                    Content="No" 
+                    Content="{local:LocalizedString ConfigWallpaper.MultiscreenWallpaper.No}" 
                     IsChecked="{Binding 
                       Path=IsMultiscreen, 
                       Converter={StaticResource Global.IsValueAsBooleanConverter}, 
@@ -386,7 +381,7 @@
                 
                 <CheckBox 
                   x:Key="ConfigureWallpapersContent"
-                  Content="_Multiscreen Wallpaper" 
+                  Content="{local:LocalizedString ConfigWallpaper.MultiscreenWallpaper.YesNo}" 
                   IsChecked="{Binding Path=IsMultiscreen, Mode=TwoWay}" 
                   HorizontalAlignment="Stretch"
                   Margin="5,5,0,3"
@@ -400,7 +395,7 @@
             <!-- This element will be visible if the dialog is NOT in ConfigureDefaultSettings mode -->
             <Label 
               Name="lblGeneral_ImagePath" 
-              Content="_Image Path: " 
+              Content="{local:LocalizedString ConfigWallpaper.WallpaperImagePath}" 
               Target="{Binding ElementName=txtGeneral_ImagePath}"
               TabIndex="50" 
               Grid.Column="0" Grid.Row="1" 
@@ -428,11 +423,11 @@
                     
                     <Style.Triggers>
                       <DataTrigger Binding="{Binding Path=ImagePath}" Value="{x:Null}">
-                        <Setter Property="Text" Value="-different values-" />
+                        <Setter Property="Text" Value="{local:LocalizedString StateRepresentation.DifferentValues}" />
                       </DataTrigger>
                       
                       <DataTrigger Binding="{Binding Path=HasImagePath}" Value="False">
-                        <Setter Property="Text" Value="-no image-" />
+                        <Setter Property="Text" Value="{local:LocalizedString ConfigWallpaper.WallpaperImagePath.NoImage}" />
                       </DataTrigger>
                     </Style.Triggers>
                   </Style>
@@ -448,7 +443,7 @@
             </StackPanel>
             
             <Label 
-              Content="_Background: " 
+              Content="{local:LocalizedString ConfigWallpaper.BackgroundColor}" 
               TabIndex="80"
               Target="{Binding ElementName=btnGeneral_SelectBackgroundColor}"
               Grid.Column="0" Grid.Row="2" 
@@ -509,29 +504,32 @@
             </StackPanel>
           </Grid>
         </GroupBox>
-        
-        <GroupBox Header="Cycle Conditions" TabIndex="130" DataContext="{Binding Path=ConfigWallpaperVM}">
+
+        <GroupBox 
+          Header="{local:LocalizedString ConfigWallpaper.Group.CycleConditions}" TabIndex="130" 
+          DataContext="{Binding Path=ConfigWallpaperVM}"
+        >
           <StackPanel Orientation="Horizontal">
-            <Label Content="Only cycle between " VerticalAlignment="Center" />
+            <Label Content="{local:LocalizedString ConfigWallpaper.CycleBetween1}" VerticalAlignment="Center" Margin="0,0,2,0" />
             <Common.Windows.Controls:TimeSpanTextBox 
               Text="{Binding Path=OnlyCycleBetweenStart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
               ToolTip="{StaticResource ToolTips.CycleConditions.OnlyCycleBetweenStart}"
               TabIndex="140" 
             />
-            
-            <Label Content="and" Margin="2,0,2,0" VerticalAlignment="Center" />
+
+            <Label Content="{local:LocalizedString ConfigWallpaper.CycleBetween2}" Margin="2,0,2,0" VerticalAlignment="Center" />
             <Common.Windows.Controls:TimeSpanTextBox 
               Text="{Binding Path=OnlyCycleBetweenStop, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
               ToolTip="{StaticResource ToolTips.CycleConditions.OnlyCycleBetweenStop}"
               TabIndex="150" 
             />
-            <Label Content="." Margin="0,0,2,0" VerticalAlignment="Center" />
+            <Label Content="{local:LocalizedString ConfigWallpaper.CycleBetween3}" Margin="0,0,2,0" VerticalAlignment="Center" />
           </StackPanel>
         </GroupBox>
       </StackPanel>
       
       <StackPanel Orientation="Vertical" DataContext="{Binding Path=ConfigWallpaperVM}">
-        <GroupBox Header="Placement" TabIndex="160">
+        <GroupBox Header="{local:LocalizedString ConfigWallpaper.Group.Placement}" TabIndex="160">
           <StackPanel Orientation="Vertical"> 
             <StackPanel.Resources>
               <Style 
@@ -546,7 +544,7 @@
             
             <UniformGrid Margin="4,2,4,2" Columns="2" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="6">
               <RadioButton 
-                Content="_Center"
+                Content="{local:LocalizedString ConfigWallpaper.Placement.Center}" 
                 IsChecked="{Binding 
                   Path=Placement, 
                   Converter={StaticResource Global.IsValueAsBooleanConverter}, 
@@ -558,7 +556,7 @@
               />
               
               <RadioButton 
-                Content="_Uniform"
+                Content="{local:LocalizedString ConfigWallpaper.Placement.Uniform}" 
                 IsChecked="{Binding 
                   Path=Placement, 
                   Converter={StaticResource Global.IsValueAsBooleanConverter}, 
@@ -570,7 +568,7 @@
               />
               
               <RadioButton 
-                Content="Uniform to _fill"
+                Content="{local:LocalizedString ConfigWallpaper.Placement.UniformToFill}" 
                 IsChecked="{Binding 
                   Path=Placement, 
                   Converter={StaticResource Global.IsValueAsBooleanConverter}, 
@@ -582,7 +580,7 @@
               />
               
               <RadioButton 
-                Content="_Stretch"
+                Content="{local:LocalizedString ConfigWallpaper.Placement.Stretch}" 
                 IsChecked="{Binding 
                   Path=Placement, 
                   Converter={StaticResource Global.IsValueAsBooleanConverter}, 
@@ -594,7 +592,7 @@
               />
     
               <RadioButton 
-                Content="_Tile"
+                Content="{local:LocalizedString ConfigWallpaper.Placement.Tile}" 
                 IsChecked="{Binding 
                   Path=Placement, 
                   Converter={StaticResource Global.IsValueAsBooleanConverter}, 
@@ -608,7 +606,7 @@
               <!-- This element will only be visible if the dialog is in ConfigureDefaultSettings mode -->
               <RadioButton
                 Name="rdbPlacement_AutoDetermine"
-                Content="Auto determi_ne" 
+                Content="{local:LocalizedString ConfigWallpaper.Placement.Auto}" 
                 IsChecked="{Binding 
                   Path=Placement, 
                   Converter={StaticResource Global.IsValueAsBooleanConverter}, 
@@ -657,7 +655,9 @@
                   </Binding.ValidationRules>
                 </Binding>
               </Common.Windows.Controls:NumericTextBox>
-              <TextBlock Text=" / " />
+
+              <TextBlock Text="{local:LocalizedString ConfigWallpaper.OffsetSeparator}" />
+              
               <Common.Windows.Controls:NumericTextBox 
                 Name="txtPlacement_VOffset"
                 TabIndex="250"
@@ -708,7 +708,10 @@
                   </Binding.ValidationRules>
                 </Binding>
               </Common.Windows.Controls:NumericTextBox>
-              <TextBlock Text="%  / " />
+
+              <TextBlock Text="{local:LocalizedString Chars.Percentage}" />
+              <TextBlock Text="{local:LocalizedString ConfigWallpaper.ScaleSeparator}" />
+              
               <Common.Windows.Controls:NumericTextBox 
                 Name="txtPlacement_VScale"
                 TabIndex="280"
@@ -721,7 +724,8 @@
                   </Binding.ValidationRules>
                 </Binding>
               </Common.Windows.Controls:NumericTextBox>
-              <TextBlock Text="%" />
+
+              <TextBlock Text="{local:LocalizedString Chars.Percentage}" />
             </StackPanel>
           </StackPanel>
         </GroupBox>
@@ -777,8 +781,11 @@
     
     <!-- The "*Button_Click" methods just assign a DialogResult and closes the window. -->
     <StackPanel Style="{StaticResource Dialog.ButtonPanel}">
-      <Button Content="Cancel" IsCancel="True" TabIndex="1001" />
-      <Button Content="OK" IsDefault="True" TabIndex="1000" Command="{Binding Path=ConfigWallpaperVM.ApplySettingsCommand}" />
+      <Button Content="{local:LocalizedString DialogGlobal.Button.Cancel}" IsCancel="True" TabIndex="1001" />
+      <Button 
+        Content="{local:LocalizedString DialogGlobal.Button.OK}" IsDefault="True" 
+        TabIndex="1000" Command="{Binding Path=ConfigWallpaperVM.ApplySettingsCommand}" 
+      />
     </StackPanel>
   </StackPanel>
 </Window>

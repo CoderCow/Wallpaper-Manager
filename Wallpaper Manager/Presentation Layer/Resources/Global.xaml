@@ -27,11 +27,6 @@
   <Common.Presentation:IsValueAsBooleanConverter x:Key="Global.IsValueAsBooleanConverter" IsNot="False" />
   <Common.Presentation:IsValueAsBooleanConverter x:Key="Global.IsNotValueAsBooleanConverter" IsNot="True" />
   
-  <!-- Text -->
-  <System:String x:Key="Global.Text.DragableTextBoxInfo">
-    When dragging using the mouse, hold the Shift-Key to drag with a greater value.
-  </System:String>
-  
   <!-- ToolTips -->
   <Style TargetType="{x:Type ToolTip}">
     <Setter Property="MaxWidth" Value="350" />
@@ -88,8 +83,10 @@
                 <Condition Binding="{Binding Path=IsMultiscreenFeature}" Value="True" />
                 <Condition Binding="{Binding Source={x:Static Data:AppEnvironment.IsMultiscreenSystem}}" Value="False" />
               </MultiDataTrigger.Conditions>
-              
-              <Setter TargetName="txbNote_Text" Property="Text" Value="This feature is only available for multi screen systems." />
+
+              <Setter 
+                TargetName="txbNote_Text" Property="Text" Value="{local:LocalizedString ToolTip.Global.MultiscreenFeature.NoteText}" 
+              />
               <Setter TargetName="imgNote_Icon" Property="Source" Value="{StaticResource Global.Icons.Warning}" />
               <Setter TargetName="pnlNote" Property="Visibility" Value="Visible" />
             </MultiDataTrigger>

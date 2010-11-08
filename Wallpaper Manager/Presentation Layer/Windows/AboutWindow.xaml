@@ -9,10 +9,11 @@
 <Window   
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+  xmlns:local="clr-namespace:WallpaperManager.Presentation"
   xmlns:Common.Presentation="clr-namespace:Common.Presentation;assembly=Common4.0" 
   
   x:Class="WallpaperManager.Presentation.AboutWindow"
-  Title="About"
+  Title="{local:LocalizedString About.Title}"
   Icon="..\Resources\Icons\About.png"
   WindowStartupLocation="CenterOwner"
   WindowStyle="SingleBorderWindow"
@@ -70,75 +71,94 @@
         <RowDefinition Height="Auto" />
         <RowDefinition Height="5" />
         <RowDefinition Height="Auto" />
-        <RowDefinition Height="18" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
-        <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="18" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="18" />
+        <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="10" />
       </Grid.RowDefinitions>
-      
-      <TextBlock Text="Application Version" Grid.Column="0" Grid.Row="0" />
+
+      <TextBlock Text="{local:LocalizedString About.ApplicationVersion}" Grid.Column="0" Grid.Row="0" />
       <TextBlock 
         Name="txtAppVersion"
         Text="{Binding Path=Environment.AppVersion, Converter={StaticResource VersionFormatConverter}}" 
         Grid.Column="1" Grid.Row="0" 
       />
-      
-      <TextBlock Text="Written by" Grid.Column="0" Grid.Row="3" />
+
+      <TextBlock Text="{local:LocalizedString About.WrittenBy}" Grid.Column="0" Grid.Row="3" />
       <TextBlock Grid.Column="1" Grid.Row="3">
         <Hyperlink Tag="mailto:KayPosmyk@gmx.de">David-Kay Posmyk</Hyperlink>
       </TextBlock>
+
+      <TextBlock Text="{local:LocalizedString About.TranslatedBy}" Grid.Column="0" Grid.Row="4" />
+
+      <TextBlock Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2">
+        <Run Text="{local:LocalizedString Translation.Translators}" />
+        <Run> </Run>
+        <Hyperlink Tag="http://www.opensource.org/licenses/bsd-license.php">
+          <Run Text="{local:LocalizedString About.LicenseLink}" />
+        </Hyperlink>
+      </TextBlock>
       
-      <TextBlock Text="Used thrid party resources:" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" />
-      <TextBlock Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2">
+      <TextBlock Text="{local:LocalizedString About.ThridPartyResources}" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" />
+      <TextBlock Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2">
         <Hyperlink Tag="http://www.visualpharm.com/">
           VisualPharm's Must Have Icons
         </Hyperlink>
         <Run> </Run>
         <Hyperlink Tag="http://creativecommons.org/licenses/by-nd/3.0/">
-          (License)
+          <Run Text="{local:LocalizedString About.LicenseLink}" />
         </Hyperlink>
       </TextBlock>
-      <TextBlock Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2">
+      <TextBlock Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="2">
         <Hyperlink Tag="http://www.famfamfam.com/">
           FamFamFam's Silk Icons
         </Hyperlink>
         <Run> </Run>
         <Hyperlink Tag="http://creativecommons.org/licenses/by/2.5/">
-          (License)
-        </Hyperlink>
-      </TextBlock>
-      <TextBlock Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="2">
-        <Run Text="Tulliana 2 Icons" />
-        <Run Text=" " />
-        <Hyperlink Tag="http://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License">
-          (License)
+          <Run Text="{local:LocalizedString About.LicenseLink}" />
         </Hyperlink>
       </TextBlock>
       <TextBlock Grid.Column="0" Grid.Row="9" Grid.ColumnSpan="2">
+        <Run Text="Tulliana 2 Icons" />
+        <Run Text=" " />
+        <Hyperlink Tag="http://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License">
+          <Run Text="{local:LocalizedString About.LicenseLink}" />
+        </Hyperlink>
+      </TextBlock>
+      <TextBlock Grid.Column="0" Grid.Row="10" Grid.ColumnSpan="2">
         <Hyperlink Tag="http://wpfcontrib.codeplex.com/">
           Avalon Library (WPF Contrib)
         </Hyperlink>
       </TextBlock>
-      <TextBlock Grid.Column="0" Grid.Row="11" Grid.ColumnSpan="2">
+      <TextBlock Grid.Column="0" Grid.Row="12" Grid.ColumnSpan="2">
         <Hyperlink Tag="http://www.WallpaperManager.de.vu">
-          Visit Wallpaper Manager Website
+          <Run Text="{local:LocalizedString About.VisitHomepage}" />
         </Hyperlink>
       </TextBlock>
-      <TextBlock Grid.Column="0" Grid.Row="12" Grid.ColumnSpan="2">
+      <TextBlock Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="2">
         <Hyperlink Tag="https://sourceforge.net/projects/wallpaperman/">
-          Visit Wallpaper Manager on Source Forge
+          <Run Text="{local:LocalizedString About.VisitSourceForgeHomepage}" />
+        </Hyperlink>
+      </TextBlock>
+      <TextBlock Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="2">
+        <Hyperlink Tag="https://sourceforge.net/projects/wallpaperman/">
+          <Run Text="{local:LocalizedString About.HelpTranslating}" />
         </Hyperlink>
       </TextBlock>
     </Grid>
     
     <StackPanel Margin="8,3,8,3" Orientation="Horizontal" FlowDirection="RightToLeft">
-      <Button Content="OK" IsDefault="True" IsCancel="True" MinWidth="80" Margin="0,3,6,3" />
+      <Button 
+        Content="{local:LocalizedString DialogGlobal.Button.OK}" IsDefault="True" IsCancel="True" MinWidth="80" Margin="0,3,6,3" 
+      />
     </StackPanel>
   </StackPanel>
 </Window>

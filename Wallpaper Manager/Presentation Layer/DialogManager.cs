@@ -40,23 +40,25 @@ namespace WallpaperManager.Presentation {
       Int32 screenCount = Screen.AllScreens.Length;
 
       StringBuilder message = new StringBuilder();
-      message.AppendLine("More wallpapers are required to cycle.");
+      message.AppendLine(LocalizationManager.GetLocalizedString("Dialog.Cycle.MissingWallpapers.Description1"));
 
       if (screenCount > 1) {
-        message.Append("There should be at least 1 activated multiscreen or ");
-        message.Append(Screen.AllScreens.Length);
-        message.AppendLine(" activated singlescreen wallpapers in the list.");
+        message.AppendFormat(
+          LocalizationManager.GetLocalizedString("Dialog.Cycle.MissingWallpapers.Description2"), Screen.AllScreens.Length
+        );
+        message.AppendLine();
       } else {
-        message.Append("There should be at least one activated wallpaper in the list.");
+        message.AppendLine(LocalizationManager.GetLocalizedString("Dialog.Cycle.MissingWallpapers.Description3"));
       }
 
       if (autocycleDisabled) {
         message.AppendLine();
-        message.Append("Autocycling has been disabled.");
+        message.Append(LocalizationManager.GetLocalizedString("Dialog.Cycle.MissingWallpapers.AutocyclingDisabled"));
       }
 
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Not Enought Wallpapers to Cycle", message.ToString(), TaskDialogButtons.OK, "Error"
+        owner, LocalizationManager.GetLocalizedString("Dialog.Cycle.MissingWallpapers.Title"), 
+        message.ToString(), TaskDialogButtons.OK, "Error"
       );
 
       taskDialog.Show();
@@ -70,8 +72,8 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowCycle_WallpapersToUseInvalid(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Invalid Selection", "You have to select one or more singlescreen or exactly one multiscreen wallpaper.",
-        TaskDialogButtons.OK, "Error"
+        owner, LocalizationManager.GetLocalizedString("Dialog.Cycle.InvalidSelection.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Cycle.InvalidSelection.Description"), TaskDialogButtons.OK, "Error"
       );
 
       taskDialog.Show();
@@ -91,9 +93,10 @@ namespace WallpaperManager.Presentation {
     /// <returns>
     ///   The <see cref="TaskDialogResult" /> containing return data of the shown <see cref="TaskDialog" />.
     /// </returns>
-    public static TaskDialogResult ShowCategory_AddNew(Window owner, ref String categoryName) {
+    public static Boolean ShowCategory_AddNew(Window owner, ref String categoryName) {
       return DialogManager.ShowInputDialog(
-        owner, "Add Category", "Please enter the name of the new category below.", ref categoryName
+        owner, LocalizationManager.GetLocalizedString("Dialog.Category.AddNew.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Category.AddNew.Description"), ref categoryName
       );
     }
 
@@ -109,9 +112,10 @@ namespace WallpaperManager.Presentation {
     /// <returns>
     ///   The <see cref="TaskDialogResult" /> containing return data of the shown <see cref="TaskDialog" />.
     /// </returns>
-    public static TaskDialogResult ShowSynchronizedCategory_AddNew(Window owner, ref String categoryName) {
+    public static Boolean ShowSynchronizedCategory_AddNew(Window owner, ref String categoryName) {
       return DialogManager.ShowInputDialog(
-        owner, "Add Synchronized Folder", "Please enter the name of the new synchronized folder below.", ref categoryName
+        owner, LocalizationManager.GetLocalizedString("Dialog.Category.AddSynchronizedFolder.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Category.AddSynchronizedFolder.Description"), ref categoryName
       );
     }
 
@@ -123,7 +127,7 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static Boolean ShowSynchronizedCategory_SelectDirectory(ref Path directoryPath) {
       FolderBrowserDialog dialog = new FolderBrowserDialog() {
-        Description = "Please select the folder which should be watched for changes.",
+        Description = LocalizationManager.GetLocalizedString("Dialog.Category.SelectSynchronizedFolder.Description"),
         ShowNewFolderButton = true,
         SelectedPath = directoryPath
       };
@@ -146,9 +150,10 @@ namespace WallpaperManager.Presentation {
     /// <returns>
     ///   The <see cref="TaskDialogResult" /> containing return data of the shown <see cref="TaskDialog" />.
     /// </returns>
-    public static TaskDialogResult ShowCategory_Rename(Window owner, ref String categoryName) {
+    public static Boolean ShowCategory_Rename(Window owner, ref String categoryName) {
       return DialogManager.ShowInputDialog(
-        owner, "Rename Category", "Please enter the new name of the category below.", ref categoryName
+        owner, LocalizationManager.GetLocalizedString("Dialog.Category.Rename.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Category.Rename.Description"), ref categoryName
       );
     }
 
@@ -165,20 +170,18 @@ namespace WallpaperManager.Presentation {
     /// <returns>
     ///   The <see cref="TaskDialogResult" /> containing return data of the shown <see cref="TaskDialog" />.
     /// </returns>
-    public static TaskDialogResult ShowSynchronizedCategory_DirectoryNotObservable(
-      Window owner, String directoryPath
-    ) {
+    public static void ShowSynchronizedCategory_DirectoryNotObservable(Window owner, String directoryPath) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Directory Not Observable",
+        owner, LocalizationManager.GetLocalizedString("Dialog.Category.SynchronizedFolderNotObservable.Title"),
         DialogManager.CreateInsertedBoldText(
-          "The directory\n", directoryPath, "\nis not observable because it could not be found."
+          LocalizationManager.GetLocalizedString("Dialog.Category.SynchronizedFolderNotObservable.Description1") + "\n", 
+          directoryPath, 
+          "\n" + LocalizationManager.GetLocalizedString("Dialog.Category.SynchronizedFolderNotObservable.Description2")
         ),
         TaskDialogButtons.OK, "Error"
       );
       
       taskDialog.Show();
-
-      return taskDialog.Result;
     }
 
     /// <summary>
@@ -194,21 +197,20 @@ namespace WallpaperManager.Presentation {
     /// <returns>
     ///   The <see cref="TaskDialogResult" /> containing return data of the shown <see cref="TaskDialog" />.
     /// </returns>
-    public static TaskDialogResult ShowSynchronizedCategory_FileAlreadyExist(
-      Window owner, String filePath
-    ) {
+    public static Boolean ShowSynchronizedCategory_FileAlreadyExist(Window owner, String filePath) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Image File Does Already Exist",
+        owner, LocalizationManager.GetLocalizedString("Dialog.Category.SynchronizedFolderFileAlreadyExist.Title"),
         DialogManager.CreateInsertedBoldText(
-          "The image file\n", filePath,
-          "\ndoes already exist in the synchronized folder.\n\nDo you want to overwrite the existing file?"
+          LocalizationManager.GetLocalizedString("Dialog.Category.SynchronizedFolderFileAlreadyExist.Description1") + "\n", 
+          filePath,
+          "\n" + LocalizationManager.GetLocalizedString("Dialog.Category.SynchronizedFolderFileAlreadyExist.Description2")
         ),
         TaskDialogButtons.Yes | TaskDialogButtons.No, "Error"
       );
       
       taskDialog.Show();
 
-      return taskDialog.Result;
+      return (DialogManager.GetPressedButton(taskDialog.Result) == TaskDialogButtons.Yes);
     }
 
     /// <summary>
@@ -220,15 +222,16 @@ namespace WallpaperManager.Presentation {
     /// <returns>
     ///   The <see cref="TaskDialogResult" /> containing return data of the shown <see cref="TaskDialog" />.
     /// </returns>
-    public static TaskDialogResult ShowCategory_NoCategoryAvailable(Window owner) {
+    public static Boolean ShowCategory_NoCategoryAvailable(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Create a New Category?", "There are no categories available. Do you want to create a new category now?",
+        owner, LocalizationManager.GetLocalizedString("Dialog.Category.NoCategoryAvailable.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Category.NoCategoryAvailable.Description"),
         TaskDialogButtons.Yes | TaskDialogButtons.No, "Question"
       );
       
       taskDialog.Show();
 
-      return taskDialog.Result;
+      return (DialogManager.GetPressedButton(taskDialog.Result) == TaskDialogButtons.Yes);
     }
 
     /// <summary>
@@ -239,7 +242,8 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowCategory_NoOneSelected(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "No Category Selected", "You have to select a category from the list first.", TaskDialogButtons.OK, "Warning"
+        owner, LocalizationManager.GetLocalizedString("Dialog.Category.NoCategorySelected.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Category.NoCategorySelected.Description"), TaskDialogButtons.OK, "Warning"
       );
       
       taskDialog.Show();
@@ -257,18 +261,20 @@ namespace WallpaperManager.Presentation {
     /// <returns>
     ///   The <see cref="TaskDialogResult" /> containing return data of the shown <see cref="TaskDialog" />.
     /// </returns>
-    public static TaskDialogResult ShowCategory_WantDelete(Window owner, String categoryName) {
+    public static Boolean ShowCategory_WantDelete(Window owner, String categoryName) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Delete This Category?", null, TaskDialogButtons.Yes | TaskDialogButtons.No, "Question"
+        owner, LocalizationManager.GetLocalizedString("Dialog.Category.Delete.Title"), null, 
+        TaskDialogButtons.Yes | TaskDialogButtons.No, "Question"
       );
 
       taskDialog.Content = DialogManager.CreateInsertedBoldText(
-        "Are you sure you want to delete ", categoryName, " and all its containing wallpaper entries?"
+        LocalizationManager.GetLocalizedString("Dialog.Category.Delete.Description1"), categoryName, 
+        LocalizationManager.GetLocalizedString("Dialog.Category.Delete.Description2")
       );
 
       taskDialog.Show();
 
-      return taskDialog.Result;
+      return (DialogManager.GetPressedButton(taskDialog.Result) == TaskDialogButtons.Yes);
     }
 
     /// <summary>
@@ -279,10 +285,10 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowCategory_NameInvalid(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Category Name Invalid",
+        owner, LocalizationManager.GetLocalizedString("Dialog.Category.NameInvalid.Title"),
         String.Concat(
-          "The name is invalid because it contains one or more of the following invalid characters:\n",
-          "\"[\", \"]\", line breaks, control characters and tabs."
+          LocalizationManager.GetLocalizedString("Dialog.Category.NameInvalid.Description1"), "\n",
+          LocalizationManager.GetLocalizedString("Dialog.Category.NameInvalid.Description2")
         ),
         TaskDialogButtons.OK, "Error"
       );
@@ -298,9 +304,9 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowCategory_NameInvalidLength(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Category Name Invalid",
+        owner, LocalizationManager.GetLocalizedString("Dialog.Category.NameInvalidLength.Title"),
         String.Format(
-          CultureInfo.CurrentCulture, "The name is invalid. It has to be at least {0} and at most {1} characters long.",
+          CultureInfo.CurrentCulture, LocalizationManager.GetLocalizedString("Dialog.Category.NameInvalidLength.Description"),
           WallpaperCategory.Name_MinLength, WallpaperCategory.Name_MaxLength
         ),
         TaskDialogButtons.OK, "Error"
@@ -319,8 +325,8 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowWallpapers_NoOneSelected(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "No Wallpaper Selected", "You have to select at least one wallpaper from the list.", 
-        TaskDialogButtons.OK, "Warning"
+        owner, LocalizationManager.GetLocalizedString("Dialog.Wallpaper.NoneSelected.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Wallpaper.NoneSelected.Description"), TaskDialogButtons.OK, "Warning"
       );
       
       taskDialog.Show();
@@ -335,19 +341,20 @@ namespace WallpaperManager.Presentation {
     /// <returns>
     ///   The <see cref="TaskDialogResult" /> containing return data of the shown <see cref="TaskDialog" />.
     /// </returns>
-    public static TaskDialogResult ShowWallpaper_WantDeletePhysically(Window owner) {
+    public static Boolean ShowWallpaper_WantDeletePhysically(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Delete This Wallpaper(s)?", "Are you sure you want to delete the selected wallpapers from your hard disk?",
+        owner, LocalizationManager.GetLocalizedString("Dialog.Wallpaper.DeletePhysically.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Wallpaper.DeletePhysically.Description"),
         TaskDialogButtons.Yes | TaskDialogButtons.No, "Question"
       );
 
       taskDialog.ShowFooter = true;
       taskDialog.FooterIcon = TaskDialogIconConverter.ConvertFrom("Warning");
-      taskDialog.Footer = "The image(s) are not moved to the recycle bin and will be deleted permanently.";
+      taskDialog.Footer = LocalizationManager.GetLocalizedString("Dialog.Wallpaper.DeletePhysically.NoteText");
 
       taskDialog.Show();
 
-      return taskDialog.Result;
+      return (DialogManager.GetPressedButton(taskDialog.Result) == TaskDialogButtons.Yes);
     }
 
     /// <summary>
@@ -358,8 +365,8 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowWallpapers_MultiscreenWallpaperOnDisabledScreens(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Multiscreen Wallpaper on Disabled Screens",
-        "A multiscreen wallpaper can't have cycling disabled on a single monitor and has to be always applied on all monitors.",
+        owner, LocalizationManager.GetLocalizedString("Dialog.Wallpaper.MultiscreenOnDisabledScreens.Title"),
+        LocalizationManager.GetLocalizedString("Dialog.Wallpaper.MultiscreenOnDisabledScreens.Description"),
         TaskDialogButtons.OK, "Error"
       );
 
@@ -375,42 +382,24 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowWallpapers_DisabledScreensOnCloneAllChangeMode(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Disabled Screens on Clone All Monitors",
-        "You've configured that some of your wallpapers should not be cycled on some of your monitors. Note that this settings are ignored when using the \"Clone All Monitors\" cycle mode.",
+        owner, LocalizationManager.GetLocalizedString("Dialog.Wallpaper.DisabledScreensAndCloneAllCycleMode.Title"),
+        LocalizationManager.GetLocalizedString("Dialog.Wallpaper.DisabledScreensAndCloneAllCycleMode.Description"),
         TaskDialogButtons.OK, "Warning"
       );
 
       taskDialog.Show();
     }
-    #endregion
 
-    #region Image Related Dialogs
     /// <summary>
     ///   Creates and shows a dialog saying that the image file has an invalid format or is not supported.
     /// </summary>
     /// <param name="owner">
     ///   The owner of the dialog window.
     /// </param>
-    public static void ShowImage_LoadError(Window owner) {
+    public static void ShowWallpaper_LoadError(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Invalid File Format", "The image file has an invalid or unsupported file format.", TaskDialogButtons.OK, "Error"
-      );
-      
-      taskDialog.Show();
-    }
-    #endregion
-
-    #region Unsupported Operation Dialogs
-    /// <summary>
-    ///   Creates and shows a dialog saying that loading of directories is not supported yet.
-    /// </summary>
-    /// <param name="owner">
-    ///   The owner of the dialog window.
-    /// </param>
-    public static void ShowUnsupported_LoadDirectory(Window owner) {
-      TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Loading of Directories is not Supported", "Loading of directories is not supported by Wallpaper Manager yet.",
-        TaskDialogButtons.OK, "Error"
+        owner, LocalizationManager.GetLocalizedString("Dialog.Wallpaper.ImageFormatError.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Wallpaper.ImageFormatError.Description"), TaskDialogButtons.OK, "Error"
       );
       
       taskDialog.Show();
@@ -429,10 +418,10 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowConfig_UnableToWrite(Window owner, String directoryPath) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Configuration Could Not Be Written", 
+        owner, LocalizationManager.GetLocalizedString("Dialog.Config.WriteError.Title"), 
         DialogManager.CreateInsertedBoldText(
-          "The configuration file ", directoryPath,
-          " could not be written. Make sure Wallpaper Mananger has sufficient rights to access this path."
+          LocalizationManager.GetLocalizedString("Dialog.Config.WriteError.Description1"), directoryPath,
+          LocalizationManager.GetLocalizedString("Dialog.Config.WriteError.Description2")
         ), 
         TaskDialogButtons.OK, "Error"
       );
@@ -451,7 +440,9 @@ namespace WallpaperManager.Presentation {
     ///   The path of the configuration file.
     /// </param>
     public static void ShowConfig_FileNotFound(Window owner, String configPath) {
-      DialogManager.ShowConfig_LoadErrorInternal(owner, configPath, "because it was not found", null);
+      DialogManager.ShowConfig_LoadErrorInternal(
+        owner, configPath, LocalizationManager.GetLocalizedString("Dialog.Config.ReadError.Description2Alt1"), null
+      );
     }
 
     /// <summary>
@@ -469,8 +460,8 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowConfig_InvalidFormat(Window owner, String configPath, String exceptionDetailText) {
       DialogManager.ShowConfig_LoadErrorInternal(
-        owner, configPath, "because it has an invalid file format", exceptionDetailText
-        );
+        owner, configPath, LocalizationManager.GetLocalizedString("Dialog.Config.ReadError.Description2Alt2"), exceptionDetailText
+      );
     }
 
     /// <summary>
@@ -508,7 +499,7 @@ namespace WallpaperManager.Presentation {
     private static void ShowConfig_LoadErrorInternal(Window owner, String configPath, String reason, String exceptionDetailText) {
       TextBlock message = new TextBlock();
 
-      message.Inlines.Add("The configuration file ");
+      message.Inlines.Add(LocalizationManager.GetLocalizedString("Dialog.Config.ReadError.Description1"));
       message.Inlines.Add(new LineBreak());
 
       // Part 2
@@ -522,24 +513,22 @@ namespace WallpaperManager.Presentation {
       // Part 3
       StringBuilder messagePart3 = new StringBuilder();
       if (reason != null) {
-        messagePart3.Append("could not be loaded ");
         messagePart3.Append(reason);
-        messagePart3.AppendLine(".");
       } else {
-        messagePart3.AppendLine("could not be loaded.");
+        messagePart3.AppendLine(LocalizationManager.GetLocalizedString("Dialog.Config.ReadError.Description2"));
       }
 
       if (exceptionDetailText != null) {
-        messagePart3.AppendLine("See Exception Details for more information.");
+        messagePart3.AppendLine(LocalizationManager.GetLocalizedString("Dialog.Error.Global.ExceptionDetailsInfo"));
       }
 
       messagePart3.AppendLine();
-      messagePart3.Append("The default configuration settings will be used instead.");
+      messagePart3.Append(LocalizationManager.GetLocalizedString("Dialog.Config.ReadError.Description3"));
 
       message.Inlines.Add(messagePart3.ToString());
 
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Configuration Cannot Be Loaded", message, TaskDialogButtons.OK, "Warning"
+        owner, LocalizationManager.GetLocalizedString("Dialog.Config.ReadError.Title"), message, TaskDialogButtons.OK, "Warning"
       );
 
       if (exceptionDetailText != null) {
@@ -575,17 +564,26 @@ namespace WallpaperManager.Presentation {
     public static String ShowUpdate_Available(
       Window owner, String currentVersion, String newVersion, String criticalMessage, String infoMessage
     ) {
-      TaskDialog taskDialog = DialogManager.CreateDialog(owner, "Update Available", null, 0, "Question");
+      TaskDialog taskDialog = DialogManager.CreateDialog(
+        owner, LocalizationManager.GetLocalizedString("Dialog.Update.Available.Title"), null, 0, "Question"
+      );
       
       taskDialog.Content = DialogManager.CreateInsertedBoldText(
-        String.Concat("There is a new version of Wallpaper Manager available.\n\nCurrent Version: ", currentVersion, "\n"),
-        String.Concat("Available Version: ", newVersion),
+        String.Concat(
+          LocalizationManager.GetLocalizedString("Dialog.Update.Available.Description1"), "\n\n", 
+          LocalizationManager.GetLocalizedString("Dialog.Update.Available.Description2"), currentVersion, "\n"
+        ),
+        String.Concat(LocalizationManager.GetLocalizedString("Dialog.Update.Available.Description3"), newVersion),
         String.Empty
       );
       
       // Note: We use the tag values as kind of button-key.
-      taskDialog.Buttons.Add(new System.Windows.Controls.Button() { Content = "Install Now", Tag = "Install" });
-      taskDialog.Buttons.Add(new System.Windows.Controls.Button() { Content = "Open Website", Tag = "OpenWebsite" });
+      taskDialog.Buttons.Add(new System.Windows.Controls.Button() {
+        Content = LocalizationManager.GetLocalizedString("Dialog.Update.Available.InstallNow"), Tag = "Install"
+      });
+      taskDialog.Buttons.Add(new System.Windows.Controls.Button() {
+        Content = LocalizationManager.GetLocalizedString("Dialog.Update.Available.OpenWebsite"), Tag = "OpenWebsite"
+      });
       DialogManager.AddTaskDialogStandardButtons(taskDialog, TaskDialogButtons.Cancel);
 
       if (!String.IsNullOrEmpty(criticalMessage)) {
@@ -600,18 +598,11 @@ namespace WallpaperManager.Presentation {
 
       taskDialog.Show();
 
-      String pressedButtonKey;
-      if (taskDialog.Result.StandardButton == TaskDialogButtons.Cancel) {
-        pressedButtonKey = "Cancel";
-      } else {
-        if (taskDialog.Result.Button != null) {
-          pressedButtonKey = (((System.Windows.Controls.Button)taskDialog.Result.Button).Tag as String);
-        } else {
-          pressedButtonKey = "Cancel";
-        }
+      if (DialogManager.GetPressedButton(taskDialog.Result) == TaskDialogButtons.Cancel) {
+        return "Cancel";
       }
 
-      return pressedButtonKey;
+      return (((System.Windows.Controls.Button)taskDialog.Result.Button).Tag as String);
     }
 
     /// <summary>
@@ -625,7 +616,8 @@ namespace WallpaperManager.Presentation {
     /// </returns>
     public static Window ShowUpdate_Downloading(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Downloading Update", String.Empty, TaskDialogButtons.None, null
+        owner, LocalizationManager.GetLocalizedString("Dialog.Update.Downloading.Title"), String.Empty, 
+        TaskDialogButtons.None, null
       );
 
       taskDialog.ShowProgressBar = true;
@@ -639,11 +631,11 @@ namespace WallpaperManager.Presentation {
         WindowStyle = WindowStyle.SingleBorderWindow,
         WindowStartupLocation = WindowStartupLocation.CenterScreen,
         Content = taskDialog,
-        Title = "Downloading Update"
+        Title = LocalizationManager.GetLocalizedString("Dialog.Update.Downloading.Title")
       };
 
       System.Windows.Controls.Button cancelButton = new System.Windows.Controls.Button();
-      cancelButton.Content = "_Cancel";
+      cancelButton.Content = LocalizationManager.GetLocalizedString("DialogGlobal.Button.Cancel");
       cancelButton.Click += delegate {
         taskDialogWindow.Close();
       };
@@ -662,7 +654,9 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowUpdate_NoUpdateAvailable(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "No Update Available", "This is the newest version of this application.", TaskDialogButtons.OK, "Information"
+        owner, LocalizationManager.GetLocalizedString("Dialog.Update.NoUpdateAvailable.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Update.NoUpdateAvailable.Description"), 
+        TaskDialogButtons.OK, "Information"
       );
 
       taskDialog.Show();
@@ -676,8 +670,8 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowUpdate_UnableToConnect(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Unable to Connect to Update Server",
-        "Wallpaper Manager can not contact the update server. \nPlease try again later.",
+        owner, LocalizationManager.GetLocalizedString("Dialog.Update.UnableToConnect.Description1"),
+        "\n" + LocalizationManager.GetLocalizedString("Dialog.Update.UnableToConnect.Description2"),
         TaskDialogButtons.OK, "Error"
       );
 
@@ -690,16 +684,19 @@ namespace WallpaperManager.Presentation {
     /// <param name="owner">
     ///   The owner of the dialog window.
     /// </param>
-    public static TaskDialogButtons ShowUpdate_UpdateFileNotFound(Window owner) {
+    public static Boolean ShowUpdate_UpdateFileNotFound(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "No Update File Found",
-        "No update file could be found on the server. \nDo you want to open the website now to install the update manually?",
+        owner, LocalizationManager.GetLocalizedString("Dialog.Update.FileNotFound.Title"),
+        String.Concat(
+          LocalizationManager.GetLocalizedString("Dialog.Update.FileNotFound.Description1"), "\n",
+          LocalizationManager.GetLocalizedString("Dialog.Update.FileNotFound.Description2")
+        ),
         TaskDialogButtons.Yes | TaskDialogButtons.No, "Error"
       );
 
       taskDialog.Show();
 
-      return taskDialog.Result.StandardButton;
+      return (DialogManager.GetPressedButton(taskDialog.Result) == TaskDialogButtons.Yes);
     }
     #endregion
 
@@ -718,15 +715,18 @@ namespace WallpaperManager.Presentation {
       TaskDialog taskDialog;
       
       if (!String.IsNullOrEmpty(filePath)) {
-        taskDialog = DialogManager.CreateDialog(owner, "File Not Found", null, TaskDialogButtons.OK, "Error");
+        taskDialog = DialogManager.CreateDialog(
+          owner, LocalizationManager.GetLocalizedString("Dialog.Error.FileNotFound.Title"), null, TaskDialogButtons.OK, "Error"
+        );
 
         taskDialog.Content = DialogManager.CreateInsertedBoldText(
-          "The requested file ", filePath, 
-          " could not be found or this program does not have the required rights to access it."
+          LocalizationManager.GetLocalizedString("Dialog.Error.FileNotFound.Description1"), filePath, 
+          LocalizationManager.GetLocalizedString("Dialog.Error.FileNotFound.Description2")
         );
       } else {
         taskDialog = DialogManager.CreateDialog(
-          owner, "File Not Found", "A requested file could not be found. Make sure it hasn't been moved or deleted.", 
+          owner, LocalizationManager.GetLocalizedString("Dialog.Error.FileNotFound.Title"), 
+          LocalizationManager.GetLocalizedString("Dialog.Error.FileNotFound.AltDescription"),
           TaskDialogButtons.OK, "Error"
         );
       }
@@ -747,11 +747,19 @@ namespace WallpaperManager.Presentation {
       TaskDialog taskDialog;
       
       if (!String.IsNullOrEmpty(filePath)) {
-        taskDialog = DialogManager.CreateDialog(owner, "File In Use", null, TaskDialogButtons.OK, "Error");
+        taskDialog = DialogManager.CreateDialog(
+          owner, LocalizationManager.GetLocalizedString("Dialog.Error.FileInUse.Title"), null, TaskDialogButtons.OK, "Error"
+        );
 
-        taskDialog.Content = DialogManager.CreateInsertedBoldText("The file ", filePath, " is in use by another program.");
+        taskDialog.Content = DialogManager.CreateInsertedBoldText(
+          LocalizationManager.GetLocalizedString("Dialog.Error.FileInUse.Description1"), filePath, 
+          LocalizationManager.GetLocalizedString("Dialog.Error.FileInUse.Description2")
+        );
       } else {
-        taskDialog = DialogManager.CreateDialog(owner, "File In Use", "The file is in use.", TaskDialogButtons.OK, "Error");
+        taskDialog = DialogManager.CreateDialog(
+          owner, LocalizationManager.GetLocalizedString("Dialog.Error.FileInUse.Title"), 
+          LocalizationManager.GetLocalizedString("Dialog.Error.FileInUse.AltDescription"), TaskDialogButtons.OK, "Error"
+        );
       }
       
       taskDialog.Show();
@@ -770,16 +778,19 @@ namespace WallpaperManager.Presentation {
       TaskDialog taskDialog;
       
       if (!String.IsNullOrEmpty(directoryPath)) {
-        taskDialog = DialogManager.CreateDialog(owner, "Directory Not Found", null, TaskDialogButtons.OK, "Error");
+        taskDialog = DialogManager.CreateDialog(
+          owner, LocalizationManager.GetLocalizedString("Dialog.Error.DirectoryNotFound.Title"), null, 
+          TaskDialogButtons.OK, "Error"
+        );
 
         taskDialog.Content = DialogManager.CreateInsertedBoldText(
-          "The requested directory ", directoryPath, 
-          " could either not be found or this program does not have the required rights to access it."
+          LocalizationManager.GetLocalizedString("Dialog.Error.DirectoryNotFound.Description1"), directoryPath, 
+          LocalizationManager.GetLocalizedString("Dialog.Error.DirectoryNotFound.Description2")
         );
       } else {
         taskDialog = DialogManager.CreateDialog(
-          owner, "Directory Not Found", 
-          "A requested directory could either not be found or this program does not have the required rights to access it.", 
+          owner, LocalizationManager.GetLocalizedString("Dialog.Error.DirectoryNotFound.Title"), 
+          LocalizationManager.GetLocalizedString("Dialog.Error.DirectoryNotFound.AltDescription"), 
           TaskDialogButtons.OK, "Error"
         );
       }
@@ -798,41 +809,14 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowGeneral_OutOfMemory(Window owner, String exceptionDetailText) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Out of Memory", "There is not enough memory for this operation available.", TaskDialogButtons.OK, "Error"
+        owner, LocalizationManager.GetLocalizedString("Dialog.Error.OutOfMemory.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Error.OutOfMemory.Description"), TaskDialogButtons.OK, "Error"
       );
 
       DialogManager.AttachExpansion_ExceptionDetails(taskDialog, exceptionDetailText);
       
       taskDialog.Show();
     }
-
-    /// <summary>
-    ///   Creates and shows a dialog saying that the path or file can not be accessed because 
-    ///   of insufficient file system rights.
-    /// </summary>
-    /// <param name="owner">
-    ///   The owner of the dialog window.
-    /// </param>
-    /// <param name="path">
-    ///   The path tried to access.
-    /// </param>
-    /// <param name="exceptionDetailText">
-    ///   The string containing the exception detail text.
-    /// </param>
-    public static void ShowGeneral_MissingFileSystemRights(Window owner, String path, String exceptionDetailText) {
-      TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Missing File System Rights", null, TaskDialogButtons.OK, "Error"
-      );
-      
-      taskDialog.Owner = DialogManager.CreateInsertedBoldText(
-        "Insufficient file system rights to access the file or directory", path, "."
-      );
-      
-      DialogManager.AttachExpansion_ExceptionDetails(taskDialog, exceptionDetailText);
-
-      taskDialog.Show();
-    }
-
     /// <summary>
     ///   Creates and shows a dialog saying that the path or file can not be accessed because 
     ///   of insufficient file system rights or the file is write protected.
@@ -850,12 +834,13 @@ namespace WallpaperManager.Presentation {
       Window owner, String path, String exceptionDetailText
     ) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Missing File System Rights", null, TaskDialogButtons.OK, "Error"
+        owner, LocalizationManager.GetLocalizedString("Dialog.Error.MissingFileSystemRights.Title"), null, 
+        TaskDialogButtons.OK, "Error"
       );
       
       taskDialog.Owner = DialogManager.CreateInsertedBoldText(
-        "The file or directory ", path, 
-        " is write protected or the user has insufficient file system rights to access it."
+        LocalizationManager.GetLocalizedString("Dialog.Error.MissingFileSystemRights.Description1"), path, 
+        LocalizationManager.GetLocalizedString("Dialog.Error.MissingFileSystemRights.Description2")
       );
       
       DialogManager.AttachExpansion_ExceptionDetails(taskDialog, exceptionDetailText);
@@ -875,8 +860,8 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowGeneral_MissingFrameworkRights(Window owner, String exceptionDetailText) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Wallpaper Manager requires Framework Rights", 
-        "Wallpaper Manager is missing .NET Framework rights to perform the requested operation.",
+        owner, LocalizationManager.GetLocalizedString("Dialog.Error.MissingFrameworkRights.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Error.MissingFrameworkRights.Description"),
         TaskDialogButtons.OK, "Error"
       );
 
@@ -894,25 +879,6 @@ namespace WallpaperManager.Presentation {
     }
 
     /// <summary>
-    ///   Creates and shows a dialog saying that the control panel couldn't be opened.
-    /// </summary>
-    /// <param name="owner">
-    ///   The owner of the dialog window.
-    /// </param>
-    /// <param name="exceptionDetailText">
-    ///   The string containing the exception detail text.
-    /// </param>
-    public static void ShowGeneral_UnableToOpenControlPanel(Window owner, String exceptionDetailText) {
-      TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Unable to Open Windows Control Panel", "Unable to open the Windows Control Panel.", TaskDialogButtons.OK, "Error"
-      );
-
-      DialogManager.AttachExpansion_ExceptionDetails(taskDialog, exceptionDetailText);
-      
-      taskDialog.Show();
-    }
-
-    /// <summary>
     ///   Creates and shows a dialog saying that the application is already running.
     /// </summary>
     /// <param name="owner">
@@ -920,8 +886,8 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowGeneral_AppAlreadyRunning(Window owner) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Wallpaper Manager Already Running", "Another instance of Wallpaper Manager is already running.",
-        TaskDialogButtons.OK, "Error"
+        owner, LocalizationManager.GetLocalizedString("Dialog.Error.AlreadyRunning.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Error.AlreadyRunning.Description"), TaskDialogButtons.OK, "Error"
       );
 
       taskDialog.Show();
@@ -938,10 +904,10 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowGeneral_UnableToCreateAppDataDirectory(Window owner, String directoryPath) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Can Not Create Directory", 
+        owner, LocalizationManager.GetLocalizedString("Dialog.Error.AppDataDirectoryCreation.Title"), 
         DialogManager.CreateInsertedBoldText(
-          "The application's data directory ", directoryPath, 
-          " could not be created. Make sure Wallpaper Mananger has sufficient rights to access it."
+          LocalizationManager.GetLocalizedString("Dialog.Error.AppDataDirectoryCreation.Description1"), directoryPath, 
+          LocalizationManager.GetLocalizedString("Dialog.Error.AppDataDirectoryCreation.Description2")
         ), 
         TaskDialogButtons.OK, "Error"
       );
@@ -960,13 +926,32 @@ namespace WallpaperManager.Presentation {
     /// </param>
     public static void ShowGeneral_UnhandledException(Window owner, String exceptionDetailText) {
       TaskDialog taskDialog = DialogManager.CreateDialog(
-        owner, "Unhandled Exception Occured", 
-        String.Format("Wallpaper Manager {0} encountered an unhandled exception, see Exception Details for more information.", Assembly.GetAssembly(typeof(DialogManager)).GetName().Version),
+        owner, LocalizationManager.GetLocalizedString("Dialog.Error.UnhandledException.Title"), 
+        String.Format(
+          LocalizationManager.GetLocalizedString("Dialog.Error.UnhandledException.Description"), 
+          Assembly.GetAssembly(typeof(DialogManager)).GetName().Version
+        ),
         TaskDialogButtons.OK, null
       );
 
       DialogManager.AttachExpansion_ExceptionDetails(taskDialog, exceptionDetailText);
 
+      taskDialog.Show();
+    }
+
+    /// <summary>
+    ///   Creates and shows a dialog saying that loading of directories is not supported yet.
+    /// </summary>
+    /// <param name="owner">
+    ///   The owner of the dialog window.
+    /// </param>
+    public static void ShowUnsupported_LoadDirectory(Window owner) {
+      TaskDialog taskDialog = DialogManager.CreateDialog(
+        owner,LocalizationManager.GetLocalizedString("Dialog.Error.DirectoryLoadingNotSupported.Title"), 
+        LocalizationManager.GetLocalizedString("Dialog.Error.DirectoryLoadingNotSupported.Description"),
+        TaskDialogButtons.OK, "Error"
+      );
+      
       taskDialog.Show();
     }
     #endregion
@@ -990,7 +975,7 @@ namespace WallpaperManager.Presentation {
     /// <returns>
     ///   The <see cref="TaskDialogResult" /> containing return data of the shown <see cref="TaskDialog" />.
     /// </returns>
-    private static TaskDialogResult ShowInputDialog(Window owner, String title, String message, ref String inputText) {
+    private static Boolean ShowInputDialog(Window owner, String title, String message, ref String inputText) {
       StackPanel stpContent = new StackPanel();
       stpContent.Children.Add(new TextBlock() { Text = message });
 
@@ -1010,7 +995,7 @@ namespace WallpaperManager.Presentation {
 
       inputText = txtInput.Text;
 
-      return taskDialog.Result;
+      return (DialogManager.GetPressedButton(taskDialog.Result) == TaskDialogButtons.OK);
     }
 
     /// <summary>
@@ -1099,11 +1084,55 @@ namespace WallpaperManager.Presentation {
     /// </param>
     private static void AddTaskDialogStandardButtons(TaskDialog taskDialog, TaskDialogButtons buttons) {
       foreach (TaskDialogButtonData buttonData in TaskDialogButtonData.FromStandardButtons(buttons)) {
-        if ((buttonData.Button == TaskDialogButtons.OK) || buttonData.Button == TaskDialogButtons.Yes) {
-          buttonData.IsDefault = true;
-        }
+        switch (buttonData.Button) {
+          case TaskDialogButtons.OK:
+            taskDialog.Buttons.Add(new System.Windows.Controls.Button() {
+              Content = LocalizationManager.GetLocalizedString("DialogGlobal.Button.OK"),
+              IsDefault = true,
+              Tag = TaskDialogButtons.OK
+            });
 
-        taskDialog.Buttons.Add(buttonData);
+            break;
+          case TaskDialogButtons.Cancel:
+            taskDialog.Buttons.Add(new System.Windows.Controls.Button() {
+              Content = LocalizationManager.GetLocalizedString("DialogGlobal.Button.Cancel"),
+              IsCancel = true,
+              Tag = TaskDialogButtons.Cancel
+            });
+
+            break;
+          case TaskDialogButtons.Yes:
+            taskDialog.Buttons.Add(new System.Windows.Controls.Button() {
+              Content = LocalizationManager.GetLocalizedString("DialogGlobal.Button.Yes"),
+              IsDefault = true,
+              Tag = TaskDialogButtons.Yes
+            });
+
+            break;
+          case TaskDialogButtons.No:
+            taskDialog.Buttons.Add(new System.Windows.Controls.Button() {
+              Content = LocalizationManager.GetLocalizedString("DialogGlobal.Button.No"),
+              IsCancel = true,
+              Tag = TaskDialogButtons.No
+            });
+
+            break;
+          case TaskDialogButtons.Retry:
+            taskDialog.Buttons.Add(new System.Windows.Controls.Button() {
+              Content = LocalizationManager.GetLocalizedString("DialogGlobal.Button.Retry"),
+              Tag = TaskDialogButtons.Retry
+            });
+
+            break;
+          case TaskDialogButtons.Close:
+            taskDialog.Buttons.Add(new System.Windows.Controls.Button() {
+              Content = LocalizationManager.GetLocalizedString("DialogGlobal.Button.Close"),
+              IsCancel = true,
+              Tag = TaskDialogButtons.Close
+            });
+
+            break;
+        }
       }
     }
 
@@ -1147,12 +1176,26 @@ namespace WallpaperManager.Presentation {
     /// </param>
     private static void AttachExpansion_ExceptionDetails(TaskDialog taskDialog, String details) {
       taskDialog.ExpansionContent = new TextBlock() { 
-        Text = String.Concat("Exception Details: \n", details), 
+        Text = String.Concat(LocalizationManager.GetLocalizedString("Dialog.Error.Global.ExceptionDetails"), "\n", details), 
         FontStyle = FontStyles.Italic 
       };
 
-      taskDialog.ExpansionButtonContent = "Exception Details";
+      taskDialog.ExpansionButtonContent = LocalizationManager.GetLocalizedString("Dialog.Error.Global.ExceptionDetailsExpander");
       taskDialog.ExpansionPosition = TaskDialogExpansionPosition.Header;
+    }
+
+    private static TaskDialogButtons? GetPressedButton(TaskDialogResult result) {
+      var button = (result.Button as System.Windows.Controls.Button);
+
+      if (button != null) {
+        var standardButton = button.Tag as TaskDialogButtons?;
+
+        if (standardButton != null) {
+          return standardButton;
+        }
+      }
+
+      return null;
     }
     #endregion
   }
