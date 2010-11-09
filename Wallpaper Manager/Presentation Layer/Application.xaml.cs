@@ -1029,6 +1029,12 @@ namespace WallpaperManager.Presentation {
           if (this.propertyBindingManager != null) {
             this.propertyBindingManager.Dispose();
           }
+          if (this.notifyIcon != null) {
+            this.notifyIcon.Dispose();
+          }
+          if (this.MainWindow != null) {
+            this.MainWindow.Dispose();
+          }
         }
       }
       
