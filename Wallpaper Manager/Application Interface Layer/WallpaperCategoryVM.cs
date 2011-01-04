@@ -121,11 +121,6 @@ namespace WallpaperManager.ApplicationInterface {
 
         this.selectedWallpaperVMs = value;
         this.OnPropertyChanged("SelectedWallpaperVMs");
-        this.OnPropertyChanged("CanAdd");
-        this.OnPropertyChanged("CanActivateDeactivateSelected");
-        this.OnPropertyChanged("CanApplySelected");
-        this.OnPropertyChanged("CanOpenFolderOfSelected");
-        this.OnPropertyChanged("CanRemoveSelected");
       }
     }
     #endregion
@@ -243,6 +238,55 @@ namespace WallpaperManager.ApplicationInterface {
 
       PropertyChangedEventManager.AddListener(wallpaperChangerVM, this, String.Empty);
       this.WallpaperChangerVM_PropertyChanged(this, new PropertyChangedEventArgs("ActiveWallpapers"));
+    }
+    #endregion
+
+    #region Command: ConfigureDefaultSettings
+    /// <summary>
+    ///   <inheritdoc cref="ConfigureDefaultSettingsCommand" select='../value/node()' />
+    /// </summary>
+    private DelegateCommand configureDefaultSettingsCommand;
+
+    /// <summary>
+    ///   Gets the Configure Default Settings <see cref="DelegateCommand" />.
+    /// </summary>
+    /// <value>
+    ///   The Configure Default Settings <see cref="DelegateCommand" />.
+    /// </value>
+    /// <seealso cref="ConfigureDefaultSettingsCommand_CanExecute">ConfigureDefaultSettingsCommand_CanExecute Method</seealso>
+    /// <seealso cref="ConfigureDefaultSettingsCommand_Execute">ConfigureDefaultSettingsCommand_Execute Method</seealso>
+    public DelegateCommand ConfigureDefaultSettingsCommand {
+      get {
+        if (this.configureDefaultSettingsCommand == null) {
+          this.configureDefaultSettingsCommand = new DelegateCommand(this.ConfigureDefaultSettingsCommand_Execute, this.ConfigureDefaultSettingsCommand_CanExecute);
+        }
+
+        return this.configureDefaultSettingsCommand;
+      }
+    }
+
+    /// <summary>
+    ///   Determines if <see cref="ConfigureDefaultSettingsCommand" /> can be executed.
+    /// </summary>
+    /// <returns>
+    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
+    /// </returns>
+    /// <seealso cref="ConfigureDefaultSettingsCommand" />
+    protected Boolean ConfigureDefaultSettingsCommand_CanExecute() {
+      return true;
+    }
+
+    /// <summary>
+    ///   Called when <see cref="ConfigureDefaultSettingsCommand" /> is executed and requests the 
+    ///   <see cref="WallpaperDefaultSettings" /> of the wrapped <see cref="WallpaperCategory" /> instance to be configured.
+    /// </summary>
+    /// <seealso cref="ConfigureDefaultSettingsCommand" />
+    protected void ConfigureDefaultSettingsCommand_Execute() {
+      try {
+        this.RequestConfigureDefaultSettings(this);
+      } catch (Exception exception) {
+        this.OnUnhandledCommandException(new CommandExceptionEventArgs(this.ConfigureDefaultSettingsCommand, exception));
+      }
     }
     #endregion
 
@@ -496,55 +540,6 @@ namespace WallpaperManager.ApplicationInterface {
         this.OnUnhandledCommandException(new CommandExceptionEventArgs(this.ConfigureSelectedCommand, exception));
       }
       #endif
-    }
-    #endregion
-
-    #region Command: ConfigureDefaultSettings
-    /// <summary>
-    ///   <inheritdoc cref="ConfigureDefaultSettingsCommand" select='../value/node()' />
-    /// </summary>
-    private DelegateCommand configureDefaultSettingsCommand;
-
-    /// <summary>
-    ///   Gets the Configure Default Settings <see cref="DelegateCommand" />.
-    /// </summary>
-    /// <value>
-    ///   The Configure Default Settings <see cref="DelegateCommand" />.
-    /// </value>
-    /// <seealso cref="ConfigureDefaultSettingsCommand_CanExecute">ConfigureDefaultSettingsCommand_CanExecute Method</seealso>
-    /// <seealso cref="ConfigureDefaultSettingsCommand_Execute">ConfigureDefaultSettingsCommand_Execute Method</seealso>
-    public DelegateCommand ConfigureDefaultSettingsCommand {
-      get {
-        if (this.configureDefaultSettingsCommand == null) {
-          this.configureDefaultSettingsCommand = new DelegateCommand(this.ConfigureDefaultSettingsCommand_Execute, this.ConfigureDefaultSettingsCommand_CanExecute);
-        }
-
-        return this.configureDefaultSettingsCommand;
-      }
-    }
-
-    /// <summary>
-    ///   Determines if <see cref="ConfigureDefaultSettingsCommand" /> can be executed.
-    /// </summary>
-    /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
-    /// </returns>
-    /// <seealso cref="ConfigureDefaultSettingsCommand" />
-    protected Boolean ConfigureDefaultSettingsCommand_CanExecute() {
-      return true;
-    }
-
-    /// <summary>
-    ///   Called when <see cref="ConfigureDefaultSettingsCommand" /> is executed and requests the 
-    ///   <see cref="WallpaperDefaultSettings" /> of the wrapped <see cref="WallpaperCategory" /> instance to be configured.
-    /// </summary>
-    /// <seealso cref="ConfigureDefaultSettingsCommand" />
-    protected void ConfigureDefaultSettingsCommand_Execute() {
-      try {
-        this.RequestConfigureDefaultSettings(this);
-      } catch (Exception exception) {
-        this.OnUnhandledCommandException(new CommandExceptionEventArgs(this.ConfigureDefaultSettingsCommand, exception));
-      }
     }
     #endregion
 

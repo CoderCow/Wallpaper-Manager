@@ -17,10 +17,8 @@ using System.Windows;
 using System.Windows.Threading;
 using System.Xml;
 
-using Avalon.Windows.Controls;
-
 using Common;
-using Common.ComponentModel;
+using Common.ObjectModel;
 using Common.Presentation;
 
 using WallpaperManager.Data;
@@ -305,7 +303,7 @@ namespace WallpaperManager.Presentation {
         return;
       }
 
-      Debug.WriteLine("First step.");
+      Debug.WriteLine("First step."); Debug.Flush();
       // Check whether the Use Default Settings argument is defined.
       if (!this.Environment.IsUseDefaultSettingsDefined) {
         if (!File.Exists(this.Environment.ConfigFilePath)) {
@@ -336,11 +334,10 @@ namespace WallpaperManager.Presentation {
 
       this.propertyBindingManager = new LightPropertyBindingManager();
       
-      Debug.WriteLine("Second step.");
-      Debug.Flush();
+      Debug.WriteLine("Second step."); Debug.Flush();
       this.wallpaperChanger = new WallpaperChanger(
         this.Environment.AppliedWallpaperFilePath, this.Configuration.General.ScreensSettings
-        );
+      );
       this.WallpaperChanger.RequestWallpapers += (senderLocal, eLocal) => {
         eLocal.Wallpapers.AddRange(this.Configuration.WallpaperCategories.GetAllWallpapers());
       };
@@ -374,8 +371,7 @@ namespace WallpaperManager.Presentation {
         this.ApplicationVM_RequestTerminateApplication
       );
       
-      Debug.WriteLine("Third step.");
-      Debug.Flush();
+      Debug.WriteLine("Third step."); Debug.Flush();
       // Cycle and start autocycling if requested.
       try {
         if (this.Configuration.General.StartAutocyclingAfterStartup) {
@@ -424,8 +420,7 @@ namespace WallpaperManager.Presentation {
         }
       }
 
-      Debug.WriteLine("Fourth step.");
-      Debug.Flush();
+      Debug.WriteLine("Fourth step."); Debug.Flush();
       this.notifyIcon = new NotifyIconManager(this.ApplicationViewModel);
 
       // Register light property bindings which make sure that the NotifyIconManager gets always updated with any changed 
@@ -455,9 +450,8 @@ namespace WallpaperManager.Presentation {
       updateManager.DownloadUpdateError += this.UpdateManager_DownloadUpdateError;
       updateManager.BeginVersionCheck();
 
-      Debug.WriteLine("Initialization succeeded.");
+      Debug.WriteLine("Initialization succeeded."); Debug.Flush();
       Debug.Unindent();
-      Debug.Flush();
     }
 
     /// <summary>
@@ -959,14 +953,14 @@ namespace WallpaperManager.Presentation {
     ///   Handles a cycle related <see cref="Exception" />.
     /// </summary>
     /// <remarks>
-    ///   When <paramref name="occuredWhenAutocycling" /> is set to <c>false</c>, then this method will disable the autocycling 
+    ///   When <paramref name="occurredWhenAutocycling" /> is set to <c>false</c>, then this method will disable the autocycling 
     ///   of wallpapers.
     /// </remarks>
     /// <param name="exception">
     ///   The exception being thrown.
     /// </param>
-    /// <param name="occuredWhenAutocycling">
-    ///   Indicates whether the exception occured on an autocycle.
+    /// <param name="occurredWhenAutocycling">
+    ///   Indicates whether the exception occurred on an autocycle.
     /// </param>
     /// <returns>
     ///   A <see cref="Boolean" /> indicating whether the exception has been handled or not.
@@ -974,13 +968,13 @@ namespace WallpaperManager.Presentation {
     /// <exception cref="ArgumentNullException">
     ///   <paramref name="exception" /> is <c>null</c>
     /// </exception>
-    protected Boolean HandleCycleException(Exception exception, Boolean occuredWhenAutocycling = false) {
+    protected Boolean HandleCycleException(Exception exception, Boolean occurredWhenAutocycling = false) {
       if (exception == null) {
         throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("exception"));
       }
 
       if (exception is InvalidOperationException) {
-        if ((occuredWhenAutocycling) && (this.WallpaperChanger.IsAutocycling)) {
+        if ((occurredWhenAutocycling) && (this.WallpaperChanger.IsAutocycling)) {
           this.WallpaperChanger.StopCycling();
           DialogManager.ShowCycle_MissingWallpapers(this.MainWindow, true);
         } else {

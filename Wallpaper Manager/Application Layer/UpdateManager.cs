@@ -457,7 +457,7 @@ namespace WallpaperManager.Application {
     /// </exception>
     /// <exception cref="WebException">
     ///   <see cref="Update_SetupDownloadURL">Update_SetupDownloadURL Constant</see> represents an invalid address or an error
-    ///   occured while downloading the data.
+    ///   occurred while downloading the data.
     /// </exception>
     /// <exception cref="NotSupportedException">
     ///   Another asynchronous update download operation is already in progress.

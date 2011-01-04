@@ -54,20 +54,6 @@ namespace WallpaperManager.Application {
   /// <seealso cref="RequestWallpapers">RequestWallpapers Event</seealso>
   /// <threadsafety static="true" instance="false" />
   public class WallpaperChanger: INotifyPropertyChanged, IDisposable {
-    #region Constant: MinAutocycleIntervalSeconds, LastActiveListSizeMax
-    /// <summary>
-    ///   Represents the minimum auto cycle interval value.
-    /// </summary>
-    /// <seealso cref="AutocycleInterval">AutocycleInterval Property</seealso>
-    public const Int32 MinAutocycleIntervalSeconds = 10;
-
-    /// <summary>
-    ///   Represents the maxium last active list size value in percentage to the overall count of wallpapers.
-    /// </summary>
-    /// <seealso cref="LastActiveListSize">LastActiveListSize Property</seealso>
-    public const Byte LastActiveListSizeMax = 80;
-    #endregion
-
     #region Static Fields: buildWallpaperWorker, buildWallpaperWorkerCaller
     /// <summary>
     ///   The <see cref="BackgroundWorker" /> performing the current wallpaper build asynchronously.
@@ -185,14 +171,14 @@ namespace WallpaperManager.Application {
     ///   The <see cref="TimeSpan" /> to wait between each auto cycle.
     /// </value>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///   Attempted to set the interval to a value which is lower than <see cref="MinAutocycleIntervalSeconds" />.
+    ///   Attempted to set the interval to a value which is lower than <see cref="GeneralConfig.MinAutocycleIntervalSeconds" />.
     /// </exception>
     public TimeSpan AutocycleInterval {
       get { return this.AutocycleTimer.Interval; }
       set {
-        if (value.TotalSeconds < WallpaperChanger.MinAutocycleIntervalSeconds) {
+        if (value.TotalSeconds < GeneralConfig.MinAutocycleIntervalSeconds) {
           throw new ArgumentOutOfRangeException(ExceptionMessages.GetValueMustBeGreaterThanValue(
-            value.ToString(), WallpaperChanger.MinAutocycleIntervalSeconds.ToString(CultureInfo.CurrentCulture)
+            value.ToString(), GeneralConfig.MinAutocycleIntervalSeconds.ToString(CultureInfo.CurrentCulture)
           ));
         }
 
@@ -220,16 +206,15 @@ namespace WallpaperManager.Application {
     ///   The percentage value indicating how large the last active list should be.
     /// </value>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///   Attempted to set a value which is not between <c>1</c> and <see cref="LastActiveListSizeMax" />.
+    ///   Attempted to set a value which is not between <c>1</c> and <see cref="GeneralConfig.LastActiveListSizeMax" />.
     /// </exception>
     public Byte LastActiveListSize {
       get { return this.lastActiveListSize; }
       set {
-        if (!value.IsBetween(1, WallpaperChanger.LastActiveListSizeMax)) {
+        if (!value.IsBetween(1, GeneralConfig.LastActiveListSizeMax)) {
           throw new ArgumentOutOfRangeException(ExceptionMessages.GetValueOutOfRange(
-            null, value, 
-            1.ToString(CultureInfo.CurrentCulture), 
-            WallpaperChanger.LastActiveListSizeMax.ToString(CultureInfo.CurrentCulture)
+            null, value, 1.ToString(CultureInfo.CurrentCulture), 
+            GeneralConfig.LastActiveListSizeMax.ToString(CultureInfo.CurrentCulture)
           ));
         }
 
@@ -511,7 +496,7 @@ namespace WallpaperManager.Application {
       this.appliedWallpaperFilePath = appliedWallpaperFilePath;
       this.screensSettings = screensSettings;
 
-      this.lastActiveListSize = WallpaperChanger.LastActiveListSizeMax;
+      this.lastActiveListSize = GeneralConfig.LastActiveListSizeMax;
       this.lastCycledWallpapers = new LastActiveWallpaperCollection(this.LastActiveListSize);
       this.activeWallpapersAccessor = new List<Wallpaper>();
       this.activeWallpapers = new ReadOnlyCollection<Wallpaper>(this.activeWallpapersAccessor);

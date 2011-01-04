@@ -290,7 +290,7 @@ namespace WallpaperManager.Data {
     ///   <paramref name="resourceName" /> is an empty string.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///   An error occured when requesting the resource. See inner exception for details.
+    ///   An error occurred when requesting the resource. See inner exception for details.
     /// </exception>
     /// <inheritdoc cref="Assembly.GetManifestResourceStream(String)" select='exception/*' />
     public static Icon IconFromEmbeddedResource(String resourceName) {

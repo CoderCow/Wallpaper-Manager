@@ -44,7 +44,7 @@ namespace WallpaperManager.ApplicationInterface {
     private Boolean isGettingThumbnail;
 
     /// <summary>
-    ///   The last occured <see cref="Exception" /> instance which was thrown when generating the thumbnail.
+    ///   The last occurred <see cref="Exception" /> instance which was thrown when generating the thumbnail.
     /// </summary>
     private Exception getThumbailError;
     #endregion

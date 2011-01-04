@@ -200,7 +200,7 @@
 
         <Label 
           Content="{local:LocalizedString Config.DoubleClickWallpaperAction}" 
-          Target="{Binding ElementName=cboDefaultActions_Wallpaper}"
+          Target="{x:Reference cboDefaultActions_Wallpaper}"
           Grid.Column="0" Grid.Row="0" 
         />
         <ComboBox 
@@ -218,7 +218,7 @@
         
         <Label 
           Content="{local:LocalizedString Config.ClickTrayIconAction}" 
-          Target="{Binding ElementName=cboDefaultActions_TrayIconSingleClick}"
+          Target="{x:Reference cboDefaultActions_TrayIconSingleClick}"
           Grid.Column="0" Grid.Row="1" 
         />
         <ComboBox 
@@ -237,7 +237,7 @@
         
         <Label 
           Content="{local:LocalizedString Config.DoubleClickTrayIconAction}" 
-          Target="{Binding ElementName=cboDefaultActions_TrayIconDoubleClick}"
+          Target="{x:Reference cboDefaultActions_TrayIconDoubleClick}"
           Grid.Column="0" Grid.Row="2" 
         />
         <ComboBox 

@@ -10,8 +10,8 @@
   x:Class="WallpaperManager.Presentation.ConfigTextOverlaysWindow"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:Common.Presentation="clr-namespace:Common.Presentation;assembly=Common4.0"
-  xmlns:Common.Windows.Controls="clr-namespace:Common.Windows.Controls;assembly=Common4.0"
+  xmlns:Common.Presentation="clr-namespace:Common.Presentation;assembly=Common.Presentation"
+  xmlns:Common.Presentation.Controls="clr-namespace:Common.Presentation.Controls;assembly=Common.Presentation"
   
   xmlns:local="clr-namespace:WallpaperManager.Presentation"
   xmlns:Data="clr-namespace:WallpaperManager.Data"
@@ -180,7 +180,7 @@
           
           <Label 
             Content="{local:LocalizedString ConfigTextOverlays.Format}" 
-            Target="{Binding ElementName=txtFormat}"
+            Target="{x:Reference txtFormat}"
             TabIndex="40"
             Grid.Column="0" Grid.Row="0"
           />
@@ -227,7 +227,7 @@
           
           <Label 
             Content="{local:LocalizedString ConfigTextOverlays.Position}" 
-            Target="{Binding ElementName=cboPosition}"
+            Target="{x:Reference cboPosition}"
             TabIndex="60"
             Grid.Column="0" Grid.Row="1"
           />
@@ -266,7 +266,7 @@
           
           <Label 
             Content="{local:LocalizedString ConfigTextOverlays.Font}" 
-            Target="{Binding ElementName=btnSelectFont}"
+            Target="{x:Reference btnSelectFont}"
             TabIndex="80"
             Grid.Column="0" Grid.Row="2"
           />
@@ -282,7 +282,7 @@
           
           <Label 
             Content="{local:LocalizedString ConfigTextOverlays.Color}" 
-            Target="{Binding ElementName=btnSelectForeColor}"
+            Target="{x:Reference btnSelectForeColor}"
             TabIndex="110"
             Grid.Column="0" Grid.Row="3"
           />
@@ -312,7 +312,7 @@
           
           <Label 
             Content="{local:LocalizedString ConfigTextOverlays.BorderColor}" 
-            Target="{Binding ElementName=btnSelectBorderColor}"
+            Target="{x:Reference btnSelectBorderColor}"
             TabIndex="140"
             Grid.Column="0" Grid.Row="4"
           />
@@ -342,11 +342,11 @@
           
           <Label 
             Content="{local:LocalizedString ConfigTextOverlays.HOffset}" 
-            Target="{Binding ElementName=txtHorizontalOffset}"
+            Target="{x:Reference txtHorizontalOffset}"
             TabIndex="170"
             Grid.Column="0" Grid.Row="5"
           />
-          <Common.Windows.Controls:NumericTextBox 
+          <Common.Presentation.Controls:NumericTextBox 
             Name="txtHorizontalOffset"
             Text="{Binding Path=HorizontalOffset, Mode=TwoWay}"
             MinValue="-9999" MaxValue="9999" DragValueSmall="1" DragValueLarge="5"
@@ -359,11 +359,11 @@
           
           <Label 
             Content="{local:LocalizedString ConfigTextOverlays.VOffset}" 
-            Target="{Binding ElementName=txtVerticalOffset}"
+            Target="{x:Reference txtVerticalOffset}"
             TabIndex="190"
             Grid.Column="0" Grid.Row="6"
           />
-          <Common.Windows.Controls:NumericTextBox 
+          <Common.Presentation.Controls:NumericTextBox 
             Name="txtVerticalOffset"
             Text="{Binding Path=VerticalOffset, Mode=TwoWay}"
             MinValue="-9999" MaxValue="9999" DragValueSmall="1" DragValueLarge="5"

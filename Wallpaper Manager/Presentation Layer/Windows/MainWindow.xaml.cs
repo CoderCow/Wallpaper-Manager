@@ -5,25 +5,29 @@
 // Written by David-Kay Posmyk (KayPosmyk@gmx.de)
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.Windows.Shell;
 using FormsDialogResult = System.Windows.Forms.DialogResult;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using Bitmap = System.Drawing.Bitmap;
-using Microsoft.WindowsAPICodePack.Taskbar;
-
-using Avalon.Windows.Controls;
+using Brush = System.Drawing.Brush;
+using Brushes = System.Drawing.Brushes;
+using Color = System.Drawing.Color;
 
 using Path = Common.IO.Path;
+using Common.Presentation;
 
 using WallpaperManager.Data;
 using WallpaperManager.ApplicationInterface;
@@ -42,21 +46,21 @@ namespace WallpaperManager.Presentation {
     public const String WallpaperSelectionDialogFilter = @"JPEG Files (*.jpg, *.jpeg, *.jpe, *.jfef)|*.jpg;*.jpeg;*.jpe;*.jfef|EXIF Files (*.exif)|*.exif|GIF Files (*.gif)|*.gif|PNG Files (*.png)|*.png|TIFF Files (*.tif, *.tiff)|*.tif;*.tiff|Bitmap Files (*.bmp, *.dib)|*.bmp;*.dib|All Supported Files|*.jpg;*.jpeg;*.jpe;*.jfif;*.exif;*.gif;*.png;*.tif;*.tiff;*.bmp;*.dib|All Files|*.*";
     #endregion
 
-    #region Constants: MainIconResName, TimeIconOverlayAccessibilityText, AutocyclingActivatedOverlayAccessibilityText, AutocyclingActivatedIconResName, AutocyclingDeactivatedIconResName
+    #region Constants: MainIconResName, TimeIconOverlayAccessibilityText, AutocyclingActivatedOverlayAccessibilityText, AutocyclingActivatedIconResPath, AutocyclingDeactivatedIconResPath
     /// <summary>
-    ///   Represents the resource path of the main icon.
+    ///   Represents the resource name of the main icon.
     /// </summary>
     private const String MainIconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.Main.ico";
 
     /// <summary>
     ///   Represents the resource path of the autocycling started icon used as icon overlay.
     /// </summary>
-    private const String AutocyclingActivatedIconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.StartCycling.ico";
+    private const String AutocyclingActivatedIconResPath = @"Presentation Layer/Resources/Icons/Start Cycling.png";
 
     /// <summary>
     ///   Represents the resource path of the autocycling stopped icon used as icon overlay.
     /// </summary>
-    private const String AutocyclingDeactivatedIconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.StopCycling.ico";
+    private const String AutocyclingDeactivatedIconResPath = @"Presentation Layer/Resources/Icons/Stop Cycling.png";
     #endregion
 
     #region Static Property: IconOverlayTextFont, IconOverlayTextFormat, IconOverlayTextColor
@@ -209,12 +213,7 @@ namespace WallpaperManager.Presentation {
     }
     #endregion
 
-    #region Property: RefreshOverlayIconTimer, Field: LastOverlayIconText
-    /// <summary>
-    ///   The last applied overlay icon text.
-    /// </summary>
-    private String lastOverlayIconText;
-
+    #region Property: RefreshOverlayIconTimer
     /// <summary>
     ///   <inheritdoc cref="RefreshOverlayIconTimer" select='../value/node()' />
     /// </summary>
@@ -867,6 +866,11 @@ namespace WallpaperManager.Presentation {
     }
 
     /// <summary>
+    ///   The last applied overlay icon text.
+    /// </summary>
+    private String lastOverlayIconText;
+
+    /// <summary>
     ///   Draws a new overlay icon for the Windows 7 Taskbar.
     /// </summary>
     /// <remarks>
@@ -879,97 +883,98 @@ namespace WallpaperManager.Presentation {
       }
 
       // TODO: Exception Handling
-      Icon newOverlayIcon = null;
-      try {
-        if (this.ApplicationVM.WallpaperChangerVM.IsAutocycling) {
-          if (!this.DisplayCycleTimeAsIconOverlay) {
-            newOverlayIcon = AppEnvironment.IconFromEmbeddedResource(MainWindow.AutocyclingActivatedIconResName);
-          } else {
-            TimeSpan timeSpanUntilNextCycle = this.ApplicationVM.WallpaperChangerVM.TimeSpanUntilNextCycle;
+      if (this.TaskbarItemInfo == null) {
+        this.TaskbarItemInfo = new TaskbarItemInfo();
+        this.TaskbarItemInfo.Description = LocalizationManager.GetLocalizedString("ToolTip.AutocyclingActivated.Description");
+      }
 
-            if (timeSpanUntilNextCycle.Seconds > 0) {
-              String timeOverlayText;
+      if (this.ApplicationVM.WallpaperChangerVM.IsAutocycling) {
+        if (this.DisplayCycleTimeAsIconOverlay) {
+          TimeSpan timeSpanUntilNextCycle = this.ApplicationVM.WallpaperChangerVM.TimeSpanUntilNextCycle;
 
-              if (timeSpanUntilNextCycle.TotalMinutes > 60) {
-                if (timeSpanUntilNextCycle.TotalHours > 9) {
-                  timeOverlayText = "9h";
-                } else {
-                  timeOverlayText = Math.Round(timeSpanUntilNextCycle.TotalHours + 1, 0) + "h";
-                }
-              } else if (timeSpanUntilNextCycle.TotalMinutes > 10) {
-                timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalMinutes + 1).ToString(CultureInfo.CurrentCulture);
-              } else if (timeSpanUntilNextCycle.TotalSeconds > 60) {
-                timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalMinutes + 1) + "m";
-              } else if (timeSpanUntilNextCycle.TotalSeconds > 10) {
-                timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalSeconds).ToString(CultureInfo.CurrentCulture);
+          if (timeSpanUntilNextCycle.Seconds > 0) {
+            String timeOverlayText;
+
+            if (timeSpanUntilNextCycle.TotalMinutes > 60) {
+              if (timeSpanUntilNextCycle.TotalHours > 9) {
+                timeOverlayText = "9h";
               } else {
-                timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalSeconds) + "s";
+                timeOverlayText = Math.Round(timeSpanUntilNextCycle.TotalHours + 1, 0) + "h";
               }
+            } else if (timeSpanUntilNextCycle.TotalMinutes > 10) {
+              timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalMinutes + 1).ToString(CultureInfo.CurrentCulture);
+            } else if (timeSpanUntilNextCycle.TotalSeconds > 60) {
+              timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalMinutes + 1) + "m";
+            } else if (timeSpanUntilNextCycle.TotalSeconds > 10) {
+              timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalSeconds).ToString(CultureInfo.CurrentCulture);
+            } else {
+              timeOverlayText = Math.Truncate(timeSpanUntilNextCycle.TotalSeconds) + "s";
+            }
 
-              // Prevent the icon from being updated if it is not required.
-              if (this.lastOverlayIconText != timeOverlayText) {
-                Brush timeOverlayBackgroundBrush = null;
-                Bitmap timeOverlayBitmap = null;
-                Graphics timeOverlayGraphics = null;
+            // Prevent the icon from being updated if it is not required.
+            if (this.lastOverlayIconText != timeOverlayText) {
+              Brush timeOverlayBackgroundBrush = null;
+              Bitmap timeOverlayBitmap = null;
+              Graphics timeOverlayGraphics = null;
 
-                try {
-                  timeOverlayBitmap = new Bitmap(16, 16);
-                  timeOverlayGraphics = Graphics.FromImage(timeOverlayBitmap);
+              try {
+                timeOverlayBitmap = new Bitmap(16, 16);
+                timeOverlayGraphics = Graphics.FromImage(timeOverlayBitmap);
 
-                  if (timeSpanUntilNextCycle.TotalSeconds > 60) {
-                    timeOverlayBackgroundBrush = new SolidBrush(Color.FromArgb(160, 0, 0, 0));
-                  } else {
-                    timeOverlayBackgroundBrush = new SolidBrush(Color.FromArgb(160, 255, 0, 0));
-                  }
-
-                  timeOverlayGraphics.SmoothingMode = SmoothingMode.AntiAlias;
-                  timeOverlayGraphics.FillEllipse(timeOverlayBackgroundBrush, 0, 0, 16, 16);
-                  timeOverlayGraphics.DrawString(
-                    timeOverlayText,
-                    MainWindow.IconOverlayTextFont,
-                    MainWindow.IconOverlayTextColor,
-                    new RectangleF(0, 1, 18, 16),
-                    MainWindow.IconOverlayTextFormat
-                  );
-                  timeOverlayGraphics.Flush();
-
-                  // For an unknown reason, the Icon.FromHandle method tends to throw a random(?) ExternalException sometimes.
-                  // Update: It seems like it happend when the method is called too many times in a row, so it could be possible 
-                  //         that old icons won't get disposed correctly.
-                  try {
-                    newOverlayIcon = System.Drawing.Icon.FromHandle(timeOverlayBitmap.GetHicon());
-                  } catch (ExternalException) {
-                    return;
-                  }
-                } finally {
-                  if (timeOverlayBackgroundBrush != null) {
-                    timeOverlayBackgroundBrush.Dispose();
-                  }
-                  if (timeOverlayBitmap != null) {
-                    timeOverlayBitmap.Dispose();
-                  }
-                  if (timeOverlayGraphics != null) {
-                    timeOverlayGraphics.Dispose();
-                  }
+                if (timeSpanUntilNextCycle.TotalSeconds > 60) {
+                  timeOverlayBackgroundBrush = new SolidBrush(Color.FromArgb(160, 0, 0, 0));
+                } else {
+                  timeOverlayBackgroundBrush = new SolidBrush(Color.FromArgb(160, 255, 0, 0));
                 }
 
-                this.lastOverlayIconText = timeOverlayText;
+                timeOverlayGraphics.SmoothingMode = SmoothingMode.AntiAlias;
+                timeOverlayGraphics.FillEllipse(timeOverlayBackgroundBrush, 0, 0, 16, 16);
+                timeOverlayGraphics.DrawString(
+                  timeOverlayText,
+                  MainWindow.IconOverlayTextFont,
+                  MainWindow.IconOverlayTextColor,
+                  new RectangleF(0, 1, 18, 16),
+                  MainWindow.IconOverlayTextFormat
+                );
+
+                timeOverlayGraphics.Flush();
+                using (MemoryStream bitmapStream = new MemoryStream()) {
+                  timeOverlayBitmap.Save(bitmapStream, System.Drawing.Imaging.ImageFormat.Png);
+                  bitmapStream.Position = 0;
+
+                  this.TaskbarItemInfo.Overlay = BitmapFrame.Create(
+                    bitmapStream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad
+                  );
+                }
+              } finally {
+                if (timeOverlayBackgroundBrush != null) {
+                  timeOverlayBackgroundBrush.Dispose();
+                }
+                if (timeOverlayBitmap != null) {
+                  timeOverlayBitmap.Dispose();
+                }
+                if (timeOverlayGraphics != null) {
+                  timeOverlayGraphics.Dispose();
+                }
               }
+
+              this.lastOverlayIconText = timeOverlayText;
             }
           }
         } else {
-          newOverlayIcon = AppEnvironment.IconFromEmbeddedResource(MainWindow.AutocyclingDeactivatedIconResName);
+          this.TaskbarItemInfo.Overlay = BitmapFrame.Create(
+            new Uri(@"pack://application:,,,/" + MainWindow.AutocyclingActivatedIconResPath, UriKind.Absolute), 
+            BitmapCreateOptions.None, BitmapCacheOption.OnLoad
+          );
         }
-        TaskbarManager.Instance.SetOverlayIcon(
-          this, newOverlayIcon, LocalizationManager.GetLocalizedString("ToolTip.AutocyclingActivated.Description")
+      } else {
+        this.TaskbarItemInfo.Overlay = BitmapFrame.Create(
+          new Uri(@"pack://application:,,,/" + MainWindow.AutocyclingDeactivatedIconResPath, UriKind.Absolute),
+          BitmapCreateOptions.None, BitmapCacheOption.OnLoad
         );
-      } finally {
-        if (newOverlayIcon != null) {
-          newOverlayIcon.Dispose();
-        }
       }
-
-      lastOverlayIconText = String.Empty;
+      
+      this.TaskbarItemInfo.Overlay.Freeze();
     }
     #endregion
 
@@ -1059,7 +1064,7 @@ namespace WallpaperManager.Presentation {
         if (DialogManager.ShowCategory_NoCategoryAvailable(this)) {
           this.ApplicationVM.WallpaperCategoryCollectionVM.AddCategoryCommand.Execute(
             new WallpaperCategory(LocalizationManager.GetLocalizedString("CategoryData.DefaultName"))
-          );
+            );
         } else {
           // The user does not want to create a new category, so we cannot continue.
           return false;
@@ -1114,7 +1119,7 @@ namespace WallpaperManager.Presentation {
       } else {
         this.ApplicationVM.WallpaperCategoryCollectionVM.SelectedCategoryVM.Add(
           new WallpaperVM(new Wallpaper(filePath))
-        );
+          );
       }
     }
     #endregion
@@ -1179,4 +1184,10 @@ namespace WallpaperManager.Presentation {
     }
     #endregion
   }
+
+  /// <summary>
+  ///   Immediate class, because generic type arguments are only supported in loose XAML.
+  /// </summary>
+  [ValueConversion(typeof(IList<WallpaperVM>), typeof(IList))]
+  public class MainWindowWallpaperGenericListConverter: GenericToNonGenericCollectionConverter<WallpaperVM> {}
 }

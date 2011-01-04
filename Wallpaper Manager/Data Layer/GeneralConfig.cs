@@ -6,8 +6,6 @@ using System.Reflection;
 using Common;
 using Common.Windows;
 
-using WallpaperManager.Application;
-
 namespace WallpaperManager.Data {
   /// <summary>
   ///   Contains general configuration data.
@@ -15,6 +13,20 @@ namespace WallpaperManager.Data {
   /// <seealso cref="Configuration">Configuration Class</seealso>
   /// <threadsafety static="true" instance="false" />
   public class GeneralConfig: ICloneable, IAssignable, INotifyPropertyChanged {
+    #region Constant: MinAutocycleIntervalSeconds, LastActiveListSizeMax
+    /// <summary>
+    ///   Represents the minimum auto cycle interval value.
+    /// </summary>
+    /// <seealso cref="AutocycleInterval">AutocycleInterval Property</seealso>
+    public const Int32 MinAutocycleIntervalSeconds = 10;
+
+    /// <summary>
+    ///   Represents the maxium last active list size value in percentage to the overall count of wallpapers.
+    /// </summary>
+    /// <seealso cref="LastActiveListSize">LastActiveListSize Property</seealso>
+    public const Byte LastActiveListSizeMax = 80;
+    #endregion
+
     #region Constants: AutostartEntryRegKeyName
     /// <summary>
     ///   Represents the value name of the autostart registry key.
@@ -146,7 +158,18 @@ namespace WallpaperManager.Data {
     /// </summary>
     private WallpaperChangeType wallpaperChangeType;
 
-    /// <inheritdoc cref="WallpaperChanger.WallpaperChangeType" />
+    /// <summary>
+    ///   Gets or sets the <see cref="WallpaperChangeType" /> defining how non-multiscreen wallpapers are built.
+    /// </summary>
+    /// <value>
+    ///   The change type for singlescreen wallpapers. <c>0</c> if the internal builder has no representation in the 
+    ///   <see cref="WallpaperChangeType" /> enumeration.
+    /// </value>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///   Attempted to set the change type to a value which is not a constant of 
+    ///   <see cref="WallpaperManager.Data.WallpaperChangeType" />.
+    /// </exception>
+    /// <seealso cref="WallpaperChangeType">WallpaperChangeType Enumeration</seealso>
     public WallpaperChangeType WallpaperChangeType {
       get { return this.wallpaperChangeType; }
       set {
@@ -166,13 +189,21 @@ namespace WallpaperManager.Data {
     /// </summary>
     private TimeSpan autocycleInterval;
 
-    /// <inheritdoc cref="WallpaperChanger.AutocycleInterval" />
+    /// <summary>
+    ///   Gets or sets the <see cref="TimeSpan" /> to wait between each auto cycle.
+    /// </summary>
+    /// <value>
+    ///   The <see cref="TimeSpan" /> to wait between each auto cycle.
+    /// </value>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///   Attempted to set the interval to a value which is lower than <see cref="GeneralConfig.MinAutocycleIntervalSeconds" />.
+    /// </exception>
     public TimeSpan AutocycleInterval {
       get { return this.autocycleInterval; }
       set {
-        if (value.TotalSeconds < WallpaperChanger.MinAutocycleIntervalSeconds) {
+        if (value.TotalSeconds < GeneralConfig.MinAutocycleIntervalSeconds) {
           throw new ArgumentOutOfRangeException(ExceptionMessages.GetValueMustBeGreaterThanValue(
-            value.ToString(), WallpaperChanger.MinAutocycleIntervalSeconds.ToString(CultureInfo.CurrentCulture)
+            value.ToString(), GeneralConfig.MinAutocycleIntervalSeconds.ToString(CultureInfo.CurrentCulture)
           ));
         }
 
@@ -188,15 +219,23 @@ namespace WallpaperManager.Data {
     /// </summary>
     private Byte lastActiveListSize;
 
-    /// <inheritdoc cref="WallpaperChanger.LastActiveListSize" />
+    /// <summary>
+    ///   Gets or sets the percentage value indicating how large the last active list should be.
+    /// </summary>
+    /// <value>
+    ///   The percentage value indicating how large the last active list should be.
+    /// </value>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///   Attempted to set a value which is not between <c>1</c> and <see cref="GeneralConfig.LastActiveListSizeMax" />.
+    /// </exception>
     public Byte LastActiveListSize {
       get { return this.lastActiveListSize; }
       set {
-        if (!value.IsBetween(1, WallpaperChanger.LastActiveListSizeMax)) {
+        if (!value.IsBetween(1, GeneralConfig.LastActiveListSizeMax)) {
           throw new ArgumentOutOfRangeException(ExceptionMessages.GetValueOutOfRange(
             null, value, 
             1.ToString(CultureInfo.CurrentCulture), 
-            WallpaperChanger.LastActiveListSizeMax.ToString(CultureInfo.CurrentCulture)
+            GeneralConfig.LastActiveListSizeMax.ToString(CultureInfo.CurrentCulture)
           ));
         }
 
@@ -211,7 +250,13 @@ namespace WallpaperManager.Data {
     /// </summary>
     private Boolean cycleAfterDisplaySettingsChanged;
 
-    /// <inheritdoc cref="WallpaperChanger.CycleAfterDisplaySettingsChanged" />
+    /// <summary>
+    ///   Gets or sets a <see cref="Boolean" /> indicating whether the next wallpaper should be cycled if the display settings 
+    ///   have changed.
+    /// </summary>
+    /// <value>
+    ///   A <see cref="Boolean" /> indicating whether the next wallpaper should be cycled if the display settings have changed.
+    /// </value>
     public Boolean CycleAfterDisplaySettingsChanged {
       get { return this.cycleAfterDisplaySettingsChanged; }
       set {
@@ -348,7 +393,18 @@ namespace WallpaperManager.Data {
     /// </summary>
     private ScreenSettingsCollection screensSettings;
 
-    /// <inheritdoc cref="WallpaperChanger.ScreensSettings" />
+    /// <summary>
+    ///   Gets or sets a collection of <see cref="ScreenSettings" /> objects containing the specific properties for each single 
+    ///   screen.
+    /// </summary>
+    /// <value>
+    ///   A collection of <see cref="ScreenSettings" /> objects containing the specific properties for each single screen.
+    /// </value>
+    /// <exception cref="ArgumentNullException">
+    ///   Attempted to set a <c>null</c> value.
+    /// </exception>
+    /// <seealso cref="ScreenSettingsCollection">ScreenSettingsCollection Class</seealso>
+    /// <seealso cref="ScreenSettings">ScreenSettings Class</seealso>
     public ScreenSettingsCollection ScreensSettings {
       get { return this.screensSettings; }
       set {

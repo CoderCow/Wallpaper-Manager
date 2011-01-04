@@ -9,7 +9,7 @@
 <ResourceDictionary 
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:Common.Windows.Controls="clr-namespace:Common.Windows.Controls;assembly=Common4.0"
+  xmlns:Common.Presentation.Controls="clr-namespace:Common.Presentation.Controls;assembly=Common.Presentation"
 >
   <!-- Brushes -->
   <DrawingBrush x:Key="Theme.LargeWindowBackgroundBrush" TileMode="None">
@@ -203,7 +203,7 @@
       </Style>
     
       <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource Theme.ListBoxBase}" />
-      <Style TargetType="{x:Type Common.Windows.Controls:ListBoxEx}" BasedOn="{StaticResource Theme.ListBoxBase}" />
+      <Style TargetType="{x:Type Common.Presentation.Controls:ListBoxEx}" BasedOn="{StaticResource Theme.ListBoxBase}" />
     
       <Style TargetType="{x:Type StatusBar}">
         <Setter Property="Foreground" Value="{StaticResource Theme.ForegroundBrush}" />

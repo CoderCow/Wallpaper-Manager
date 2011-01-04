@@ -64,17 +64,17 @@ namespace WallpaperManager.Presentation {
 
     #region Constants: ContextMenu_Options_IconResName, ContextMenu_StartCycling_IconResName, ContextMenu_StopCycling_IconResName
     /// <summary>
-    ///   Represents the resource path of the configuration icon.
+    ///   Represents the resource name of the configuration icon.
     /// </summary>
     private const String ContextMenu_Options_IconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.Configuration.ico";
 
     /// <summary>
-    ///   Represents the resource path of the start cycling icon.
+    ///   Represents the resource name of the start cycling icon.
     /// </summary>
     private const String ContextMenu_StartCycling_IconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.StartCycling.ico";
 
     /// <summary>
-    ///   Represents the resource path of the stop cycling icon.
+    ///   Represents the resource name of the stop cycling icon.
     /// </summary>
     private const String ContextMenu_StopCycling_IconResName = "WallpaperManager.Presentation_Layer.Resources.Icons.StopCycling.ico";
     #endregion
@@ -261,7 +261,7 @@ namespace WallpaperManager.Presentation {
       menuItem.Name = NotifyIconManager.ContextMenu_StartCycling_Name;
       menuItem.Image = AppEnvironment.IconFromEmbeddedResource(
         NotifyIconManager.ContextMenu_StartCycling_IconResName
-        ).ToBitmap();
+      ).ToBitmap();
       this.wrappedNotifyIcon.ContextMenuStrip.Items.Add(menuItem);
 
       // **** Stop Cycling Menu Item ****
@@ -269,7 +269,7 @@ namespace WallpaperManager.Presentation {
       menuItem.Name = NotifyIconManager.ContextMenu_StopCycling_Name;
       menuItem.Image = AppEnvironment.IconFromEmbeddedResource(
         NotifyIconManager.ContextMenu_StopCycling_IconResName
-        ).ToBitmap();
+      ).ToBitmap();
       menuItem.Visible = false;
       this.wrappedNotifyIcon.ContextMenuStrip.Items.Add(menuItem);
 
@@ -285,7 +285,7 @@ namespace WallpaperManager.Presentation {
       menuItem.Name = NotifyIconManager.ContextMenu_Options_Name;
       menuItem.Image = AppEnvironment.IconFromEmbeddedResource(
         NotifyIconManager.ContextMenu_Options_IconResName
-        ).ToBitmap();
+      ).ToBitmap();
       this.wrappedNotifyIcon.ContextMenuStrip.Items.Add(menuItem);
 
       this.wrappedNotifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());

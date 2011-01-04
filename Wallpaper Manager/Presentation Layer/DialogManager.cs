@@ -466,7 +466,7 @@ namespace WallpaperManager.Presentation {
 
     /// <summary>
     ///   Creates and shows a dialog saying that the configuration file could not be loaded because
-    ///   an unhandled error occured.
+    ///   an unhandled error occurred.
     /// </summary>
     /// <param name="owner">
     ///   The owner of the dialog window.
@@ -916,7 +916,7 @@ namespace WallpaperManager.Presentation {
     }
 
     /// <summary>
-    ///   Creates and shows a dialog saying that an unhandled exception occured.
+    ///   Creates and shows a dialog saying that an unhandled exception occurred.
     /// </summary>
     /// <param name="owner">
     ///   The owner of the dialog window.

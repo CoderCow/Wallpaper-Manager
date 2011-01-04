@@ -9,8 +9,7 @@
 <ResourceDictionary 
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:System="clr-namespace:System;assembly=mscorlib"
-  xmlns:Common.Presentation="clr-namespace:Common.Presentation;assembly=Common4.0"
+  xmlns:Common.Presentation="clr-namespace:Common.Presentation;assembly=Common.Presentation"
   
   xmlns:local="clr-namespace:WallpaperManager.Presentation"
   xmlns:Data="clr-namespace:WallpaperManager.Data"

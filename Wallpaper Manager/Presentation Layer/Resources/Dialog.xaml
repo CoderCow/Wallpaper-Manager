@@ -9,7 +9,7 @@
 <ResourceDictionary 
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:Common.Windows.Controls="clr-namespace:Common.Windows.Controls;assembly=Common4.0"
+  xmlns:Common.Presentation.Controls="clr-namespace:Common.Presentation.Controls;assembly=Common.Presentation"
 >
   <Style TargetType="{x:Type GroupBox}">
     <Setter Property="Margin" Value="2" />
@@ -66,12 +66,12 @@
   </Style>
   
   <Style 
-    TargetType="{x:Type Common.Windows.Controls:NumericTextBox}" 
+    TargetType="{x:Type Common.Presentation.Controls:NumericTextBox}" 
     BasedOn="{StaticResource {x:Type TextBox}}" 
   />
   
   <Style 
-    TargetType="{x:Type Common.Windows.Controls:TimeSpanTextBox}" 
+    TargetType="{x:Type Common.Presentation.Controls:TimeSpanTextBox}" 
     BasedOn="{StaticResource {x:Type TextBox}}" 
   />
 
