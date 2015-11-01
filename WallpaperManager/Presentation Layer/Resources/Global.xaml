@@ -7,7 +7,7 @@
 <ResourceDictionary 
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:Common.Presentation="clr-namespace:Common.Presentation;assembly=Common.Presentation"
+  xmlns:CommonPresentation="clr-namespace:Common.Presentation;assembly=Common.Presentation"
   
   xmlns:local="clr-namespace:WallpaperManager.Presentation"
   xmlns:Data="clr-namespace:WallpaperManager.Data"
@@ -21,8 +21,8 @@
   <BitmapImage x:Key="Global.Icons.About" UriSource="..\Resources\Icons\About.png" />
   
   <!-- Converters -->
-  <Common.Presentation:IsValueAsBooleanConverter x:Key="Global.IsValueAsBooleanConverter" IsNot="False" />
-  <Common.Presentation:IsValueAsBooleanConverter x:Key="Global.IsNotValueAsBooleanConverter" IsNot="True" />
+  <CommonPresentation:IsValueAsBooleanConverter x:Key="Global.IsValueAsBooleanConverter" IsNot="False" />
+  <CommonPresentation:IsValueAsBooleanConverter x:Key="Global.IsNotValueAsBooleanConverter" IsNot="True" />
   
   <!-- ToolTips -->
   <Style TargetType="{x:Type ToolTip}">

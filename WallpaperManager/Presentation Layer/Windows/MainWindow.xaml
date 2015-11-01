@@ -7,8 +7,8 @@
 <Window 
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-  xmlns:Common.Presentation="clr-namespace:Common.Presentation;assembly=Common.Presentation"
-  xmlns:Common.Presentation.Controls="clr-namespace:Common.Presentation.Controls;assembly=Common.Presentation"
+  xmlns:CommonPresentation="clr-namespace:Common.Presentation;assembly=Common.Presentation"
+  xmlns:CommonControls="clr-namespace:Common.Presentation.Controls;assembly=Common.Presentation"
   
   xmlns:local="clr-namespace:WallpaperManager.Presentation"
   xmlns:ApplicationInterface="clr-namespace:WallpaperManager.ApplicationInterface"
@@ -41,17 +41,17 @@
       <!-- Converters / Validation Rules -->
       <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
       <local:WallpaperPlacementConverter x:Key="WallpaperPlacementConverter" />
-      <Common.Presentation:BooleanToStringConverter 
+      <CommonPresentation:BooleanToStringConverter 
         x:Key="BooleanToYesNoConverter" 
         TrueString="{local:LocalizedString StateRepresentation.Yes}" 
         FalseString="{local:LocalizedString StateRepresentation.No}" 
       />
-      <Common.Presentation:BooleanToStringConverter 
+      <CommonPresentation:BooleanToStringConverter 
         x:Key="BooleanToEnabledDisabledConverter" 
         TrueString="{local:LocalizedString StateRepresentation.Enabled}" 
         FalseString="{local:LocalizedString StateRepresentation.Enabled}"
       />
-      <Common.Presentation:PathToFileNameConverter x:Key="PathToFileNameConverter" NoneString="{local:LocalizedString ConfigWallpaper.WallpaperImagePath.NoImage}" />
+      <CommonPresentation:PathToFileNameConverter x:Key="PathToFileNameConverter" NoneString="{local:LocalizedString ConfigWallpaper.WallpaperImagePath.NoImage}" />
       <local:MainWindowWallpaperGenericListConverter x:Key="WallpaperGenericListConverter" />
     
       <!-- ToolTips -->
@@ -681,7 +681,7 @@
     
     <GridSplitter Width="4" Background="Transparent" Grid.Column="0" Grid.Row="1" />
     
-    <Common.Presentation.Controls:ListBoxEx
+    <CommonControls:ListBoxEx
       x:Name="lbxWallpaper"
       ItemsSource="{Binding ApplicationVM.WallpaperCategoryCollectionVM.SelectedCategoryVM}"
       SelectionMode="Extended"
@@ -746,7 +746,7 @@
           />
         </ContextMenu>
       </ListBox.ContextMenu>
-    </Common.Presentation.Controls:ListBoxEx>
+    </CommonControls:ListBoxEx>
 
     <StatusBar Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2">
       <StatusBarItem>
