@@ -199,9 +199,7 @@
     <Compile Include="Presentation Layer\Application.xaml.cs">
       <DependentUpon>Application.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Presentation Layer\Converters\WallpaperFileNameToStringConverter.cs" />
     <Compile Include="Presentation Layer\Converters\WallpaperPlacementConverter.cs" />
-    <Compile Include="Presentation Layer\Converters\WallpaperVMlistConverter.cs" />
     <Compile Include="Presentation Layer\DialogManager.cs" />
     <Compile Include="Data Layer\Configuration.cs" />
     <Compile Include="Data Layer\Enumerations\OverlayTextPosition.cs" />
@@ -221,6 +219,8 @@
     <Compile Include="Data Layer\WallpaperOverlayText.cs" />
     <Compile Include="Application Interface Layer\ConfigTextOverlaysVM.cs" />
     <Compile Include="Application Interface Layer\Enumerations\ConfigWallpaperMode.cs" />
+    <Compile Include="Presentation Layer\Markup Extensions\LocalizedString.cs" />
+    <Compile Include="Presentation Layer\Resources\Localization\LocalizationManager.cs" />
     <Compile Include="Presentation Layer\Windows\ConfigWindow\ConfigTextOverlaysWindow.xaml.cs">
       <DependentUpon>ConfigTextOverlaysWindow.xaml</DependentUpon>
     </Compile>
@@ -319,6 +319,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Presentation Layer\Resources\Icons\Configuration.ico" />
+    <EmbeddedResource Include="Presentation Layer\Resources\Localization\LocalizationData.de-DE.resx" />
+    <EmbeddedResource Include="Presentation Layer\Resources\Localization\LocalizationData.resx" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Presentation Layer\Resources\Icons\Configuration.png" />
@@ -503,7 +505,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_ConfigurationName="Any" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Any" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
