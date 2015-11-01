@@ -79,11 +79,11 @@ namespace WallpaperManager.Presentation {
     }
     #endregion
 
-    #region Command: ConfigureOverlayTexts
+    #region Command: ConfigureTextOverlays
     /// <summary>
     ///   The Configur Overlay Texts <see cref="RoutedCommand">Command</see>.
     /// </summary>
-    public readonly static RoutedCommand ConfigureOverlayTextsCommand = new RoutedCommand();
+    public readonly static RoutedCommand ConfigureTextOverlaysCommand = new RoutedCommand();
 
     /// <summary>
     ///   Handles the <see cref="CommandBinding.CanExecute" /> event of a <see cref="CommandBinding" />.
@@ -94,8 +94,8 @@ namespace WallpaperManager.Presentation {
     /// <param name="e">
     ///   The <see cref="CanExecuteRoutedEventArgs" /> instance containing the event data.
     /// </param>
-    /// <seealso cref="ConfigureOverlayTextsCommand" />
-    protected virtual void ConfigureOverlayTextsCommand_CanExecute(Object sender, CanExecuteRoutedEventArgs e) {
+    /// <seealso cref="ConfigureTextOverlaysCommand" />
+    protected virtual void ConfigureTextOverlaysCommand_CanExecute(Object sender, CanExecuteRoutedEventArgs e) {
       e.CanExecute = true;
     }
 
@@ -110,10 +110,10 @@ namespace WallpaperManager.Presentation {
     /// <param name="e">
     ///   The <see cref="ExecutedRoutedEventArgs" /> instance containing the event data.
     /// </param>
-    /// <seealso cref="ConfigureOverlayTextsCommand" />
-    protected virtual void ConfigureOverlayTextsCommand_Executed(Object sender, ExecutedRoutedEventArgs e) {
+    /// <seealso cref="ConfigureTextOverlaysCommand" />
+    protected virtual void ConfigureTextOverlaysCommand_Executed(Object sender, ExecutedRoutedEventArgs e) {
       ConfigTextOverlaysWindow configTextOverlaysWindow = new ConfigTextOverlaysWindow(
-        new ConfigTextOverlaysVM(this.DataContext.SelectedScreenSettings.OverlayTexts)
+        new ConfigTextOverlaysVM(this.DataContext.SelectedScreenSettings.TextOverlays)
       );
 
       configTextOverlaysWindow.Owner = this.GetClosestParentOfType<Window>();

@@ -49,7 +49,7 @@ namespace WallpaperManager.Data {
     public const Int32 Name_MaxLength = 100;
     #endregion
 
-    #region Property: Name_InvalidChars
+    #region Static Property: Name_InvalidChars
     /// <summary>
     ///   <inheritdoc cref="Name_InvalidChars" select="../value/node()" />
     /// </summary>

@@ -137,21 +137,21 @@ namespace WallpaperManager.Data {
     }
     #endregion
 
-    #region Property: OverlayTexts
+    #region Property: TextOverlays
     /// <summary>
-    ///   <inheritdoc cref="OverlayTexts" select='../value/node()' />
+    ///   <inheritdoc cref="TextOverlays" select='../value/node()' />
     /// </summary>
-    private ObservableCollection<WallpaperOverlayText> overlayTexts;
+    private ObservableCollection<WallpaperTextOverlay> textOverlays;
 
     /// <summary>
-    ///   Gets the collection of <see cref="WallpaperOverlayText" /> objects which should be applied on this screen.
+    ///   Gets the collection of <see cref="WallpaperTextOverlay" /> objects which should be applied on this screen.
     /// </summary>
     /// <value>
-    ///   The collection of <see cref="WallpaperOverlayText" /> objects which should be applied on this screen.
+    ///   The collection of <see cref="WallpaperTextOverlay" /> objects which should be applied on this screen.
     /// </value>
-    /// <seealso cref="WallpaperOverlayText">WallpaperOverlayText Class</seealso>
-    public ObservableCollection<WallpaperOverlayText> OverlayTexts {
-      get { return this.overlayTexts; }
+    /// <seealso cref="WallpaperTextOverlay">WallpaperTextOverlay Class</seealso>
+    public ObservableCollection<WallpaperTextOverlay> TextOverlays {
+      get { return this.textOverlays; }
     }
     #endregion
 
@@ -184,7 +184,7 @@ namespace WallpaperManager.Data {
       // Cache the Bounds and BoundsWithMargin rectangles for this first time.
       this.RefreshBounds();
 
-      this.overlayTexts = new ObservableCollection<WallpaperOverlayText>();
+      this.textOverlays = new ObservableCollection<WallpaperTextOverlay>();
     }
 
     /// <summary>
@@ -212,9 +212,9 @@ namespace WallpaperManager.Data {
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />
     public virtual Object Clone() {
-      ObservableCollection<WallpaperOverlayText> overlayTextCollection = new ObservableCollection<WallpaperOverlayText>();
-      foreach (WallpaperOverlayText overlayText in this.OverlayTexts) {
-        overlayTextCollection.Add((WallpaperOverlayText)overlayText.Clone());
+      ObservableCollection<WallpaperTextOverlay> overlayTextCollection = new ObservableCollection<WallpaperTextOverlay>();
+      foreach (WallpaperTextOverlay overlayText in this.TextOverlays) {
+        overlayTextCollection.Add((WallpaperTextOverlay)overlayText.Clone());
       }
       
       return new ScreenSettings(this.Index) {
@@ -222,7 +222,7 @@ namespace WallpaperManager.Data {
         staticWallpaper = (Wallpaper)this.StaticWallpaper.Clone(),
         margins = (ScreenMargins)this.Margins.Clone(),        
         boundsWithMargin = this.BoundsWithMargin,
-        overlayTexts = overlayTextCollection,
+        textOverlays = overlayTextCollection,
       };
     }
 
@@ -252,9 +252,9 @@ namespace WallpaperManager.Data {
       this.StaticWallpaper.AssignTo(otherInstance.staticWallpaper);
       this.Margins.AssignTo(otherInstance.Margins);
 
-      otherInstance.OverlayTexts.Clear();
-      for (Int32 i = 0; i < this.OverlayTexts.Count; i++) {
-        otherInstance.OverlayTexts.Add(this.OverlayTexts[i]);
+      otherInstance.TextOverlays.Clear();
+      for (Int32 i = 0; i < this.TextOverlays.Count; i++) {
+        otherInstance.TextOverlays.Add(this.TextOverlays[i]);
       }
     }
     #endregion

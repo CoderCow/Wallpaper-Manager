@@ -293,54 +293,54 @@ namespace WallpaperManager.Data {
               if (overlayTextElement.Name != "OverlayText") {
                 continue;
               }
-              WallpaperOverlayText overlayText = new WallpaperOverlayText();
+              WallpaperTextOverlay textOverlay = new WallpaperTextOverlay();
 
               element = overlayTextElement["Format"];
               if (element != null) {
-                overlayText.Format = element.InnerText;
+                textOverlay.Format = element.InnerText;
               }
 
               element = overlayTextElement["Position"];
               if (element != null) {
-                overlayText.Position = (OverlayTextPosition)Enum.Parse(typeof(OverlayTextPosition), element.InnerText);
+                textOverlay.Position = (TextOverlayPosition)Enum.Parse(typeof(TextOverlayPosition), element.InnerText);
               }
 
               element = overlayTextElement["FontName"];
               if (element != null) {
-                overlayText.FontName = element.InnerText;
+                textOverlay.FontName = element.InnerText;
               }
 
               element = overlayTextElement["FontSize"];
               if (element != null) {
-                overlayText.FontSize = Single.Parse(element.InnerText, CultureInfo.InvariantCulture);
+                textOverlay.FontSize = Single.Parse(element.InnerText, CultureInfo.InvariantCulture);
               }
 
               element = overlayTextElement["FontStyle"];
               if (element != null) {
-                overlayText.FontStyle = (FontStyle)Enum.Parse(typeof (FontStyle), element.InnerText);
+                textOverlay.FontStyle = (FontStyle)Enum.Parse(typeof (FontStyle), element.InnerText);
               }
 
               element = overlayTextElement["ForeColor"];
               if (element != null) {
-                overlayText.ForeColor = ColorTranslator.FromHtml(element.InnerText);
+                textOverlay.ForeColor = ColorTranslator.FromHtml(element.InnerText);
               }
 
               element = overlayTextElement["BorderColor"];
               if (element != null) {
-                overlayText.BorderColor = ColorTranslator.FromHtml(element.InnerText);
+                textOverlay.BorderColor = ColorTranslator.FromHtml(element.InnerText);
               }
 
               element = overlayTextElement["HorizontalOffset"];
               if (element != null) {
-                overlayText.HorizontalOffset = Int32.Parse(element.InnerText, CultureInfo.InvariantCulture);
+                textOverlay.HorizontalOffset = Int32.Parse(element.InnerText, CultureInfo.InvariantCulture);
               }
 
               element = overlayTextElement["VerticalOffset"];
               if (element != null) {
-                overlayText.VerticalOffset = Int32.Parse(element.InnerText, CultureInfo.InvariantCulture);
+                textOverlay.VerticalOffset = Int32.Parse(element.InnerText, CultureInfo.InvariantCulture);
               }
 
-              screenSettings.OverlayTexts.Add(overlayText);
+              screenSettings.TextOverlays.Add(textOverlay);
             }
           }
           #endregion
@@ -744,7 +744,7 @@ namespace WallpaperManager.Data {
         XmlElement overlayTextsElement = document.CreateElement("OverlayTexts");
         screenSettingsElement.AppendChild(overlayTextsElement);
 
-        foreach (WallpaperOverlayText overlayText in screenSettings.OverlayTexts) {
+        foreach (WallpaperTextOverlay overlayText in screenSettings.TextOverlays) {
           XmlElement overlayTextElement = document.CreateElement("OverlayText");
           overlayTextsElement.AppendChild(overlayTextElement);
 

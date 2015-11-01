@@ -13,23 +13,23 @@ using Common.Presentation;
 using WallpaperManager.Data;
 
 namespace WallpaperManager.ApplicationInterface {
-  /// <commondoc select='WrappingCollectionViewModels/General/*' params="WrappedType=WallpaperOverlayText" />
+  /// <commondoc select='WrappingCollectionViewModels/General/*' params="WrappedType=WallpaperTextOverlay" />
   /// <threadsafety static="true" instance="false" />
   public class ConfigTextOverlaysVM: INotifyPropertyChanged {
-    #region Property: OverlayTexts
+    #region Property: TextOverlays
     /// <summary>
-    ///   <inheritdoc cref="OverlayTextCollection" select='../value/node()' />
+    ///   <inheritdoc cref="TextOverlays" select='../value/node()' />
     /// </summary>
-    private readonly ObservableCollection<WallpaperOverlayText> overlayTextCollection;
+    private readonly ObservableCollection<WallpaperTextOverlay> textOverlays;
 
     /// <summary>
-    ///   Gets the <see cref="WallpaperOverlayText" /> collection instance wrapped by this View Model.
+    ///   Gets the <see cref="WallpaperTextOverlay" /> collection instance wrapped by this View Model.
     /// </summary>
     /// <value>
-    ///   The <see cref="WallpaperOverlayText" /> collection instance wrapped by this View Model.
+    ///   The <see cref="WallpaperTextOverlay" /> collection instance wrapped by this View Model.
     /// </value>
-    public ObservableCollection<WallpaperOverlayText> OverlayTextCollection {
-      get { return this.overlayTextCollection; }
+    public ObservableCollection<WallpaperTextOverlay> TextOverlays {
+      get { return this.textOverlays; }
     }
     #endregion
 
@@ -40,10 +40,10 @@ namespace WallpaperManager.ApplicationInterface {
     private Int32 selectedItemIndex;
 
     /// <summary>
-    ///   Gets or sets the index of the selected <see cref="WallpaperOverlayText" /> item.
+    ///   Gets or sets the index of the selected <see cref="WallpaperTextOverlay" /> item.
     /// </summary>
     /// <value>
-    ///   The index of the selected <see cref="WallpaperOverlayText" /> item.
+    ///   The index of the selected <see cref="WallpaperTextOverlay" /> item.
     /// </value>
     public Int32 SelectedItemIndex {
       get { return this.selectedItemIndex; }
@@ -57,15 +57,15 @@ namespace WallpaperManager.ApplicationInterface {
 
     #region Property: SelectedItem
     /// <summary>
-    ///   Gets the selected <see cref="WallpaperOverlayText" /> item.
+    ///   Gets the selected <see cref="WallpaperTextOverlay" /> item.
     /// </summary>
     /// <value>
-    ///   The selected <see cref="WallpaperOverlayText" /> item.
+    ///   The selected <see cref="WallpaperTextOverlay" /> item.
     /// </value>
-    public WallpaperOverlayText SelectedItem {
+    public WallpaperTextOverlay SelectedItem {
       get {
-        if ((this.OverlayTextCollection.Count > 0) && (this.SelectedItemIndex != -1)) {
-          return this.OverlayTextCollection[this.SelectedItemIndex];
+        if ((this.TextOverlays.Count > 0) && (this.SelectedItemIndex != -1)) {
+          return this.TextOverlays[this.SelectedItemIndex];
         }
 
         return null;
@@ -78,27 +78,27 @@ namespace WallpaperManager.ApplicationInterface {
     /// <summary>
     ///   Initializes a new instance of the <see cref="ConfigTextOverlaysVM" /> class.
     /// </summary>
-    /// <param name="overlayTextCollection">
-    ///   The <see cref="WallpaperOverlayText" /> collection instance wrapped by this View Model.
+    /// <param name="textOverlays">
+    ///   The <see cref="WallpaperTextOverlay" /> collection instance wrapped by this View Model.
     /// </param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="overlayTextCollection" /> is <c>null</c>.
+    ///   <paramref name="textOverlays" /> is <c>null</c>.
     /// </exception>
-    /// <seealso cref="WallpaperOverlayText">WallpaperOverlayText Class</seealso>
-    public ConfigTextOverlaysVM(ObservableCollection<WallpaperOverlayText> overlayTextCollection) {
-      if (overlayTextCollection == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("overlayTextCollection"));
+    /// <seealso cref="WallpaperTextOverlay">WallpaperTextOverlay Class</seealso>
+    public ConfigTextOverlaysVM(ObservableCollection<WallpaperTextOverlay> textOverlays) {
+      if (textOverlays == null) {
+        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("TextOverlays"));
       }
 
-      this.overlayTextCollection = overlayTextCollection;
+      this.textOverlays = textOverlays;
     }
     #endregion
 
-    #region Command: AddOverlayText
+    #region Command: AddTextOverlay
     /// <summary>
-    ///   <inheritdoc cref="AddOverlayTextCommand" select='../value/node()' />
+    ///   <inheritdoc cref="AddTextOverlayCommand" select='../value/node()' />
     /// </summary>
-    private DelegateCommand addOverlayTextCommand;
+    private DelegateCommand addTextOverlayCommand;
 
     /// <summary>
     ///   Gets the Add OverlayText <see cref="DelegateCommand" />.
@@ -106,48 +106,48 @@ namespace WallpaperManager.ApplicationInterface {
     /// <value>
     ///   The Add OverlayText <see cref="DelegateCommand" />.
     /// </value>
-    /// <seealso cref="AddOverlayTextCommand_CanExecute">AddOverlayTextCommand_CanExecute Method</seealso>
-    /// <seealso cref="AddOverlayTextCommand_Execute">AddOverlayTextCommand_Execute Method</seealso>
-    /// <seealso cref="WallpaperOverlayText">WallpaperOverlayText Class</seealso>
-    public DelegateCommand AddOverlayTextCommand {
+    /// <seealso cref="AddTextOverlayCommand_CanExecute">AddTextOverlayCommand_CanExecute Method</seealso>
+    /// <seealso cref="AddTextOverlayCommand_Execute">AddTextOverlayCommand_Execute Method</seealso>
+    /// <seealso cref="WallpaperTextOverlay">WallpaperTextOverlay Class</seealso>
+    public DelegateCommand AddTextOverlayCommand {
       get {
-        if (this.addOverlayTextCommand == null) {
-          this.addOverlayTextCommand = new DelegateCommand(
-            this.AddOverlayTextCommand_Execute, this.AddOverlayTextCommand_CanExecute
+        if (this.addTextOverlayCommand == null) {
+          this.addTextOverlayCommand = new DelegateCommand(
+            this.AddTextOverlayCommand_Execute, this.AddTextOverlayCommand_CanExecute
           );
         }
     
-        return this.addOverlayTextCommand;
+        return this.addTextOverlayCommand;
       }
     }
 
     /// <summary>
-    ///   Determines if <see cref="AddOverlayTextCommand" /> can be executed.
+    ///   Determines if <see cref="AddTextOverlayCommand" /> can be executed.
     /// </summary>
     /// <returns>
     ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
     /// </returns>
-    /// <seealso cref="AddOverlayTextCommand" />
-    protected Boolean AddOverlayTextCommand_CanExecute() {
+    /// <seealso cref="AddTextOverlayCommand" />
+    protected Boolean AddTextOverlayCommand_CanExecute() {
       return true;
     }
 
     /// <summary>
-    ///   Called when <see cref="AddOverlayTextCommand" /> is executed.
-    ///   Adds a new <see cref="WallpaperOverlayText" /> to the wrapped <see cref="OverlayTextCollection" />.
+    ///   Called when <see cref="AddTextOverlayCommand" /> is executed.
+    ///   Adds a new <see cref="WallpaperTextOverlay" /> to the wrapped <see cref="TextOverlays" />.
     /// </summary>
-    /// <seealso cref="AddOverlayTextCommand" />
-    protected void AddOverlayTextCommand_Execute() {
-      this.OverlayTextCollection.Add(new WallpaperOverlayText());
-      this.SelectedItemIndex = this.OverlayTextCollection.Count - 1;
+    /// <seealso cref="AddTextOverlayCommand" />
+    protected void AddTextOverlayCommand_Execute() {
+      this.TextOverlays.Add(new WallpaperTextOverlay());
+      this.SelectedItemIndex = this.TextOverlays.Count - 1;
     }
     #endregion
 
-    #region Command: RemoveOverlayText
+    #region Command: RemoveTextOverlay
     /// <summary>
-    ///   <inheritdoc cref="RemoveOverlayTextCommand" select='../value/node()' />
+    ///   <inheritdoc cref="RemoveTextOverlayCommand" select='../value/node()' />
     /// </summary>
-    private DelegateCommand removeOverlayTextCommand;
+    private DelegateCommand removeTextOverlayCommand;
 
     /// <summary>
     ///   Gets the Remove Overlay Text <see cref="DelegateCommand" />.
@@ -155,41 +155,41 @@ namespace WallpaperManager.ApplicationInterface {
     /// <value>
     ///   The Remove Overlay Text <see cref="DelegateCommand" />.
     /// </value>
-    /// <seealso cref="RemoveOverlayTextCommand_CanExecute">RemoveOverlayTextCommand_CanExecute Method</seealso>
-    /// <seealso cref="RemoveOverlayTextCommand_Execute">RemoveOverlayTextCommand_Execute Method</seealso>
-    /// <seealso cref="WallpaperOverlayText">WallpaperOverlayText Class</seealso>
-    public DelegateCommand RemoveOverlayTextCommand {
+    /// <seealso cref="RemoveTextOverlayCommand_CanExecute">RemoveTextOverlayCommand_CanExecute Method</seealso>
+    /// <seealso cref="RemoveTextOverlayCommand_Execute">RemoveTextOverlayCommand_Execute Method</seealso>
+    /// <seealso cref="WallpaperTextOverlay">WallpaperTextOverlay Class</seealso>
+    public DelegateCommand RemoveTextOverlayCommand {
       get {
-        if (this.removeOverlayTextCommand == null) {
-          this.removeOverlayTextCommand = new DelegateCommand(
-            this.RemoveOverlayTextCommand_Execute, this.RemoveOverlayTextCommand_CanExecute
+        if (this.removeTextOverlayCommand == null) {
+          this.removeTextOverlayCommand = new DelegateCommand(
+            this.RemoveTextOverlayCommand_Execute, this.RemoveTextOverlayCommand_CanExecute
           );
         }
     
-        return this.removeOverlayTextCommand;
+        return this.removeTextOverlayCommand;
       }
     }
 
     /// <summary>
-    ///   Determines if <see cref="RemoveOverlayTextCommand" /> can be executed.
+    ///   Determines if <see cref="RemoveTextOverlayCommand" /> can be executed.
     /// </summary>
     /// <returns>
     ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
     /// </returns>
-    /// <seealso cref="RemoveOverlayTextCommand" />
-    /// <seealso cref="WallpaperOverlayText">WallpaperOverlayText Class</seealso>
-    protected Boolean RemoveOverlayTextCommand_CanExecute() {
+    /// <seealso cref="RemoveTextOverlayCommand" />
+    /// <seealso cref="WallpaperTextOverlay">WallpaperTextOverlay Class</seealso>
+    protected Boolean RemoveTextOverlayCommand_CanExecute() {
       return (this.SelectedItem != null);
     }
 
     /// <summary>
-    ///   Called when <see cref="RemoveOverlayTextCommand" /> is executed.
-    ///   Removes the selected <see cref="WallpaperOverlayText" /> from the wrapped <see cref="OverlayTextCollection" />.
+    ///   Called when <see cref="RemoveTextOverlayCommand" /> is executed.
+    ///   Removes the selected <see cref="WallpaperTextOverlay" /> from the wrapped <see cref="TextOverlays" />.
     /// </summary>
-    /// <seealso cref="RemoveOverlayTextCommand" />
-    /// <seealso cref="WallpaperOverlayText">WallpaperOverlayText Class</seealso>
-    protected void RemoveOverlayTextCommand_Execute() {
-      this.OverlayTextCollection.RemoveAt(this.SelectedItemIndex);
+    /// <seealso cref="RemoveTextOverlayCommand" />
+    /// <seealso cref="WallpaperTextOverlay">WallpaperTextOverlay Class</seealso>
+    protected void RemoveTextOverlayCommand_Execute() {
+      this.TextOverlays.RemoveAt(this.SelectedItemIndex);
     }
     #endregion
 

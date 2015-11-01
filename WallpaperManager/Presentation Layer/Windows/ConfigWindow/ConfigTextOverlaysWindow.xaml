@@ -39,10 +39,10 @@
       <Common.Presentation:ColorStringValidationRule x:Key="ColorStringValidationRule" AllowTransparency="True" />
       
       <Common.Presentation:CommandReference 
-        x:Key="CommandReference.RemoveOverlayText"
+        x:Key="CommandReference.RemoveTextOverlay"
         Command="{Binding 
           RelativeSource ={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, 
-          Path=ConfigTextOverlaysVM.RemoveOverlayTextCommand
+          Path=ConfigTextOverlaysVM.RemoveTextOverlayCommand
         }"
       />
 
@@ -61,24 +61,24 @@
       
       <ToolTip x:Key="ToolTips.ForeColor">
         <local:ToolTipData 
-          Title="{local:LocalizedString ToolTip.OverlayTextColor.Title}"
-          Content="{local:LocalizedString ToolTip.OverlayTextColor.Description}"
+          Title="{local:LocalizedString ToolTip.TextOverlayColor.Title}"
+          Content="{local:LocalizedString ToolTip.TextOverlayColor.Description}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.BorderColor">
         <local:ToolTipData 
-          Title="{local:LocalizedString ToolTip.OverlayTextBorderColor.Title}"
-          Content="{local:LocalizedString ToolTip.OverlayTextBorderColor.Description}"
+          Title="{local:LocalizedString ToolTip.TextOverlayBorderColor.Title}"
+          Content="{local:LocalizedString ToolTip.TextOverlayBorderColor.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
-          NoteText="{local:LocalizedString ToolTip.OverlayTextBorderColor.NoteText}"
+          NoteText="{local:LocalizedString ToolTip.TextOverlayBorderColor.NoteText}"
         />
       </ToolTip>
       
       <ToolTip x:Key="ToolTips.HOffset">
         <local:ToolTipData 
-          Title="{local:LocalizedString ToolTip.OverlayTextHOffset.Title}"
-          Content="{local:LocalizedString ToolTip.OverlayTextHOffset.Description}"
+          Title="{local:LocalizedString ToolTip.TextOverlayHOffset.Title}"
+          Content="{local:LocalizedString ToolTip.TextOverlayHOffset.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
           NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
@@ -86,8 +86,8 @@
       
       <ToolTip x:Key="ToolTips.VOffset">
         <local:ToolTipData 
-          Title="{local:LocalizedString ToolTip.OverlayTextVOffset.Title}"
-          Content="{local:LocalizedString ToolTip.OverlayTextVOffset.Description}"
+          Title="{local:LocalizedString ToolTip.TextOverlayVOffset.Title}"
+          Content="{local:LocalizedString ToolTip.TextOverlayVOffset.Description}"
           NoteIcon="{StaticResource Global.Icons.Information}"
           NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
@@ -123,8 +123,8 @@
       </Grid.RowDefinitions>
       
       <ListBox 
-        Name="lstOverlayTexts"
-        ItemsSource="{Binding Path=OverlayTextCollection}"
+        Name="lstTextOverlays"
+        ItemsSource="{Binding Path=TextOverlays}"
         SelectedIndex="{Binding Path=SelectedItemIndex}"
         Margin="1,1,3,1"
         MaxHeight="150"
@@ -132,11 +132,11 @@
         Grid.Column="0" Grid.Row="0"
       >
         <ListBox.InputBindings>
-          <KeyBinding Key="Delete" Command="{StaticResource CommandReference.RemoveOverlayText}" />
+          <KeyBinding Key="Delete" Command="{StaticResource CommandReference.RemoveTextOverlay}" />
         </ListBox.InputBindings>
         
         <ListBox.ItemTemplate>
-          <DataTemplate DataType="{x:Type Data:WallpaperOverlayText}">
+          <DataTemplate DataType="{x:Type Data:WallpaperTextOverlay}">
             <TextBlock Name="txtItemText" Text="{Binding Path=Format}" />
           </DataTemplate>
         </ListBox.ItemTemplate>
@@ -144,11 +144,11 @@
       
       <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
         <Button 
-          Content="{local:LocalizedString ConfigTextOverlays.Add}" Command="{Binding AddOverlayTextCommand}" 
+          Content="{local:LocalizedString ConfigTextOverlays.Add}" Command="{Binding AddTextOverlayCommand}" 
           Margin="2" TabIndex="20" 
         />
         <Button 
-          Content="{local:LocalizedString ConfigTextOverlays.Remove}" Command="{Binding RemoveOverlayTextCommand}" 
+          Content="{local:LocalizedString ConfigTextOverlays.Remove}" Command="{Binding RemoveTextOverlayCommand}" 
           Margin="2" TabIndex="30" 
         />
       </StackPanel>
@@ -158,7 +158,7 @@
         DataContext="{Binding Path=SelectedItem}" 
         Margin="0,10,0,0"
         IsEnabled="{Binding 
-          ElementName=lstOverlayTexts, Path=SelectedIndex, 
+          ElementName=lstTextOverlays, Path=SelectedIndex, 
           Converter={StaticResource Global.IsNotValueAsBooleanConverter}, ConverterParameter=-1
         }"
         Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
@@ -201,25 +201,25 @@
             <TextBox.ToolTip>
               <ToolTip MaxWidth="600" Style="{x:Null}">
                 <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.Title}" FontWeight="Bold" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.Description}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.Title}" FontWeight="Bold" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.Description}" /><LineBreak />
                   <LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP1}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP2}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP3}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP4}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP5}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP6}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP7}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP8}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP9}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP10}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP11}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP12}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP13}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP14}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP15}" /><LineBreak />
-                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP16}" />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP1}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP2}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP3}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP4}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP5}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP6}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP7}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP8}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP9}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP10}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP11}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP12}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP13}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP14}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP15}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.TextOverlayFormat.DescriptionP16}" />
                 </TextBlock>
               </ToolTip>
             </TextBox.ToolTip>
@@ -240,27 +240,27 @@
           >
             <ComboBoxItem 
               Content="{local:LocalizedString ConfigTextOverlays.Position.TopLeft}" 
-              Tag="{x:Static Data:OverlayTextPosition.TopLeft}" 
+              Tag="{x:Static Data:TextOverlayPosition.TopLeft}" 
             />
             <ComboBoxItem 
               Content="{local:LocalizedString ConfigTextOverlays.Position.TopCentered}" 
-              Tag="{x:Static Data:OverlayTextPosition.TopMiddle}" 
+              Tag="{x:Static Data:TextOverlayPosition.TopMiddle}" 
             />
             <ComboBoxItem 
               Content="{local:LocalizedString ConfigTextOverlays.Position.TopRight}" 
-              Tag="{x:Static Data:OverlayTextPosition.TopRight}" 
+              Tag="{x:Static Data:TextOverlayPosition.TopRight}" 
             />
             <ComboBoxItem 
               Content="{local:LocalizedString ConfigTextOverlays.Position.BottomLeft}" 
-              Tag="{x:Static Data:OverlayTextPosition.BottomLeft}" 
+              Tag="{x:Static Data:TextOverlayPosition.BottomLeft}" 
             />
             <ComboBoxItem 
               Content="{local:LocalizedString ConfigTextOverlays.Position.BottomCentered}" 
-              Tag="{x:Static Data:OverlayTextPosition.BottomMiddle}" 
+              Tag="{x:Static Data:TextOverlayPosition.BottomMiddle}" 
             />
             <ComboBoxItem 
               Content="{local:LocalizedString ConfigTextOverlays.Position.BottomRight}" 
-              Tag="{x:Static Data:OverlayTextPosition.BottomRight}" 
+              Tag="{x:Static Data:TextOverlayPosition.BottomRight}" 
             />
           </ComboBox>
           

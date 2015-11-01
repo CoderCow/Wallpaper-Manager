@@ -234,8 +234,8 @@
         <Setter Property="Margin" Value="2,4,2,4" />
         <Setter Property="Padding" Value="4,0,4,0" />
       </Style>
-      
-      <Style x:Key="{x:Static local:ScreenLayoutBox.ScreenRadioButtonStyleKey}" TargetType="{x:Type RadioButton}">
+
+      <Style x:Key="{x:Static Common.Presentation.Controls:ScreenLayoutBox.ScreenRadioButtonStyleKey}" TargetType="{x:Type RadioButton}">
         <Setter Property="IsTabStop" Value="False" />
       
         <Setter Property="Template">
@@ -257,8 +257,8 @@
           </Setter.Value>
         </Setter>
       </Style>
-      
-      <Style x:Key="{x:Static local:ScreenLayoutBox.ScreenCheckBoxStyleKey}" TargetType="{x:Type CheckBox}">
+
+      <Style x:Key="{x:Static Common.Presentation.Controls:ScreenLayoutBox.ScreenCheckBoxStyleKey}" TargetType="{x:Type CheckBox}">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="ToolTip" Value="{StaticResource ToolTips.ScreenCheckBox}" />
         <Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
@@ -302,7 +302,7 @@
   <StackPanel Margin="5" Orientation="Vertical">
     <StackPanel Orientation="Horizontal">
       <StackPanel Orientation="Vertical">
-        <local:ScreenLayoutBox
+        <Common.Presentation.Controls:ScreenLayoutBox
           x:Name="slbPreview"
           ScreensCheckStatus="{Binding Path=ConfigWallpaperVM.ScreensCycleState}"
           ScreenBackground="{Binding Path=WallpaperPreview}"

@@ -73,8 +73,8 @@
           NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
         />
       </ToolTip>
-      
-      <ToolTip x:Key="ToolTips.Monitor.ConfigOverlayTexts">
+
+      <ToolTip x:Key="ToolTips.Monitor.ConfigTextOverlays">
         <local:ToolTipData
           Title="{local:LocalizedString ToolTip.ConfigTextOverlays.Title}"
           Content="{local:LocalizedString ToolTip.ConfigTextOverlays.Description}"
@@ -84,7 +84,10 @@
       </ToolTip>
       
       <!-- Styles / Templates -->
-      <Style x:Key="{x:Static local:ScreenLayoutBox.ScreenRadioButtonStyleKey}" TargetType="{x:Type RadioButton}">
+      <Style 
+        x:Key="{x:Static Common.Presentation.Controls:ScreenLayoutBox.ScreenRadioButtonStyleKey}" 
+        TargetType="{x:Type RadioButton}"
+      >
         <Setter Property="FontSize" Value="24pt" />
         <Setter Property="FontFamily" Value="Verdana" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
@@ -128,14 +131,14 @@
       CanExecute="ConfigureStaticWallpaperCommand_CanExecute" Executed="ConfigureStaticWallpaperCommand_Executed" 
     />
     <CommandBinding 
-      Command="{x:Static local:MonitorSettingsPage.ConfigureOverlayTextsCommand}" 
-      CanExecute="ConfigureOverlayTextsCommand_CanExecute" Executed="ConfigureOverlayTextsCommand_Executed" 
+      Command="{x:Static local:MonitorSettingsPage.ConfigureTextOverlaysCommand}" 
+      CanExecute="ConfigureTextOverlaysCommand_CanExecute" Executed="ConfigureTextOverlaysCommand_Executed" 
     />
   </Page.CommandBindings>
 
   <!-- Taken Alt+X Keys: G,C,M,R,S,W,L,R,T,B -->
   <StackPanel Orientation="Vertical">
-    <local:ScreenLayoutBox 
+    <Common.Presentation.Controls:ScreenLayoutBox 
       x:Name="slbScreenSelection" 
       SelectedScreenIndex="{Binding Path=SelectedScreenIndex, Mode=TwoWay}"
       Background="Transparent"
@@ -287,10 +290,10 @@
                 
                 <Button 
                   Content="{local:LocalizedString Config.ConfigTextOverlays}" 
-                  Command="{x:Static local:MonitorSettingsPage.ConfigureOverlayTextsCommand}" 
+                  Command="{x:Static local:MonitorSettingsPage.ConfigureTextOverlaysCommand}" 
                   VerticalAlignment="Bottom"
                   Margin="3,0,5,2"
-                  ToolTip="{StaticResource ToolTips.Monitor.ConfigOverlayTexts}"
+                  ToolTip="{StaticResource ToolTips.Monitor.ConfigTextOverlays}"
                 />
               </StackPanel>
             </StackPanel>

@@ -15,7 +15,7 @@ using Common.Presentation;
 using WallpaperManager.Data;
 
 namespace WallpaperManager.ApplicationInterface {
-  /// <commondoc select='WrappingViewModels/General/*' params="WrappedType=WallpaperOverlayText" />
+  /// <commondoc select='WrappingViewModels/General/*' params="WrappedType=WallpaperTextOverlay" />
   /// <threadsafety static="true" instance="false" />
   public class ConfigurationVM: INotifyPropertyChanged {
     #region Property: Configuration

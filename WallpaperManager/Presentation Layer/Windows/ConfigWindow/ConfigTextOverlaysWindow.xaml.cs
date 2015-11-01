@@ -15,7 +15,7 @@ using WallpaperManager.ApplicationInterface;
 
 namespace WallpaperManager.Presentation {
   /// <summary>
-  ///   The Text Overlays Configuration Window used to configure <see cref="WallpaperOverlayText">WallpaperOverlayTexts</see>
+  ///   The Text Overlays Configuration Window used to configure <see cref="WallpaperTextOverlay">WallpaperOverlayTexts</see>
   ///   by using the <see cref="ConfigTextOverlaysVM">Config Text Overlays View Model</see>.
   /// </summary>
   /// <seealso cref="ConfigTextOverlaysVM">ConfigTextOverlaysVM Class</seealso>

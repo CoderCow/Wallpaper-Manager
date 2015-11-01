@@ -16,7 +16,7 @@ using Common.IO;
 using Common.Presentation;
 
 using WallpaperManager.Data;
-using WallpaperManager.Application;
+using WallpaperManager.Business;
 
 namespace WallpaperManager.ApplicationInterface {
   /// <commondoc select='WrappingCollectionViewModels/General/*' params="WrappedType=Wallpaper" />

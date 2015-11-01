@@ -14,7 +14,7 @@ using Common;
 using Common.Presentation;
 
 using WallpaperManager.Data;
-using WallpaperManager.Application;
+using WallpaperManager.Business;
 
 namespace WallpaperManager.ApplicationInterface {
   /// <commondoc select='WrappingViewModels/General/*' params="WrappedType=WallpaperChanger" />
@@ -39,7 +39,7 @@ namespace WallpaperManager.ApplicationInterface {
     #endregion
 
     #region Property: IsAutocycling
-    /// <inheritdoc cref="WallpaperManager.Application.WallpaperChanger.IsAutocycling" />
+    /// <inheritdoc cref="WallpaperManager.Business.WallpaperChanger.IsAutocycling" />
     public Boolean IsAutocycling {
       get { return this.WallpaperChanger.IsAutocycling; }
     }
@@ -58,7 +58,7 @@ namespace WallpaperManager.ApplicationInterface {
     #endregion
 
     #region Property: ActiveWallpapers
-    /// <inheritdoc cref="WallpaperManager.Application.WallpaperChanger.ActiveWallpapers" />
+    /// <inheritdoc cref="WallpaperManager.Business.WallpaperChanger.ActiveWallpapers" />
     public ReadOnlyCollection<Wallpaper> ActiveWallpapers {
       get { return this.WallpaperChanger.ActiveWallpapers; }
     }
@@ -145,7 +145,7 @@ namespace WallpaperManager.ApplicationInterface {
     ///   Called when <see cref="StartCyclingCommand" /> is executed.
     ///   Starts the automatic cycling of wallpapers.
     /// </summary>
-    /// <inheritdoc cref="WallpaperManager.Application.WallpaperChanger.StartCycling" select='exception' />
+    /// <inheritdoc cref="WallpaperManager.Business.WallpaperChanger.StartCycling" select='exception' />
     /// <seealso cref="StartCyclingCommand" />
     protected void StartCyclingCommand_Execute() {
       if (!this.WallpaperChanger.CheckWallpaperListIntegrity()) {
@@ -207,7 +207,7 @@ namespace WallpaperManager.ApplicationInterface {
     ///   Called when <see cref="StopCyclingCommand" /> is executed.
     ///   Stops the automatic cycling of wallpapers.
     /// </summary>
-    /// <inheritdoc cref="WallpaperManager.Application.WallpaperChanger.StopCycling" select='exception' />
+    /// <inheritdoc cref="WallpaperManager.Business.WallpaperChanger.StopCycling" select='exception' />
     /// <seealso cref="StopCyclingCommand" />
     protected void StopCyclingCommand_Execute() {
       #if DEBUG
@@ -263,7 +263,7 @@ namespace WallpaperManager.ApplicationInterface {
     ///   Called when <see cref="CycleNextRandomlyCommand" /> is executed.
     ///   Starts the automatic cycling of wallpapers.
     /// </summary>
-    /// <inheritdoc cref="WallpaperManager.Application.WallpaperChanger.CycleNextRandomly(IList{Wallpaper})" select='exception' />
+    /// <inheritdoc cref="WallpaperManager.Business.WallpaperChanger.CycleNextRandomly(IList{Wallpaper})" select='exception' />
     /// <seealso cref="CycleNextRandomlyCommand" />
     protected void CycleNextRandomlyCommand_Execute() {
       #if DEBUG
@@ -325,7 +325,7 @@ namespace WallpaperManager.ApplicationInterface {
     /// <param name="wallpapersToUse">
     ///   The <see cref="Wallpaper" /> objects to use for the cycle.
     /// </param>
-    /// <inheritdoc cref="WallpaperManager.Application.WallpaperChanger.CycleNextRandomly(IList{Wallpaper})" select='exception' />
+    /// <inheritdoc cref="WallpaperManager.Business.WallpaperChanger.CycleNextRandomly(IList{Wallpaper})" select='exception' />
     /// <seealso cref="CycleNextCommand" />
     protected void CycleNextCommand_Execute(IList<Wallpaper> wallpapersToUse) {
       #if DEBUG

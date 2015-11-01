@@ -23,7 +23,7 @@ using Common;
 using Path = Common.IO.Path;
 
 using WallpaperManager.Data;
-using WallpaperManager.Application;
+using WallpaperManager.Business;
 using WallpaperManager.ApplicationInterface;
 
 namespace WallpaperManager.Presentation {

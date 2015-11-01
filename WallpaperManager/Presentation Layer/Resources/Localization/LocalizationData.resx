@@ -119,31 +119,31 @@
   </resheader>
   <data name="About.ApplicationVersion" xml:space="preserve">
     <value>Application Version</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/About.png)</comment>
+    <comment>(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="About.LicenseLink" xml:space="preserve">
     <value>(License)</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/About.png)</comment>
+    <comment>(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="About.ThridPartyResources" xml:space="preserve">
-    <value>Used thrid party resources:</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/About.png)</comment>
+    <value>Used otherwise resources:</value>
+    <comment>(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
     <value>About</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/About.png)</comment>
+    <comment>(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="About.TranslatedBy" xml:space="preserve">
-    <value>Translated by</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/About.png)</comment>
+    <value>Translators of the current language:</value>
+    <comment>This translation entry is followed by  "About.Translators".</comment>
   </data>
-  <data name="Translation.Translators" xml:space="preserve">
+  <data name="About.Translators" xml:space="preserve">
     <value>-</value>
     <comment>The amount of strings each user translated will be put behind the name in the release version.</comment>
   </data>
   <data name="About.VersionString" xml:space="preserve">
     <value>{0}.{1} Revision {3}</value>
-    <comment>{0}, {1}, {2}, {3} represent the single version components as numbers.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/About.png)</comment>
+    <comment>{0}, {1}, {2}, {3} represent the single version components as numbers.\n(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="About.VersionStringBeta" xml:space="preserve">
     <value>{0}.{1} Beta {3}</value>
@@ -151,19 +151,19 @@
   </data>
   <data name="About.VersionStringShort" xml:space="preserve">
     <value>{0}.{1}</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/About.png)</comment>
+    <comment>(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="About.VisitHomepage" xml:space="preserve">
-    <value>Visit Wallpaper Manager Website</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/About.png)</comment>
+    <value>Wallpaper Manager Website</value>
+    <comment>(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="About.VisitSourceForgeHomepage" xml:space="preserve">
-    <value>Visit Wallpaper Manager on Source Forge</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/About.png)</comment>
+    <value>Wallpaper Manager on Source Forge</value>
+    <comment>(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
-  <data name="About.WrittenBy" xml:space="preserve">
-    <value>Written by</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/About.png)</comment>
+  <data name="About.DevelopedBy" xml:space="preserve">
+    <value>Developed by</value>
+    <comment>(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="CategoryData.DefaultName" xml:space="preserve">
     <value>New Category</value>
@@ -174,103 +174,103 @@
   </data>
   <data name="Config.AutocycleInteval" xml:space="preserve">
     <value>_Interval for automatic cycling: </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.ClickTrayIconAction" xml:space="preserve">
     <value>Single click on _Tray-Icon: </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.ConfigTextOverlays" xml:space="preserve">
-    <value>Configure Text Overlays</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Monitors.png)</comment>
+    <value>1-Configure Text-Overlays</value>
+    <comment>Keep the "1-" as is and don't translate it.\n(Screenshot: www.alturl.com/eshkd)</comment>
   </data>
   <data name="Config.CycleAfterDisplaySettingsChanged" xml:space="preserve">
     <value>Cycle immediately when the _display settings have changed.</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Cycling.png)</comment>
+    <comment>(Screenshot: www.alturl.com/ciyox)</comment>
   </data>
   <data name="Config.CycleAfterStartup" xml:space="preserve">
     <value>Cycle a_fter startup</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.CycleTimeAsIconOverlay" xml:space="preserve">
-    <value>Cycle Time as Icon Overlay</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <value>Cycle Time in Icon-Overlay</value>
+    <comment>(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.DoubleClickTrayIconAction" xml:space="preserve">
     <value>Double click on Tray-_Icon: </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.DoubleClickWallpaperAction" xml:space="preserve">
     <value>Double click on Wall_paper: </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.Group.Behavior" xml:space="preserve">
     <value>Behavior</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.Group.Cycling" xml:space="preserve">
     <value>Cycling</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Cycling.png)</comment>
+    <comment>(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.Group.DefaultActions" xml:space="preserve">
     <value>Default Actions</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.Group.General" xml:space="preserve">
-    <value>General</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <value>1-General</value>
+    <comment>Keep the "1-" as is and don't translate it.\n(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.Group.Margins" xml:space="preserve">
     <value>Margins</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Monitors.png)</comment>
+    <comment>(Screenshot: www.alturl.com/eshkd)</comment>
   </data>
   <data name="Config.Group.Monitors" xml:space="preserve">
     <value>Monitors</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Monitors.png)</comment>
+    <comment>(Screenshot: www.alturl.com/eshkd)</comment>
   </data>
   <data name="Config.Group.MonitorSettings1" xml:space="preserve">
     <value>Monitor </value>
-    <comment>Please keep the whitespace at the end.\nThe number of the currently selected monitor and "Config.Group.MonitorSettings2" will be displayed behind this string.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Monitors.png)</comment>
+    <comment>Please keep the whitespace at the end.\nThe number of the currently selected monitor and "Config.Group.MonitorSettings2" will be displayed behind this string.\n(Screenshot: www.alturl.com/eshkd)</comment>
   </data>
   <data name="Config.Group.MonitorSettings2" xml:space="preserve">
     <value> Settings</value>
-    <comment>Please keep the whitespace at the start.\n"Config.Group.MonitorSettings1" and the number of the currently selected monitor will be displayed before this string.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Monitors.png)</comment>
+    <comment>Please keep the whitespace at the start.\n"Config.Group.MonitorSettings1" and the number of the currently selected monitor will be displayed before this string.\n(Screenshot: www.alturl.com/eshkd)</comment>
   </data>
   <data name="Config.Group.MultiMonitorBehavior" xml:space="preserve">
     <value>Multi-Monitor Behaviour</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Cycling.png)</comment>
+    <comment>(Screenshot: www.alturl.com/ciyox)</comment>
   </data>
   <data name="Config.Group.Startup" xml:space="preserve">
     <value>Startup</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.MemorizeLastCycledWPs1" xml:space="preserve">
     <value>M_emorize </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.MemorizeLastCycledWPs2" xml:space="preserve">
     <value> % of the last wallpapers cycled.</value>
-    <comment>Please keep the whitespace at the start.\n\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>Please keep the whitespace at the start.\n\n(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.MinimizeAfterStartup" xml:space="preserve">
     <value>Start mi_nimized</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.MinimizeOnClose" xml:space="preserve">
     <value>Minimize on Close</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.MonitorConfigStatic" xml:space="preserve">
     <value>Configure Static _Wallpaper</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Monitors.png)</comment>
+    <comment>(Screenshot: www.alturl.com/eshkd)</comment>
   </data>
   <data name="Config.MonitorCycleRandom" xml:space="preserve">
     <value>Cycle _Random Wallpapers on this Monitor</value>
-    <comment>Config.MonitorConfigStatic	Configure Static _Wallpaper	(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Monitors.png)</comment>
+    <comment>(Screenshot: www.alturl.com/eshkd)</comment>
   </data>
   <data name="Config.MonitorCycleStatic" xml:space="preserve">
     <value>Always Use a _Static Wallpaper on this Monitor</value>
-    <comment>Config.MonitorConfigStatic	Configure Static _Wallpaper	(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Monitors.png)</comment>
+    <comment>(Screenshot: www.alturl.com/eshkd)</comment>
   </data>
   <data name="Config.MonitorMarginBottom" xml:space="preserve">
     <value>_Bottom: </value>
@@ -290,210 +290,213 @@
   </data>
   <data name="Config.StartAutocyclingAfterStartup" xml:space="preserve">
     <value>Start _autocycling after startup</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.StartWithWindows" xml:space="preserve">
     <value>Start with _Windows</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.TerminateAfterStartup" xml:space="preserve">
     <value>... and c_lose application</value>
-    <comment>Is placed directly after the checkbox saying "Cycle after startup"\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>Is placed directly after the checkbox saying "Cycle after startup"\n(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.Title" xml:space="preserve">
     <value>Configuration</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20General.png)</comment>
+    <comment>(Screenshot: www.alturl.com/pta5e)</comment>
   </data>
   <data name="Config.WallpaperChangeType" xml:space="preserve">
     <value>Use the following method when appling single screen wallpapers: </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Cycling.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/ciyox)</comment>
   </data>
   <data name="Config.WallpaperChangeType.ChangeAll.Description" xml:space="preserve">
-    <value>Uses different wallpapers for _all monitors on each cycle.</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Cycling.png)</comment>
+    <value>Uses different wallpapers of _all monitors on each cycle.</value>
+    <comment>(Screenshot: www.alturl.com/ciyox)</comment>
   </data>
   <data name="Config.WallpaperChangeType.ChangeAll.Title" xml:space="preserve">
     <value>Change All Monitors</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Cycling.png)</comment>
+    <comment>(Screenshot: www.alturl.com/ciyox)</comment>
   </data>
   <data name="Config.WallpaperChangeType.ChangeAllCloned.Description" xml:space="preserve">
-    <value>Uses the _same wallpaper for any monitor on each cycle.</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Cycling.png)</comment>
+    <value>Uses the _same wallpaper of any monitor on each cycle.</value>
+    <comment>(Screenshot: www.alturl.com/ciyox)</comment>
   </data>
   <data name="Config.WallpaperChangeType.ChangeAllCloned.Title" xml:space="preserve">
     <value>Clone All Monitors</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Cycling.png)</comment>
+    <comment>(Screenshot: www.alturl.com/ciyox)</comment>
   </data>
   <data name="Config.WallpaperChangeType.ChangeOneByOne.Description" xml:space="preserve">
     <value>Changes the wallpaper of only _one monitor on each cycle.</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Cycling.png)</comment>
+    <comment>(Screenshot: www.alturl.com/ciyox)</comment>
   </data>
   <data name="Config.WallpaperChangeType.ChangeOneByOne.Title" xml:space="preserve">
     <value>Change One Monitor</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Cycling.png)</comment>
+    <comment>(Screenshot: www.alturl.com/ciyox)</comment>
   </data>
   <data name="ConfigDefaultSettings.Title" xml:space="preserve">
-    <value>Configure Wallpaper Default Settings</value>
+    <value>1-Configure Wallpaper Default Settings</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="ConfigStaticWallpaper.Title" xml:space="preserve">
     <value>Configure Static Wallpaper</value>
   </data>
   <data name="ConfigTextOverlays.Add" xml:space="preserve">
     <value>_Add</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.BorderColor" xml:space="preserve">
     <value>_Border Color: </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Color" xml:space="preserve">
     <value>_Color: </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Font" xml:space="preserve">
     <value>_Font: </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Format" xml:space="preserve">
     <value>_Format: </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Group.Settings" xml:space="preserve">
-    <value>Overlay Text Settings</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <value>Text-Overlay Settings</value>
+    <comment>(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.HOffset" xml:space="preserve">
     <value>_Horizontal Offset: </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Position" xml:space="preserve">
     <value>_Position: </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Position.BottomCentered" xml:space="preserve">
     <value>Bottom Centered</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Position.BottomLeft" xml:space="preserve">
     <value>Bottom Left</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Position.BottomRight" xml:space="preserve">
     <value>Bottom Right</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Position.TopCentered" xml:space="preserve">
     <value>Top Centered</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Position.TopLeft" xml:space="preserve">
     <value>Top Left</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Position.TopRight" xml:space="preserve">
     <value>Top Right</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Remove" xml:space="preserve">
     <value>_Remove</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.Title" xml:space="preserve">
-    <value>Configure Text Overlays</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <value>Configure Text-Overlays</value>
+    <comment>(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigTextOverlays.VOffset" xml:space="preserve">
     <value>_Vertical Offset: </value>
-    <comment>Please keep the whitespace at the end.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Text%20Overlays.png)</comment>
+    <comment>Please keep the whitespace at the end.\n(Screenshot: www.alturl.com/59tak)</comment>
   </data>
   <data name="ConfigWallpaper.BackgroundColor" xml:space="preserve">
     <value>_Background:</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.CycleBetween1" xml:space="preserve">
     <value>Only cycle between</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.CycleBetween2" xml:space="preserve">
     <value>and</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.CycleBetween3" xml:space="preserve">
     <value>.</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.Group.CycleConditions" xml:space="preserve">
     <value>Cycle Conditions</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.Group.General" xml:space="preserve">
     <value>General</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.Group.Placement" xml:space="preserve">
     <value>Placement</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.MultiscreenWallpaper" xml:space="preserve">
     <value>Multiscreen wallpaper:</value>
-    <comment>Where the value after this string will be one of the strings defined as "ConfigWallpaper.MultiscreenWallpaper.*"\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>This translation entry is followed by  one of the strings defined as "ConfigWallpaper.MultiscreenWallpaper.*"\n(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.MultiscreenWallpaper.Auto" xml:space="preserve">
     <value>Auto</value>
   </data>
   <data name="ConfigWallpaper.MultiscreenWallpaper.No" xml:space="preserve">
-    <value>No</value>
+    <value>1-No</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="ConfigWallpaper.MultiscreenWallpaper.Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>1-Yes</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="ConfigWallpaper.MultiscreenWallpaper.YesNo" xml:space="preserve">
     <value>_Multiscreen Wallpaper</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.OffsetSeparator" xml:space="preserve">
-    <value> / </value>
-    <comment>This separator is placed between the HOffset / VOffset textboxes.\nMake sure to keep the whitespace before and behind it.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <value>1- / </value>
+    <comment>This separator is placed between the HOffset / VOffset textboxes.\nMake sure to keep the whitespace before and behind it.\nKeep the "1-" as is and don't translate it.\n(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.Placement.Auto" xml:space="preserve">
     <value>Auto determi_ne</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.Placement.Center" xml:space="preserve">
     <value>_Center</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.Placement.Stretch" xml:space="preserve">
     <value>_Stretch</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.Placement.Tile" xml:space="preserve">
     <value>_Tile</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.Placement.Uniform" xml:space="preserve">
     <value>_Uniform</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.Placement.UniformToFill" xml:space="preserve">
     <value>Uniform to _fill</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.ScaleSeparator" xml:space="preserve">
     <value> / </value>
-    <comment>This separator is placed between the HScale / VScale textboxes.\nMake sure to keep the whitespace before and behind it.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>This separator is placed between the HScale / VScale textboxes.\nMake sure to keep the whitespace before and behind it.\n(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.Title" xml:space="preserve">
     <value>Configure Wallpaper(s)</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.WallpaperImagePath" xml:space="preserve">
     <value>_Image Path:</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="ConfigWallpaper.WallpaperImagePath.NoImage" xml:space="preserve">
     <value>-no image-</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Config%20Wallpapers.png)</comment>
+    <comment>(Screenshot: www.alturl.com/4fyap)</comment>
   </data>
   <data name="DialogGlobal.Button.Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -582,41 +585,43 @@
     <comment>Used in a context like: "Something: Enabled"</comment>
   </data>
   <data name="StateRepresentation.No" xml:space="preserve">
-    <value>No</value>
-    <comment>Used in a context like: "Something: No"</comment>
+    <value>2-No</value>
+    <comment>Used in a context like: "Something: No"\nKeep the "2-" as is and don't translate it.</comment>
   </data>
   <data name="StateRepresentation.Yes" xml:space="preserve">
-    <value>Yes</value>
-    <comment>Used in a context like: "Something: Yes"</comment>
+    <value>2-Yes</value>
+    <comment>Used in a context like: "Something: Yes"\nKeep the "2-" as is and don't translate it.</comment>
   </data>
   <data name="StatusBar.Autocycling" xml:space="preserve">
     <value>Autocycling: </value>
-    <comment>Where the value after this string will either be "StateRepresentation.Enabled" or "StateRepresentation.Disabled".\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Main.png)</comment>
+    <comment>Where the value after this string will either be "StateRepresentation.Enabled" or "StateRepresentation.Disabled".\n(Screenshot: www.alturl.com/ufu7d)</comment>
   </data>
   <data name="StatusBar.Selected" xml:space="preserve">
     <value>Selected: </value>
-    <comment>Where the value after this string will be the number of selected wallpapers.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Main.png)</comment>
+    <comment>This translation entry is followed by  the number of selected wallpapers.\n(Screenshot: www.alturl.com/ufu7d)</comment>
   </data>
   <data name="StatusBar.Wallpapers" xml:space="preserve">
     <value>Wallpapers: </value>
-    <comment>Where the value after this string will be the the number of wallpapers in list.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Main.png)</comment>
+    <comment>This translation entry is followed by  the the number of wallpapers in list.\n(Screenshot: www.alturl.com/ufu7d)</comment>
   </data>
   <data name="ToolButton.AddCategory" xml:space="preserve">
     <value>Add Category</value>
-    <comment>This is one of the ToolButtons in the upper right corner of the main window so try to keep the translation short.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Main.png)</comment>
+    <comment>This is one of the ToolButtons in the upper right corner of the main window so try to keep the translation short.\n(Screenshot: www.alturl.com/ufu7d)</comment>
   </data>
   <data name="ToolButton.AddWallpapers" xml:space="preserve">
-    <value>Add Wallpaper(s)</value>
-    <comment>This is one of the ToolButtons in the upper right corner of the main window so try to keep the translation short.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Main.png)</comment>
+    <value>1-Add Wallpaper(s)</value>
+    <comment>This is one of the ToolButtons in the upper right corner of the main window so try to keep the translation short.\nKeep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="ToolTip.AddCategory.Description" xml:space="preserve">
-    <value>Adds a new Wallpaper Category to the list. (Hotkeys: Ctrl+Q)</value>
+    <value>1-Adds a new Wallpaper Category to the list. (Hotkey: Ctrl+Q)</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="ToolTip.AddCategory.Title" xml:space="preserve">
-    <value>Add Wallpaper Category</value>
+    <value>1-Add Wallpaper Category</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="ToolTip.AddCategoryOrSyncFolder.Description" xml:space="preserve">
-    <value>Adds a new Wallpaper Category to the list. (Hotkeys: Ctrl+Q)</value>
+    <value>Adds a new Wallpaper Category to the list. (Hotkey: Ctrl+Q)</value>
   </data>
   <data name="ToolTip.AddCategoryOrSyncFolder.NoteText" xml:space="preserve">
     <value>Hold the Shift-Key to add a Synchronized Folder.</value>
@@ -634,7 +639,7 @@
     <value>Add Synchronized Folder</value>
   </data>
   <data name="ToolTip.AddWallpaper.Description" xml:space="preserve">
-    <value>Adds new wallpapers to the list. (Hotkeys: Ctrl+W)</value>
+    <value>Adds new wallpapers to the list. (Hotkey: Ctrl+W)</value>
   </data>
   <data name="ToolTip.AddWallpaper.NoteText" xml:space="preserve">
     <value>If the selected Wallpaper Category is a Synchronized Folder then the Wallpaper Image will be copied into it.</value>
@@ -643,7 +648,7 @@
     <value>Add Wallpaper(s)</value>
   </data>
   <data name="ToolTip.AutocycleInterval.Description" xml:space="preserve">
-    <value>If random cycling is enabled, this value defines the time between each random cycle.</value>
+    <value>If autocycling is enabled, this value defines the time between each autocycle.</value>
   </data>
   <data name="ToolTip.AutocycleInterval.Title" xml:space="preserve">
     <value>Autocycle Interval</value>
@@ -658,7 +663,7 @@
     <value>Configure Wallpaper Default Settings</value>
   </data>
   <data name="ToolTip.CategoryRemove.Description" xml:space="preserve">
-    <value>Removes the selected Wallpaper Category. (Hotkeys: Delete)</value>
+    <value>Removes the selected Wallpaper Category. (Hotkey: Delete)</value>
   </data>
   <data name="ToolTip.CategoryRemove.NoteText" xml:space="preserve">
     <value>Hold the Shift-Key to remove without confirmation dialog.</value>
@@ -679,13 +684,14 @@
     <value>Single Click on Tray Icon - Action</value>
   </data>
   <data name="ToolTip.ConfigTextOverlays.Description" xml:space="preserve">
-    <value>Configures Text Overlays that should be displayed before the wallpaper on this monitor.</value>
+    <value>Configures Text-Overlays that should be displayed before the wallpaper on this monitor.</value>
   </data>
   <data name="ToolTip.ConfigTextOverlays.NoteText" xml:space="preserve">
-    <value>Text Overlays are applied with the wallpaper to show useful information like the wallpaper's name etc.</value>
+    <value>Text-Overlays are applied with the wallpaper to show useful information like the wallpaper's name etc.</value>
   </data>
   <data name="ToolTip.ConfigTextOverlays.Title" xml:space="preserve">
-    <value>Configure Text Overlays</value>
+    <value>2-Configure Text-Overlays</value>
+    <comment>Keep the "2-" as is and don't translate it.\n</comment>
   </data>
   <data name="ToolTip.ConfigureWallpaperManager.Description" xml:space="preserve">
     <value>Configures Wallpaper Mananger. (Hotkey: F10)</value>
@@ -694,16 +700,17 @@
     <value>Configure Wallpaper Manager</value>
   </data>
   <data name="ToolTip.ConfigureWallpapers.Description" xml:space="preserve">
-    <value>Changes the configuration settings of the selected wallpapers. (Hotkeys: Enter)</value>
+    <value>Changes the configuration settings of the selected wallpapers. (Hotkey: Enter)</value>
   </data>
-  <data name="ToolTip.ConfigureWallpapers.Description}" xml:space="preserve">
+  <data name="ToolTip.RemoveWallpapers.Description" xml:space="preserve">
     <value>Removes the selected wallpapers from list. (Hotkey: Delete)</value>
   </data>
   <data name="ToolTip.ConfigureWallpapers.Title" xml:space="preserve">
-    <value>Configure Wallpaper(s)</value>
+    <value>1-Configure Wallpaper(s)</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="ToolTip.CycleAfterDisplaySettingsChanged.Description" xml:space="preserve">
-    <value>If checked, Wallpaper Mananger will immediately perform a random cycle after the Windows Display Settings (like the resolution) have been changed.</value>
+    <value>If checked, Wallpaper Mananger will immediately perform a autocycle after the Windows Display Settings (like the resolution) have been changed.</value>
   </data>
   <data name="ToolTip.CycleAfterDisplaySettingsChanged.Title" xml:space="preserve">
     <value>Cycle After Display Settings Changed</value>
@@ -715,19 +722,19 @@
     <value>Cycle After Startup</value>
   </data>
   <data name="ToolTip.CycleNext.Description" xml:space="preserve">
-    <value>Applies the next wallpaper on the Windows Desktop. (Hotkeys: F5)</value>
+    <value>Applies the next wallpaper on the Windows Desktop. (Hotkey: F5)</value>
   </data>
   <data name="ToolTip.CycleNext.Title" xml:space="preserve">
     <value>Cycle Next Wallpaper</value>
   </data>
   <data name="ToolTip.DisplayCycleTimeAsIconOverlay.Description" xml:space="preserve">
-    <value>If checked, Wallpaper Manager will show the remaining time for the next random cycle as overlay icon in the Windows Task Bar (Windows 7 only).</value>
+    <value>If checked, Wallpaper Manager will show the remaining time for the next autocycle as Icon-Overlay in the Windows Task Bar (Windows 7 only).</value>
   </data>
   <data name="ToolTip.DisplayCycleTimeAsIconOverlay.NoteText" xml:space="preserve">
     <value>To make use of this feature, don't close Wallpaper Mananger's main window but minimize it or check the 'Minimize on Close' Box. The icon will only be visible in the Task Bar if you have large icons enabled.</value>
   </data>
   <data name="ToolTip.DisplayCycleTimeAsIconOverlay.Title" xml:space="preserve">
-    <value>Display Cycle Time as Icon Overlay</value>
+    <value>Display Cycle Time as Icon-Overlay</value>
   </data>
   <data name="ToolTip.DoubleClickTrayIconAction.Description" xml:space="preserve">
     <value>The action to execute whenever the user double clicks on a the Tray Icon.</value>
@@ -745,7 +752,7 @@
     <value>When dragging using the mouse, hold the Shift-Key to drag with a greater value.</value>
   </data>
   <data name="ToolTip.MemorizeLastCycledWPs.Description" xml:space="preserve">
-    <value>If random cycling is enabled, this value defines how many wallpapers are memorized to prevent them from being cycled over and over again.</value>
+    <value>If autocycling is enabled, this value defines how many wallpapers are memorized to prevent them from being cycled over and over again.</value>
   </data>
   <data name="ToolTip.MemorizeLastCycledWPs.NoteText" xml:space="preserve">
     <value>For example: If this value is set to 30% and wallpaper A had just been applied then at least 30% of all your wallpapers have to be cycled until wallpaper A can be applied again.</value>
@@ -763,7 +770,8 @@
     <value>If checked, Wallpaper Manager's main window will always be minimized and be shown in the Windows Task Bar even if the close button is clicked.</value>
   </data>
   <data name="ToolTip.MinimizeOnClose.Title" xml:space="preserve">
-    <value>Minimize on Close</value>
+    <value>1-Minimize on Close</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="ToolTip.MonitorBottomMargin.Description" xml:space="preserve">
     <value>Sets a margin from the bottom side of the monitor in pixels where no wallpaper should be applied.</value>
@@ -829,7 +837,8 @@
     <value>This value defines the time of the day when Wallpaper Mananger should start cycling this wallpaper.</value>
   </data>
   <data name="ToolTip.OnlyCycleBetweenStart.Title" xml:space="preserve">
-    <value>Cycle Time of Day Condition</value>
+    <value>1-Cycle Time of Day Condition</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="ToolTip.OnlyCycleBetweenStop.Description" xml:space="preserve">
     <value>This value defines the time of the day when Wallpaper Mananger should stop cycling this wallpaper.</value>
@@ -841,104 +850,106 @@
     <value>Opens the containing folder of the selected wallpaper(s) in Windows Explorer.</value>
   </data>
   <data name="ToolTip.OpenWallpapersFolder.Title" xml:space="preserve">
-    <value>Open Wallpaper's Folder</value>
+    <value>1-Open Wallpaper's Folder</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
-  <data name="ToolTip.OverlayTextBorderColor.Description" xml:space="preserve">
-    <value>The color of the overlay text's border.</value>
+  <data name="ToolTip.TextOverlayBorderColor.Description" xml:space="preserve">
+    <value>The color of the Text-Overlay's border.</value>
   </data>
-  <data name="ToolTip.OverlayTextBorderColor.NoteText" xml:space="preserve">
+  <data name="ToolTip.TextOverlayBorderColor.NoteText" xml:space="preserve">
     <value>Its recommended to set the Border-Color into a huge contrast difference to the text's color to make sure that the text can be seen on any wallpaper.</value>
   </data>
-  <data name="ToolTip.OverlayTextBorderColor.Title" xml:space="preserve">
+  <data name="ToolTip.TextOverlayBorderColor.Title" xml:space="preserve">
     <value>Text Border-Color</value>
   </data>
-  <data name="ToolTip.OverlayTextColor.Description" xml:space="preserve">
-    <value>The color of the overlay text.</value>
+  <data name="ToolTip.TextOverlayColor.Description" xml:space="preserve">
+    <value>The color of the Text-Overlay.</value>
   </data>
-  <data name="ToolTip.OverlayTextColor.Title" xml:space="preserve">
+  <data name="ToolTip.TextOverlayColor.Title" xml:space="preserve">
     <value>Text Color</value>
     <comment>.</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.Description" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.Description" xml:space="preserve">
     <value>The format of the text to be displayed.</value>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP1" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP1" xml:space="preserve">
     <value>%WallpaperX% - The filename of the wallpaper (without ext.), where the X is the monitor number.</value>
     <comment>Please don't translate "%WallpaperX%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP10" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP10" xml:space="preserve">
     <value>%OSVersion% - The current Windows version.</value>
     <comment>Please don't translate "%OSVersion%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP11" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP11" xml:space="preserve">
     <value>%SystemRuntime% - The time-span since the system is running.&lt;LineBreak /&gt;</value>
     <comment>Please don't translate "%SystemRuntime%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP12" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP12" xml:space="preserve">
     <value>%SystemRuntimeFmt% - The time-span since the system is running formatted. (e.g. 2 hours, 22 minutes)</value>
     <comment>Please don't translate "%SystemRuntimeFmt%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP13" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP13" xml:space="preserve">
     <value>%SystemStartTime% - The time of day when the system started to run.</value>
     <comment>Please don't translate "%SystemStartTime%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP14" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP14" xml:space="preserve">
     <value>%SystemStartTimeD% - The time and date when the system started to run.</value>
     <comment>Please don't translate "%SystemStartTimeD%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP15" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP15" xml:space="preserve">
     <value>%SystemStartTimeDFmt% - The time and date when the system started to run formatted.</value>
     <comment>Please don't translate "%SystemStartTimeDFmt%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP16" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP16" xml:space="preserve">
     <value>%LB% - Line break.</value>
     <comment>Please don't translate "%LB%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP2" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP2" xml:space="preserve">
     <value>%WallpaperFileX% - The filename of the wallpaper (with ext.), where the X is the monitor number.</value>
     <comment>Please don't translate "%WallpaperFileX%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP3" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP3" xml:space="preserve">
     <value>%WallpaperPathX% - The full path of the wallpaper, where the X is the monitor number.</value>
     <comment>Please don't translate "%WallpaperPathX%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP4" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP4" xml:space="preserve">
     <value>%Date% - The current date.</value>
     <comment>Please don't translate "%Date%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP5" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP5" xml:space="preserve">
     <value>%DateFmt% - The current date formatted (e.g. August 12, 2010).</value>
     <comment>Please don't translate "%DateFmt%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP6" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP6" xml:space="preserve">
     <value>%Time% - The current time.</value>
     <comment>Please don't translate "%Time%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP7" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP7" xml:space="preserve">
     <value>%DayOfWeek% - The current day of the week.</value>
     <comment>Please don't translate "%DayOfWeek%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP8" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP8" xml:space="preserve">
     <value>%UserName% - The name of the current logged on user.</value>
     <comment>Please don't translate "%UserName%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.DescriptionP9" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.DescriptionP9" xml:space="preserve">
     <value>%MachineName% - The computer name.</value>
     <comment>Please don't translate "%MachineName%".</comment>
   </data>
-  <data name="ToolTip.OverlayTextFormat.Title" xml:space="preserve">
+  <data name="ToolTip.TextOverlayFormat.Title" xml:space="preserve">
     <value>Text Format</value>
   </data>
-  <data name="ToolTip.OverlayTextHOffset.Description" xml:space="preserve">
-    <value>This value moves the text on the horizontal axis by the given pixels.</value>
+  <data name="ToolTip.TextOverlayHOffset.Description" xml:space="preserve">
+    <value>1-This value moves the text on the horizontal axis by the given pixels.</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
-  <data name="ToolTip.OverlayTextHOffset.Title" xml:space="preserve">
+  <data name="ToolTip.TextOverlayHOffset.Title" xml:space="preserve">
     <value>Horizontal Text Offset</value>
   </data>
-  <data name="ToolTip.OverlayTextVOffset.Description" xml:space="preserve">
+  <data name="ToolTip.TextOverlayVOffset.Description" xml:space="preserve">
     <value>This value moves the text on the horizontal axis by the given pixels.</value>
   </data>
-  <data name="ToolTip.OverlayTextVOffset.Title" xml:space="preserve">
+  <data name="ToolTip.TextOverlayVOffset.Title" xml:space="preserve">
     <value>Vertical Text Offset</value>
   </data>
   <data name="ToolTip.RemoveWallpapers.Title" xml:space="preserve">
@@ -960,7 +971,7 @@
     <value>Start Autocycling After Startup</value>
   </data>
   <data name="ToolTip.StartCycling.Description" xml:space="preserve">
-    <value>Starts the automatic cycling process of wallpapers. (Hotkeys: F3)</value>
+    <value>Starts the automatic cycling process of wallpapers. (Hotkey: F3)</value>
   </data>
   <data name="ToolTip.StartCycling.Title" xml:space="preserve">
     <value>Start Autocycling of Wallpapers</value>
@@ -976,7 +987,7 @@
     <value>Start With Windows</value>
   </data>
   <data name="ToolTip.StopCycling.Description" xml:space="preserve">
-    <value>Stops the automatic cycling process of wallpapers. (Hotkeys: F4)</value>
+    <value>Stops the automatic cycling process of wallpapers. (Hotkey: F4)</value>
   </data>
   <data name="ToolTip.StopCycling.Title" xml:space="preserve">
     <value>Stops Autocycling of Wallpapers</value>
@@ -1048,25 +1059,25 @@
     <value>Image Path</value>
   </data>
   <data name="ToolTip.WallpaperMirrorBottom.Description" xml:space="preserve">
-    <value>If checked, the wallpaper will have a mirror of iteself on its bottom side when cycled.</value>
+    <value>If checked, the wallpaper will have a mirrored clone of itself on its bottom edge when cycled.</value>
   </data>
   <data name="ToolTip.WallpaperMirrorBottom.Title" xml:space="preserve">
     <value>Mirror Wallpaper on the Bottom</value>
   </data>
   <data name="ToolTip.WallpaperMirrorLeft.Description" xml:space="preserve">
-    <value>If checked, the wallpaper will have a mirror of iteself on its left side when cycled.</value>
+    <value>If checked, the wallpaper will have a mirrored clone of iteself on its left edge when cycled.</value>
   </data>
   <data name="ToolTip.WallpaperMirrorLeft.Title" xml:space="preserve">
     <value>Mirror Wallpaper on the Left</value>
   </data>
   <data name="ToolTip.WallpaperMirrorRight.Description" xml:space="preserve">
-    <value>If checked, the wallpaper will have a mirror of iteself on its right side when cycled.</value>
+    <value>If checked, the wallpaper will have a mirrored clone of iteself on its right edge when cycled.</value>
   </data>
   <data name="ToolTip.WallpaperMirrorRight.Title" xml:space="preserve">
     <value>Mirror Wallpaper on the Right</value>
   </data>
   <data name="ToolTip.WallpaperMirrorTop.Description" xml:space="preserve">
-    <value>If checked, the wallpaper will have a mirror of iteself on its top side when cycled.</value>
+    <value>If checked, the wallpaper will have a mirrored clone of iteself on its top edge when cycled.</value>
   </data>
   <data name="ToolTip.WallpaperMirrorTop.Title" xml:space="preserve">
     <value>Mirror Wallpaper on the Top</value>
@@ -1078,7 +1089,7 @@
     <value>Auto Determine Placement</value>
   </data>
   <data name="ToolTip.WallpaperPriority.Description" xml:space="preserve">
-    <value>When cycling randomly, this value defines how often the wallpaper is picked.</value>
+    <value>When cycling automatically, this value defines how often the wallpaper is picked.</value>
   </data>
   <data name="ToolTip.WallpaperPriority.Title" xml:space="preserve">
     <value>Cycle Priority</value>
@@ -1103,27 +1114,29 @@
   </data>
   <data name="WallpaperData.Multiscreen" xml:space="preserve">
     <value>Multiscreen:</value>
-    <comment>Where the value after this string will either be "StateRepresentation.Yes" or "StateRepresentation.No".\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Main.png)</comment>
+    <comment>Where the value after this string will either be "StateRepresentation.Yes" or "StateRepresentation.No".\n(Screenshot: www.alturl.com/ufu7d)</comment>
   </data>
   <data name="WallpaperData.Placement" xml:space="preserve">
     <value>Placement:</value>
-    <comment>Where the value after this string will be the placement of the wallpaper. (See: WallpaperPlacement.*)\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Main.png)</comment>
+    <comment>This translation entry is followed by  the placement of the wallpaper. (See: WallpaperPlacement.*)\n(Screenshot: www.alturl.com/ufu7d)</comment>
   </data>
   <data name="WallpaperData.Priority" xml:space="preserve">
     <value>Priority:</value>
-    <comment>Where the value after this string will be the priority  number of the wallpaper.\n(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/Main.png)</comment>
+    <comment>This translation entry is followed by  the priority  number of the wallpaper.\n(Screenshot: www.alturl.com/ufu7d)</comment>
   </data>
   <data name="Dialog.Category.AddNew.Description" xml:space="preserve">
     <value>Please enter the name of the new category below.</value>
   </data>
   <data name="Dialog.Category.AddNew.Title" xml:space="preserve">
-    <value>Add Category</value>
+    <value>1-Add Category</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="Dialog.Category.AddSynchronizedFolder.Description" xml:space="preserve">
     <value>Please enter the name of the new synchronized folder below.</value>
   </data>
   <data name="Dialog.Category.AddSynchronizedFolder.Title" xml:space="preserve">
-    <value>Add Synchronized Folder</value>
+    <value>1-Add Synchronized Folder</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="Dialog.Category.Delete.Description1" xml:space="preserve">
     <value>Are you sure you want to delete </value>
@@ -1144,7 +1157,8 @@
     <value>\"[\", \"]\", line breaks, control characters and tabs.</value>
   </data>
   <data name="Dialog.Category.NameInvalid.Title" xml:space="preserve">
-    <value>Category Name Invalid</value>
+    <value>1-Category Name Invalid</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="Dialog.Category.NameInvalidLength.Description" xml:space="preserve">
     <value>The name is invalid. It has to be at least {0} and at most {1} characters long.</value>
@@ -1177,22 +1191,22 @@
   </data>
   <data name="Dialog.Category.SynchronizedFolderFileAlreadyExist.Description1" xml:space="preserve">
     <value>The image file </value>
-    <comment>Where the value after this string will be the full path of the related file.\nPlease keep the whitespace at the end.</comment>
+    <comment>This translation entry is followed by  the full path of the related file.\nPlease keep the whitespace at the end.</comment>
   </data>
   <data name="Dialog.Category.SynchronizedFolderFileAlreadyExist.Description2" xml:space="preserve">
     <value> does already exist in the synchronized folder.\n\nDo you want to overwrite the existing file?</value>
-    <comment>Where the value before this string will be the full path of the related file.\nPlease keep the whitespace at the start.</comment>
+    <comment>This translation entry is leaded by  the full path of the related file.\nPlease keep the whitespace at the start.</comment>
   </data>
   <data name="Dialog.Category.SynchronizedFolderFileAlreadyExist.Title" xml:space="preserve">
     <value>Image File Does Already Exist</value>
   </data>
   <data name="Dialog.Category.SynchronizedFolderNotObservable.Description1" xml:space="preserve">
     <value>The directory</value>
-    <comment>Where the value after this string will be the full path of the related directory.</comment>
+    <comment>This translation entry is followed by  the full path of the related directory.</comment>
   </data>
   <data name="Dialog.Category.SynchronizedFolderNotObservable.Description2" xml:space="preserve">
     <value>is not observable because it could not be found.</value>
-    <comment>Where the value before this string will be the full path of the related directory.</comment>
+    <comment>This translation entry is leaded by  the full path of the related directory.</comment>
   </data>
   <data name="Dialog.Category.SynchronizedFolderNotObservable.Title" xml:space="preserve">
     <value>Directory Not Observable</value>
@@ -1217,11 +1231,11 @@
   </data>
   <data name="Dialog.Config.WriteError.Description1" xml:space="preserve">
     <value>The configuration file </value>
-    <comment>Where the value after this string will be the full path of the related file.\nPlease keep the whitespace at the end.</comment>
+    <comment>This translation entry is followed by  the full path of the related file.\nPlease keep the whitespace at the end.</comment>
   </data>
   <data name="Dialog.Config.WriteError.Description2" xml:space="preserve">
     <value> could not be written. Make sure Wallpaper Mananger has sufficient rights to access this path.</value>
-    <comment>Where the value before this string will be the full path of the related file. Please keep the whitespace at the start.</comment>
+    <comment>This translation entry is leaded by  the full path of the related file. Please keep the whitespace at the start.</comment>
   </data>
   <data name="Dialog.Config.WriteError.Title" xml:space="preserve">
     <value>Configuration Could Not Be Written</value>
@@ -1448,7 +1462,8 @@
     <value>Yes</value>
   </data>
   <data name="Menu.TrayCycleNext" xml:space="preserve">
-    <value>Cycle Next Wallpaper</value>
+    <value>1-Cycle Next Wallpaper</value>
+    <comment>Keep the "1-" as is and don't translate it.</comment>
   </data>
   <data name="Menu.TrayExit" xml:space="preserve">
     <value>Exit</value>
@@ -1468,19 +1483,16 @@
   <data name="ToolTip.Global.MultiscreenFeature.NoteText" xml:space="preserve">
     <value>This feature is only available for multi screen systems.</value>
   </data>
-  <data name="Translation.LanguageName" xml:space="preserve">
+  <data name="Translation.LanguageDisplayName" xml:space="preserve">
     <value>English</value>
-  </data>
-  <data name="Translation.LastUpdateDate" xml:space="preserve">
-    <value>11-07-2010</value>
-    <comment>Don't change this field.</comment>
+    <comment>The name of the language as how it is displayed in the configuration window's drop down.</comment>
   </data>
   <data name="About.HelpTranslating" xml:space="preserve">
-    <value>Help translating Wallpaper Manager on Launchpad</value>
-    <comment>(Screenshot: http://codercow.111mb.de/WallpaperManager/Resources/New%20Screenshots/About.png)</comment>
+    <value>Help translating Wallpaper Manager</value>
+    <comment>(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="OverlayTextData.DefaultFormat" xml:space="preserve">
-    <value>New Text Overlay</value>
-    <comment>The format string used for a newly created text overlay.</comment>
+    <value>New Text-Overlay</value>
+    <comment>The format string used for a newly created Text-Overlay.</comment>
   </data>
 </root>

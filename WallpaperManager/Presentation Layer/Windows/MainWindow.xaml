@@ -161,7 +161,7 @@
       <ToolTip x:Key="ToolTips.Wallpaper.Remove">
         <local:ToolTipData
           Title="{local:LocalizedString ToolTip.RemoveWallpapers.Title}"
-          Content="{local:LocalizedString ToolTip.ConfigureWallpapers.Description}"
+          Content="{local:LocalizedString ToolTip.RemoveWallpapers.Description}"
         />
       </ToolTip>
       

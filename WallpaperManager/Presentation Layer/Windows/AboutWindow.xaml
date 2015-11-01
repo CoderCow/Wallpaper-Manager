@@ -93,7 +93,7 @@
         Grid.Column="1" Grid.Row="0" 
       />
 
-      <TextBlock Text="{local:LocalizedString About.WrittenBy}" Grid.Column="0" Grid.Row="3" />
+      <TextBlock Text="{local:LocalizedString About.DevelopedBy}" Grid.Column="0" Grid.Row="3" />
       <TextBlock Grid.Column="1" Grid.Row="3">
         <Hyperlink Tag="mailto:KayPosmyk@gmx.de">David-Kay Posmyk</Hyperlink>
       </TextBlock>
@@ -101,7 +101,7 @@
       <TextBlock Text="{local:LocalizedString About.TranslatedBy}" Grid.Column="0" Grid.Row="4" />
 
       <TextBlock Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2">
-        <Run Text="{local:LocalizedString Translation.Translators}" />
+        <Run Text="{local:LocalizedString About.Translators}" />
         <Run> </Run>
         <Hyperlink Tag="http://www.opensource.org/licenses/bsd-license.php">
           <Run Text="{local:LocalizedString About.LicenseLink}" />
@@ -150,7 +150,7 @@
         </Hyperlink>
       </TextBlock>
       <TextBlock Grid.Column="0" Grid.Row="14" Grid.ColumnSpan="2">
-        <Hyperlink Tag="https://sourceforge.net/projects/wallpaperman/">
+        <Hyperlink Tag="http://www.transifex.net/projects/p/wallpapermanager/">
           <Run Text="{local:LocalizedString About.HelpTranslating}" />
         </Hyperlink>
       </TextBlock>

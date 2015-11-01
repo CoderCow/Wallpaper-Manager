@@ -22,7 +22,7 @@ using Common.ObjectModel;
 using Common.Presentation;
 
 using WallpaperManager.Data;
-using WallpaperManager.Application;
+using WallpaperManager.Business;
 using WallpaperManager.ApplicationInterface;
 using AppEnvironment = WallpaperManager.Data.AppEnvironment;
 
@@ -854,7 +854,7 @@ namespace WallpaperManager.Presentation {
     }
 
     /// <summary>
-    ///   Handles the <see cref="WallpaperManager.Application.WallpaperChanger.AutocycleException" /> event of a 
+    ///   Handles the <see cref="WallpaperManager.Business.WallpaperChanger.AutocycleException" /> event of a 
     ///   <see cref="WallpaperChanger" /> instance and handles the thrown exception if possible.
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
