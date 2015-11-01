@@ -1,0 +1,96 @@
+Version 2.1:
+  [+] Multilanguage support.
+  [*] Fixed some tool tip text data.
+  [-] Fixed a bug causing some configuration checkboxes not to be disabled if they should have to.
+  [-] Fixed a bug causing no effect when pressing the Return or Escape button in some dialogs.
+  [-] Fixed a bug causing the notify icon to not being removed after the application closed.
+
+Verison 2.0 Revision 3:
+  [-] Fixed a bug causing overlay texts to display wrong wallpaper names in some cases (related Bug-Tracker-ID: 3101135).
+  [-] Fixed a bug causing an unhandled exception when the screen settings changed multiple times in a row.
+
+Verison 2.0 Revision 2:
+  [-] Fixed several critical autocycling bugs (related Bug-Tracker-IDs: 3096271, 3098180).
+  [-] Fixed a bug causing an unhandled exception when a update server was unreachable.
+  [-] Fixed a bug causing to show error dialogs on update checking during application startup.
+
+Version 2.0 Revision 1:
+  [+] Added the link to Wallpaper Manager's source forge page to the about window.
+  [-] Fixed a bug causing renaming of wallpapers in Synchronized Folders not taking effect in the wallpaper list.
+  [-] Fixed a bug causing the Drag & Drop feature work incorrectly with Synchronized Folders.
+  [-] Fixed a few bugs related to the Main Window's overlay icon.
+  [-] Fixed several small bugs.
+
+Version 2.0:
+  [+] This project is now open source.
+  [+] Improved the auto update function to support multiple update servers now.
+  [*] Ported to .NET Framework 4.0. 
+  [*] Updated the skin of the Main- and About Window.
+  [*] Lots of internal code cleanup.
+  [-] Fixed a bug causing the auto update to be canceled when the system had been rebooted due the bootstrapper installation.
+  [-] Fixed a bug causing assigned single click actions of the tray icon to execute even on right clicks.
+  [-] Fixed a bug causing the "Show Wallpaper Manager" menu of the tray icon to execute the double click action instead of showing the main window for some system configurations.
+  [-] Fixed a bug causing the single and double click action to be executed when performing a double click on the tray icon for some system configurations.
+  [-] Fixed a bug causing a read error on rational font size values of Wallpaper Overlay Texts.
+  [-] Fixed several small bugs.
+
+Version 1.9 Revision 1:
+  [-] Fixed a bug causing to detect Windows XP / 2003 Server systems as Windows 7 which could cause lots of errors in some cases.
+  [-] Fixed some bugs related to Windows XP / 2003 Server and the autoupdater.
+
+Version 1.9:
+  [+] Added auto-update functionality.
+  [*] Small design and code changes not worth mentioning.
+  [-] Fixed a bug causing to apply wrong wallpapers on some vertical screen layouts.
+  [-] Fixed a bug causing configuration read errors when the screen count of the system changed.
+  [-] Fixed a bug causing to not to show the right Horizontal Offset in the Wallpaper Configuration Dialog sometimes.
+  [-] Fixed a bug causing to not add wallpapers in a Synchronized Folder dependend on the file's extension in some cases.
+
+Version 1.8 Revision 1:
+  [-] Fixed two bugs related to Static Wallpapers.
+  [-] Fixed a bug causing too not apply Overlay Texts Settings in some cases.
+
+Version 1.8:
+  [+] Added the ability to perform a cycle after the display settings (like the resolution) have changed.
+  [+] Some Tray-Icon and wallpaper related click actions can now be configured.
+  [+] Wallpapers can now have effects like flipping or mirroring.
+  [+] Advanced placement support for wallpapers by offset and scaling.
+  [+] Margin settings may now be configured for any monitor.
+  [+] Added Overlay-Texts which are generally drawn over the wallpaper of a specific monitor to display useful information.
+  [+] Wallpapers may now be applied on specific monitors only.
+  [+] A monitor may now always display a static wallpaper.
+  [+] Added time of day Cycle Condition to wallpapers, usefull to let specific wallpapers only cycle at specific daytimes.
+  [+] The background-color of a wallpaper may now be changed.
+  [+] Each Wallpaper Category / Synchronized Folder may now define "Wallpaper Default Settings" which are applied to any new wallpaper added to that category.
+  [+] Added Dragable-Text-Boxes for a much better mouse/keyboard handling.
+  [+] Added Windows 7 support like overlay icons and support to keep Wallpaper Manager always in the Windows Task Bar.
+  [*] Random Cycle Interval minimum value lowered to 10 seconds from 30 seconds.
+  [*] Increased the quality of which wallpapers are generally drawn.
+  [*] Tool Tips have been overworked completely.
+  [*] Enlarged and updated the Configuration Dialog design.
+  [*] General small design updgrades.
+  [*] Some internal code performance/security updates.
+  [*] Some other slight changes.
+  [-] Fixed a bug causing a scrolling problem in the wallpaper list when switching between Wallpaper Categories.
+  [-] Fixed a bug causing to highlight not all wallpapers applied in "Change One Monitor" Change Mode.
+  [-] Fixed a bug causing an unhandled Exception when clicking the Tray-Icon with only the Configuration Window or another Dialog shown.
+
+Version 1.3:
+  [+] Wallpapers may now be added to Synchronized Folders (Wallpaper Manager will then copy the image into the folder).
+  [*] Renamed Watched Folder to Synchronized Folder.
+  [-] Fixed a bug which caused to display singlescreen images wrong in some cases.
+  [-] Temporary removed the XML schema due possible wrong validation errors.
+
+Version 1.2:
+  [+] Added "Escape" hotkey to close the Main Window.
+  [+] Wallpaper Manager can now watch a given folder and add/remove wallpapers automatically.
+  [+] Wallpapers can now also be removed directly from hard disk.
+  [*] "... and close application" can now not be set if "Cycle after startup" isn't.
+  [*] Cycling is now handled by another thread.
+  [*] Embedded the Graphical User Interface within the main application assembly.
+  [*] Improved Auto Termination: There is now a 5 seconds delay before the application gets terminated. This waittime gets interrupted if the Configuration Window or Main Window gets opened by the user.
+  [*] Improved Exception handling.
+  [*] Small design upgrades.
+  [*] Wallpaper preview generation in the Wallpaper Configuration dialog is much faster now.
+  [-] Fixed a bug that caused to uselessly fill up the memory after each cycle.
+  [-] Fixed a huge bug when applying one image on multiple screens.

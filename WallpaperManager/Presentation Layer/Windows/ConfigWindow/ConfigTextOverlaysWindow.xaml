@@ -1,0 +1,384 @@
+<!-- 
+  THIS FILE IS PROVIDED UNDER THE TERMS OF THE CREATIVE COMMONS PUBLIC LICENSE WHICH CAN BE FOUND IN THE PROVIDED License.txt 
+  FILE. IT IS PROTECTED BY COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS AUTHORIZED UNDER ITS 
+  LICENSE OR COPYRIGHT LAW IS PROHIBITED.
+  
+  Written by David-Kay Posmyk (KayPosmyk@gmx.de)
+-->
+  
+<Window
+  x:Class="WallpaperManager.Presentation.ConfigTextOverlaysWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:Common.Presentation="clr-namespace:Common.Presentation;assembly=Common.Presentation"
+  xmlns:Common.Presentation.Controls="clr-namespace:Common.Presentation.Controls;assembly=Common.Presentation"
+  
+  xmlns:local="clr-namespace:WallpaperManager.Presentation"
+  xmlns:Data="clr-namespace:WallpaperManager.Data"
+  
+  Title="{local:LocalizedString ConfigTextOverlays.Title}"
+  Icon="..\..\Resources\Icons\Configuration.png"
+  WindowStartupLocation="CenterOwner"
+  MinWidth="300"
+  MaxWidth="600"
+  WindowStyle="SingleBorderWindow"
+  ResizeMode="NoResize"
+  SizeToContent="WidthAndHeight"
+  ShowInTaskbar="False"
+  DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+>
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="..\..\Resources\Dialog.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      
+      <!-- Converters / Validation Rules / Command References -->
+      <Common.Presentation:ColorToHtmlStringConverter x:Key="ColorToHtmlStringConverter" />
+      
+      <Common.Presentation:ColorStringValidationRule x:Key="ColorStringValidationRule" AllowTransparency="True" />
+      
+      <Common.Presentation:CommandReference 
+        x:Key="CommandReference.RemoveOverlayText"
+        Command="{Binding 
+          RelativeSource ={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, 
+          Path=ConfigTextOverlaysVM.RemoveOverlayTextCommand
+        }"
+      />
+
+      <!-- Styles / Templates -->
+      <Style x:Key="Footer.Button" TargetType="{x:Type Button}">
+        <Setter Property="Margin" Value="0,3,6,3" />
+        <Setter Property="MinWidth" Value="80" />
+      </Style>
+      
+      <Style x:Key="EditFieldPropertiesButton" TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Content" Value="..." />
+        <Setter Property="MaxWidth" Value="25" />
+        <Setter Property="Margin" Value="2,4,2,4" />
+        <Setter Property="Padding" Value="4,0,4,0" />
+      </Style>
+      
+      <ToolTip x:Key="ToolTips.ForeColor">
+        <local:ToolTipData 
+          Title="{local:LocalizedString ToolTip.OverlayTextColor.Title}"
+          Content="{local:LocalizedString ToolTip.OverlayTextColor.Description}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.BorderColor">
+        <local:ToolTipData 
+          Title="{local:LocalizedString ToolTip.OverlayTextBorderColor.Title}"
+          Content="{local:LocalizedString ToolTip.OverlayTextBorderColor.Description}"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{local:LocalizedString ToolTip.OverlayTextBorderColor.NoteText}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.HOffset">
+        <local:ToolTipData 
+          Title="{local:LocalizedString ToolTip.OverlayTextHOffset.Title}"
+          Content="{local:LocalizedString ToolTip.OverlayTextHOffset.Description}"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.VOffset">
+        <local:ToolTipData 
+          Title="{local:LocalizedString ToolTip.OverlayTextVOffset.Title}"
+          Content="{local:LocalizedString ToolTip.OverlayTextVOffset.Description}"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
+        />
+      </ToolTip>
+    </ResourceDictionary>
+  </Window.Resources>
+  
+  <Window.CommandBindings>
+    <CommandBinding 
+      Command="{x:Static local:ConfigTextOverlaysWindow.SelectFontCommand}" 
+      CanExecute="SelectFontCommand_CanExecute" Executed="SelectFontCommand_Executed"
+    />
+    <CommandBinding 
+      Command="{x:Static local:ConfigTextOverlaysWindow.SelectForeColorCommand}" 
+      CanExecute="SelectForeColorCommand_CanExecute" Executed="SelectForeColorCommand_Executed" 
+    />
+    <CommandBinding 
+      Command="{x:Static local:ConfigTextOverlaysWindow.SelectBorderColorCommand}" 
+      CanExecute="SelectBorderColorCommand_CanExecute" Executed="SelectBorderColorCommand_Executed" 
+    />
+  </Window.CommandBindings>
+  
+  <StackPanel Orientation="Vertical">
+    <!-- Taken Alt+X Keys: A,R,P,F,C,B,H,V -->
+    <Grid DataContext="{Binding Path=ConfigTextOverlaysVM}" Margin="5,5,5,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+      
+      <ListBox 
+        Name="lstOverlayTexts"
+        ItemsSource="{Binding Path=OverlayTextCollection}"
+        SelectedIndex="{Binding Path=SelectedItemIndex}"
+        Margin="1,1,3,1"
+        MaxHeight="150"
+        TabIndex="10" 
+        Grid.Column="0" Grid.Row="0"
+      >
+        <ListBox.InputBindings>
+          <KeyBinding Key="Delete" Command="{StaticResource CommandReference.RemoveOverlayText}" />
+        </ListBox.InputBindings>
+        
+        <ListBox.ItemTemplate>
+          <DataTemplate DataType="{x:Type Data:WallpaperOverlayText}">
+            <TextBlock Name="txtItemText" Text="{Binding Path=Format}" />
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      
+      <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0">
+        <Button 
+          Content="{local:LocalizedString ConfigTextOverlays.Add}" Command="{Binding AddOverlayTextCommand}" 
+          Margin="2" TabIndex="20" 
+        />
+        <Button 
+          Content="{local:LocalizedString ConfigTextOverlays.Remove}" Command="{Binding RemoveOverlayTextCommand}" 
+          Margin="2" TabIndex="30" 
+        />
+      </StackPanel>
+      
+      <GroupBox 
+        Header="{local:LocalizedString ConfigTextOverlays.Group.Settings}" 
+        DataContext="{Binding Path=SelectedItem}" 
+        Margin="0,10,0,0"
+        IsEnabled="{Binding 
+          ElementName=lstOverlayTexts, Path=SelectedIndex, 
+          Converter={StaticResource Global.IsNotValueAsBooleanConverter}, ConverterParameter=-1
+        }"
+        Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+      >
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+          
+          <Label 
+            Content="{local:LocalizedString ConfigTextOverlays.Format}" 
+            Target="{x:Reference txtFormat}"
+            TabIndex="40"
+            Grid.Column="0" Grid.Row="0"
+          />
+          <TextBox 
+            Name="txtFormat"
+            TabIndex="50"
+            Grid.Column="1" Grid.Row="0"
+            ToolTipService.ShowDuration="120000"
+          >
+            <TextBox.Text>
+              <Binding Path="Format" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                <Binding.ValidationRules>
+                  <Common.Presentation:StringValidationRule AllowEmpty="False" AllowWhitespacesOnly="False" AllowedMaxLength="300" />
+                </Binding.ValidationRules>
+              </Binding>
+            </TextBox.Text>
+          
+            <TextBox.ToolTip>
+              <ToolTip MaxWidth="600" Style="{x:Null}">
+                <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}">
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.Title}" FontWeight="Bold" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.Description}" /><LineBreak />
+                  <LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP1}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP2}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP3}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP4}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP5}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP6}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP7}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP8}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP9}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP10}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP11}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP12}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP13}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP14}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP15}" /><LineBreak />
+                  <Run Text="{local:LocalizedString ToolTip.OverlayTextFormat.DescriptionP16}" />
+                </TextBlock>
+              </ToolTip>
+            </TextBox.ToolTip>
+          </TextBox>
+          
+          <Label 
+            Content="{local:LocalizedString ConfigTextOverlays.Position}" 
+            Target="{x:Reference cboPosition}"
+            TabIndex="60"
+            Grid.Column="0" Grid.Row="1"
+          />
+          <ComboBox
+            Name="cboPosition"
+            SelectedValue="{Binding Path=Position, Mode=TwoWay}"
+            SelectedValuePath="Tag"
+            TabIndex="70"
+            Grid.Column="1" Grid.Row="1"
+          >
+            <ComboBoxItem 
+              Content="{local:LocalizedString ConfigTextOverlays.Position.TopLeft}" 
+              Tag="{x:Static Data:OverlayTextPosition.TopLeft}" 
+            />
+            <ComboBoxItem 
+              Content="{local:LocalizedString ConfigTextOverlays.Position.TopCentered}" 
+              Tag="{x:Static Data:OverlayTextPosition.TopMiddle}" 
+            />
+            <ComboBoxItem 
+              Content="{local:LocalizedString ConfigTextOverlays.Position.TopRight}" 
+              Tag="{x:Static Data:OverlayTextPosition.TopRight}" 
+            />
+            <ComboBoxItem 
+              Content="{local:LocalizedString ConfigTextOverlays.Position.BottomLeft}" 
+              Tag="{x:Static Data:OverlayTextPosition.BottomLeft}" 
+            />
+            <ComboBoxItem 
+              Content="{local:LocalizedString ConfigTextOverlays.Position.BottomCentered}" 
+              Tag="{x:Static Data:OverlayTextPosition.BottomMiddle}" 
+            />
+            <ComboBoxItem 
+              Content="{local:LocalizedString ConfigTextOverlays.Position.BottomRight}" 
+              Tag="{x:Static Data:OverlayTextPosition.BottomRight}" 
+            />
+          </ComboBox>
+          
+          <Label 
+            Content="{local:LocalizedString ConfigTextOverlays.Font}" 
+            Target="{x:Reference btnSelectFont}"
+            TabIndex="80"
+            Grid.Column="0" Grid.Row="2"
+          />
+          <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2">
+            <TextBox Text="{Binding Path=FontName, Mode=OneWay}" IsReadOnly="True" TabIndex="90" />
+            <Button 
+              Name="btnSelectFont"
+              TabIndex="100"
+              Command="{x:Static local:ConfigTextOverlaysWindow.SelectFontCommand}"
+              Style="{StaticResource EditFieldPropertiesButton}"
+            /> 
+          </StackPanel>
+          
+          <Label 
+            Content="{local:LocalizedString ConfigTextOverlays.Color}" 
+            Target="{x:Reference btnSelectForeColor}"
+            TabIndex="110"
+            Grid.Column="0" Grid.Row="3"
+          />
+          <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3">
+            <TextBox MinWidth="70" ToolTip="{StaticResource ToolTips.ForeColor}" TabIndex="120">
+              <TextBox.Text>
+                <Binding
+                  Path="ForeColor"
+                  Mode="TwoWay"
+                  Converter="{StaticResource ColorToHtmlStringConverter}"
+                  UpdateSourceTrigger="PropertyChanged"
+                >
+                  <Binding.ValidationRules>
+                    <StaticResource ResourceKey="ColorStringValidationRule" />
+                  </Binding.ValidationRules>
+                </Binding>
+              </TextBox.Text>
+            </TextBox>
+            
+            <Button 
+              Name="btnSelectForeColor"
+              TabIndex="130"
+              Command="{x:Static local:ConfigTextOverlaysWindow.SelectForeColorCommand}"
+              Style="{StaticResource EditFieldPropertiesButton}"
+            /> 
+          </StackPanel>
+          
+          <Label 
+            Content="{local:LocalizedString ConfigTextOverlays.BorderColor}" 
+            Target="{x:Reference btnSelectBorderColor}"
+            TabIndex="140"
+            Grid.Column="0" Grid.Row="4"
+          />
+          <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4">
+            <TextBox MinWidth="70" ToolTip="{StaticResource ToolTips.BorderColor}" TabIndex="150">
+              <TextBox.Text>
+                <Binding
+                  Path="BorderColor"
+                  Mode="TwoWay"
+                  Converter="{StaticResource ColorToHtmlStringConverter}"
+                  UpdateSourceTrigger="PropertyChanged"
+                >
+                  <Binding.ValidationRules>
+                    <StaticResource ResourceKey="ColorStringValidationRule" />
+                  </Binding.ValidationRules>
+                </Binding>
+              </TextBox.Text>
+            </TextBox>
+            
+            <Button 
+              Name="btnSelectBorderColor"
+              TabIndex="160"
+              Command="{x:Static local:ConfigTextOverlaysWindow.SelectBorderColorCommand}"
+              Style="{StaticResource EditFieldPropertiesButton}"
+            /> 
+          </StackPanel>
+          
+          <Label 
+            Content="{local:LocalizedString ConfigTextOverlays.HOffset}" 
+            Target="{x:Reference txtHorizontalOffset}"
+            TabIndex="170"
+            Grid.Column="0" Grid.Row="5"
+          />
+          <Common.Presentation.Controls:NumericTextBox 
+            Name="txtHorizontalOffset"
+            Text="{Binding Path=HorizontalOffset, Mode=TwoWay}"
+            MinValue="-9999" MaxValue="9999" DragValueSmall="1" DragValueLarge="5"
+            HorizontalAlignment="Left"
+            MinWidth="50"
+            ToolTip="{StaticResource ToolTips.HOffset}"
+            TabIndex="180"
+            Grid.Column="1" Grid.Row="5"
+          />
+          
+          <Label 
+            Content="{local:LocalizedString ConfigTextOverlays.VOffset}" 
+            Target="{x:Reference txtVerticalOffset}"
+            TabIndex="190"
+            Grid.Column="0" Grid.Row="6"
+          />
+          <Common.Presentation.Controls:NumericTextBox 
+            Name="txtVerticalOffset"
+            Text="{Binding Path=VerticalOffset, Mode=TwoWay}"
+            MinValue="-9999" MaxValue="9999" DragValueSmall="1" DragValueLarge="5"
+            HorizontalAlignment="Left"
+            MinWidth="50"
+            ToolTip="{StaticResource ToolTips.VOffset}"
+            TabIndex="200"
+            Grid.Column="1" Grid.Row="6"
+          />
+        </Grid>
+      </GroupBox>
+    </Grid>
+  
+    <StackPanel Margin="8" Orientation="Horizontal" FlowDirection="RightToLeft" Style="{StaticResource Dialog.ButtonPanel}">
+      <Button Content="{local:LocalizedString DialogGlobal.Button.OK}" IsDefault="True" IsCancel="True" TabIndex="1000" />
+    </StackPanel>
+  </StackPanel>
+</Window>

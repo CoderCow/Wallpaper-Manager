@@ -1,0 +1,259 @@
+<!-- 
+  THIS FILE IS PROVIDED UNDER THE TERMS OF THE CREATIVE COMMONS PUBLIC LICENSE WHICH CAN BE FOUND IN THE PROVIDED License.txt 
+  FILE. IT IS PROTECTED BY COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS AUTHORIZED UNDER ITS 
+  LICENSE OR COPYRIGHT LAW IS PROHIBITED.
+  
+  Written by David-Kay Posmyk (KayPosmyk@gmx.de)
+-->
+  
+<Page 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  
+  xmlns:local="clr-namespace:WallpaperManager.Presentation"
+  xmlns:Data="clr-namespace:WallpaperManager.Data"
+  
+  x:Class="WallpaperManager.Presentation.GeneralSettingsPage"
+  Title="{local:LocalizedString Config.Group.General}"
+  SnapsToDevicePixels="True"
+>
+  <Page.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="..\..\Resources\Dialog.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      
+      <!-- Startup ToolTips -->
+      <ToolTip x:Key="ToolTips.Startup.StartWithWindows">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.StartWithWindows.Title}"
+          Content="{local:LocalizedString ToolTip.StartWithWindows.Description}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Startup.StartWithWindows.Error">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.StartWithWindows.Title}"
+          Content="{local:LocalizedString ToolTip.StartWithWindows.Description}"
+          NoteIcon="{StaticResource Global.Icons.Error}"
+          NoteText="{local:LocalizedString ToolTip.StartWithWindows.NoteText}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Startup.StartMinimized">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.MinimizeAfterStartup.Title}"
+          Content="{local:LocalizedString ToolTip.MinimizeAfterStartup.Description}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Startup.CycleAfterStartup">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.CycleAfterStartup.Title}"
+          Content="{local:LocalizedString ToolTip.CycleAfterStartup.Description}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Startup.TerminateAfterStatup">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.TerminateAfterStartup.Title}"
+          Content="{local:LocalizedString ToolTip.TerminateAfterStartup.Description}"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{local:LocalizedString ToolTip.TerminateAfterStartup.NoteText}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Startup.StartAutocyclingAfterStartup">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.StartAutocyclingAfterStartup.Title}"
+          Content="{local:LocalizedString ToolTip.StartAutocyclingAfterStartup.Description}"
+        />
+      </ToolTip>
+      
+      <!-- Behavior ToolTips -->
+      <ToolTip x:Key="ToolTips.Behavior.MinimizeOnClose">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.MinimizeOnClose.Title}"
+          Content="{local:LocalizedString ToolTip.MinimizeOnClose.Description}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Behavior.DisplayCycleTimeAsIconOverlay">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.DisplayCycleTimeAsIconOverlay.Title}"
+          Content="{local:LocalizedString ToolTip.DisplayCycleTimeAsIconOverlay.Description}"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{local:LocalizedString ToolTip.DisplayCycleTimeAsIconOverlay.NoteText}"
+        />
+      </ToolTip>
+      
+      <!-- Default Actions ToolTips -->
+      <ToolTip x:Key="ToolTips.DefaultActions.DoubleClickWallpaper">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.DoubleClickWallpaperAction.Title}"
+          Content="{local:LocalizedString ToolTip.DoubleClickWallpaperAction.Description}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.DefaultActions.SingleClickTrayIcon">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.ClickTrayIconAction.Title}"
+          Content="{local:LocalizedString ToolTip.ClickTrayIconAction.Description}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.DefaultActions.DoubleClickTrayIcon">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.DoubleClickTrayIconAction.Title}"
+          Content="{local:LocalizedString ToolTip.DoubleClickTrayIconAction.Description}"
+        />
+      </ToolTip>
+    </ResourceDictionary>
+  </Page.Resources>
+ 
+  <!-- Taken Alt+X Keys: G,C,M,W,N,F,L,A,P,T,I,D -->
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <GroupBox Header="Startup" Grid.Column="0" Grid.Row="0">
+      <StackPanel Orientation="Vertical">
+        <CheckBox Content="{local:LocalizedString Config.StartWithWindows}" IsChecked="{Binding StartWithWindows}">
+          <CheckBox.Style>
+            <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}">
+              <Setter Property="ToolTip" Value="{StaticResource ToolTips.Startup.StartWithWindows}" />
+
+              <Style.Triggers>
+                <!-- Disable the checkbox and update the ToolTip if the value couldn't be determined by the View Model. -->
+                <Trigger Property="IsChecked" Value="{x:Null}">
+                  <Setter Property="IsEnabled" Value="False" />
+                  <Setter Property="ToolTip" Value="{StaticResource ToolTips.Startup.StartWithWindows.Error}" />
+                </Trigger>
+              </Style.Triggers>
+            </Style>
+          </CheckBox.Style>
+        </CheckBox>
+        
+        <CheckBox 
+          Content="{local:LocalizedString Config.MinimizeAfterStartup}"
+          IsChecked="{Binding Configuration.MinimizeAfterStartup, Mode=TwoWay}"
+          ToolTip="{StaticResource ToolTips.Startup.StartMinimized}"
+        />
+        
+        <StackPanel Orientation="Horizontal">
+          <CheckBox 
+            Name="chkCycleAfterStartup" 
+            Content="{local:LocalizedString Config.CycleAfterStartup}"
+            IsChecked="{Binding Configuration.CycleAfterStartup, Mode=TwoWay}"
+            ToolTip="{StaticResource ToolTips.Startup.CycleAfterStartup}"
+          />
+          
+          <CheckBox 
+            Content="{local:LocalizedString Config.TerminateAfterStartup}"
+            IsChecked="{Binding Configuration.TerminateAfterStartup, Mode=TwoWay}" 
+            IsEnabled="{Binding ElementName=chkCycleAfterStartup, Path=IsChecked}"
+            Margin="20,2,2,2"
+            ToolTip="{StaticResource ToolTips.Startup.TerminateAfterStatup}"
+          />
+        </StackPanel>
+        
+        <CheckBox 
+          Content="{local:LocalizedString Config.StartAutocyclingAfterStartup}" 
+          IsChecked="{Binding Path=Configuration.StartAutocyclingAfterStartup, Mode=TwoWay}" 
+          ToolTip="{StaticResource ToolTips.Startup.StartAutocyclingAfterStartup}"
+        />
+      </StackPanel>
+    </GroupBox>
+
+    <GroupBox Header="{local:LocalizedString Config.Group.Behavior}" Grid.Column="1" Grid.Row="0">
+      <StackPanel Orientation="Vertical">
+        <CheckBox 
+          Content="{local:LocalizedString Config.MinimizeOnClose}"
+          IsChecked="{Binding Configuration.MinimizeOnClose, Mode=TwoWay}"
+          ToolTip="{StaticResource ToolTips.Behavior.MinimizeOnClose}"
+        />
+        <CheckBox 
+          Content="{local:LocalizedString Config.CycleTimeAsIconOverlay}"
+          IsChecked="{Binding Configuration.DisplayCycleTimeAsIconOverlay, Mode=TwoWay}"
+          ToolTip="{StaticResource ToolTips.Behavior.DisplayCycleTimeAsIconOverlay}"
+        />
+      </StackPanel>
+    </GroupBox>
+
+    <GroupBox Header="{local:LocalizedString Config.Group.DefaultActions}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Label 
+          Content="{local:LocalizedString Config.DoubleClickWallpaperAction}" 
+          Target="{x:Reference cboDefaultActions_Wallpaper}"
+          Grid.Column="0" Grid.Row="0" 
+        />
+        <ComboBox 
+          Name="cboDefaultActions_Wallpaper" 
+          HorizontalAlignment="Left" 
+          SelectedValue="{Binding Path=Configuration.WallpaperDoubleClickAction, Mode=TwoWay}"
+          SelectedValuePath="Tag"
+          ToolTip="{StaticResource ToolTips.DefaultActions.DoubleClickWallpaper}"
+          Grid.Column="1" Grid.Row="0" 
+        >
+          <ComboBoxItem Content="No Action" Tag="{x:Static Data:WallpaperClickAction.NoAction}" />
+          <ComboBoxItem Content="Apply Wallpaper" Tag="{x:Static Data:WallpaperClickAction.ApplyOnDesktop}" />
+          <ComboBoxItem Content="Configure Wallpaper..." Tag="{x:Static Data:WallpaperClickAction.ShowConfigurationWindow}" />
+        </ComboBox>
+        
+        <Label 
+          Content="{local:LocalizedString Config.ClickTrayIconAction}" 
+          Target="{x:Reference cboDefaultActions_TrayIconSingleClick}"
+          Grid.Column="0" Grid.Row="1" 
+        />
+        <ComboBox 
+          Name="cboDefaultActions_TrayIconSingleClick" 
+          HorizontalAlignment="Left" 
+          SelectedValue="{Binding Configuration.TrayIconSingleClickAction, Mode=TwoWay}"
+          SelectedValuePath="Tag"
+          ToolTip="{StaticResource ToolTips.DefaultActions.SingleClickTrayIcon}"
+          Grid.Column="1" Grid.Row="1"
+        >
+          <ComboBoxItem Content="No Action" Tag="{x:Static Data:TrayIconClickAction.NoAction}" />
+          <ComboBoxItem Content="Show Wallpaper Manager..." Tag="{x:Static Data:TrayIconClickAction.ShowMainWindow}" />
+          <ComboBoxItem Content="Cycle Next Wallpaper" Tag="{x:Static Data:TrayIconClickAction.CycleNextWallpaper}" />
+          <ComboBoxItem Content="Options..." Tag="{x:Static Data:TrayIconClickAction.ShowOptionsWindow}" />
+        </ComboBox>
+        
+        <Label 
+          Content="{local:LocalizedString Config.DoubleClickTrayIconAction}" 
+          Target="{x:Reference cboDefaultActions_TrayIconDoubleClick}"
+          Grid.Column="0" Grid.Row="2" 
+        />
+        <ComboBox 
+          Name="cboDefaultActions_TrayIconDoubleClick" 
+          HorizontalAlignment="Left" 
+          SelectedValue="{Binding Configuration.TrayIconDoubleClickAction, Mode=TwoWay}"
+          SelectedValuePath="Tag"
+          ToolTip="{StaticResource ToolTips.DefaultActions.DoubleClickTrayIcon}"
+          Grid.Column="1" Grid.Row="2"
+        >
+          <ComboBoxItem Content="No Action" Tag="{x:Static Data:TrayIconClickAction.NoAction}" />
+          <ComboBoxItem Content="Show Wallpaper Manager..." Tag="{x:Static Data:TrayIconClickAction.ShowMainWindow}" />
+          <ComboBoxItem Content="Cycle Next Wallpaper" Tag="{x:Static Data:TrayIconClickAction.CycleNextWallpaper}" />
+          <ComboBoxItem Content="Options..." Tag="{x:Static Data:TrayIconClickAction.ShowOptionsWindow}" />
+        </ComboBox>
+      </Grid>
+    </GroupBox>
+  </Grid>
+</Page>
