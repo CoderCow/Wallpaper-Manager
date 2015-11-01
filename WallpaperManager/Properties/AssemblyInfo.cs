@@ -15,7 +15,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Wallpaper Manager")]
-[assembly: AssemblyCopyright("Copyright © 2009-2010, David-Kay Posmyk. All Rights Reserved")]
+[assembly: AssemblyCopyright("Copyright © 2009-2015, David Kay Posmyk. All Rights Reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

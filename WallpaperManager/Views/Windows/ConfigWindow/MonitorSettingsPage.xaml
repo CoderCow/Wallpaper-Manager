@@ -1,0 +1,303 @@
+<!-- 
+  This source is subject to the Creative Commons Public License.
+  Please see the README.MD file for more information.
+  All other rights reserved.
+-->
+
+<Page 
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:CommonControls="clr-namespace:Common.Presentation.Controls;assembly=Common.Presentation"
+  
+  xmlns:local="clr-namespace:WallpaperManager.Views"
+  
+  x:Class="WallpaperManager.Views.MonitorSettingsPage"
+  Title="{local:LocalizedString Config.Group.Monitors}"
+  SnapsToDevicePixels="True"
+>
+  <Page.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="..\..\Resources\Dialog.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      
+      <!-- Startup ToolTips -->
+      <ToolTip x:Key="ToolTips.Monitor.CycleRandomWallpaper">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.MonitorCycleRandom.Title}"
+          Content="{local:LocalizedString ToolTip.MonitorCycleRandom.Description}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Monitor.StaticWallpaper">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.MonitorCycleStatic.Title}"
+          Content="{local:LocalizedString ToolTip.MonitorCycleStatic.Description}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Monitor.LeftMargin">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.MonitorLeftMargin.Title}"
+          Content="{local:LocalizedString ToolTip.MonitorLeftMargin.Description}"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Monitor.RightMargin">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.MonitorRightMargin.Title}"
+          Content="{local:LocalizedString ToolTip.MonitorRightMargin.Description}"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Monitor.TopMargin">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.MonitorTopMargin.Title}"
+          Content="{local:LocalizedString ToolTip.MonitorTopMargin.Description}"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
+        />
+      </ToolTip>
+      
+      <ToolTip x:Key="ToolTips.Monitor.BottomMargin">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.MonitorBottomMargin.Title}"
+          Content="{local:LocalizedString ToolTip.MonitorBottomMargin.Description}"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{local:LocalizedString ToolTip.Global.DragableTextBox.NoteText}"
+        />
+      </ToolTip>
+
+      <ToolTip x:Key="ToolTips.Monitor.ConfigTextOverlays">
+        <local:ToolTipData
+          Title="{local:LocalizedString ToolTip.ConfigTextOverlays.Title}"
+          Content="{local:LocalizedString ToolTip.ConfigTextOverlays.Description}"
+          NoteIcon="{StaticResource Global.Icons.Information}"
+          NoteText="{local:LocalizedString ToolTip.ConfigTextOverlays.NoteText}"
+        />
+      </ToolTip>
+      
+      <!-- Styles / Templates -->
+      <Style 
+        x:Key="{x:Static CommonControls:ScreenLayoutBox.ScreenRadioButtonStyleKey}" 
+        TargetType="{x:Type RadioButton}"
+      >
+        <Setter Property="FontSize" Value="24pt" />
+        <Setter Property="FontFamily" Value="Verdana" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+        
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type RadioButton}">
+              <Border 
+                Name="brdOuter"
+                BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="3"
+              >
+                <Border 
+                  Name="brdInner"
+                  BorderBrush="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" BorderThickness="1"
+                  Background="Black"
+                  Padding="5"
+                >
+                  <ContentPresenter />
+                </Border>
+              </Border>
+              
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                  <Setter
+                    TargetName="brdOuter"
+                    Property="BorderBrush"
+                    Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
+                  />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+    </ResourceDictionary>
+  </Page.Resources>
+  
+  <Page.CommandBindings>
+    <CommandBinding 
+      Command="{x:Static local:MonitorSettingsPage.ConfigureStaticWallpaperCommand}" 
+      CanExecute="ConfigureStaticWallpaperCommand_CanExecute" Executed="ConfigureStaticWallpaperCommand_Executed" 
+    />
+    <CommandBinding 
+      Command="{x:Static local:MonitorSettingsPage.ConfigureTextOverlaysCommand}" 
+      CanExecute="ConfigureTextOverlaysCommand_CanExecute" Executed="ConfigureTextOverlaysCommand_Executed" 
+    />
+  </Page.CommandBindings>
+
+  <!-- Taken Alt+X Keys: G,C,M,R,S,W,L,R,T,B -->
+  <StackPanel Orientation="Vertical">
+    <CommonControls:ScreenLayoutBox 
+      x:Name="slbScreenSelection" 
+      SelectedScreenIndex="{Binding Path=SelectedScreenIndex, Mode=TwoWay}"
+      Background="Transparent"
+      Height="105" 
+    />
+    
+    <GroupBox>
+      <GroupBox.Header>
+        <TextBlock>
+          <Run Text="{local:LocalizedString Config.Group.MonitorSettings1}" />
+          <TextBlock Text="{Binding Path=SelectedScreenNumber}" />
+          <Run Text="{local:LocalizedString Config.Group.MonitorSettings2}" />
+        </TextBlock>
+      </GroupBox.Header>
+      
+      <!-- 
+        This is wrapped in a ContentControl because the bindings inside usually wouldn't refresh when 
+        another screen is selected, but by setting Content of the ContentControl the DataTemplate's 
+        bindings will automatically refresh.
+      -->
+      <ContentControl Content="{Binding Path=SelectedScreenSettings}" Focusable="False">
+        <ContentControl.ContentTemplate>
+          <DataTemplate>
+            <StackPanel Orientation="Vertical">
+              <ContentPresenter>
+                <ContentPresenter.ContentTemplate>
+                  <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                      <RadioButton 
+                        Name="rdbMonitorSettings_RandomWallpaper"
+                        Content="{local:LocalizedString Config.MonitorCycleRandom}" 
+                        IsChecked="{Binding Path=CycleRandomly, Mode=TwoWay}"
+                        ToolTip="{StaticResource ToolTips.Monitor.CycleRandomWallpaper}"
+                      />
+                      <RadioButton 
+                        Name="rdbMonitorSettings_StaticWallpaper"
+                        Content="{local:LocalizedString Config.MonitorCycleStatic}" 
+                        ToolTip="{StaticResource ToolTips.Monitor.StaticWallpaper}"
+                      />
+                      <Button 
+                        Name="btnMonitorSettings_ConfigureStaticWallpaper"
+                        Command="{x:Static local:MonitorSettingsPage.ConfigureStaticWallpaperCommand}"
+                        Content="{local:LocalizedString Config.MonitorConfigStatic}" 
+                        Margin="17,2,2,4" 
+                        HorizontalAlignment="Left" 
+                        IsEnabled="False"
+                      />
+                    </StackPanel>
+                    
+                    <DataTemplate.Triggers>
+                      <Trigger SourceName="rdbMonitorSettings_RandomWallpaper" Property="IsChecked" Value="False">
+                        <Setter 
+                          TargetName="rdbMonitorSettings_StaticWallpaper" 
+                          Property="IsChecked" Value="True" 
+                        />
+                        <Setter 
+                          TargetName="btnMonitorSettings_ConfigureStaticWallpaper" 
+                          Property="IsEnabled" Value="True" 
+                        />
+                      </Trigger>
+                    </DataTemplate.Triggers>
+                  </DataTemplate>
+                </ContentPresenter.ContentTemplate>
+              </ContentPresenter>
+
+              <StackPanel Orientation="Horizontal">
+                <GroupBox Header="{local:LocalizedString Config.Group.Margins}" HorizontalAlignment="Left">
+                  <GroupBox.Resources>
+                    <Style 
+                      x:Key="BorderSettingBox" 
+                      TargetType="{x:Type CommonControls:NumericTextBox}" BasedOn="{StaticResource {x:Type TextBox}}"
+                    >
+                      <Setter Property="Margin" Value="0,2,0,2" />
+                      <Setter Property="DragValueSmall" Value="1" />
+                      <Setter Property="DragValueLarge" Value="10" />
+                    </Style>
+                  </GroupBox.Resources>
+                
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto" />
+                      <ColumnDefinition Width="50" />
+                      <ColumnDefinition Width="30" />
+                      <ColumnDefinition Width="Auto" />
+                      <ColumnDefinition Width="50" />
+                      <ColumnDefinition Width="Auto" />
+                      <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="Auto" />
+                      <RowDefinition Height="Auto" />
+                      <RowDefinition Height="Auto" />
+                      <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    
+                    <Label 
+                      Content="{local:LocalizedString Config.MonitorMarginLeft}" 
+                      Target="{x:Reference txtMargin_Left}" 
+                      Grid.Column="0" Grid.Row="0" 
+                    />
+                    <CommonControls:NumericTextBox
+                      Name="txtMargin_Left" 
+                      Text="{Binding Path=Margins.Left, Mode=TwoWay}" 
+                      ToolTip="{StaticResource ToolTips.Monitor.LeftMargin}"
+                      Grid.Column="1" Grid.Row="0" 
+                    />
+                    <Label Content=" px " Grid.Column="2" Grid.Row="0" />
+                    
+                    <Label 
+                      Content="{local:LocalizedString Config.MonitorMarginRight}" 
+                      Target="{x:Reference txtMargins_Right}" 
+                      Grid.Column="3" Grid.Row="0" 
+                    />
+                    <CommonControls:NumericTextBox
+                      Name="txtMargins_Right" 
+                      Text="{Binding Path=Margins.Right, Mode=TwoWay}" 
+                      ToolTip="{StaticResource ToolTips.Monitor.RightMargin}"
+                      Grid.Column="4" Grid.Row="0" 
+                    />
+                    <Label Content=" px" Grid.Column="5" Grid.Row="0" />
+                    
+                    <Label 
+                      Content="{local:LocalizedString Config.MonitorMarginTop}" 
+                      Target="{x:Reference txtMargins_Top}" 
+                      Grid.Column="0" Grid.Row="1" 
+                    />
+                    <CommonControls:NumericTextBox
+                      Name="txtMargins_Top" 
+                      Text="{Binding Path=Margins.Top, Mode=TwoWay}" 
+                      ToolTip="{StaticResource ToolTips.Monitor.TopMargin}"
+                      Grid.Column="1" Grid.Row="1" 
+                    />
+                    <Label Content=" px " Grid.Column="2" Grid.Row="1" />
+                    
+                    <Label 
+                      Content="{local:LocalizedString Config.MonitorMarginBottom}" 
+                      Target="{x:Reference txtMargins_Bottom}" 
+                      Grid.Column="3" Grid.Row="1" 
+                    />
+                    <CommonControls:NumericTextBox
+                      Name="txtMargins_Bottom" 
+                      Text="{Binding Path=Margins.Bottom, Mode=TwoWay}" 
+                      ToolTip="{StaticResource ToolTips.Monitor.BottomMargin}"
+                      Grid.Column="4" Grid.Row="1" 
+                    />
+                    <Label Content=" px" Grid.Column="5" Grid.Row="1" />
+                  </Grid>
+                </GroupBox>
+                
+                <Button 
+                  Content="{local:LocalizedString Config.ConfigTextOverlays}" 
+                  Command="{x:Static local:MonitorSettingsPage.ConfigureTextOverlaysCommand}" 
+                  VerticalAlignment="Bottom"
+                  Margin="3,0,5,2"
+                  ToolTip="{StaticResource ToolTips.Monitor.ConfigTextOverlays}"
+                />
+              </StackPanel>
+            </StackPanel>
+          </DataTemplate>
+        </ContentControl.ContentTemplate>
+      </ContentControl>
+    </GroupBox>
+  </StackPanel>
+</Page>
