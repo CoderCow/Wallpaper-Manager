@@ -1,9 +1,7 @@
 <!-- 
-  THIS FILE IS PROVIDED UNDER THE TERMS OF THE CREATIVE COMMONS PUBLIC LICENSE WHICH CAN BE FOUND IN THE PROVIDED License.txt 
-  FILE. IT IS PROTECTED BY COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS AUTHORIZED UNDER ITS 
-  LICENSE OR COPYRIGHT LAW IS PROHIBITED.
-  
-  Written by David-Kay Posmyk (KayPosmyk@gmx.de)
+  This source is subject to the Creative Commons Public License.
+  Please see the README.MD file for more information.
+  All other rights reserved.
 -->
   
 <Window   
@@ -102,7 +100,7 @@
 
       <TextBlock Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2">
         <Run Text="{local:LocalizedString About.Translators}" />
-        <Run> </Run>
+        <Run />
         <Hyperlink Tag="http://www.opensource.org/licenses/bsd-license.php">
           <Run Text="{local:LocalizedString About.LicenseLink}" />
         </Hyperlink>
@@ -113,7 +111,7 @@
         <Hyperlink Tag="http://www.visualpharm.com/">
           VisualPharm's Must Have Icons
         </Hyperlink>
-        <Run> </Run>
+        <Run />
         <Hyperlink Tag="http://creativecommons.org/licenses/by-nd/3.0/">
           <Run Text="{local:LocalizedString About.LicenseLink}" />
         </Hyperlink>
@@ -122,7 +120,7 @@
         <Hyperlink Tag="http://www.famfamfam.com/">
           FamFamFam's Silk Icons
         </Hyperlink>
-        <Run> </Run>
+        <Run />
         <Hyperlink Tag="http://creativecommons.org/licenses/by/2.5/">
           <Run Text="{local:LocalizedString About.LicenseLink}" />
         </Hyperlink>

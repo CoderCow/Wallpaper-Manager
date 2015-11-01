@@ -1,9 +1,6 @@
-﻿// THIS FILE IS PROVIDED UNDER THE TERMS OF THE CREATIVE COMMONS PUBLIC LICENSE WHICH CAN BE FOUND IN THE PROVIDED License.txt 
-// FILE. IT IS PROTECTED BY COPYRIGHT AND/OR OTHER APPLICABLE LAW. ANY USE OF THE WORK OTHER THAN AS AUTHORIZED UNDER ITS 
-// LICENSE OR COPYRIGHT LAW IS PROHIBITED.
-//
-// Written by David-Kay Posmyk (KayPosmyk@gmx.de)
-
+﻿// This source is subject to the Creative Commons Public License.
+// Please see the README.MD file for more information.
+// All other rights reserved.
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

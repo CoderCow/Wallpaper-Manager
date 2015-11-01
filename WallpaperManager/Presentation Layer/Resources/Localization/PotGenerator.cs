@@ -1,3 +1,6 @@
+// This source is subject to the Creative Commons Public License.
+// Please see the README.MD file for more information.
+// All other rights reserved.
 #define PotGenerator
 #define DEBUG
 #if PotGenerator && DEBUG

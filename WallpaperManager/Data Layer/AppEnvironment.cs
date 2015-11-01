@@ -1,6 +1,6 @@
-// Uncomment to use the configuration file in the app's directory instead of the users app data directory.
-// #def LocalConfig
-
+// This source is subject to the Creative Commons Public License.
+// Please see the README.MD file for more information.
+// All other rights reserved.
 using System;
 using System.Diagnostics;
 using System.Drawing;
