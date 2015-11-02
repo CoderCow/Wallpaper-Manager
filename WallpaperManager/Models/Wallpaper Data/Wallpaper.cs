@@ -1,11 +1,11 @@
 ﻿// This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
-using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Windows.Forms;
-
 using Common;
 using Common.IO;
 
@@ -14,77 +14,68 @@ namespace WallpaperManager.Models {
   ///   Contains wallpaper related data.
   /// </summary>
   /// <threadsafety static="true" instance="false" />
-  public class Wallpaper: WallpaperSettingsBase, ICloneable, IAssignable {
-    #region Property: IsBlank
+  public class Wallpaper : WallpaperSettingsBase, ICloneable, IAssignable {
     /// <summary>
-    ///   <inheritdoc cref="IsBlank" select='../value/node()' />
+    ///   <inheritdoc cref="ImagePath" select='../value/node()' />
     /// </summary>
-    private Boolean isBlank;
+    private Path imagePath;
 
     /// <summary>
-    ///   Gets a <see cref="Boolean" /> indicating whether any properties of this instance had been changed since it has been
-    ///   instanced.
+    ///   <inheritdoc cref="ImageSize" select='../value/node()' />
     /// </summary>
-    /// <value>
-    ///   A <see cref="Boolean" /> indicating whether any properties of this instance had been changed since it has been 
-    ///   instanced.
-    /// </value>
-    public Boolean IsBlank {
-      get { return this.isBlank; }
-    }
-    #endregion
+    private Size imageSize;
 
-    #region Property: SuggestIsMultiscreen
     /// <summary>
     ///   <inheritdoc cref="SuggestIsMultiscreen" select='../value/node()' />
     /// </summary>
-    private Boolean suggestIsMultiscreen;
+    private bool suggestIsMultiscreen;
 
     /// <summary>
-    ///   Gets a <see cref="Boolean" /> indicating whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> setting should 
+    ///   <inheritdoc cref="SuggestPlacement" select='../value/node()' />
+    /// </summary>
+    private bool suggestPlacement;
+
+    /// <summary>
+    ///   Gets a <see cref="bool" /> indicating whether any properties of this instance had been changed since it has been
+    ///   instanced.
+    /// </summary>
+    /// <value>
+    ///   A <see cref="bool" /> indicating whether any properties of this instance had been changed since it has been
+    ///   instanced.
+    /// </value>
+    public bool IsBlank { get; private set; }
+
+    /// <summary>
+    ///   Gets a <see cref="bool" /> indicating whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> setting should
     ///   be automatically suggested for this wallpaper or not.
     /// </summary>
     /// <value>
-    ///   A <see cref="Boolean" /> indicating whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> setting should be 
+    ///   A <see cref="bool" /> indicating whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> setting should be
     ///   automatically suggested for this wallpaper or not.
     /// </value>
-    public Boolean SuggestIsMultiscreen {
+    public bool SuggestIsMultiscreen {
       get { return this.suggestIsMultiscreen; }
       set {
         this.suggestIsMultiscreen = value;
         this.OnPropertyChanged("SuggestIsMultiscreen");
       }
     }
-    #endregion
-
-    #region Property: SuggestPlacement
-    /// <summary>
-    ///   <inheritdoc cref="SuggestPlacement" select='../value/node()' />
-    /// </summary>
-    private Boolean suggestPlacement;
 
     /// <summary>
-    ///   Gets a <see cref="Boolean" /> indicating whether <see cref="WallpaperSettingsBase.Placement" /> setting should be 
+    ///   Gets a <see cref="bool" /> indicating whether <see cref="WallpaperSettingsBase.Placement" /> setting should be
     ///   automatically suggested for this wallpaper or not.
     /// </summary>
     /// <value>
-    ///   A <see cref="Boolean" /> indicating whether <see cref="WallpaperSettingsBase.Placement" /> setting should be 
+    ///   A <see cref="bool" /> indicating whether <see cref="WallpaperSettingsBase.Placement" /> setting should be
     ///   automatically suggested for this wallpaper or not.
     /// </value>
-    public Boolean SuggestPlacement {
+    public bool SuggestPlacement {
       get { return this.suggestPlacement; }
       set {
         this.suggestPlacement = value;
         this.OnPropertyChanged("SuggestPlacement");
       }
     }
-    #endregion
-
-    #region Property: ImagePath
-    /// <summary>
-    ///   <inheritdoc cref="ImagePath" select='../value/node()' />
-    /// </summary>
-    private Path imagePath;
 
     /// <summary>
     ///   Gets or sets the path of the image file of this wallpaper.
@@ -99,13 +90,6 @@ namespace WallpaperManager.Models {
         this.OnPropertyChanged("ImagePath");
       }
     }
-    #endregion
-
-    #region Property: ImageSize
-    /// <summary>
-    ///   <inheritdoc cref="ImageSize" select='../value/node()' />
-    /// </summary>
-    private Size imageSize;
 
     /// <summary>
     ///   Gets or sets the size of the image where <see cref="ImagePath" /> is reffering to.
@@ -114,9 +98,10 @@ namespace WallpaperManager.Models {
     ///   The size of the image where <see cref="ImagePath" /> is reffering to.
     /// </value>
     /// <remarks>
-    ///   When this property is changed for the first time, and their respective <see cref="SuggestPlacement" /> and 
-    ///   <see cref="SuggestIsMultiscreen" /> properties are <c>true</c>, it will cause the 
-    ///   <see cref="WallpaperSettingsBase.Placement" /> and <see cref="WallpaperSettingsBase.IsMultiscreen" /> properties to be 
+    ///   When this property is changed for the first time, and their respective <see cref="SuggestPlacement" /> and
+    ///   <see cref="SuggestIsMultiscreen" /> properties are <c>true</c>, it will cause the
+    ///   <see cref="WallpaperSettingsBase.Placement" /> and <see cref="WallpaperSettingsBase.IsMultiscreen" /> properties to
+    ///   be
     ///   suggested automatically related to the new image size.
     /// </remarks>
     /// <seealso cref="WallpaperSettingsBase.Placement">WallpaperSettingsBase.Placement Property</seealso>
@@ -127,21 +112,19 @@ namespace WallpaperManager.Models {
       get { return this.imageSize; }
       set {
         // Auto determine the best settings for the wallpaper, if necessary.
+        // TODO: Dont do this in a property setter
         this.SuggestSettings(value);
 
         this.imageSize = value;
         this.OnPropertyChanged("ImageSize");
       }
     }
-    #endregion
 
-
-    #region Methods: Constructors
     /// <summary>
     ///   Initializes a new instance of the <see cref="Wallpaper" /> class.
     /// </summary>
     public Wallpaper() {
-      this.isBlank = true;
+      this.IsBlank = true;
     }
 
     /// <summary>
@@ -150,27 +133,26 @@ namespace WallpaperManager.Models {
     /// <param name="imagePath">
     ///   The path of the image file of this wallpaper.
     /// </param>
-    public Wallpaper(Path imagePath): this() {
+    public Wallpaper(Path imagePath) : this() {
       this.imagePath = imagePath;
     }
-    #endregion
 
-    #region Methods: EvaluateCycleConditions, SuggestSettings, OnPropertyChanged, ToString
     /// <summary>
-    ///   Checks whether the cycle conditions for this wallpaper match or not. 
+    ///   Checks whether the cycle conditions for this wallpaper match or not.
     /// </summary>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the cycle conditions match.
+    ///   A <see cref="bool" /> indicating whether the cycle conditions match.
     /// </returns>
-    public Boolean EvaluateCycleConditions() {
+    public bool EvaluateCycleConditions() {
       TimeSpan timeOfDay = DateTime.Now.TimeOfDay;
 
       return ((timeOfDay >= this.OnlyCycleBetweenStart) && (timeOfDay <= this.OnlyCycleBetweenStop));
     }
 
     /// <summary>
-    ///   Automatically suggests <see cref="WallpaperSettingsBase.IsMultiscreen" /> and 
-    ///   <see cref="WallpaperSettingsBase.Placement" /> using the given <paramref name="imageSize" /> value if their respective
+    ///   Automatically suggests <see cref="WallpaperSettingsBase.IsMultiscreen" /> and
+    ///   <see cref="WallpaperSettingsBase.Placement" /> using the given <paramref name="imageSize" /> value if their
+    ///   respective
     ///   <see cref="SuggestIsMultiscreen" /> and <see cref="SuggestPlacement" /> properties return <c>true</c>.
     /// </summary>
     /// <param name="imageSize">
@@ -180,18 +162,17 @@ namespace WallpaperManager.Models {
       if (this.SuggestPlacement) {
         // If the wallpaper is pretty small, we guess that it will maybe used 
         // in "Tile" mode, otherwise we recommend "StretchWithRatio" mode.
-        if ((imageSize.Width < 640) || (imageSize.Height < 480)) {
+        if ((imageSize.Width < 640) || (imageSize.Height < 480))
           this.Placement = WallpaperPlacement.Tile;
-        } else {
+        else
           this.Placement = WallpaperPlacement.Uniform;
-        }
 
         this.SuggestPlacement = false;
       }
 
       if (Screen.AllScreens.Length > 1) {
         if (this.SuggestIsMultiscreen) {
-          System.Drawing.Rectangle primaryScreenBounds = Screen.PrimaryScreen.Bounds;
+          Rectangle primaryScreenBounds = Screen.PrimaryScreen.Bounds;
 
           // If the wallpaper's width is at least 150% of the primary screen, we guess that it will 
           // be used as an multi screen wallpaper.
@@ -202,46 +183,40 @@ namespace WallpaperManager.Models {
 
           this.SuggestIsMultiscreen = false;
         }
-      } else {
+      } else
         this.IsMultiscreen = false;
-      }
     }
 
     /// <commondoc select='INotifyPropertyChanged/Methods/OnPropertyChanged/*' />
-    protected override void OnPropertyChanged(String propertyName) {
+    protected override void OnPropertyChanged(string propertyName) {
       base.OnPropertyChanged(propertyName);
 
       // Image size is sometimes set after the class is being constructed.
-      if (propertyName != "ImageSize") {
-        this.isBlank = false;
-      }
+      if (propertyName != "ImageSize")
+        this.IsBlank = false;
 
       base.OnPropertyChanged("IsBlank");
     }
 
     /// <summary>
-    ///   Generates a <see cref="String" /> containing the <see cref="ImagePath" />.
+    ///   Generates a <see cref="string" /> containing the <see cref="ImagePath" />.
     /// </summary>
     /// <returns>
-    ///   A <see cref="String" /> containing the <see cref="ImagePath" />.
+    ///   A <see cref="string" /> containing the <see cref="ImagePath" />.
     /// </returns>
-    public override String ToString() {
-      return StringGenerator.FromListKeyed(
-        new String[] { "ImagePath" },
-        (IList<Object>)new Object[] { this.ImagePath }
-      );
+    public override string ToString() {
+      return $"ImagePath: {this.ImagePath}";
     }
-    #endregion
 
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />
-    public override Object Clone() {
+    public override object Clone() {
       Wallpaper clonedInstance = new Wallpaper(this.ImagePath);
 
       // Clone all fields defined by WallpaperSettingsBase.
       base.Clone(clonedInstance);
 
-      clonedInstance.isBlank = this.IsBlank;
+      clonedInstance.IsBlank = this.IsBlank;
       clonedInstance.imagePath = this.ImagePath;
       clonedInstance.imageSize = this.ImageSize;
 
@@ -258,9 +233,7 @@ namespace WallpaperManager.Models {
     ///   <paramref name="other" /> is <c>null</c>.
     /// </exception>
     protected override void AssignTo(WallpaperSettingsBase other) {
-      if (other == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("other"));
-      }
+      Contract.Requires<ArgumentNullException>(other != null);
 
       // Assign all members defined by WallpaperSettingsBase.
       base.AssignTo(other);

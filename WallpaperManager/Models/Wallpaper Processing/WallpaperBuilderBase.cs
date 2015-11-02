@@ -1,18 +1,17 @@
 // This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
-
 using Common.Drawing;
 using Path = Common.IO.Path;
-
-using WallpaperManager.Models;
 
 namespace WallpaperManager.Models {
   /// <summary>
@@ -20,51 +19,8 @@ namespace WallpaperManager.Models {
   /// </summary>
   /// <seealso href="dd316e3f-9541-46f1-961c-3c057c166f3b.htm" target="_self">Wallpaper Building Process</seealso>
   /// <threadsafety static="true" instance="false" />
+  [ContractClass(typeof(WallpaperBuilderBaseContracts))]
   public abstract class WallpaperBuilderBase {
-    #region Property: RequiredWallpapersByScreen
-    /// <summary>
-    ///   Gets an array of numbers representing the count of required <see cref="Wallpaper" /> instances to build a 
-    ///   multiscreen wallpaper for each screen.
-    /// </summary>
-    /// <remarks>
-    ///   The item index is equal (and in the same order) with the screen indexes.
-    /// </remarks>
-    /// <value>
-    ///   An array of numbers representing the count of required <see cref="Wallpaper" /> instances to build a multiscreen 
-    ///   wallpaper for each screen.
-    /// </value>
-    public abstract ReadOnlyCollection<Int32> RequiredWallpapersByScreen {
-      get;
-    }
-    #endregion
-
-    #region Property: ScreensSettings
-    /// <summary>
-    ///   <inheritdoc cref="ScreensSettings" select='../value/node()' />
-    /// </summary>
-    private ScreenSettingsCollection screensSettings;
-
-    /// <summary>
-    ///   Gets or sets a <see cref="ScreenSettingsCollection" /> object containing the specific properties for each single screen.
-    /// </summary>
-    /// <value>
-    ///   A <see cref="ScreenSettingsCollection" /> object containing the specific properties for each single screen.
-    /// </value>
-    /// <seealso cref="ScreenSettingsCollection">ScreenSettingsCollection Class</seealso>
-    /// <seealso cref="ScreenSettings">ScreenSettings Class</seealso>
-    public ScreenSettingsCollection ScreensSettings {
-      get { return this.screensSettings; }
-      set {
-        if (value == null) {
-          throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull());
-        }
-
-        this.screensSettings = value;
-      }
-    }
-    #endregion
-
-    #region Property: FullScreenBounds
     /// <summary>
     ///   Gets the cached bounds of all screens.
     /// </summary>
@@ -72,23 +28,43 @@ namespace WallpaperManager.Models {
     ///   The cached bounds of all screens.
     /// </value>
     protected static Rectangle FullScreenBounds {
-      get { 
-        Int32 screenCount = Screen.AllScreens.Length;
+      get {
+        int screenCount = Screen.AllScreens.Length;
         Rectangle fullScreenBounds = new Rectangle();
 
-        for (Int32 i = 0; i < screenCount; i++) {
+        for (int i = 0; i < screenCount; i++)
           fullScreenBounds = Rectangle.Union(Screen.AllScreens[i].Bounds, fullScreenBounds);
-        }
 
         return fullScreenBounds;
       }
     }
-    #endregion
 
-
-    #region Constructor
     /// <summary>
-    ///   Initializes a new instance of the <see cref="WallpaperBuilderBase"/> class.
+    ///   Gets an array of numbers representing the count of required <see cref="Wallpaper" /> instances to build a
+    ///   multiscreen wallpaper for each screen.
+    /// </summary>
+    /// <remarks>
+    ///   The item index is equal (and in the same order) with the screen indexes.
+    /// </remarks>
+    /// <value>
+    ///   An array of numbers representing the count of required <see cref="Wallpaper" /> instances to build a multiscreen
+    ///   wallpaper for each screen.
+    /// </value>
+    public abstract ReadOnlyCollection<int> RequiredWallpapersByScreen { get; }
+
+    /// <summary>
+    ///   Gets or sets a <see cref="ScreenSettingsCollection" /> object containing the specific properties for each single
+    ///   screen.
+    /// </summary>
+    /// <value>
+    ///   A <see cref="ScreenSettingsCollection" /> object containing the specific properties for each single screen.
+    /// </value>
+    /// <seealso cref="ScreenSettingsCollection">ScreenSettingsCollection Class</seealso>
+    /// <seealso cref="ScreenSettings">ScreenSettings Class</seealso>
+    public ScreenSettingsCollection ScreensSettings { get; set; }
+
+    /// <summary>
+    ///   Initializes a new instance of the <see cref="WallpaperBuilderBase" /> class.
     /// </summary>
     /// <param name="screensSettings">
     ///   A collection of <see cref="ScreenSettings" /> objects containing the specific properties for each single screen.
@@ -99,15 +75,19 @@ namespace WallpaperManager.Models {
     /// <seealso cref="ScreenSettingsCollection">ScreenSettingsCollection Class</seealso>
     /// <seealso cref="ScreenSettings">ScreenSettings Class</seealso>
     protected WallpaperBuilderBase(ScreenSettingsCollection screensSettings) {
-      if (screensSettings == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("screenSettings"));
-      }
-
-      this.screensSettings = screensSettings;
+      this.ScreensSettings = screensSettings;
     }
-    #endregion
 
-    #region Method: CreateMultiscreenFromSingle
+    /// <summary>
+    ///   Checks whether all properties have valid values.
+    /// </summary>
+    [ContractInvariantMethod]
+    private void CheckInvariants() {
+      Contract.Invariant(this.RequiredWallpapersByScreen != null);
+      Contract.Invariant(this.RequiredWallpapersByScreen.Count == Screen.AllScreens.Length);
+      Contract.Invariant(this.ScreensSettings != null);
+    }
+
     /// <summary>
     ///   Creates a multiscreen wallpaper from one <see cref="Wallpaper" /> object (from one image).
     /// </summary>
@@ -122,16 +102,11 @@ namespace WallpaperManager.Models {
     ///   The image file where the <paramref name="multiscreenWallpaper" /> object refers to could not be found.
     /// </exception>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
-    public Image CreateMultiscreenFromSingle(Wallpaper multiscreenWallpaper, Single scaleFactor, Boolean useWindowsFix) {
-      if (multiscreenWallpaper == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("multiscreenWallpaper"));
-      }
+    public Image CreateMultiscreenFromSingle(Wallpaper multiscreenWallpaper, float scaleFactor, bool useWindowsFix) {
+      Contract.Requires<ArgumentNullException>(multiscreenWallpaper != null);
 
       Rectangle fullScreenBounds = WallpaperBuilderBase.FullScreenBounds;
-
-      Bitmap wallpaperImage = new Bitmap(
-        (Int32)(fullScreenBounds.Width * scaleFactor), (Int32)(fullScreenBounds.Height * scaleFactor)
-      );
+      Bitmap wallpaperImage = new Bitmap((int)(fullScreenBounds.Width * scaleFactor), (int)(fullScreenBounds.Height * scaleFactor));
 
       using (Graphics graphics = Graphics.FromImage(wallpaperImage)) {
         Graphics destinationGraphics = graphics;
@@ -140,46 +115,39 @@ namespace WallpaperManager.Models {
         try {
           // If the fullscreenbounds rectangle has a negative x or y values, we normalize them by using 0,0 as origin and adding 
           // the difference to each drawn wallpaper later.
-          Int32 xOriginAdd; 
-          if (fullScreenBounds.X < 0) {
+          int xOriginAdd;
+          if (fullScreenBounds.X < 0)
             xOriginAdd = Math.Abs(WallpaperBuilderBase.FullScreenBounds.X);
-          } else {
+          else
             xOriginAdd = 0;
-          }
 
-          Int32 yOriginAdd;
-          if (fullScreenBounds.Y < 0) {
+          int yOriginAdd;
+          if (fullScreenBounds.Y < 0)
             yOriginAdd = Math.Abs(WallpaperBuilderBase.FullScreenBounds.Y);
-          } else {
+          else
             yOriginAdd = 0;
-          }
 
           // Check if we have to redraw the end-wallpaper to fix it for Windows.
-          Boolean requiresWindowsFix = ((useWindowsFix) && ((fullScreenBounds.Left < 0) || (fullScreenBounds.Top < 0)));
+          bool requiresWindowsFix = ((useWindowsFix) && ((fullScreenBounds.Left < 0) || (fullScreenBounds.Top < 0)));
 
           if (requiresWindowsFix) {
             // We have to redraw it, we need another temporary image and draw on this one instead.
             preWallpaperImage = new Bitmap(wallpaperImage.Width, wallpaperImage.Height);
             destinationGraphics = Graphics.FromImage(preWallpaperImage);
           }
-          
+
           destinationGraphics.ScaleTransform(scaleFactor, scaleFactor);
 
           // The rectangle of the multiscreen wallpaper should span across all screens except the ones which should display 
           // a statical wallpaper.
           Rectangle? multiscreenWallpaperRect = null;
 
-          for (Int32 i = 0; i < this.ScreensSettings.Count; i++) {
-            if (
-              this.ScreensSettings[i].CycleRandomly || !this.ScreensSettings[i].StaticWallpaper.EvaluateCycleConditions()
-            ) {
-              if (multiscreenWallpaperRect == null) {
+          for (int i = 0; i < this.ScreensSettings.Count; i++) {
+            if (this.ScreensSettings[i].CycleRandomly || !this.ScreensSettings[i].StaticWallpaper.EvaluateCycleConditions()) {
+              if (multiscreenWallpaperRect == null)
                 multiscreenWallpaperRect = this.ScreensSettings[i].BoundsWithMargin;
-              } else {
-                multiscreenWallpaperRect = Rectangle.Union(
-                  multiscreenWallpaperRect.Value, this.ScreensSettings[i].BoundsWithMargin
-                );
-              }
+              else
+                multiscreenWallpaperRect = Rectangle.Union(multiscreenWallpaperRect.Value, this.ScreensSettings[i].BoundsWithMargin);
             }
           }
 
@@ -190,33 +158,27 @@ namespace WallpaperManager.Models {
             multiscreenWallpaperRectValue.Y += yOriginAdd;
 
             destinationGraphics.SetClip(multiscreenWallpaperRectValue);
-            WallpaperBuilderBase.DrawWallpaper(
-              destinationGraphics, multiscreenWallpaperRectValue, multiscreenWallpaper, multiscreenWallpaper.Placement
-              );
+            WallpaperBuilderBase.DrawWallpaper(destinationGraphics, multiscreenWallpaperRectValue, multiscreenWallpaper, multiscreenWallpaper.Placement);
             destinationGraphics.ResetClip();
           }
 
           // Draw or overdraw all static wallpapers and draw the Overlay Texts for all screens.
-          for (Int32 i = 0; i < this.ScreensSettings.Count; i++) {
+          for (int i = 0; i < this.ScreensSettings.Count; i++) {
             destinationGraphics.SetClip(this.ScreensSettings[i].BoundsWithMargin);
 
-            if (
-              !this.ScreensSettings[i].CycleRandomly && this.ScreensSettings[i].StaticWallpaper.EvaluateCycleConditions()
-            ) {
+            if (!this.ScreensSettings[i].CycleRandomly && this.ScreensSettings[i].StaticWallpaper.EvaluateCycleConditions()) {
               WallpaperBuilderBase.DrawWallpaper(
                 destinationGraphics,
                 this.ScreensSettings[i].BoundsWithMargin,
                 this.ScreensSettings[i].StaticWallpaper,
-                this.ScreensSettings[i].StaticWallpaper.Placement
-              );
+                this.ScreensSettings[i].StaticWallpaper.Placement);
             }
 
             WallpaperBuilderBase.DrawOverlayTexts(
-              destinationGraphics, 
-              this.ScreensSettings[i].BoundsWithMargin, 
-              new[] { multiscreenWallpaper }, 
-              this.ScreensSettings[i].TextOverlays
-            );
+              destinationGraphics,
+              this.ScreensSettings[i].BoundsWithMargin,
+              new[] {multiscreenWallpaper},
+              this.ScreensSettings[i].TextOverlays);
             destinationGraphics.ResetClip();
           }
 
@@ -226,25 +188,18 @@ namespace WallpaperManager.Models {
           }
         } finally {
           destinationGraphics.Dispose();
-
-          if (preWallpaperImage != null) {
-            preWallpaperImage.Dispose();
-          }
+          preWallpaperImage?.Dispose();
         }
       }
 
       return wallpaperImage;
     }
-    #endregion
 
-    #region Method: CreateMultiscreenFromMultiple, CreateMultiscreenFromMultipleInternal
     /// <inheritdoc cref="CreateMultiscreenFromMultipleInternal" />
     /// <param name="wallpapers">
     ///   The <see cref="Wallpaper" /> objects to use for each screen.
     /// </param>
-    public abstract Image CreateMultiscreenFromMultiple(
-      IList<IList<Wallpaper>> wallpapers, Single scaleFactor, Boolean useWindowsFix
-    );
+    public abstract Image CreateMultiscreenFromMultiple(IList<IList<Wallpaper>> wallpapers, float scaleFactor, bool useWindowsFix);
 
     /// <summary>
     ///   Creates a multiscreen wallpaper from multiple <see cref="Wallpaper" /> objects (from multiple images).
@@ -265,12 +220,12 @@ namespace WallpaperManager.Models {
     ///   Defines the factor to scale the created image. Decrease this value to speed up the drawing process of preview images.
     /// </param>
     /// <param name="useWindowsFix">
-    ///   A <see cref="Boolean" /> indicating whether the image is drawn in a special way to fix problems that occur when 
+    ///   A <see cref="bool" /> indicating whether the image is drawn in a special way to fix problems that occur when
     ///   Windows applies tiled images for extended desktops. Set to <c>true</c> if you are planning to apply the generated
     ///   image on the Windows Desktop.
     /// </param>
     /// <returns>
-    ///   A <see cref="Image" /> instance containing drawn the multiscreen wallpaper image. 
+    ///   A <see cref="Image" /> instance containing drawn the multiscreen wallpaper image.
     /// </returns>
     /// <exception cref="ArgumentException">
     ///   <paramref name="wallpapers" /> a <c>null</c> item.
@@ -284,25 +239,15 @@ namespace WallpaperManager.Models {
     /// <exception cref="FileNotFoundException">
     ///   The image file where on of the <see cref="Wallpaper" /> objects refers to could not be found.
     /// </exception>
-    protected Image CreateMultiscreenFromMultipleInternal(
-      IList<Wallpaper> wallpapers, Single scaleFactor, Boolean useWindowsFix
-    ) {
-      if (wallpapers == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("wallpapers"));
-      }
-      if (wallpapers.Count == 0) {
-        throw new ArgumentOutOfRangeException(ExceptionMessages.GetCollectionIsEmpty("wallpapers"));
-      }
-      if (wallpapers.Contains(null)) {
-        throw new ArgumentException(ExceptionMessages.GetCollectionContainsNullItem("wallpapers"));
-      }
+    protected Image CreateMultiscreenFromMultipleInternal(IList<Wallpaper> wallpapers, float scaleFactor, bool useWindowsFix) {
+      Contract.Requires<ArgumentNullException>(wallpapers != null);
+      Contract.Requires<ArgumentException>(wallpapers.Count > 0);
+      Contract.Requires<ArgumentException>(!wallpapers.Contains(null));
 
       Rectangle fullScreenBounds = WallpaperBuilderBase.FullScreenBounds;
-      Int32 screenCount = Screen.AllScreens.Length;
+      int screenCount = Screen.AllScreens.Length;
 
-      Bitmap wallpaperImage = new Bitmap(
-        (Int32)(fullScreenBounds.Width * scaleFactor), (Int32)(fullScreenBounds.Height * scaleFactor)
-      );
+      Bitmap wallpaperImage = new Bitmap((int)(fullScreenBounds.Width * scaleFactor), (int)(fullScreenBounds.Height * scaleFactor));
 
       using (Graphics graphics = Graphics.FromImage(wallpaperImage)) {
         Graphics destinationGraphics = graphics;
@@ -311,42 +256,38 @@ namespace WallpaperManager.Models {
         try {
           // If the fullscreenbounds rectangle has a negative x or y values, we normalize them by using 0,0 as origin and adding 
           // the difference to each drawn wallpaper later.
-          Int32 xOriginAdd; 
-          if (fullScreenBounds.X < 0) {
+          int xOriginAdd;
+          if (fullScreenBounds.X < 0)
             xOriginAdd = Math.Abs(WallpaperBuilderBase.FullScreenBounds.X);
-          } else {
+          else
             xOriginAdd = 0;
-          }
 
-          Int32 yOriginAdd;
-          if (fullScreenBounds.Y < 0) {
+          int yOriginAdd;
+          if (fullScreenBounds.Y < 0)
             yOriginAdd = Math.Abs(WallpaperBuilderBase.FullScreenBounds.Y);
-          } else {
+          else
             yOriginAdd = 0;
-          }
 
           // Check if we have to redraw the end-wallpaper to fix it for Windows' strange way of applyment.
-          Boolean requiresWindowsFix = ((useWindowsFix) && ((fullScreenBounds.Left < 0) || (fullScreenBounds.Top < 0)));
+          bool requiresWindowsFix = ((useWindowsFix) && ((fullScreenBounds.Left < 0) || (fullScreenBounds.Top < 0)));
 
           if (requiresWindowsFix) {
             // We have to redraw it, we need another temporary image and draw on this one instead.
             preWallpaperImage = new Bitmap(wallpaperImage.Width, wallpaperImage.Height);
             destinationGraphics = Graphics.FromImage(preWallpaperImage);
           }
-          
+
           // Draw the full wallpaper.
           destinationGraphics.ScaleTransform(scaleFactor, scaleFactor);
 
-          for (Int32 i = 0; i < screenCount; i++) {
+          for (int i = 0; i < screenCount; i++) {
             Rectangle screenBounds = this.ScreensSettings[i].BoundsWithMargin;
             screenBounds.X += xOriginAdd;
             screenBounds.Y += yOriginAdd;
 
             destinationGraphics.SetClip(screenBounds, CombineMode.Replace);
             WallpaperBuilderBase.DrawWallpaper(destinationGraphics, screenBounds, wallpapers[i], wallpapers[i].Placement);
-            WallpaperBuilderBase.DrawOverlayTexts(
-              destinationGraphics, screenBounds, wallpapers, this.ScreensSettings[i].TextOverlays
-            );
+            WallpaperBuilderBase.DrawOverlayTexts(destinationGraphics, screenBounds, wallpapers, this.ScreensSettings[i].TextOverlays);
             destinationGraphics.ResetClip();
           }
 
@@ -356,18 +297,13 @@ namespace WallpaperManager.Models {
           }
         } finally {
           destinationGraphics.Dispose();
-
-          if (preWallpaperImage != null) {
-            preWallpaperImage.Dispose();
-          }
+          preWallpaperImage?.Dispose();
         }
       }
 
       return wallpaperImage;
     }
-    #endregion
 
-    #region Static Methods: DrawWallpaper, DrawFullWallpaperFixed, DrawOverlayTexts
     /// <summary>
     ///   Draws a wallpaper image by using the given <see cref="Graphics" /> object.
     /// </summary>
@@ -391,43 +327,33 @@ namespace WallpaperManager.Models {
     /// </exception>
     /// <seealso cref="Graphics">Graphics Class</seealso>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
-    /// <seealso cref="WallpaperPlacement">WallpaperPlacement Enumeration</seealso>.
-    protected static void DrawWallpaper(
-      Graphics destGraphics, Rectangle destScreenRect, Wallpaper wallpaper, WallpaperPlacement placement
-    ) {
-      if (destGraphics == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("destGraphics"));
-      }
-      if (wallpaper == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("wallpaper"));
-      }
-      if (!Enum.IsDefined(typeof(WallpaperPlacement), placement)) {
-        throw new ArgumentOutOfRangeException(
-          ExceptionMessages.GetEnumValueInvalid("placement", typeof(WallpaperPlacement), placement)
-        );
-      }
+    /// <seealso cref="WallpaperPlacement">WallpaperPlacement Enumeration</seealso>
+    /// .
+    protected static void DrawWallpaper(Graphics destGraphics, Rectangle destScreenRect, Wallpaper wallpaper, WallpaperPlacement placement) {
+      Contract.Requires<ArgumentNullException>(destGraphics != null);
+      Contract.Requires<ArgumentNullException>(wallpaper != null);
+      Contract.Requires<ArgumentException>(Enum.IsDefined(typeof(WallpaperPlacement), placement));
 
-      using (SolidBrush backgroundBrush = new SolidBrush(wallpaper.BackgroundColor)) {
+      using (SolidBrush backgroundBrush = new SolidBrush(wallpaper.BackgroundColor))
         destGraphics.FillRectangle(backgroundBrush, destScreenRect);
-      }
 
       if ((wallpaper.ImagePath != Path.None) && (File.Exists(wallpaper.ImagePath))) {
         Image originalImage = null;
         Image imageToDraw = null;
-        
+
         try {
           originalImage = Image.FromFile(wallpaper.ImagePath);
           imageToDraw = originalImage;
-          
+
           if (wallpaper.Effects != 0) {
             #region Mirror Effect
             // Required images to draw for the mirror effect.
-            Int32 horizontalImages = 1;
-            Int32 verticalImages = 1;
+            int horizontalImages = 1;
+            int verticalImages = 1;
 
             // This values "move" the texture of the brush.
-            Int32 horizontalBrushTransform = 0;
-            Int32 verticalBrushTransform = 0;
+            int horizontalBrushTransform = 0;
+            int verticalBrushTransform = 0;
             TextureBrush mirrorBrush = new TextureBrush(originalImage, WrapMode.TileFlipXY);
 
             if (((wallpaper.Effects & WallpaperEffects.MirrorLeft) == WallpaperEffects.MirrorLeft)) {
@@ -463,11 +389,10 @@ namespace WallpaperManager.Models {
               verticalImages++;
 
               if (mirrorBrush.WrapMode != WrapMode.TileFlipXY) {
-                if (mirrorBrush.WrapMode == WrapMode.TileFlipX) {
+                if (mirrorBrush.WrapMode == WrapMode.TileFlipX)
                   mirrorBrush.WrapMode = WrapMode.TileFlipXY;
-                } else {
+                else
                   mirrorBrush.WrapMode = WrapMode.TileFlipY;
-                }
               }
 
               // This will make the brush start with the mirrored image.
@@ -477,11 +402,10 @@ namespace WallpaperManager.Models {
               verticalImages++;
 
               if (mirrorBrush.WrapMode != WrapMode.TileFlipXY) {
-                if (mirrorBrush.WrapMode == WrapMode.TileFlipX) {
+                if (mirrorBrush.WrapMode == WrapMode.TileFlipX)
                   mirrorBrush.WrapMode = WrapMode.TileFlipXY;
-                } else {
+                else
                   mirrorBrush.WrapMode = WrapMode.TileFlipY;
-                }
               }
 
               if (((wallpaper.Effects & WallpaperEffects.MirrorTop) != WallpaperEffects.MirrorTop)) {
@@ -492,11 +416,10 @@ namespace WallpaperManager.Models {
 
             if (((wallpaper.Effects & WallpaperEffects.FlipVertical) == WallpaperEffects.FlipVertical)) {
               if (mirrorBrush.WrapMode != WrapMode.TileFlipXY) {
-                if (mirrorBrush.WrapMode == WrapMode.TileFlipX) {
+                if (mirrorBrush.WrapMode == WrapMode.TileFlipX)
                   mirrorBrush.WrapMode = WrapMode.TileFlipXY;
-                } else {
+                else
                   mirrorBrush.WrapMode = WrapMode.TileFlipY;
-                }
               }
 
               if (verticalBrushTransform == 0) {
@@ -510,23 +433,16 @@ namespace WallpaperManager.Models {
 
             mirrorBrush.TranslateTransform(horizontalBrushTransform, verticalBrushTransform);
 
-            Image modifiedImage = new Bitmap(
-              originalImage.Width * horizontalImages, originalImage.Height * verticalImages
-            );
+            Image modifiedImage = new Bitmap(originalImage.Width * horizontalImages, originalImage.Height * verticalImages);
 
             Graphics modifiedImageGraphics = null;
             try {
               modifiedImageGraphics = Graphics.FromImage(modifiedImage);
-
-              modifiedImageGraphics.FillRectangle(
-                mirrorBrush, new Rectangle(0, 0, modifiedImage.Width, modifiedImage.Height)
-              );
+              modifiedImageGraphics.FillRectangle(mirrorBrush, new Rectangle(0, 0, modifiedImage.Width, modifiedImage.Height));
 
               imageToDraw = modifiedImage;
             } finally {
-              if (modifiedImageGraphics != null) {
-                modifiedImageGraphics.Dispose();
-              }
+              modifiedImageGraphics?.Dispose();
             }
             #endregion
           }
@@ -534,10 +450,10 @@ namespace WallpaperManager.Models {
           GraphicsContainer graphicalContext = null;
           try {
             graphicalContext = destGraphics.BeginContainer();
-            
+
             // Place the origin in the center of the screen.
-            Single xTranslationForScale = destScreenRect.X + (destScreenRect.Width / 2f);
-            Single yTranslationForScale = destScreenRect.Y + (destScreenRect.Height / 2f);
+            float xTranslationForScale = destScreenRect.X + (destScreenRect.Width / 2f);
+            float yTranslationForScale = destScreenRect.Y + (destScreenRect.Height / 2f);
             destGraphics.TranslateTransform(xTranslationForScale, yTranslationForScale);
             destGraphics.ScaleTransform((wallpaper.Scale.X + 100) / 100f, (wallpaper.Scale.Y + 100) / 100f);
             // And reset it, that way we have a nice scaling of the image.
@@ -574,17 +490,12 @@ namespace WallpaperManager.Models {
                 break;
             }
           } finally {
-            if (graphicalContext != null) {
+            if (graphicalContext != null)
               destGraphics.EndContainer(graphicalContext);
-            }
           }
         } finally {
-          if (originalImage != null) {
-            originalImage.Dispose();
-          }
-          if (imageToDraw != null) {
-            imageToDraw.Dispose();
-          }
+          originalImage?.Dispose();
+          imageToDraw?.Dispose();
         }
       }
     }
@@ -604,14 +515,10 @@ namespace WallpaperManager.Models {
     /// <seealso cref="Graphics">Graphics Class</seealso>
     /// <seealso cref="Bitmap">Bitmap Class</seealso>
     protected static void DrawFullWallpaperFixed(Graphics destGraphics, Image wallpaperImage) {
-      if (destGraphics == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("destGraphics"));
-      }
-      if (wallpaperImage == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("wallpaperImage"));
-      }
+      Contract.Requires<ArgumentNullException>(destGraphics != null);
+      Contract.Requires<ArgumentNullException>(wallpaperImage != null);
 
-      Single scaleFactor = ((Single)wallpaperImage.Width / WallpaperBuilderBase.FullScreenBounds.Width);
+      float scaleFactor = ((float)wallpaperImage.Width / WallpaperBuilderBase.FullScreenBounds.Width);
       Rectangle scaledFullScreenBounds = WallpaperBuilderBase.FullScreenBounds.ScaleFull(scaleFactor);
 
       // TODO: Buggy with 2x2 monitor systems and greater.
@@ -619,54 +526,34 @@ namespace WallpaperManager.Models {
       if (WallpaperBuilderBase.FullScreenBounds.Left < 0) {
         // Negative Side (Left from Primary)
         destGraphics.DrawImage(
-          wallpaperImage, 
-          new Rectangle(
-            scaledFullScreenBounds.Right, 0, Math.Abs(scaledFullScreenBounds.Left), scaledFullScreenBounds.Height
-          ),
-          new Rectangle(
-            0, 0, Math.Abs(scaledFullScreenBounds.Left), scaledFullScreenBounds.Height
-          ),
-          GraphicsUnit.Pixel
-        );
+          wallpaperImage,
+          new Rectangle(scaledFullScreenBounds.Right, 0, Math.Abs(scaledFullScreenBounds.Left), scaledFullScreenBounds.Height),
+          new Rectangle(0, 0, Math.Abs(scaledFullScreenBounds.Left), scaledFullScreenBounds.Height),
+          GraphicsUnit.Pixel);
 
         // Positive Side (Primary and Right From Primary)
         destGraphics.DrawImage(
-          wallpaperImage, 
-          new Rectangle(
-            0, 0, scaledFullScreenBounds.Right, scaledFullScreenBounds.Height
-          ),
-          new Rectangle(
-            Math.Abs(scaledFullScreenBounds.Left), 0, scaledFullScreenBounds.Right, scaledFullScreenBounds.Height
-          ),
-          GraphicsUnit.Pixel
-        );
+          wallpaperImage,
+          new Rectangle(0, 0, scaledFullScreenBounds.Right, scaledFullScreenBounds.Height),
+          new Rectangle(Math.Abs(scaledFullScreenBounds.Left), 0, scaledFullScreenBounds.Right, scaledFullScreenBounds.Height),
+          GraphicsUnit.Pixel);
       }
 
       // Are there screens above the primary screen?
       if (WallpaperBuilderBase.FullScreenBounds.Top < 0) {
         // Drawing the negative side (above primary) to the positive side (primary and below primary).
         destGraphics.DrawImage(
-          wallpaperImage, 
-          new Rectangle(
-            0, scaledFullScreenBounds.Bottom, scaledFullScreenBounds.Width, Math.Abs(scaledFullScreenBounds.Top)
-          ),
-          new Rectangle(
-            0, 0, scaledFullScreenBounds.Width, Math.Abs(scaledFullScreenBounds.Top)
-          ),
-          GraphicsUnit.Pixel
-        );
+          wallpaperImage,
+          new Rectangle(0, scaledFullScreenBounds.Bottom, scaledFullScreenBounds.Width, Math.Abs(scaledFullScreenBounds.Top)),
+          new Rectangle(0, 0, scaledFullScreenBounds.Width, Math.Abs(scaledFullScreenBounds.Top)),
+          GraphicsUnit.Pixel);
 
         // Drawing the positive side (primary and below primary) to the negative side (above primary).
         destGraphics.DrawImage(
-          wallpaperImage, 
-          new Rectangle(
-            0, 0, scaledFullScreenBounds.Width, scaledFullScreenBounds.Bottom
-          ),
-          new Rectangle(
-            0, Math.Abs(scaledFullScreenBounds.Top), scaledFullScreenBounds.Width, scaledFullScreenBounds.Bottom
-          ),
-          GraphicsUnit.Pixel
-        );
+          wallpaperImage,
+          new Rectangle(0, 0, scaledFullScreenBounds.Width, scaledFullScreenBounds.Bottom),
+          new Rectangle(0, Math.Abs(scaledFullScreenBounds.Top), scaledFullScreenBounds.Width, scaledFullScreenBounds.Bottom),
+          GraphicsUnit.Pixel);
       }
     }
 
@@ -687,26 +574,18 @@ namespace WallpaperManager.Models {
     ///   A collection of <see cref="WallpaperTextOverlay" /> objects to be drawn.
     /// </param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="destGraphics" /> or <paramref name="wallpapers" /> or <paramref name="overlayTexts" /> is <c>null</c>.
+    ///   <paramref name="destGraphics" /> or <paramref name="wallpapers" /> or <paramref name="overlayTexts" /> is <c>null</c>
+    ///   .
     /// </exception>
     /// <seealso cref="Graphics">Graphics Class</seealso>
     /// <seealso cref="WallpaperTextOverlay">WallpaperTextOverlay Class</seealso>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
-    private static void DrawOverlayTexts(
-      Graphics destGraphics, Rectangle rect, IList<Wallpaper> wallpapers, IList<WallpaperTextOverlay> overlayTexts
-    ) {
-      if (destGraphics == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("destGraphics"));
-      }
-      if (wallpapers == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("wallpapers"));
-      }
-      if (overlayTexts == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("overlayTexts"));
-      }
-      if (overlayTexts.Count == 0) {
+    private static void DrawOverlayTexts(Graphics destGraphics, Rectangle rect, IList<Wallpaper> wallpapers, IList<WallpaperTextOverlay> overlayTexts) {
+      Contract.Requires<ArgumentNullException>(destGraphics != null);
+      Contract.Requires<ArgumentNullException>(wallpapers != null);
+      Contract.Requires<ArgumentNullException>(overlayTexts != null);
+      if (overlayTexts.Count == 0)
         return;
-      }
 
       GraphicsContainer graphicalContext = null;
       try {
@@ -753,35 +632,45 @@ namespace WallpaperManager.Models {
               Pen borderPen = null;
               SolidBrush fontBrush = null;
               try {
-                Single fontSizeInPixels = (destGraphics.DpiY * overlayText.FontSize / 72);
+                float fontSizeInPixels = (destGraphics.DpiY * overlayText.FontSize / 72);
                 fontFamily = new FontFamily(overlayText.FontName);
 
                 textPath = new GraphicsPath();
                 textPath.AddString(
-                  overlayText.GetEvaluatedText(wallpapers), 
-                  fontFamily, (Int32)overlayText.FontStyle, fontSizeInPixels, 
-                  textRect, format
-                );
+                  overlayText.GetEvaluatedText(wallpapers),
+                  fontFamily, (int)overlayText.FontStyle, fontSizeInPixels,
+                  textRect, format);
 
-                borderPen = new Pen(overlayText.BorderColor, (Single)Math.Round(fontSizeInPixels * 0.2, 2));
+                borderPen = new Pen(overlayText.BorderColor, (float)Math.Round(fontSizeInPixels * 0.2, 2));
                 fontBrush = new SolidBrush(overlayText.ForeColor);
                 destGraphics.DrawPath(borderPen, textPath);
                 destGraphics.FillPath(fontBrush, textPath);
               } finally {
-                if (textPath != null) textPath.Dispose();
-                if (fontFamily != null) fontFamily.Dispose();
-                if (borderPen != null) borderPen.Dispose();
-                if (fontBrush != null) fontBrush.Dispose();
+                textPath?.Dispose();
+                fontFamily?.Dispose();
+                borderPen?.Dispose();
+                fontBrush?.Dispose();
               }
             }
           }
         }
       } finally {
-        if (graphicalContext != null) {
+        if (graphicalContext != null)
           destGraphics.EndContainer(graphicalContext);
-        }
       }
     }
-    #endregion
+  }
+
+  [ContractClassFor(typeof(WallpaperBuilderBase))]
+  internal abstract class WallpaperBuilderBaseContracts : WallpaperBuilderBase {
+    public WallpaperBuilderBaseContracts(ScreenSettingsCollection screensSettings) : base(screensSettings) {}
+
+    public override Image CreateMultiscreenFromMultiple(IList<IList<Wallpaper>> wallpapers, float scaleFactor, bool useWindowsFix) {
+      Contract.Requires<ArgumentNullException>(wallpapers != null);
+      Contract.Requires<ArgumentException>(wallpapers.Count > 0);
+      Contract.Requires<ArgumentException>(!wallpapers.Contains(null));
+
+      throw new NotImplementedException();
+    }
   }
 }

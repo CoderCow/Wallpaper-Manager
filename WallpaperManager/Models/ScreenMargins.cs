@@ -1,10 +1,11 @@
 ﻿// This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
+using System.Diagnostics.Contracts;
 using Common;
 
 namespace WallpaperManager.Models {
@@ -12,12 +13,26 @@ namespace WallpaperManager.Models {
   ///   Contains margin definitions (left, right, top and bottom) for a screen.
   /// </summary>
   /// <threadsafety static="true" instance="false" />
-  public class ScreenMargins: INotifyPropertyChanged, ICloneable, IAssignable {
-    #region Property: Left
+  public class ScreenMargins : INotifyPropertyChanged, ICloneable, IAssignable {
+    /// <summary>
+    ///   <inheritdoc cref="Bottom" select='../value/node()' />
+    /// </summary>
+    private int bottom;
+
     /// <summary>
     ///   <inheritdoc cref="Left" select='../value/node()' />
     /// </summary>
-    private Int32 left;
+    private int left;
+
+    /// <summary>
+    ///   <inheritdoc cref="Right" select='../value/node()' />
+    /// </summary>
+    private int right;
+
+    /// <summary>
+    ///   <inheritdoc cref="Top" select='../value/node()' />
+    /// </summary>
+    private int top;
 
     /// <summary>
     ///   Gets or sets the left border value in pixels.
@@ -25,20 +40,13 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The left border value in pixels.
     /// </value>
-    public Int32 Left {
+    public int Left {
       get { return this.left; }
       set {
         this.left = value;
         this.OnPropertyChanged("Left");
       }
     }
-    #endregion
-
-    #region Property: Right
-    /// <summary>
-    ///   <inheritdoc cref="Right" select='../value/node()' />
-    /// </summary>
-    private Int32 right;
 
     /// <summary>
     ///   Gets or sets the right border value in pixels.
@@ -46,20 +54,13 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The right border value in pixels.
     /// </value>
-    public Int32 Right {
+    public int Right {
       get { return this.right; }
       set {
         this.right = value;
         this.OnPropertyChanged("Right");
       }
     }
-    #endregion
-
-    #region Property: Top
-    /// <summary>
-    ///   <inheritdoc cref="Top" select='../value/node()' />
-    /// </summary>
-    private Int32 top;
 
     /// <summary>
     ///   Gets or sets the top border value in pixels.
@@ -67,20 +68,13 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The top border value in pixels.
     /// </value>
-    public Int32 Top {
+    public int Top {
       get { return this.top; }
       set {
         this.top = value;
         this.OnPropertyChanged("Top");
       }
     }
-    #endregion
-
-    #region Property: Bottom
-    /// <summary>
-    ///   <inheritdoc cref="Bottom" select='../value/node()' />
-    /// </summary>
-    private Int32 bottom;
 
     /// <summary>
     ///   Gets or sets the bottom border value in pixels.
@@ -88,26 +82,24 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The bottom border value in pixels.
     /// </value>
-    public Int32 Bottom {
+    public int Bottom {
       get { return this.bottom; }
       set {
         this.bottom = value;
         this.OnPropertyChanged("Bottom");
       }
     }
-    #endregion
 
-
-    #region Method: Constructor
-    /// <summary>
-    ///   Initializes a new instance of the <see cref="ScreenMargins" /> class.
-    /// </summary>
-    public ScreenMargins() {}
-    #endregion
+    /// <inheritdoc />
+    public override string ToString() {
+      return StringGenerator.FromListKeyed(
+        new[] {"Left", "Right", "Top", "Bottom"},
+        (IList<object>)new object[] {this.Left, this.Right, this.Top, this.Bottom});
+    }
 
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />
-    public Object Clone() {
+    public object Clone() {
       return this.MemberwiseClone();
     }
 
@@ -123,16 +115,11 @@ namespace WallpaperManager.Models {
     /// <exception cref="ArgumentException">
     ///   <paramref name="other" /> is not castable to the <see cref="ScreenMargins" /> type.
     /// </exception>
-    public void AssignTo(Object other) {
-      if (other == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("other"));
-      }
+    public void AssignTo(object other) {
+      Contract.Requires<ArgumentNullException>(other != null);
+      Contract.Requires<ArgumentException>(other is ScreenMargins);
 
-      ScreenMargins otherInstance = (other as ScreenMargins);
-      if (otherInstance == null) {
-        throw new ArgumentException(ExceptionMessages.GetTypeIsNotCastable("Object", "ScreenMargins", "other"));
-      }
-
+      ScreenMargins otherInstance = (ScreenMargins)other;
       otherInstance.Left = this.Left;
       otherInstance.Top = this.Top;
       otherInstance.Right = this.Right;
@@ -145,20 +132,8 @@ namespace WallpaperManager.Models {
     public event PropertyChangedEventHandler PropertyChanged;
 
     /// <commondoc select='INotifyPropertyChanged/Methods/OnPropertyChanged/*' />
-    protected virtual void OnPropertyChanged(String propertyName) {
-      if (this.PropertyChanged != null) {
-        this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-      }
-    }
-    #endregion
-
-    #region Methods: ToString
-    /// <inheritdoc />
-    public override String ToString() {
-      return StringGenerator.FromListKeyed(
-        new String[] { "Left", "Right", "Top", "Bottom" },
-        (IList<Object>)new Object[] { this.Left, this.Right, this.Top, this.Bottom }
-      );
+    protected virtual void OnPropertyChanged(string propertyName) {
+      this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     #endregion
   }

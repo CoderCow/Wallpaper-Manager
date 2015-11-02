@@ -1,27 +1,21 @@
 // This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Windows;
-
 using Common;
 using Common.Presentation;
-
 using WallpaperManager.Models;
 
 namespace WallpaperManager.ViewModels {
   /// <commondoc select='WrappingViewModels/General/*' params="WrappedType=WallpaperChanger" />
   /// <threadsafety static="true" instance="false" />
-  public class WallpaperChangerVM: IWeakEventListener, INotifyPropertyChanged {
-    #region Property: WallpaperChanger
-    /// <summary>
-    ///   <inheritdoc cref="WallpaperChanger" select='../value/node()' />
-    /// </summary>
-    private readonly WallpaperChanger wallpaperChanger;
-
+  public class WallpaperChangerVM : IWeakEventListener, INotifyPropertyChanged {
     /// <summary>
     ///   Gets the <see cref="WallpaperChanger" /> wrapped by this View Model.
     /// </summary>
@@ -29,19 +23,13 @@ namespace WallpaperManager.ViewModels {
     ///   The <see cref="WallpaperChanger" /> wrapped by this View Model.
     /// </value>
     /// <seealso cref="WallpaperChanger">WallpaperChanger Class</seealso>
-    protected WallpaperChanger WallpaperChanger {
-      get { return this.wallpaperChanger; }
-    }
-    #endregion
+    protected WallpaperChanger WallpaperChanger { get; }
 
-    #region Property: IsAutocycling
     /// <inheritdoc cref="WallpaperManager.Models.WallpaperChanger.IsAutocycling" />
-    public Boolean IsAutocycling {
+    public bool IsAutocycling {
       get { return this.WallpaperChanger.IsAutocycling; }
     }
-    #endregion
 
-    #region Property: TimeSpanUntilNextCycle
     /// <summary>
     ///   Gets the <see cref="TimeSpan" /> until the next automatic cycle.
     /// </summary>
@@ -51,56 +39,67 @@ namespace WallpaperManager.ViewModels {
     public TimeSpan TimeSpanUntilNextCycle {
       get { return this.WallpaperChanger.TimeSpanUntilNextCycle; }
     }
-    #endregion
 
-    #region Property: ActiveWallpapers
     /// <inheritdoc cref="WallpaperManager.Models.WallpaperChanger.ActiveWallpapers" />
     public ReadOnlyCollection<Wallpaper> ActiveWallpapers {
       get { return this.WallpaperChanger.ActiveWallpapers; }
     }
-    #endregion
 
-    #region Event: UnhandledCommandException
     /// <commondoc select='ViewModels/Events/UnhandledCommandException/*' />
     public event EventHandler<CommandExceptionEventArgs> UnhandledCommandException;
 
-    /// <commondoc select='ViewModels/Methods/OnUnhandledCommandException/*' />
-    protected virtual void OnUnhandledCommandException(CommandExceptionEventArgs e) {
-      if (e == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("e"));
-      }
-
-      if (this.UnhandledCommandException != null) {
-        this.UnhandledCommandException.ReverseInvoke(this, e);
-      }
-
-      if (!e.IsHandled) {
-        throw e.Exception;
-      }
-    }
-    #endregion
-
-
-    #region Method: Constructor
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperChangerVM" /> class.
     /// </summary>
     /// <param name="wallpaperChanger">
     ///   The <see cref="WallpaperChanger" /> wrapped by this View Model.
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <paramref name="wallpaperChanger" /> is <c>null</c>.
-    /// </exception>
     /// <seealso cref="WallpaperChanger">WallpaperChanger Class</seealso>
     public WallpaperChangerVM(WallpaperChanger wallpaperChanger) {
-      if (wallpaperChanger == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("wallpaperChanger"));
+      this.WallpaperChanger = wallpaperChanger;
+      PropertyChangedEventManager.AddListener(this.WallpaperChanger, this, string.Empty);
+    }
+
+    #region IWeakEventListener Implementation
+    /// <inheritdoc />
+    public bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e) {
+      if (managerType == typeof(PropertyChangedEventManager)) {
+        switch (((PropertyChangedEventArgs)e).PropertyName) {
+          case "IsAutocycling":
+            this.OnPropertyChanged("IsAutocycling");
+            break;
+          case "ActiveWallpapers":
+            this.OnPropertyChanged("ActiveWallpapers");
+            break;
+          case "TimeSpanUntilNextCycle":
+            this.OnPropertyChanged("TimeSpanUntilNextCycle");
+            break;
+        }
+        return true;
       }
 
-      this.wallpaperChanger = wallpaperChanger;
-      PropertyChangedEventManager.AddListener(this.WallpaperChanger, this, String.Empty);
+      return false;
     }
     #endregion
+
+    /// <summary>
+    ///   Checks whether all properties have valid values.
+    /// </summary>
+    [ContractInvariantMethod]
+    private void CheckInvariants() {
+      Contract.Invariant(this.WallpaperChanger != null);
+      Contract.Invariant(this.StartCyclingCommand != null);
+      Contract.Invariant(this.StopCyclingCommand != null);
+      Contract.Invariant(this.CycleNextRandomlyCommand != null);
+      Contract.Invariant(this.CycleNextCommand != null);
+    }
+
+    /// <commondoc select='ViewModels/Methods/OnUnhandledCommandException/*' />
+    protected virtual void OnUnhandledCommandException(CommandExceptionEventArgs e) {
+      Contract.Requires<ArgumentNullException>(e != null);
+
+      this.UnhandledCommandException?.ReverseInvoke(this, e);
+    }
 
     #region Command: StartCycling
     /// <summary>
@@ -118,9 +117,8 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="StartCyclingCommand_Execute">StartCyclingCommand_Execute Method</seealso>
     public DelegateCommand StartCyclingCommand {
       get {
-        if (this.startCyclingCommand == null) {
+        if (this.startCyclingCommand == null)
           this.startCyclingCommand = new DelegateCommand(this.StartCyclingCommand_Execute, this.StartCyclingCommand_CanExecute);
-        }
 
         return this.startCyclingCommand;
       }
@@ -130,10 +128,10 @@ namespace WallpaperManager.ViewModels {
     ///   Determines if <see cref="StartCyclingCommand" /> can be executed.
     /// </summary>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
+    ///   A <see cref="bool" /> indicating whether the command can be executed or not.
     /// </returns>
     /// <seealso cref="StartCyclingCommand" />
-    protected Boolean StartCyclingCommand_CanExecute() {
+    protected bool StartCyclingCommand_CanExecute() {
       return true;
     }
 
@@ -145,16 +143,14 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="StartCyclingCommand" />
     protected void StartCyclingCommand_Execute() {
       if (!this.WallpaperChanger.CheckWallpaperListIntegrity()) {
-        this.OnUnhandledCommandException(new CommandExceptionEventArgs(
-          this.StartCyclingCommand, new InvalidOperationException(ExceptionMessages.GetNotEnoughtWallpapersToCycle())
-        ));
+        this.OnUnhandledCommandException(new CommandExceptionEventArgs(this.StartCyclingCommand, new InvalidOperationException("Not enough wallpapers to cycle.")));
 
         return;
       }
 
-      #if DEBUG
+#if DEBUG
       this.WallpaperChanger.StartCycling();
-      #else
+#else
       try {
         this.WallpaperChanger.StartCycling();
       } catch (Exception exception) {
@@ -180,9 +176,8 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="StopCyclingCommand_Execute">StopCyclingCommand_Execute Method</seealso>
     public DelegateCommand StopCyclingCommand {
       get {
-        if (this.stopCyclingCommand == null) {
+        if (this.stopCyclingCommand == null)
           this.stopCyclingCommand = new DelegateCommand(this.StopCyclingCommand_Execute, this.StopCyclingCommand_CanExecute);
-        }
 
         return this.stopCyclingCommand;
       }
@@ -192,10 +187,10 @@ namespace WallpaperManager.ViewModels {
     ///   Determines if <see cref="StopCyclingCommand" /> can be executed.
     /// </summary>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
+    ///   A <see cref="bool" /> indicating whether the command can be executed or not.
     /// </returns>
     /// <seealso cref="StopCyclingCommand" />
-    protected Boolean StopCyclingCommand_CanExecute() {
+    protected bool StopCyclingCommand_CanExecute() {
       return true;
     }
 
@@ -206,9 +201,9 @@ namespace WallpaperManager.ViewModels {
     /// <inheritdoc cref="WallpaperManager.Models.WallpaperChanger.StopCycling" select='exception' />
     /// <seealso cref="StopCyclingCommand" />
     protected void StopCyclingCommand_Execute() {
-      #if DEBUG
+#if DEBUG
       this.WallpaperChanger.StopCycling();
-      #else
+#else
       try {
         this.WallpaperChanger.StopCycling();
       } catch (Exception exception) {
@@ -234,11 +229,8 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="CycleNextRandomlyCommand_Execute">CycleNextRandomlyCommand_Execute Method</seealso>
     public DelegateCommand CycleNextRandomlyCommand {
       get {
-        if (this.cycleNextRandomlyCommand == null) {
-          this.cycleNextRandomlyCommand = new DelegateCommand(
-            this.CycleNextRandomlyCommand_Execute, this.CycleNextRandomlyCommand_CanExecute
-          );
-        }
+        if (this.cycleNextRandomlyCommand == null)
+          this.cycleNextRandomlyCommand = new DelegateCommand(this.CycleNextRandomlyCommand_Execute, this.CycleNextRandomlyCommand_CanExecute);
 
         return this.cycleNextRandomlyCommand;
       }
@@ -248,10 +240,10 @@ namespace WallpaperManager.ViewModels {
     ///   Determines if <see cref="CycleNextRandomlyCommand" /> can be executed.
     /// </summary>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
+    ///   A <see cref="bool" /> indicating whether the command can be executed or not.
     /// </returns>
     /// <seealso cref="CycleNextRandomlyCommand" />
-    protected Boolean CycleNextRandomlyCommand_CanExecute() {
+    protected bool CycleNextRandomlyCommand_CanExecute() {
       return true;
     }
 
@@ -259,18 +251,16 @@ namespace WallpaperManager.ViewModels {
     ///   Called when <see cref="CycleNextRandomlyCommand" /> is executed.
     ///   Starts the automatic cycling of wallpapers.
     /// </summary>
-    /// <inheritdoc cref="WallpaperManager.Models.WallpaperChanger.CycleNextRandomly(IList{Wallpaper})" select='exception' />
+    /// <inheritdoc
+    ///   cref="WallpaperManager.Models.WallpaperChanger.CycleNextRandomly(System.Collections.Generic.IList{WallpaperManager.Models.Wallpaper})"
+    ///   select='exception' />
     /// <seealso cref="CycleNextRandomlyCommand" />
     protected void CycleNextRandomlyCommand_Execute() {
-      #if DEBUG
-      this.WallpaperChanger.CycleNextRandomly();
-      #else
       try {
         this.WallpaperChanger.CycleNextRandomly();
       } catch (Exception exception) {
         this.OnUnhandledCommandException(new CommandExceptionEventArgs(this.CycleNextRandomlyCommand, exception));
       }
-      #endif
     }
     #endregion
 
@@ -290,11 +280,8 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="CycleNextCommand_Execute">CycleNextCommand_Execute Method</seealso>
     public DelegateCommand<IList<Wallpaper>> CycleNextCommand {
       get {
-        if (this.cycleNextCommand == null) {
-          this.cycleNextCommand = new DelegateCommand<IList<Wallpaper>>(
-            this.CycleNextCommand_Execute, this.CycleNextCommand_CanExecute
-          );
-        }
+        if (this.cycleNextCommand == null)
+          this.cycleNextCommand = new DelegateCommand<IList<Wallpaper>>(this.CycleNextCommand_Execute, this.CycleNextCommand_CanExecute);
 
         return this.cycleNextCommand;
       }
@@ -307,10 +294,10 @@ namespace WallpaperManager.ViewModels {
     ///   The <see cref="Wallpaper" /> objects to use for the cycle.
     /// </param>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
+    ///   A <see cref="bool" /> indicating whether the command can be executed or not.
     /// </returns>
     /// <seealso cref="CycleNextCommand" />
-    protected Boolean CycleNextCommand_CanExecute(IList<Wallpaper> wallpapersToUse) {
+    protected bool CycleNextCommand_CanExecute(IList<Wallpaper> wallpapersToUse) {
       return true;
     }
 
@@ -324,45 +311,14 @@ namespace WallpaperManager.ViewModels {
     /// <inheritdoc cref="WallpaperManager.Models.WallpaperChanger.CycleNextRandomly(IList{Wallpaper})" select='exception' />
     /// <seealso cref="CycleNextCommand" />
     protected void CycleNextCommand_Execute(IList<Wallpaper> wallpapersToUse) {
-      #if DEBUG
-      if (wallpapersToUse != null) {
-        this.WallpaperChanger.CycleNext(wallpapersToUse);
-      } else {
-        this.WallpaperChanger.CycleNextRandomly();
-      }
-      #else
       try {
-        if (wallpapersToUse != null) {
+        if (wallpapersToUse != null)
           this.WallpaperChanger.CycleNext(wallpapersToUse);
-        } else {
+        else
           this.WallpaperChanger.CycleNextRandomly();
-        }
       } catch (Exception exception) {
         this.OnUnhandledCommandException(new CommandExceptionEventArgs(this.CycleNextCommand, exception));
       }
-      #endif
-    }
-    #endregion
-
-    #region IWeakEventListener Implementation
-    /// <inheritdoc />
-    public Boolean ReceiveWeakEvent(Type managerType, Object sender, EventArgs e) {
-      if (managerType == typeof(PropertyChangedEventManager)) {
-        switch (((PropertyChangedEventArgs)e).PropertyName) {
-          case "IsAutocycling":
-            this.OnPropertyChanged("IsAutocycling");
-            break;
-          case "ActiveWallpapers":
-            this.OnPropertyChanged("ActiveWallpapers");
-            break;
-          case "TimeSpanUntilNextCycle":
-            this.OnPropertyChanged("TimeSpanUntilNextCycle");
-            break;
-        }
-        return true;
-      }
-
-      return false;
     }
     #endregion
 
@@ -371,10 +327,8 @@ namespace WallpaperManager.ViewModels {
     public event PropertyChangedEventHandler PropertyChanged;
 
     /// <commondoc select='INotifyPropertyChanged/Methods/OnPropertyChanged/*' />
-    protected virtual void OnPropertyChanged(String propertyName) {
-      if (this.PropertyChanged != null) {
-        this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-      }
+    protected virtual void OnPropertyChanged(string propertyName) {
+      this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     #endregion
   }

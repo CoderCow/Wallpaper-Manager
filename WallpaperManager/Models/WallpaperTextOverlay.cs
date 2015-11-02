@@ -1,17 +1,16 @@
 ﻿// This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Globalization;
 using System.Text;
-
 using Common;
 using Common.IO;
-
-using WallpaperManager.Models;
 
 namespace WallpaperManager.Models {
   /// <summary>
@@ -24,22 +23,66 @@ namespace WallpaperManager.Models {
   /// <seealso cref="WallpaperBuilderBase">WallpaperBuilderBase Class</seealso>
   /// <seealso cref="WallpaperChanger">WallpaperChanger Class</seealso>
   /// <threadsafety static="true" instance="false" />
-  public class WallpaperTextOverlay: INotifyPropertyChanged, ICloneable, IAssignable {
-    #region Constants: DefaultFormat, DefaultFontName, DefaultFontSize, DefaultFontStyle, DefaultForeColor, DefaultBorderColor, DefaultPosition
+  public class WallpaperTextOverlay : INotifyPropertyChanged, ICloneable, IAssignable {
     /// <summary>
     ///   Represents the default font name.
     /// </summary>
-    private const String DefaultFontName = "Verdana";
+    private const string DefaultFontName = "Verdana";
 
     /// <summary>
     ///   Represents the default font size in points.
     /// </summary>
-    private const Single DefaultFontSize = 12;
+    private const float DefaultFontSize = 12;
 
     /// <summary>
     ///   Represents the default <see cref="FontStyle" />.
     /// </summary>
     private const FontStyle DefaultFontStyle = 0;
+
+    /// <summary>
+    ///   Represents the default <see cref="Position" /> value.
+    /// </summary>
+    private const TextOverlayPosition DefaultPosition = TextOverlayPosition.BottomRight;
+
+    /// <summary>
+    ///   <inheritdoc cref="BorderColor" select='../value/node()' />
+    /// </summary>
+    private Color borderColor;
+
+    /// <summary>
+    ///   <inheritdoc cref="FontName" select='../value/node()' />
+    /// </summary>
+    private string fontName;
+
+    /// <summary>
+    ///   <inheritdoc cref="FontSize" select='../value/node()' />
+    /// </summary>
+    private float fontSize;
+
+    /// <summary>
+    ///   <inheritdoc cref="FontStyle" select='../value/node()' />
+    /// </summary>
+    private FontStyle fontStyle;
+
+    /// <summary>
+    ///   <inheritdoc cref="ForeColor" select='../value/node()' />
+    /// </summary>
+    private Color foreColor;
+
+    /// <summary>
+    ///   <inheritdoc cref="Format" select='../value/node()' />
+    /// </summary>
+    private string format;
+
+    /// <summary>
+    ///   <inheritdoc cref="Offset" select='../value/node()' />
+    /// </summary>
+    private Point offset;
+
+    /// <summary>
+    ///   <inheritdoc cref="Position" select='../value/node()' />
+    /// </summary>
+    private TextOverlayPosition position;
 
     /// <summary>
     ///   Gets the default <see cref="ForeColor" /> value.
@@ -62,44 +105,18 @@ namespace WallpaperManager.Models {
     }
 
     /// <summary>
-    ///   Represents the default <see cref="Position" /> value.
-    /// </summary>
-    private const TextOverlayPosition DefaultPosition = TextOverlayPosition.BottomRight;
-    #endregion
-
-    #region Property: Format
-    /// <summary>
-    ///   <inheritdoc cref="Format" select='../value/node()' />
-    /// </summary>
-    private String format;
-    
-    /// <summary>
     ///   Gets or sets the content text.
     /// </summary>
     /// <value>
     ///   The content text.
     /// </value>
-    /// <exception cref="ArgumentNullException">
-    ///   Attempted to set a <c>null</c> value.
-    /// </exception>
-    public String Format {
+    public string Format {
       get { return this.format; }
       set {
-        if (value == null) {
-          throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull());
-        }
-        
         this.format = value;
         this.OnPropertyChanged("Format");
       }
     }
-    #endregion
-
-    #region Property: FontName
-    /// <summary>
-    ///   <inheritdoc cref="FontName" select='../value/node()' />
-    /// </summary>
-    private String fontName;
 
     /// <summary>
     ///   Gets or sets the content text's font name.
@@ -107,30 +124,13 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The content text's font name.
     /// </value>
-    /// <exception cref="ArgumentNullException">
-    ///   Attempted to set a <c>null</c> value.
-    /// </exception>
-    public String FontName {
+    public string FontName {
       get { return this.fontName; }
       set {
-        if (value == null) {
-          throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull());
-        }
-        if (value.Trim().Length == 0) {
-          throw new ArgumentNullException(ExceptionMessages.GetStringIsEmptyOrClear());
-        }
-
         this.fontName = value;
         this.OnPropertyChanged("FontName");
       }
     }
-    #endregion
-
-    #region Property: FontSize
-    /// <summary>
-    ///   <inheritdoc cref="FontSize" select='../value/node()' />
-    /// </summary>
-    private Single fontSize;
 
     /// <summary>
     ///   Gets or sets the content text's font size in points.
@@ -138,23 +138,13 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The content text's font size in points.
     /// </value>
-    /// <exception cref="ArgumentNullException">
-    ///   Attempted to set a <c>null</c> value.
-    /// </exception>
-    public Single FontSize {
+    public float FontSize {
       get { return this.fontSize; }
       set {
         this.fontSize = value;
         this.OnPropertyChanged("FontSize");
       }
     }
-    #endregion
-
-    #region Property: FontStyle
-    /// <summary>
-    ///   <inheritdoc cref="FontStyle" select='../value/node()' />
-    /// </summary>
-    private FontStyle fontStyle;
 
     /// <summary>
     ///   Gets or sets the content text's font style.
@@ -162,9 +152,6 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The content text's font style.
     /// </value>
-    /// <exception cref="ArgumentNullException">
-    ///   Attempted to set a <c>null</c> value.
-    /// </exception>
     public FontStyle FontStyle {
       get { return this.fontStyle; }
       set {
@@ -172,13 +159,6 @@ namespace WallpaperManager.Models {
         this.OnPropertyChanged("FontStyle");
       }
     }
-    #endregion
-
-    #region Property: ForeColor
-    /// <summary>
-    ///   <inheritdoc cref="ForeColor" select='../value/node()' />
-    /// </summary>
-    private Color foreColor;
 
     /// <summary>
     ///   Gets or sets the content text's color.
@@ -193,13 +173,6 @@ namespace WallpaperManager.Models {
         this.OnPropertyChanged("ForeColor");
       }
     }
-    #endregion
-
-    #region Property: BorderColor
-    /// <summary>
-    ///   <inheritdoc cref="BorderColor" select='../value/node()' />
-    /// </summary>
-    private Color borderColor;
 
     /// <summary>
     ///   Gets or sets the content text's border color.
@@ -214,13 +187,6 @@ namespace WallpaperManager.Models {
         this.OnPropertyChanged("BorderColor");
       }
     }
-    #endregion
-
-    #region Properties: Offset, HorizontalOffset, VerticalOffset
-    /// <summary>
-    ///   <inheritdoc cref="Offset" select='../value/node()' />
-    /// </summary>
-    private Point offset;
 
     /// <summary>
     ///   Gets or sets the content text's horizontal and vertical offset.
@@ -242,7 +208,7 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The content text's horizontal offset.
     /// </value>
-    public Int32 HorizontalOffset {
+    public int HorizontalOffset {
       get { return this.offset.X; }
       set {
         this.offset = new Point(value, this.Offset.Y);
@@ -256,20 +222,13 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The content text's vertical offset.
     /// </value>
-    public Int32 VerticalOffset {
+    public int VerticalOffset {
       get { return this.offset.Y; }
       set {
         this.offset = new Point(this.Offset.X, value);
         this.OnPropertyChanged("Offset");
       }
     }
-    #endregion
-
-    #region Property: Position
-    /// <summary>
-    ///   <inheritdoc cref="Position" select='../value/node()' />
-    /// </summary>
-    private TextOverlayPosition position;
 
     /// <summary>
     ///   Gets or sets the position where the text should be displayed on the screen.
@@ -277,25 +236,15 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The position where the text should be displayed on the screen.
     /// </value>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///   Attempted to set a value which is no constant defined by the <see cref="TextOverlayPosition" /> enumeration.
-    /// </exception>
     /// <seealso cref="TextOverlayPosition">TextOverlayPosition Enumeration</seealso>
     public TextOverlayPosition Position {
       get { return this.position; }
       set {
-        if (!Enum.IsDefined(typeof(TextOverlayPosition), value)) {
-          throw new ArgumentOutOfRangeException(ExceptionMessages.GetEnumValueInvalid(null, typeof(TextOverlayPosition), value));
-        }
-
         this.position = value;
         this.OnPropertyChanged("Position");
       }
     }
-    #endregion
 
-    
-    #region Methods: Constructor, GetEvaluatedText
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperTextOverlay" /> class.
     /// </summary>
@@ -310,6 +259,18 @@ namespace WallpaperManager.Models {
     }
 
     /// <summary>
+    ///   Checks whether all properties have valid values.
+    /// </summary>
+    [ContractInvariantMethod]
+    private void CheckInvariants() {
+      Contract.Invariant(this.Format != null);
+      Contract.Invariant(this.FontName != null);
+      Contract.Invariant(this.FontName.Trim().Length > 0);
+      Contract.Invariant(Enum.IsDefined(typeof(FontStyle), this.FontStyle));
+      Contract.Invariant(Enum.IsDefined(typeof(TextOverlayPosition), this.Position));
+    }
+
+    /// <summary>
     ///   Returns the format string with replaced parameter values.
     /// </summary>
     /// <param name="wallpapers">
@@ -319,17 +280,17 @@ namespace WallpaperManager.Models {
     ///   The format string with replaced parameter values.
     /// </returns>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
-    public String GetEvaluatedText(IList<Wallpaper> wallpapers) {
+    public string GetEvaluatedText(IList<Wallpaper> wallpapers) {
       StringBuilder evaluatedText = new StringBuilder();
-      
-      Boolean inParam = false;
-      Int32 lastParamStart = 0;
-      for (Int32 i = 0; i < this.Format.Length; i++) {
-        Char currentChar = this.Format[i];
+
+      bool inParam = false;
+      int lastParamStart = 0;
+      for (int i = 0; i < this.Format.Length; i++) {
+        char currentChar = this.Format[i];
 
         if (currentChar == '%') {
           if (inParam) {
-            String parameter = this.Format.Substring(lastParamStart + 1, i - lastParamStart - 1);
+            string parameter = this.Format.Substring(lastParamStart + 1, i - lastParamStart - 1);
             parameter = parameter.ToUpperInvariant();
 
             switch (parameter) {
@@ -343,7 +304,7 @@ namespace WallpaperManager.Models {
                 evaluatedText.Append(DateTime.Now.ToString("hh:mm:ss", CultureInfo.CurrentCulture));
                 break;
               case "DAYOFWEEK":
-                evaluatedText.Append(DateTime.Today.DayOfWeek.ToString());
+                evaluatedText.Append(DateTime.Today.DayOfWeek);
                 break;
               case "USERNAME":
                 evaluatedText.Append(Environment.UserName);
@@ -356,44 +317,35 @@ namespace WallpaperManager.Models {
                 break;
               case "SYSTEMRUNTIME":
                 TimeSpan runtime = TimeSpan.FromMilliseconds(Environment.TickCount);
-                
-                if (runtime.Days > 0) {
-                  evaluatedText.Append(String.Format(
-                    CultureInfo.CurrentCulture, 
-                    "{0}.{1:00}:{2:00}:{3:00}", runtime.Days, runtime.Hours, runtime.Minutes, runtime.Seconds)
-                  );
-                } else {
-                  evaluatedText.Append(String.Format(
-                    CultureInfo.CurrentCulture, "{0:00}:{1:00}:{2:00}", runtime.Hours, runtime.Minutes, runtime.Seconds)
-                  );
-                }
+
+                if (runtime.Days > 0)
+                  evaluatedText.Append(string.Format(CultureInfo.CurrentCulture, "{0}.{1:00}:{2:00}:{3:00}", runtime.Days, runtime.Hours, runtime.Minutes, runtime.Seconds));
+                else
+                  evaluatedText.Append(string.Format(CultureInfo.CurrentCulture, "{0:00}:{1:00}:{2:00}", runtime.Hours, runtime.Minutes, runtime.Seconds));
+
                 break;
               case "SYSTEMRUNTIMEFMT":
                 TimeSpan runtime2 = TimeSpan.FromMilliseconds(Environment.TickCount);
-                
-                if (runtime2.Days > 0) {
-                  evaluatedText.Append(String.Format(
-                    CultureInfo.CurrentCulture, "{0} days, {1} hours, {2} minutes", runtime2.Days, runtime2.Hours, runtime2.Minutes)
-                  );
-                } else {
-                  evaluatedText.Append(String.Format(
-                    CultureInfo.CurrentCulture, "{0} hours, {1} minutes", runtime2.Hours, runtime2.Minutes)
-                  );
-                }
+
+                if (runtime2.Days > 0)
+                  evaluatedText.Append(string.Format(CultureInfo.CurrentCulture, "{0} days, {1} hours, {2} minutes", runtime2.Days, runtime2.Hours, runtime2.Minutes));
+                else
+                  evaluatedText.Append(string.Format(CultureInfo.CurrentCulture, "{0} hours, {1} minutes", runtime2.Hours, runtime2.Minutes));
+
                 break;
               case "SYSTEMSTARTTIME":
                 TimeSpan runtime3 = TimeSpan.FromMilliseconds(Environment.TickCount);
-                
+
                 evaluatedText.Append(DateTime.Now.Subtract(runtime3).ToString("hh:mm:ss", CultureInfo.CurrentCulture));
                 break;
               case "SYSTEMSTARTTIMED":
                 TimeSpan runtime4 = TimeSpan.FromMilliseconds(Environment.TickCount);
-                
+
                 evaluatedText.Append(DateTime.Now.Subtract(runtime4).ToString("dd.MM.yy, hh:mm:ss", CultureInfo.CurrentCulture));
                 break;
               case "SYSTEMSTARTTIMEDFMT":
                 TimeSpan runtime5 = TimeSpan.FromMilliseconds(Environment.TickCount);
-                
+
                 evaluatedText.Append(DateTime.Now.Subtract(runtime5).ToString("MMMM d, yyyy hh:mm:ss", CultureInfo.CurrentCulture));
                 break;
               case "LB":
@@ -401,47 +353,41 @@ namespace WallpaperManager.Models {
                 break;
               default:
                 if (parameter.Length > 9 && parameter.StartsWith("WALLPAPER", StringComparison.OrdinalIgnoreCase)) {
-                  Int32 screenIndex;
+                  int screenIndex;
 
-                  if (Int32.TryParse(parameter.Substring(9), out screenIndex)) {
-                    if (screenIndex > wallpapers.Count || screenIndex <= 0) {
+                  if (int.TryParse(parameter.Substring(9), out screenIndex)) {
+                    if (screenIndex > wallpapers.Count || screenIndex <= 0)
                       screenIndex = 1;
-                    }
 
                     Path filePath = wallpapers[screenIndex - 1].ImagePath;
-                    if (filePath != Path.None) {
+                    if (filePath != Path.None)
                       evaluatedText.Append(filePath.FileNameWithoutExt);
-                    }
                   }
                 }
 
                 if (parameter.Length > 13 && parameter.StartsWith("WALLPAPERFILE", StringComparison.OrdinalIgnoreCase)) {
-                  Int32 screenIndex;
+                  int screenIndex;
 
-                  if (Int32.TryParse(parameter.Substring(13), out screenIndex)) {
-                    if (screenIndex > wallpapers.Count || screenIndex <= 0) {
+                  if (int.TryParse(parameter.Substring(13), out screenIndex)) {
+                    if (screenIndex > wallpapers.Count || screenIndex <= 0)
                       screenIndex = 1;
-                    }
-                    
+
                     Path filePath = wallpapers[screenIndex - 1].ImagePath;
-                    if (filePath != Path.None) {
+                    if (filePath != Path.None)
                       evaluatedText.Append(filePath.FileName);
-                    }
                   }
                 }
 
                 if (parameter.Length > 13 && parameter.StartsWith("WALLPAPERPATH", StringComparison.OrdinalIgnoreCase)) {
-                  Int32 screenIndex;
+                  int screenIndex;
 
-                  if (Int32.TryParse(parameter.Substring(13), out screenIndex)) {
-                    if (screenIndex > wallpapers.Count || screenIndex <= 0) {
+                  if (int.TryParse(parameter.Substring(13), out screenIndex)) {
+                    if (screenIndex > wallpapers.Count || screenIndex <= 0)
                       screenIndex = 1;
-                    }
 
                     Path filePath = wallpapers[screenIndex - 1].ImagePath;
-                    if (filePath != Path.None) {
+                    if (filePath != Path.None)
                       evaluatedText.Append(filePath);
-                    }
                   }
                 }
                 break;
@@ -453,17 +399,14 @@ namespace WallpaperManager.Models {
             lastParamStart = i;
           }
         } else {
-          if (!inParam) {
+          if (!inParam)
             evaluatedText.Append(currentChar);
-          }
         }
       }
 
       return evaluatedText.ToString();
     }
-    #endregion
-    
-    #region Methods: FontSettingsFromFont, FontSettingsToFont
+
     /// <summary>
     ///   Gets the <see cref="FontName" />, <see cref="FontSize" /> and <see cref="FontStyle" /> property from the given
     ///   <paramref name="sourceFont" />.
@@ -478,21 +421,20 @@ namespace WallpaperManager.Models {
     }
 
     /// <summary>
-    ///   Creates a new <see cref="Font" /> instance with the <see cref="FontName" />, <see cref="FontSize" /> and 
+    ///   Creates a new <see cref="Font" /> instance with the <see cref="FontName" />, <see cref="FontSize" /> and
     ///   <see cref="FontStyle" /> properties assigned.
     /// </summary>
     /// <returns>
-    ///   A new <see cref="Font" /> instance with the <see cref="FontName" />, <see cref="FontSize" /> and 
+    ///   A new <see cref="Font" /> instance with the <see cref="FontName" />, <see cref="FontSize" /> and
     ///   <see cref="FontStyle" /> properties assigned.
     /// </returns>
     public Font FontSettingsToFont() {
       return new Font(this.FontName, this.FontSize, this.FontStyle);
     }
-    #endregion
 
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />
-    public virtual Object Clone() {
+    public virtual object Clone() {
       return new WallpaperTextOverlay() {
         Format = this.Format,
         FontName = this.FontName,
@@ -501,7 +443,7 @@ namespace WallpaperManager.Models {
         ForeColor = this.ForeColor,
         BorderColor = this.BorderColor,
         Offset = this.Offset,
-        Position = this.Position,
+        Position = this.Position
       };
     }
 
@@ -517,16 +459,11 @@ namespace WallpaperManager.Models {
     /// <exception cref="ArgumentException">
     ///   <paramref name="other" /> is not castable to the <see cref="WallpaperTextOverlay" /> type.
     /// </exception>
-    public virtual void AssignTo(Object other) {
-      if (other == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("other"));
-      }
+    public virtual void AssignTo(object other) {
+      Contract.Requires<ArgumentNullException>(other != null);
+      Contract.Requires<ArgumentException>(other is WallpaperTextOverlay);
 
-      WallpaperTextOverlay otherInstance = other as WallpaperTextOverlay;
-      if (otherInstance == null) {
-        throw new ArgumentException(ExceptionMessages.GetTypeIsNotCastable("Object", "WallpaperTextOverlay", "other"));
-      }
-
+      WallpaperTextOverlay otherInstance = (WallpaperTextOverlay)other;
       otherInstance.Format = this.Format;
       otherInstance.FontName = this.FontName;
       otherInstance.FontSize = this.FontSize;
@@ -543,10 +480,8 @@ namespace WallpaperManager.Models {
     public event PropertyChangedEventHandler PropertyChanged;
 
     /// <commondoc select='INotifyPropertyChanged/Methods/OnPropertyChanged/*' />
-    protected virtual void OnPropertyChanged(String propertyName) {
-      if (this.PropertyChanged != null) {
-        this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-      }
+    protected virtual void OnPropertyChanged(string propertyName) {
+      this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     #endregion
   }

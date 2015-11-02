@@ -1,6 +1,9 @@
 ﻿// This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
+using System;
+
 namespace WallpaperManager.Models {
   /// <summary>
   ///   Specifies how a wallpaper should be placed when drawn on a screen.
@@ -29,6 +32,6 @@ namespace WallpaperManager.Models {
     /// <summary>
     ///   The wallpaper is tiled to fill the whole screen.
     /// </summary>
-    Tile = 4,
+    Tile = 4
   }
 }

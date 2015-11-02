@@ -1,6 +1,8 @@
 ﻿// This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
+using System;
 using System.Windows.Forms;
 
 namespace WallpaperManager.Models {
@@ -26,6 +28,6 @@ namespace WallpaperManager.Models {
     /// <summary>
     ///   The options window should be displayed.
     /// </summary>
-    ShowOptionsWindow,
+    ShowOptionsWindow
   }
 }

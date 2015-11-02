@@ -1,13 +1,12 @@
 // This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
 using System.ComponentModel;
-
+using System.Diagnostics.Contracts;
 using Common;
 using Common.Presentation;
-
-using WallpaperManager.Models;
 
 namespace WallpaperManager.ViewModels {
   /// <summary>
@@ -16,13 +15,7 @@ namespace WallpaperManager.ViewModels {
   /// </summary>
   /// <commondoc select='ViewModels/General/*' />
   /// <threadsafety static="true" instance="false" />
-  public class ApplicationVM: INotifyPropertyChanged {
-    #region Property: WallpaperCategoryCollectionVM
-    /// <summary>
-    ///   <inheritdoc cref="WallpaperCategoryCollectionVM" select='../value/node()' />
-    /// </summary>
-    private readonly WallpaperCategoryCollectionVM wallpaperCategoryCollectionVM;
-
+  public class ApplicationVM : INotifyPropertyChanged {
     /// <summary>
     ///   Gets the <see cref="ViewModels.WallpaperCategoryCollectionVM" /> instance.
     /// </summary>
@@ -30,36 +23,18 @@ namespace WallpaperManager.ViewModels {
     ///   The <see cref="ViewModels.WallpaperCategoryCollectionVM" /> instance.
     /// </value>
     /// <seealso cref="ViewModels.WallpaperCategoryCollectionVM">WallpaperCategoryCollectionVM Class</seealso>
-    public WallpaperCategoryCollectionVM WallpaperCategoryCollectionVM {
-      get { return this.wallpaperCategoryCollectionVM; }
-    }
-    #endregion
-
-    #region Property: WallpaperChangerVM
-    /// <summary>
-    ///   <inheritdoc cref="WallpaperChangerVM" select='../value/node()' />
-    /// </summary>
-    private readonly WallpaperChangerVM wallpaperChangerVM;
+    public WallpaperCategoryCollectionVM WallpaperCategoryCollectionVM { get; }
 
     /// <summary>
-    ///   Gets the the <see cref="ViewModels.WallpaperChangerVM" /> instance providing an interface to control the cycling 
+    ///   Gets the the <see cref="ViewModels.WallpaperChangerVM" /> instance providing an interface to control the cycling
     ///   of wallpapers.
     /// </summary>
     /// <value>
-    ///   The the <see cref="ViewModels.WallpaperChangerVM" /> instance providing an interface to control the cycling of 
+    ///   The the <see cref="ViewModels.WallpaperChangerVM" /> instance providing an interface to control the cycling of
     ///   wallpapers.
     /// </value>
     /// <seealso cref="ViewModels.WallpaperChangerVM">WallpaperChangerVM Class</seealso>
-    public WallpaperChangerVM WallpaperChangerVM {
-      get { return this.wallpaperChangerVM; }
-    }
-    #endregion
-
-    #region Property: RequestShowMain
-    /// <summary>
-    ///   <inheritdoc cref="RequestShowMain" select='../value/node()' />
-    /// </summary>
-    private readonly Action<ApplicationVM,Boolean> requestShowMain;
+    public WallpaperChangerVM WallpaperChangerVM { get; }
 
     /// <summary>
     ///   Gets the delegate invoked to request the showing of the main view.
@@ -67,16 +42,7 @@ namespace WallpaperManager.ViewModels {
     /// <value>
     ///   The delegate invoked to request the showing of the main view.
     /// </value>
-    protected Action<ApplicationVM,Boolean> RequestShowMain {
-      get { return this.requestShowMain; }
-    }
-    #endregion
-
-    #region Property: RequestShowConfiguration
-    /// <summary>
-    ///   <inheritdoc cref="RequestShowConfiguration" select='../value/node()' />
-    /// </summary>
-    private readonly Action<ApplicationVM> requestShowConfiguration;
+    protected Action<ApplicationVM, bool> RequestShowMain { get; }
 
     /// <summary>
     ///   Gets the delegate invoked to request the showing of the configuration view.
@@ -84,16 +50,7 @@ namespace WallpaperManager.ViewModels {
     /// <value>
     ///   The delegate invoked to request the showing of the configuration view.
     /// </value>
-    protected Action<ApplicationVM> RequestShowConfiguration {
-      get { return this.requestShowConfiguration; }
-    }
-    #endregion
-
-    #region Property: RequestShowChangelog
-    /// <summary>
-    ///   <inheritdoc cref="RequestShowChangelog" select='../value/node()' />
-    /// </summary>
-    private readonly Action<ApplicationVM> requestShowChangelog;
+    protected Action<ApplicationVM> RequestShowConfiguration { get; }
 
     /// <summary>
     ///   Gets the delegate invoked to request the showing of the Changelog.
@@ -101,16 +58,7 @@ namespace WallpaperManager.ViewModels {
     /// <value>
     ///   The delegate invoked to request the showing of the Changelog.
     /// </value>
-    protected Action<ApplicationVM> RequestShowChangelog {
-      get { return this.requestShowChangelog; }
-    }
-    #endregion
-
-    #region Property: RequestShowAbout
-    /// <summary>
-    ///   <inheritdoc cref="RequestShowAbout" select='../value/node()' />
-    /// </summary>
-    private readonly Action<ApplicationVM> requestShowAbout;
+    protected Action<ApplicationVM> RequestShowChangelog { get; }
 
     /// <summary>
     ///   Gets the delegate invoked to request the showing of the about view.
@@ -118,16 +66,7 @@ namespace WallpaperManager.ViewModels {
     /// <value>
     ///   The delegate invoked to request the showing of the about view.
     /// </value>
-    protected Action<ApplicationVM> RequestShowAbout {
-      get { return this.requestShowAbout; }
-    }
-    #endregion
-
-    #region Property: RequestUpdateCheck
-    /// <summary>
-    ///   <inheritdoc cref="RequestUpdateCheck" select='../value/node()' />
-    /// </summary>
-    private readonly Action<ApplicationVM> requestUpdateCheck;
+    protected Action<ApplicationVM> RequestShowAbout { get; }
 
     /// <summary>
     ///   Gets the delegate invoked to request a check for updates.
@@ -135,16 +74,7 @@ namespace WallpaperManager.ViewModels {
     /// <value>
     ///   The delegate invoked to request a check for updates.
     /// </value>
-    protected Action<ApplicationVM> RequestUpdateCheck {
-      get { return this.requestUpdateCheck; }
-    }
-    #endregion
-
-    #region Property: RequestTerminateApplication
-    /// <summary>
-    ///   <inheritdoc cref="RequestTerminateApplication" select='../value/node()' />
-    /// </summary>
-    private readonly Action<ApplicationVM> requestTerminateApplication;
+    protected Action<ApplicationVM> RequestUpdateCheck { get; }
 
     /// <summary>
     ///   Gets the delegate invoked to request a termination of the application.
@@ -152,53 +82,16 @@ namespace WallpaperManager.ViewModels {
     /// <value>
     ///   The delegate invoked to request a termination of the application.
     /// </value>
-    protected Action<ApplicationVM> RequestTerminateApplication {
-      get { return this.requestTerminateApplication; }
-    }
-    #endregion
+    protected Action<ApplicationVM> RequestTerminateApplication { get; }
 
-    #region Event: RequestViewClose
     /// <summary>
     ///   Occurs when the View Model requests the View to close.
     /// </summary>
     public event EventHandler RequestViewClose;
 
-    /// <summary>
-    ///   Called when the View Model requests the View to close.
-    /// </summary>
-    /// <remarks>
-    ///   This method raises the <see cref="RequestViewClose">RequestViewClose Event</see>.
-    /// </remarks>
-    /// <seealso cref="RequestViewClose">RequestViewClose Event</seealso>
-    protected virtual void OnRequestViewClose() {
-      if (this.RequestViewClose != null) {
-        this.RequestViewClose(this, EventArgs.Empty);
-      }
-    }
-    #endregion
-
-    #region Event: UnhandledCommandException
     /// <commondoc select='ViewModels/Events/UnhandledCommandException/*' />
     public event EventHandler<CommandExceptionEventArgs> UnhandledCommandException;
 
-    /// <commondoc select='ViewModels/Methods/OnUnhandledCommandException/*' />
-    protected virtual void OnUnhandledCommandException(CommandExceptionEventArgs e) {
-      if (e == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("e"));
-      }
-
-      if (this.UnhandledCommandException != null) {
-        this.UnhandledCommandException.ReverseInvoke(this, e);
-      }
-
-      if (!e.IsHandled) {
-        throw e.Exception;
-      }
-    }
-    #endregion
-
-
-    #region Methods: Constructor
     /// <summary>
     ///   Initializes a new instance of the <see cref="ApplicationVM" /> class.
     /// </summary>
@@ -206,7 +99,7 @@ namespace WallpaperManager.ViewModels {
     ///   The <see cref="ViewModels.WallpaperCategoryCollectionVM" /> instance.
     /// </param>
     /// <param name="wallpaperChangerVM">
-    ///   The the <see cref="ViewModels.WallpaperChangerVM" /> instance providing an interface to 
+    ///   The the <see cref="ViewModels.WallpaperChangerVM" /> instance providing an interface to
     ///   control the cycling of wallpapers.
     /// </param>
     /// <param name="requestShowMain">
@@ -228,64 +121,78 @@ namespace WallpaperManager.ViewModels {
     ///   The delegate invoked to request a termination of the application.
     /// </param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="categoriesVM" /> or <paramref name="wallpaperChangerVM" /> or <paramref name="requestShowMain" /> or 
-    ///   <paramref name="requestShowConfiguration" /> or <paramref name="requestShowChangelog" /> or 
-    ///   <paramref name="requestShowAbout" /> or <paramref name="requestUpdateCheck" /> or 
+    ///   <paramref name="categoriesVM" /> or <paramref name="wallpaperChangerVM" /> or <paramref name="requestShowMain" /> or
+    ///   <paramref name="requestShowConfiguration" /> or <paramref name="requestShowChangelog" /> or
+    ///   <paramref name="requestShowAbout" /> or <paramref name="requestUpdateCheck" /> or
     ///   <paramref name="requestTerminateApplication" /> is <c>null</c>.
     /// </exception>
     /// <seealso cref="ViewModels.WallpaperCategoryCollectionVM">WallpaperCategoryCollectionVM Class</seealso>
     /// <seealso cref="ViewModels.WallpaperChangerVM">WallpaperChangerVM Class</seealso>
     public ApplicationVM(
-      WallpaperCategoryCollectionVM categoriesVM, 
+      WallpaperCategoryCollectionVM categoriesVM,
       WallpaperChangerVM wallpaperChangerVM,
-      Action<ApplicationVM,Boolean> requestShowMain,
+      Action<ApplicationVM, bool> requestShowMain,
       Action<ApplicationVM> requestShowConfiguration,
       Action<ApplicationVM> requestShowChangelog,
       Action<ApplicationVM> requestShowAbout,
       Action<ApplicationVM> requestUpdateCheck,
-      Action<ApplicationVM> requestTerminateApplication
-    ) {
-      if (categoriesVM == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("categoriesVM"));
-      }
-      if (wallpaperChangerVM == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("wallpaperChangerVM"));
-      }
-      if (requestUpdateCheck == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("requestUpdateCheck"));
-      }
-      if (requestShowMain == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("requestShowMain"));
-      }
-      if (requestShowConfiguration == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("requestShowConfiguration"));
-      }
-      if (requestShowChangelog == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("requestShowChangelog"));
-      }
-      if (requestShowAbout == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("requestShowAbout"));
-      }
-      if (requestTerminateApplication == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("requestTerminateApplication"));
-      }
-      
-      this.wallpaperCategoryCollectionVM = categoriesVM;
-      this.wallpaperChangerVM = wallpaperChangerVM;
-      this.requestUpdateCheck = requestUpdateCheck;
-      this.requestShowMain = requestShowMain;
-      this.requestShowConfiguration = requestShowConfiguration;
-      this.requestShowChangelog = requestShowChangelog;
-      this.requestShowAbout = requestShowAbout;
-      this.requestTerminateApplication = requestTerminateApplication;
+      Action<ApplicationVM> requestTerminateApplication) {
+
+      this.WallpaperCategoryCollectionVM = categoriesVM;
+      this.WallpaperChangerVM = wallpaperChangerVM;
+      this.RequestUpdateCheck = requestUpdateCheck;
+      this.RequestShowMain = requestShowMain;
+      this.RequestShowConfiguration = requestShowConfiguration;
+      this.RequestShowChangelog = requestShowChangelog;
+      this.RequestShowAbout = requestShowAbout;
+      this.RequestTerminateApplication = requestTerminateApplication;
     }
-    #endregion
+
+    /// <summary>
+    ///   Checks whether all properties have valid values.
+    /// </summary>
+    [ContractInvariantMethod]
+    private void CheckInvariants() {
+      Contract.Invariant(this.WallpaperCategoryCollectionVM != null);
+      Contract.Invariant(this.WallpaperChangerVM != null);
+      Contract.Invariant(this.RequestUpdateCheck != null);
+      Contract.Invariant(this.RequestShowMain != null);
+      Contract.Invariant(this.RequestShowConfiguration != null);
+      Contract.Invariant(this.RequestShowChangelog != null);
+      Contract.Invariant(this.RequestShowAbout != null);
+      Contract.Invariant(this.RequestTerminateApplication != null);
+      Contract.Invariant(this.ShowMainCommand != null);
+      Contract.Invariant(this.ShowConfigurationCommand != null);
+      Contract.Invariant(this.ShowChangelogCommand != null);
+      Contract.Invariant(this.ShowAboutCommand != null);
+      Contract.Invariant(this.UpdateCheckCommand != null);
+      Contract.Invariant(this.CloseCommand != null);
+      Contract.Invariant(this.TerminateApplicationCommand != null);
+    }
+
+    /// <summary>
+    ///   Called when the View Model requests the View to close.
+    /// </summary>
+    /// <remarks>
+    ///   This method raises the <see cref="RequestViewClose">RequestViewClose Event</see>.
+    /// </remarks>
+    /// <seealso cref="RequestViewClose">RequestViewClose Event</seealso>
+    protected virtual void OnRequestViewClose() {
+      this.RequestViewClose?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <commondoc select='ViewModels/Methods/OnUnhandledCommandException/*' />
+    protected virtual void OnUnhandledCommandException(CommandExceptionEventArgs e) {
+      Contract.Requires<ArgumentNullException>(e != null);
+
+      this.UnhandledCommandException?.ReverseInvoke(this, e);
+    }
 
     #region Command: ShowMain
     /// <summary>
     ///   <inheritdoc cref="ShowMainCommand" select='../value/node()' />
     /// </summary>
-    private DelegateCommand<Boolean> showMainCommand;
+    private DelegateCommand<bool> showMainCommand;
 
     /// <summary>
     ///   Gets the Show Main <see cref="DelegateCommand" />.
@@ -295,11 +202,10 @@ namespace WallpaperManager.ViewModels {
     /// </value>
     /// <seealso cref="ShowMainCommand_CanExecute">ShowMainCommand_CanExecute Method</seealso>
     /// <seealso cref="ShowMainCommand_Execute">ShowMainCommand_Execute Method</seealso>
-    public DelegateCommand<Boolean> ShowMainCommand {
+    public DelegateCommand<bool> ShowMainCommand {
       get {
-        if (this.showMainCommand == null) {
-          this.showMainCommand = new DelegateCommand<Boolean>(this.ShowMainCommand_Execute, this.ShowMainCommand_CanExecute);
-        }
+        if (this.showMainCommand == null)
+          this.showMainCommand = new DelegateCommand<bool>(this.ShowMainCommand_Execute, this.ShowMainCommand_CanExecute);
 
         return this.showMainCommand;
       }
@@ -309,13 +215,13 @@ namespace WallpaperManager.ViewModels {
     ///   Determines if <see cref="ShowMainCommand" /> can be executed.
     /// </summary>
     /// <param name="showMinimized">
-    ///   A <see cref="Boolean" /> indicating whether the main view should be shown minimized or not.
+    ///   A <see cref="bool" /> indicating whether the main view should be shown minimized or not.
     /// </param>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
+    ///   A <see cref="bool" /> indicating whether the command can be executed or not.
     /// </returns>
     /// <seealso cref="ShowMainCommand" />
-    protected Boolean ShowMainCommand_CanExecute(Boolean showMinimized) {
+    protected bool ShowMainCommand_CanExecute(bool showMinimized) {
       return true;
     }
 
@@ -323,12 +229,12 @@ namespace WallpaperManager.ViewModels {
     ///   Called when <see cref="ShowMainCommand" /> is executed and requests the main view to be shown.
     /// </summary>
     /// <param name="showMinimized">
-    ///   A <see cref="Boolean" /> indicating whether the main view should be shown minimized or not.
+    ///   A <see cref="bool" /> indicating whether the main view should be shown minimized or not.
     /// </param>
     /// <seealso cref="ShowMainCommand" />
-    protected void ShowMainCommand_Execute(Boolean showMinimized) {
+    protected void ShowMainCommand_Execute(bool showMinimized) {
       try {
-      this.RequestShowMain(this, showMinimized);
+        this.RequestShowMain(this, showMinimized);
       } catch (Exception exception) {
         this.OnUnhandledCommandException(new CommandExceptionEventArgs(this.ShowMainCommand, exception));
       }
@@ -351,9 +257,8 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="ShowConfigurationCommand_Execute">ShowConfigurationCommand_Execute Method</seealso>
     public DelegateCommand ShowConfigurationCommand {
       get {
-        if (this.showConfigurationCommand == null) {
+        if (this.showConfigurationCommand == null)
           this.showConfigurationCommand = new DelegateCommand(this.ShowConfigurationCommand_Execute, this.ShowConfigurationCommand_CanExecute);
-        }
 
         return this.showConfigurationCommand;
       }
@@ -363,10 +268,10 @@ namespace WallpaperManager.ViewModels {
     ///   Determines if <see cref="ShowConfigurationCommand" /> can be executed.
     /// </summary>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
+    ///   A <see cref="bool" /> indicating whether the command can be executed or not.
     /// </returns>
     /// <seealso cref="ShowConfigurationCommand" />
-    protected Boolean ShowConfigurationCommand_CanExecute() {
+    protected bool ShowConfigurationCommand_CanExecute() {
       return true;
     }
 
@@ -399,9 +304,8 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="ShowChangelogCommand_Execute">ShowChangelogCommand_Execute Method</seealso>
     public DelegateCommand ShowChangelogCommand {
       get {
-        if (this.showChangelogCommand == null) {
+        if (this.showChangelogCommand == null)
           this.showChangelogCommand = new DelegateCommand(this.ShowChangelogCommand_Execute, this.ShowChangelogCommand_CanExecute);
-        }
 
         return this.showChangelogCommand;
       }
@@ -411,10 +315,10 @@ namespace WallpaperManager.ViewModels {
     ///   Determines if <see cref="ShowChangelogCommand" /> can be executed.
     /// </summary>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
+    ///   A <see cref="bool" /> indicating whether the command can be executed or not.
     /// </returns>
     /// <seealso cref="ShowChangelogCommand" />
-    protected Boolean ShowChangelogCommand_CanExecute() {
+    protected bool ShowChangelogCommand_CanExecute() {
       return true;
     }
 
@@ -447,9 +351,8 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="ShowAboutCommand_Execute">ShowAboutCommand_Execute Method</seealso>
     public DelegateCommand ShowAboutCommand {
       get {
-        if (this.showAboutCommand == null) {
+        if (this.showAboutCommand == null)
           this.showAboutCommand = new DelegateCommand(this.ShowAboutCommand_Execute, this.ShowAboutCommand_CanExecute);
-        }
 
         return this.showAboutCommand;
       }
@@ -459,10 +362,10 @@ namespace WallpaperManager.ViewModels {
     ///   Determines if <see cref="ShowAboutCommand" /> can be executed.
     /// </summary>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
+    ///   A <see cref="bool" /> indicating whether the command can be executed or not.
     /// </returns>
     /// <seealso cref="ShowAboutCommand" />
-    protected Boolean ShowAboutCommand_CanExecute() {
+    protected bool ShowAboutCommand_CanExecute() {
       return true;
     }
 
@@ -495,9 +398,8 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="UpdateCheckCommand_Execute">UpdateCheckCommand_Execute Method</seealso>
     public DelegateCommand UpdateCheckCommand {
       get {
-        if (this.updateCheckCommand == null) {
+        if (this.updateCheckCommand == null)
           this.updateCheckCommand = new DelegateCommand(this.UpdateCheckCommand_Execute, this.UpdateCheckCommand_CanExecute);
-        }
 
         return this.updateCheckCommand;
       }
@@ -507,10 +409,10 @@ namespace WallpaperManager.ViewModels {
     ///   Determines if <see cref="UpdateCheckCommand" /> can be executed.
     /// </summary>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
+    ///   A <see cref="bool" /> indicating whether the command can be executed or not.
     /// </returns>
     /// <seealso cref="UpdateCheckCommand" />
-    protected Boolean UpdateCheckCommand_CanExecute() {
+    protected bool UpdateCheckCommand_CanExecute() {
       return true;
     }
 
@@ -543,9 +445,8 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="CloseCommand_Execute">CloseCommand_Execute Method</seealso>
     public DelegateCommand CloseCommand {
       get {
-        if (this.closeCommand == null) {
+        if (this.closeCommand == null)
           this.closeCommand = new DelegateCommand(this.CloseCommand_Execute, this.CloseCommand_CanExecute);
-        }
 
         return this.closeCommand;
       }
@@ -555,10 +456,10 @@ namespace WallpaperManager.ViewModels {
     ///   Determines if <see cref="CloseCommand" /> can be executed.
     /// </summary>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
+    ///   A <see cref="bool" /> indicating whether the command can be executed or not.
     /// </returns>
     /// <seealso cref="CloseCommand" />
-    protected Boolean CloseCommand_CanExecute() {
+    protected bool CloseCommand_CanExecute() {
       return true;
     }
 
@@ -591,9 +492,8 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="TerminateApplicationCommand_Execute">TerminateApplicationCommand_Execute Method</seealso>
     public DelegateCommand TerminateApplicationCommand {
       get {
-        if (this.terminateApplicationCommand == null) {
+        if (this.terminateApplicationCommand == null)
           this.terminateApplicationCommand = new DelegateCommand(this.TerminateApplicationCommand_Execute, this.TerminateApplicationCommand_CanExecute);
-        }
 
         return this.terminateApplicationCommand;
       }
@@ -603,10 +503,10 @@ namespace WallpaperManager.ViewModels {
     ///   Determines if <see cref="TerminateApplicationCommand" /> can be executed.
     /// </summary>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the command can be executed or not.
+    ///   A <see cref="bool" /> indicating whether the command can be executed or not.
     /// </returns>
     /// <seealso cref="TerminateApplicationCommand" />
-    protected Boolean TerminateApplicationCommand_CanExecute() {
+    protected bool TerminateApplicationCommand_CanExecute() {
       return true;
     }
 
@@ -628,10 +528,8 @@ namespace WallpaperManager.ViewModels {
     public event PropertyChangedEventHandler PropertyChanged;
 
     /// <commondoc select='INotifyPropertyChanged/Methods/OnPropertyChanged/*' />
-    protected virtual void OnPropertyChanged(String propertyName) {
-      if (this.PropertyChanged != null) {
-        this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-      }
+    protected virtual void OnPropertyChanged(string propertyName) {
+      this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     #endregion
   }

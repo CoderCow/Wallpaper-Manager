@@ -1,19 +1,19 @@
 // This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
+using System.Diagnostics.Contracts;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
 using Common;
-
 using WallpaperManager.Models;
 using WallpaperManager.ViewModels;
 
 namespace WallpaperManager.Views {
   /// <summary>
-  ///   The Configuration Window used to configure the applicaiton's base settings which are stored by the 
+  ///   The Configuration Window used to configure the applicaiton's base settings which are stored by the
   ///   <see cref="Configuration" /> class using the <see cref="ConfigurationVM">Configuration View Model</see>.
   /// </summary>
   /// <remarks>
@@ -45,25 +45,59 @@ namespace WallpaperManager.Views {
   /// <seealso cref="Page">Page Class</seealso>
   /// <seealso cref="Frame">Frame Class</seealso>
   /// <threadsafety static="true" instance="false" />
-  public partial class ConfigWindow: Window {
-    #region Property: ConfigurationVM
+  public partial class ConfigWindow : Window {
     /// <summary>
-    ///   <inheritdoc cref="ConfigurationVM" select='../value/node()' />
-    /// </summary>
-    private readonly ConfigurationVM configurationVM;
-
-    /// <summary>
-    ///   Gets the <see cref="WallpaperManager.ViewModels.ConfigurationVM" /> instance used as interface to communicate 
+    ///   Gets the <see cref="WallpaperManager.ViewModels.ConfigurationVM" /> instance used as interface to communicate
     ///   with the application.
     /// </summary>
     /// <value>
-    ///   The <see cref="WallpaperManager.ViewModels.ConfigurationVM" /> instance used as interface to communicate with 
+    ///   The <see cref="WallpaperManager.ViewModels.ConfigurationVM" /> instance used as interface to communicate with
     ///   the application.
     /// </value>
-    public ConfigurationVM ConfigurationVM {
-      get { return this.configurationVM; }
+    public ConfigurationVM ConfigurationVM { get; }
+
+    /// <summary>
+    ///   Initializes a new instance of the <see cref="ConfigWindow" /> class.
+    /// </summary>
+    /// <param name="configurationVM">
+    ///   The <see cref="WallpaperManager.ViewModels.ConfigurationVM" /> instance used as interface to communicate with
+    ///   the application.
+    /// </param>
+    public ConfigWindow(ConfigurationVM configurationVM) {
+      this.ConfigurationVM = configurationVM;
+      this.ConfigurationVM.RequestClose += (sender, e) => {
+        this.DialogResult = e.Result;
+        this.Close();
+      };
+
+      this.InitializeComponent();
     }
-    #endregion
+
+    /// <summary>
+    ///   Checks whether all properties have valid values.
+    /// </summary>
+    [ContractInvariantMethod]
+    private void CheckInvariants() {
+      Contract.Invariant(this.ConfigurationVM != null);
+      Contract.Invariant(ConfigWindow.ChangePageCommand != null);
+    }
+
+    /// <summary>
+    ///   Handles the <see cref="Frame.ContentRendered" /> event of the ContentFrame-Element.
+    ///   Sets the content's data context to the frame's data context.
+    /// </summary>
+    /// <param name="sender">
+    ///   The source of the event.
+    /// </param>
+    /// <param name="e">
+    ///   The <see cref="System.EventArgs" /> instance containing the event data.
+    /// </param>
+    private void FrmContent_ContentRendered(object sender, EventArgs e) {
+      FrameworkElement element = (this.frmContent.Content as FrameworkElement);
+
+      if (element != null)
+        element.DataContext = this.frmContent.DataContext;
+    }
 
     #region Command: ChangePage
     /// <summary>
@@ -81,7 +115,7 @@ namespace WallpaperManager.Views {
     ///   The <see cref="CanExecuteRoutedEventArgs" /> instance containing the event data.
     /// </param>
     /// <seealso cref="ChangePageCommand" />
-    protected virtual void ChangePageCommand_CanExecute(Object sender, CanExecuteRoutedEventArgs e) {
+    protected virtual void ChangePageCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
       e.CanExecute = true;
     }
 
@@ -96,59 +130,11 @@ namespace WallpaperManager.Views {
     ///   The <see cref="ExecutedRoutedEventArgs" /> instance containing the event data.
     /// </param>
     /// <seealso cref="ChangePageCommand" />
-    protected virtual void ChangePageCommand_Executed(Object sender, ExecutedRoutedEventArgs e) {
+    protected virtual void ChangePageCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
       FrameworkElement navigateTo = (e.Parameter as FrameworkElement);
 
-      if (navigateTo != null && this.frmContent.Navigate(navigateTo)) {
+      if (navigateTo != null && this.frmContent.Navigate(navigateTo))
         this.frmContent.Focus();
-      }
-    }
-    #endregion
-
-
-    #region Constructor
-    /// <summary>
-    ///   Initializes a new instance of the <see cref="ConfigWindow" /> class.
-    /// </summary>
-    /// <param name="configurationVM">
-    ///   The <see cref="WallpaperManager.ViewModels.ConfigurationVM" /> instance used as interface to communicate with 
-    ///   the application.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <paramref name="configurationVM" /> is <c>null</c>.
-    /// </exception>
-    public ConfigWindow(ConfigurationVM configurationVM) {
-      if (configurationVM == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("configurationVM"));
-      }
-
-      this.configurationVM = configurationVM;
-      this.configurationVM.RequestClose += delegate(Object sender, RequestCloseEventArgs e) {
-        this.DialogResult = e.Result;
-        this.Close();
-      };
-
-      this.InitializeComponent();
-    }
-    #endregion
-
-    #region Method: FrmContent_ContentRendered
-    /// <summary>
-    ///   Handles the <see cref="Frame.ContentRendered" /> event of the ContentFrame-Element.
-    ///   Sets the content's data context to the frame's data context.
-    /// </summary>
-    /// <param name="sender">
-    ///   The source of the event.
-    /// </param>
-    /// <param name="e">
-    ///   The <see cref="System.EventArgs" /> instance containing the event data.
-    /// </param>
-    private void FrmContent_ContentRendered(Object sender, EventArgs e) {
-      FrameworkElement element = (this.frmContent.Content as FrameworkElement);
-
-      if (element != null) {
-        element.DataContext = this.frmContent.DataContext;
-      }
     }
     #endregion
   }

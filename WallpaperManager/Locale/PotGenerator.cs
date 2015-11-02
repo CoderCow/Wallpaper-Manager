@@ -1,6 +1,7 @@
 // This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 #define PotGenerator
 #define DEBUG
 #if PotGenerator && DEBUG
@@ -16,10 +17,10 @@ namespace WallpaperManager {
   // Immediate Window Call:
   // WallpaperManager.PotGenerator.Generate("C:\\Cygwin\\usr\\tmp\\Wallpaper Manager\\Wallpaper Manager.pot");
   public static class PotGenerator {
-    public static void Generate(String filePath) {
-      List<String> excludedEntryNames = new List<String> { "Translation.LastUpdateDate" };
+    public static void Generate(string filePath) {
+      var excludedEntryNames = new List<string> {"Translation.LastUpdateDate"};
       MemoryStream fileStream = new MemoryStream();
-      
+
       using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8)) {
         // Header
         writer.WriteLine("# Wallpaper Manager Localization Template File");
@@ -41,20 +42,18 @@ namespace WallpaperManager {
         writer.WriteLine();
 
         ResXResourceReader resxReader = new ResXResourceReader(
-          @"G:\Projects\C#\Freeware\Wallpaper Manager\wallpaperman\Wallpaper Manager\Views\Resources\Localization\LocalizationData.resx"
-        );
+          @"G:\Projects\C#\Freeware\Wallpaper Manager\wallpaperman\Wallpaper Manager\Views\Resources\Localization\LocalizationData.resx");
         resxReader.UseResXDataNodes = true;
 
         foreach (DictionaryEntry entry in resxReader) {
           ResXDataNode node = entry.Value as ResXDataNode;
 
           if (node != null) {
-            String value = (node.GetValue((AssemblyName[])null) as String);
-            String comment = node.Comment;
+            string value = (node.GetValue((AssemblyName[])null) as string);
+            string comment = node.Comment;
 
-            if (value != null && !excludedEntryNames.Contains(node.Name)) {
+            if (value != null && !excludedEntryNames.Contains(node.Name))
               PotGenerator.WriteEntry(writer, value, node.Name, comment);
-            }
           }
         }
 
@@ -69,12 +68,12 @@ namespace WallpaperManager {
       }
     }
 
-    private static void WriteEntry(StreamWriter writer, String originalText, String entryName, String comments) {
-      String context = @"LocalizationData.resx";
-      String commentsNew = "Entry Name: " + entryName + ".";
+    private static void WriteEntry(StreamWriter writer, string originalText, string entryName, string comments) {
+      string context = @"LocalizationData.resx";
+      string commentsNew = "Entry Name: " + entryName + ".";
 
-      String[] commentLines = comments.Split(new[] { "\\n" }, StringSplitOptions.None);
-      foreach (String commentLine in commentLines) {
+      string[] commentLines = comments.Split(new[] {"\\n"}, StringSplitOptions.None);
+      foreach (string commentLine in commentLines) {
         // Take screenshot comment lines as context.
         if (commentLine.StartsWith("(Screenshot: ")) {
           context = commentLine;
@@ -83,9 +82,8 @@ namespace WallpaperManager {
 
         commentsNew += " " + commentLine.Replace("\"", "'");
       }
-      if (commentsNew.Length >= 255) {
+      if (commentsNew.Length >= 255)
         throw new FormatException("Generated comment line exceeds 255 chars maximum.");
-      }
 
       writer.WriteLine("#: " + context);
       writer.WriteLine("msgctxt \"" + commentsNew + "\"");
@@ -98,4 +96,5 @@ namespace WallpaperManager {
     }
   }
 }
+
 #endif

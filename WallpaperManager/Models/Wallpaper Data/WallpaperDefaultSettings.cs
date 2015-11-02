@@ -1,62 +1,58 @@
 ﻿// This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
+using System.Diagnostics.Contracts;
 
 namespace WallpaperManager.Models {
   /// <summary>
   ///   Contains data to be applied to newly added wallpapers.
   /// </summary>
   /// <threadsafety static="true" instance="false" />
-  public class WallpaperDefaultSettings: WallpaperSettingsBase {
-    #region Property: AutoDetermineIsMultiscreen
+  public class WallpaperDefaultSettings : WallpaperSettingsBase {
     /// <summary>
     ///   <inheritdoc cref="AutoDetermineIsMultiscreen" select='../value/node()' />
     /// </summary>
-    private Boolean autoDetermineIsMultiscreen;
+    private bool autoDetermineIsMultiscreen;
 
-    /// <summary>
-    ///   Gets or sets a value indicating whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> property should be 
-    ///   determined automatically or not.
-    /// </summary>
-    /// <value>
-    ///   <c>true</c> whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> property should be determined 
-    ///   automatically; otherwise <c>false</c>.
-    /// </value>
-    public Boolean AutoDetermineIsMultiscreen {
-      get { return this.autoDetermineIsMultiscreen; }
-      set { 
-        this.autoDetermineIsMultiscreen = value; 
-        this.OnPropertyChanged("AutoDetermineIsMultiscreen");
-      }
-    }
-    #endregion
-
-    #region Property: AutoDeterminePlacement
     /// <summary>
     ///   <inheritdoc cref="AutoDeterminePlacement" select='../value/node()' />
     /// </summary>
-    private Boolean autoDeterminePlacement;
+    private bool autoDeterminePlacement;
 
     /// <summary>
-    ///   Gets or sets a value indicating whether the <see cref="WallpaperSettingsBase.Placement" /> 
+    ///   Gets or sets a value indicating whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> property should be
+    ///   determined automatically or not.
+    /// </summary>
+    /// <value>
+    ///   <c>true</c> whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> property should be determined
+    ///   automatically; otherwise <c>false</c>.
+    /// </value>
+    public bool AutoDetermineIsMultiscreen {
+      get { return this.autoDetermineIsMultiscreen; }
+      set {
+        this.autoDetermineIsMultiscreen = value;
+        this.OnPropertyChanged("AutoDetermineIsMultiscreen");
+      }
+    }
+
+    /// <summary>
+    ///   Gets or sets a value indicating whether the <see cref="WallpaperSettingsBase.Placement" />
     ///   property should be determined automatically or not.
     /// </summary>
     /// <value>
-    ///   <c>true</c> whether the <see cref="WallpaperSettingsBase.Placement" /> property should be 
+    ///   <c>true</c> whether the <see cref="WallpaperSettingsBase.Placement" /> property should be
     ///   determined automatically; otherwise <c>false</c>.
     /// </value>
-    public Boolean AutoDeterminePlacement {
+    public bool AutoDeterminePlacement {
       get { return this.autoDeterminePlacement; }
-      set { 
-        this.autoDeterminePlacement = value; 
+      set {
+        this.autoDeterminePlacement = value;
         this.OnPropertyChanged("AutoDeterminePlacement");
       }
     }
-    #endregion
 
-
-    #region Methods: Constructor
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperDefaultSettings" /> class.
     /// </summary>
@@ -64,11 +60,10 @@ namespace WallpaperManager.Models {
       this.autoDetermineIsMultiscreen = true;
       this.autoDeterminePlacement = true;
     }
-    #endregion
 
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />
-    public override Object Clone() {
+    public override object Clone() {
       WallpaperDefaultSettings clonedInstance = new WallpaperDefaultSettings();
 
       // Clone all fields defined by WallpaperSettingsBase.
@@ -90,9 +85,7 @@ namespace WallpaperManager.Models {
     ///   <paramref name="other" /> is <c>null</c>.
     /// </exception>
     protected override void AssignTo(WallpaperSettingsBase other) {
-      if (other == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("other"));
-      }
+      Contract.Requires<ArgumentNullException>(other != null);
 
       // Assign all members defined by WallpaperSettingsBase.
       base.AssignTo(other);

@@ -1,6 +1,7 @@
 ﻿// This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
 
 namespace WallpaperManager.Models {
@@ -37,6 +38,6 @@ namespace WallpaperManager.Models {
     /// <summary>
     ///   The wallpaper gets mirrored to its bottom side.
     /// </summary>
-    MirrorBottom = 32,
+    MirrorBottom = 32
   }
 }

@@ -1,6 +1,9 @@
 ﻿// This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
+using System;
+
 namespace WallpaperManager.Models {
   /// <summary>
   ///   Specifies the position of an overlay text on the screen.
@@ -34,6 +37,6 @@ namespace WallpaperManager.Models {
     /// <summary>
     ///   The text will be placed in the lower right corner of the screen.
     /// </summary>
-    BottomRight,
+    BottomRight
   }
 }

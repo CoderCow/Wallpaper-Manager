@@ -160,10 +160,12 @@
       <HintPath>..\packages\AvalonLibrary.2.2.0.0\lib\net40\AvalonLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common">
+    <Reference Include="Common, Version=1.5.378.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>References\Common.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Presentation">
+    <Reference Include="Common.Presentation, Version=1.0.591.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>References\Common.Presentation.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
@@ -220,11 +222,10 @@
     <Compile Include="Models\Enumerations\WallpaperClickAction.cs" />
     <Compile Include="Models\Enumerations\WallpaperEffects.cs" />
     <Compile Include="Models\Enumerations\WallpaperPlacement.cs" />
-    <Compile Include="Models\ExceptionMessages.cs" />
     <Compile Include="Models\GeneralConfig.cs" />
     <Compile Include="Models\Interfaces\IConfiguration.cs" />
     <Compile Include="Models\Interfaces\IGeneralConfiguration.cs" />
-    <Compile Include="Models\Interfaces\IScreenSetting.cs" />
+    <Compile Include="Models\Interfaces\IScreenSettings.cs" />
     <Compile Include="Models\Interfaces\IWallpaper.cs" />
     <Compile Include="Models\Interfaces\IWallpaperCategory.cs" />
     <Compile Include="Models\Interfaces\IWallpaperCommonAttributes.cs" />
@@ -324,7 +325,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="License.txt" />
   </ItemGroup>

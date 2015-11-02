@@ -1,11 +1,12 @@
 ﻿// This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.Contracts;
 using System.Windows.Forms;
-
 using Common;
 
 namespace WallpaperManager.Models {
@@ -17,39 +18,35 @@ namespace WallpaperManager.Models {
   ///   are available on the current computer.
   /// </remarks>
   /// <threadsafety static="false" instance="false" />
-  public class ScreenSettingsCollection: ReadOnlyCollection<ScreenSettings>, ICloneable, IAssignable {
-    #region Property: RandomCycledScreenCount
+  public class ScreenSettingsCollection : ReadOnlyCollection<ScreenSettings>, ICloneable, IAssignable {
     /// <summary>
     ///   Gets the number of <see cref="ScreenSettings" /> objects where no static wallpaper should be cycled on.
     /// </summary>
     /// <value>
     ///   The number of <see cref="ScreenSettings" /> objects where no static wallpaper should be cycled on.
     /// </value>
-    public Int32 RandomCycledScreenCount {
+    public int RandomCycledScreenCount {
       get {
-        Int32 count = 0;
+        int count = 0;
 
         foreach (ScreenSettings screenSetting in this) {
-          if (screenSetting.CycleRandomly) {
+          if (screenSetting.CycleRandomly)
             count++;
-          }
         }
 
         return count;
       }
     }
-    #endregion
 
-    #region Property: AllStatic
     /// <summary>
-    ///   Gets a <see cref="Boolean" /> indicating whether all monitors should cycle static wallpapers or not.
+    ///   Gets a <see cref="bool" /> indicating whether all monitors should cycle static wallpapers or not.
     /// </summary>
     /// <value>
-    ///   A <see cref="Boolean" /> indicating whether all monitors should cycle static wallpapers or not.
+    ///   A <see cref="bool" /> indicating whether all monitors should cycle static wallpapers or not.
     /// </value>
-    public Boolean AllStatic {
+    public bool AllStatic {
       get {
-        Boolean allStatic = true;
+        bool allStatic = true;
 
         foreach (ScreenSettings screenSetting in this) {
           if (screenSetting.CycleRandomly) {
@@ -61,21 +58,17 @@ namespace WallpaperManager.Models {
         return allStatic;
       }
     }
-    #endregion
 
-
-    #region Methods: Constructor, RefreshBounds
     /// <summary>
     ///   Initializes a new instance of the <see cref="ScreenSettingsCollection" /> class.
     /// </summary>
-    public ScreenSettingsCollection(): base(new ScreenSettings[Screen.AllScreens.Length]) {
-      for (Int32 i = 0; i < Screen.AllScreens.Length; i++) {
+    public ScreenSettingsCollection() : base(new ScreenSettings[Screen.AllScreens.Length]) {
+      for (int i = 0; i < Screen.AllScreens.Length; i++)
         this.Items[i] = new ScreenSettings(i);
-      }
     }
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="ScreenSettingsCollection" /> class with a given collection of 
+    ///   Initializes a new instance of the <see cref="ScreenSettingsCollection" /> class with a given collection of
     ///   <see cref="ScreenSettings" /> instances.
     /// </summary>
     /// <param name="screenSettings">
@@ -86,26 +79,21 @@ namespace WallpaperManager.Models {
     ///   screens.
     /// </exception>
     /// <seealso cref="ScreenSettings">ScreenSettings Class</seealso>
-    public ScreenSettingsCollection(IList<ScreenSettings> screenSettings): base(new ScreenSettings[Screen.AllScreens.Length]) {
-      if (screenSettings.Count != Screen.AllScreens.Length) {
-        throw new ArgumentOutOfRangeException(ExceptionMessages.GetCollectionItemsNotEqualToScreenCount("screenSettings"));
-      }
+    public ScreenSettingsCollection(IList<ScreenSettings> screenSettings) : base(new ScreenSettings[Screen.AllScreens.Length]) {
+      Contract.Requires<ArgumentException>(screenSettings.Count == Screen.AllScreens.Length);
 
-      for (Int32 i = 0; i < Screen.AllScreens.Length; i++) {
+      for (int i = 0; i < Screen.AllScreens.Length; i++)
         this.Items[i] = screenSettings[i];
-      }
     }
 
     /// <summary>
-    ///   Refreshes the cached <see cref="ScreenSettings.Bounds" /> and recalculates 
+    ///   Refreshes the cached <see cref="ScreenSettings.Bounds" /> and recalculates
     ///   <see cref="ScreenSettings.BoundsWithMargin" /> of all <see cref="ScreenSettings" /> instances in this collection.
     /// </summary>
     public void RefreshBounds() {
-      foreach (ScreenSettings screenSettings in this) {
+      foreach (ScreenSettings screenSettings in this)
         screenSettings.RefreshBounds();
-      }
     }
-    #endregion
 
     #region ICloneable Implementation, IAssignable Implementation
     /// <summary>
@@ -120,32 +108,25 @@ namespace WallpaperManager.Models {
     /// <exception cref="ArgumentException">
     ///   <paramref name="other" /> is not castable to the <see cref="ScreenSettingsCollection" /> type.
     /// </exception>
-    public void AssignTo(Object other) {
-      if (other == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("other"));
-      }
+    public void AssignTo(object other) {
+      Contract.Requires<ArgumentNullException>(other != null);
+      Contract.Requires<ArgumentException>(other is ScreenSettingsCollection);
 
       ScreenSettingsCollection otherInstance = (ScreenSettingsCollection)other;
-      if (otherInstance == null) {
-        throw new ArgumentException(ExceptionMessages.GetTypeIsNotCastable("Object", "ScreenSettingsCollection", "other"));
-      }
-
-      for (Int32 i = 0; i < this.Count; i++) {
-        if (i >= otherInstance.Count) {
+      for (int i = 0; i < this.Count; i++) {
+        if (i >= otherInstance.Count)
           otherInstance.Items.Add(this[i]);
-        } else {
+        else
           this[i].AssignTo(otherInstance[i]);
-        }
       }
     }
 
     /// <inheritdoc />
-    public Object Clone() {
-      List<ScreenSettings> clonedScreensSettings = new List<ScreenSettings>(this.Count);
+    public object Clone() {
+      var clonedScreensSettings = new List<ScreenSettings>(this.Count);
 
-      for (Int32 i = 0; i < this.Count; i++) {
+      for (int i = 0; i < this.Count; i++)
         clonedScreensSettings.Add((ScreenSettings)this[i].Clone());
-      }
 
       return new ScreenSettingsCollection(clonedScreensSettings);
     }

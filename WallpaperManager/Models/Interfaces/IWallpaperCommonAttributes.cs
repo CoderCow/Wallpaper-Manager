@@ -1,6 +1,7 @@
 // This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
@@ -10,8 +11,8 @@ namespace WallpaperManager.Models {
   /// <summary>
   ///   Defines common wallpaper attributes.
   /// </summary>
+  [ContractClass(typeof(IWallpaperCommonAttributesContracts))]
   public interface IWallpaperCommonAttributes {
-    #region Property: IsActivated
     /// <summary>
     ///   Gets or sets a <see cref="Boolean" /> indicating whether this wallpaper is activated.
     /// </summary>
@@ -21,20 +22,16 @@ namespace WallpaperManager.Models {
     /// <remarks>
     ///   The activated status of a wallpaper usually indicates if it should be automatically cycled or not.
     /// </remarks>
-    Boolean IsActivated { get; set; }
-    #endregion
+    bool IsActivated { get; set; }
 
-    #region Property: IsMultiscreen
     /// <summary>
     ///   Gets or sets a <see cref="Boolean" /> indicating whether this wallpaper represents a wallpaper for multiple screens.
     /// </summary>
     /// <value>
     ///   A <see cref="Boolean" /> indicating whether this wallpaper represents a wallpaper for multiple screens.
     /// </value>
-    Boolean IsMultiscreen { get; set; }
-    #endregion
+    bool IsMultiscreen { get; set; }
 
-    #region Property: Priority
     /// <summary>
     ///   Gets or sets the pick priority of this wallpaper.
     /// </summary>
@@ -44,10 +41,8 @@ namespace WallpaperManager.Models {
     /// <remarks>
     ///   The pick priority usually represents the chance for the wallpaper of being automatically picked when cycling.
     /// </remarks>
-    Byte Priority { get; set; }
-    #endregion
+    byte Priority { get; set; }
 
-    #region Property: OnlyCycleBetweenStart
     /// <summary>
     ///   Gets or sets the start time of the range in which this wallpaper should only be cycled.
     /// </summary>
@@ -56,9 +51,7 @@ namespace WallpaperManager.Models {
     /// </value>
     /// <seealso cref="OnlyCycleBetweenStop">OnlyCycleBetweenStop Property</seealso>
     TimeSpan OnlyCycleBetweenStart { get; set; }
-    #endregion
 
-    #region Property: OnlyCycleBetweenStop
     /// <summary>
     ///   Gets or sets the end time of the range in which this wallpaper should only be cycled.
     /// </summary>
@@ -67,9 +60,7 @@ namespace WallpaperManager.Models {
     /// </value>
     /// <seealso cref="OnlyCycleBetweenStart">OnlyCycleBetweenStart Property</seealso>
     TimeSpan OnlyCycleBetweenStop { get; set; }
-    #endregion
 
-    #region Property: Placement
     /// <summary>
     ///   Gets or sets a value defining how this wallpaper should be placed when drawn on a screen.
     /// </summary>
@@ -80,9 +71,7 @@ namespace WallpaperManager.Models {
     ///   Attempted to set a value which is not represented by a constant of the <see cref="WallpaperPlacement" /> enumeration.
     /// </exception>
     WallpaperPlacement Placement { get; set; }
-    #endregion
 
-    #region Property: Offset
     /// <summary>
     ///   Gets or sets the horizontal and vertical placement offset the wallpaper should be drawn with.
     /// </summary>
@@ -90,9 +79,7 @@ namespace WallpaperManager.Models {
     ///   The horizontal and vertical placement offset the wallpaper should be drawn with.
     /// </value>
     Point Offset { get; set; }
-    #endregion
 
-    #region Property: Scale
     /// <summary>
     ///   Gets or sets the horizontal and vertical scale the wallpaper should be drawn with.
     /// </summary>
@@ -100,9 +87,7 @@ namespace WallpaperManager.Models {
     ///   The horizontal and vertical scale the wallpaper should be drawn with.
     /// </value>
     Point Scale { get; set; }
-    #endregion
 
-    #region Property: Effects
     /// <summary>
     ///   Gets or sets the effects the wallpaper should be drawn with.
     /// </summary>
@@ -110,9 +95,7 @@ namespace WallpaperManager.Models {
     ///   The effects the wallpaper should be drawn with.
     /// </value>
     WallpaperEffects Effects { get; set; }
-    #endregion
 
-    #region Property: BackgroundColor
     /// <summary>
     ///   Gets or sets the background color drawn for this wallpaper if it does not fill out the whole screen.
     /// </summary>
@@ -120,16 +103,38 @@ namespace WallpaperManager.Models {
     ///   background color drawn for this wallpaper if it does not fill out the whole screen.
     /// </value>
     Color BackgroundColor { get; set; }
-    #endregion
 
-    #region Property: DisabledScreens
     /// <summary>
     ///   Gets a collection of screen indexes where this wallpaper is not allowed to be cycled on.
     /// </summary>
     /// <value>
     ///   A collection of screen indexes where this wallpaper is not allowed to be cycled on.
     /// </value>
-    Collection<Int32> DisabledScreens { get; }
-    #endregion
+    Collection<int> DisabledScreens { get; }
+  }
+
+  [ContractClassFor(typeof(IWallpaperCommonAttributes))]
+  internal abstract class IWallpaperCommonAttributesContracts : IWallpaperCommonAttributes {
+    public abstract Color BackgroundColor { get; set; }
+    public abstract Collection<int> DisabledScreens { get; }
+    public abstract WallpaperEffects Effects { get; set; }
+    public abstract bool IsActivated { get; set; }
+    public abstract bool IsMultiscreen { get; set; }
+    public abstract Point Offset { get; set; }
+    public abstract TimeSpan OnlyCycleBetweenStart { get; set; }
+    public abstract TimeSpan OnlyCycleBetweenStop { get; set; }
+    public abstract WallpaperPlacement Placement { get; set; }
+    public abstract byte Priority { get; set; }
+    public abstract Point Scale { get; set; }
+
+    /// <summary>
+    ///   Checks whether all properties have valid values.
+    /// </summary>
+    [ContractInvariantMethod]
+    private void CheckInvariants() {
+      Contract.Invariant(this.DisabledScreens != null);
+      Contract.Invariant(Enum.IsDefined(typeof(WallpaperEffects), this.Effects));
+      Contract.Invariant(Enum.IsDefined(typeof(WallpaperPlacement), this.Placement));
+    }
   }
 }

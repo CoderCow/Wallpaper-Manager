@@ -1,42 +1,26 @@
 // This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
-using System;
-using System.Collections.Generic;
-using Common;
 
-using WallpaperManager.Models;
+using System;
+using System.Diagnostics.Contracts;
+using Common;
 
 namespace WallpaperManager.Models {
   /// <summary>
   ///   Provides data to a successful version check done by the <see cref="UpdateManager" /> class.
   /// </summary>
   /// <threadsafety static="true" instance="false" />
-  public class VersionCheckSuccessfulEventArgs: EventArgs {
-    #region Property: IsUpdate
+  public class VersionCheckSuccessfulEventArgs : EventArgs {
     /// <summary>
-    ///   <inheritdoc cref="IsUpdate" select='../value/node()' />
-    /// </summary>
-    private readonly Boolean isUpdate;
-
-    /// <summary>
-    ///   Gets a <see cref="Boolean" /> indicating whether the version on the server is greater than the current application's 
+    ///   Gets a <see cref="bool" /> indicating whether the version on the server is greater than the current application's
     ///   version or not.
     /// </summary>
     /// <value>
-    ///   A <see cref="Boolean" /> indicating whether the version on the server is greater than the current application's 
+    ///   A <see cref="bool" /> indicating whether the version on the server is greater than the current application's
     ///   version or not.
     /// </value>
-    public Boolean IsUpdate {
-      get { return this.isUpdate; }
-    }
-    #endregion
-
-    #region Property: Version
-    /// <summary>
-    ///   <inheritdoc cref="Version" select='../value/node()' />
-    /// </summary>
-    private readonly Version version;
+    public bool IsUpdate { get; }
 
     /// <summary>
     ///   Gets the <see cref="Version" /> instance representing the available application version on the server.
@@ -44,16 +28,7 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The <see cref="Version" /> instance representing the available application version on the server.
     /// </value>
-    public Version Version {
-      get { return this.version; }
-    }
-    #endregion
-
-    #region Property: CriticalMessage
-    /// <summary>
-    ///   <inheritdoc cref="CriticalMessage" select='../value/node()' />
-    /// </summary>
-    private readonly String criticalMessage;
+    public Version Version { get; }
 
     /// <summary>
     ///   Gets the critical message attached with the version info provided by the update server.
@@ -61,16 +36,7 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The critical message attached with the version info provided by the update server.
     /// </value>
-    public String CriticalMessage {
-      get { return this.criticalMessage; }
-    }
-    #endregion
-
-    #region Property: InfoMessage
-    /// <summary>
-    ///   <inheritdoc cref="InfoMessage" select='../value/node()' />
-    /// </summary>
-    private readonly String infoMessage;
+    public string CriticalMessage { get; }
 
     /// <summary>
     ///   Gets the info message attached with the version info provided by the update server.
@@ -78,18 +44,13 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The info message attached with the version info provided by the update server.
     /// </value>
-    public String InfoMessage {
-      get { return this.infoMessage; }
-    }
-    #endregion
+    public string InfoMessage { get; }
 
-
-    #region Method: Constructor, ToString
     /// <summary>
     ///   Initializes a new instance of the <see cref="VersionCheckSuccessfulEventArgs" /> class.
     /// </summary>
     /// <param name="isUpdate">
-    ///   A <see cref="Boolean" /> indicating whether the version on the server is greater than the current application's 
+    ///   A <see cref="bool" /> indicating whether the version on the server is greater than the current application's
     ///   version or not.
     /// </param>
     /// <param name="version">
@@ -101,27 +62,24 @@ namespace WallpaperManager.Models {
     /// <param name="infoMessage">
     ///   The info message attached with the version info provided by the update server.
     /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <paramref name="version" /> is <c>null</c>.
-    /// </exception>
-    public VersionCheckSuccessfulEventArgs(Boolean isUpdate, Version version, String criticalMessage, String infoMessage) {
-      if (version == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("version"));
-      }
+    public VersionCheckSuccessfulEventArgs(bool isUpdate, Version version, string criticalMessage, string infoMessage) {
+      this.IsUpdate = isUpdate;
+      this.Version = version;
+      this.CriticalMessage = criticalMessage;
+      this.InfoMessage = infoMessage;
+    }
 
-      this.isUpdate = isUpdate;
-      this.version = version;
-      this.criticalMessage = criticalMessage;
-      this.infoMessage = infoMessage;
+    /// <summary>
+    ///   Checks whether all properties have valid values.
+    /// </summary>
+    [ContractInvariantMethod]
+    private void CheckInvariants() {
+      Contract.Invariant(this.Version != null);
     }
 
     /// <inheritdoc />
-    public override String ToString() {
-      return StringGenerator.FromListKeyed(
-        new String[] { "Version", "Critical Message", "Info Message" },
-        (IList<Object>)new Object[] { this.Version, this.CriticalMessage, this.InfoMessage }
-      );
+    public override string ToString() {
+      return $"Version: {this.Version}, Critical Message: {this.CriticalMessage ?? "null"}, Info Message: {this.InfoMessage ?? "null"}";
     }
-    #endregion
   }
 }

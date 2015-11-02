@@ -1,9 +1,11 @@
 ﻿// This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -12,12 +14,9 @@ using System.Security.Permissions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-using System.Xml;
-
 using Common;
 using Common.ObjectModel;
 using Common.Presentation;
-
 using WallpaperManager.Models;
 using WallpaperManager.ViewModels;
 using AppEnvironment = WallpaperManager.Models.AppEnvironment;
@@ -28,8 +27,9 @@ namespace WallpaperManager.Views {
   /// </summary>
   /// <remarks>
   ///   <para>
-  ///     This class handles most of the application's initialize process and publishes data, functions and components to 
-  ///     be used globally over this program. It also handles most Graphical User Interface related dialog and window management
+  ///     This class handles most of the application's initialize process and publishes data, functions and components to
+  ///     be used globally over this program. It also handles most Graphical User Interface related dialog and window
+  ///     management
   ///     and exception handling.
   ///   </para>
   ///   <para>
@@ -37,20 +37,20 @@ namespace WallpaperManager.Views {
   ///     <list type="bullet">
   ///       <item>
   ///         <description>
-  ///           Setting the <see cref="CultureInfo">Culture</see> of the app and handling the <see cref="Mutex" /> to 
+  ///           Setting the <see cref="CultureInfo">Culture</see> of the app and handling the <see cref="Mutex" /> to
   ///           prevent multiple instances.
   ///         </description>
   ///       </item>
   ///       <item>
   ///         <description>
-  ///           Register global error handlers (if DEBUG is not defined) to show dialogs instead of the default exception 
+  ///           Register global error handlers (if DEBUG is not defined) to show dialogs instead of the default exception
   ///           window.
   ///         </description>
   ///       </item>
   ///       <item>
   ///         <description>
-  ///           If existing, load the configuration file and apply its startup-related settings (also includes creating and 
-  ///           showing the <see cref="MainWindow" />, creating the notify icon and the <see cref="WallpaperChanger" />, 
+  ///           If existing, load the configuration file and apply its startup-related settings (also includes creating and
+  ///           showing the <see cref="MainWindow" />, creating the notify icon and the <see cref="WallpaperChanger" />,
   ///           and starting the auto termination process if necessary).
   ///         </description>
   ///       </item>
@@ -71,60 +71,34 @@ namespace WallpaperManager.Views {
   /// <seealso cref="NotifyIcon">NotifyIcon Property</seealso>
   /// <seealso cref="ApplicationViewModel">ApplicationViewModel Property</seealso>
   /// <threadsafety static="true" instance="false" />
-  public partial class Application: System.Windows.Application, INotifyPropertyChanged, IDisposable {
-    #region Constants: AutoTerminate_Seconds, isFirstInstance
+  public partial class Application : System.Windows.Application, INotifyPropertyChanged, IDisposable {
     /// <summary>
     ///   Represents the time in seconds to wait until the application gets automatically terminated.
     /// </summary>
-    public const Int32 AutoTerminate_Seconds = 5;
+    public const int AutoTerminate_Seconds = 5;
 
     /// <summary>
-    ///   A <see cref="Boolean" /> indicating whether this is the first instance of the application being run.
+    ///   A <see cref="bool" /> indicating whether this is the first instance of the application being run.
     /// </summary>
-    private static Boolean isFirstInstance;
-    #endregion
+    private static bool isFirstInstance;
 
-    #region Fields: propertyBindingManager
     /// <summary>
-    ///   The <see cref="LightPropertyBindingManager" /> used to register bindings between the configuration and related objects.
+    ///   The <see cref="LightPropertyBindingManager" /> used to register bindings between the configuration and related
+    ///   objects.
     /// </summary>
     private LightPropertyBindingManager propertyBindingManager;
-    #endregion
-
-    #region Static Property: Current
-    /// <summary>
-    ///   The Application object for the current <see cref="AppDomain" />. 
-    /// </summary>
-    private static Application current;
 
     /// <inheritdoc cref="System.Windows.Application.Current" />
-    public static new Application Current {
-      get { return Application.current; }
-    }
-    #endregion
-
-    #region Property: Environment
-    /// <summary>
-    ///   <inheritdoc cref="Environment" select='../value/node()' />
-    /// </summary>
-    private AppEnvironment environment;
+    public static new Application Current { get; private set; }
 
     /// <summary>
-    ///   Gets the <see cref="AppEnvironment" /> instance providing serveral data related to Wallpaper Manager's environment.
+    ///   Gets the <see cref="Models.AppEnvironment" /> instance providing serveral data related to Wallpaper Manager's
+    ///   environment.
     /// </summary>
     /// <value>
-    ///   The <see cref="AppEnvironment" /> instance providing serveral data related to Wallpaper Manager's environment.
+    ///   The <see cref="Models.AppEnvironment" /> instance providing serveral data related to Wallpaper Manager's environment.
     /// </value>
-    public AppEnvironment Environment {
-      get { return this.environment; }
-    }
-    #endregion
-
-    #region Property: Configuration
-    /// <summary>
-    ///   <inheritdoc cref="Configuration" select='../value/node()' />
-    /// </summary>
-    private Configuration configuration;
+    public AppEnvironment Environment { get; private set; }
 
     /// <summary>
     ///   Gets the <see cref="Configuration" /> instance, containing several user-defined configuration data.
@@ -132,17 +106,7 @@ namespace WallpaperManager.Views {
     /// <value>
     ///   The <see cref="Configuration" /> instance, containing several user-defined configuration data.
     /// </value>
-    protected Configuration Configuration {
-      get { return this.configuration; }
-    }
-    #endregion
-
-    #region Property: WallpaperChanger
-    /// <summary>
-    ///   <inheritdoc cref="WallpaperChanger" select='../value/node()' />
-    /// </summary>
-    /// <inheritdoc cref="WallpaperChanger" select='seealso' />
-    private WallpaperChanger wallpaperChanger;
+    protected Configuration Configuration { get; private set; }
 
     /// <summary>
     ///   Gets the changer used to manage the change and generation process of wallpapers.
@@ -151,31 +115,18 @@ namespace WallpaperManager.Views {
     ///   The chager object used to manage the change and generation process of wallpapers.
     /// </value>
     /// <seealso cref="WallpaperChanger">WallpaperChanger Class</seealso>
-    protected WallpaperChanger WallpaperChanger {
-      get { return this.wallpaperChanger; }
-    }
-    #endregion
-
-    #region Property: WallpaperChangerVM
-    /// <summary>
-    ///   <inheritdoc cref="WallpaperChanger" select='../value/node()' />
-    /// </summary>
-    private WallpaperChangerVM wallpaperChangerVM;
+    protected WallpaperChanger WallpaperChanger { get; private set; }
 
     /// <summary>
-    ///   Gets the <see cref="WallpaperChangerVM" /> instance used to wrap the <see cref="WallpaperChanger" /> instance in 
+    ///   Gets the <see cref="WallpaperChangerVM" /> instance used to wrap the <see cref="WallpaperChanger" /> instance in
     ///   a Graphical User Interface context.
     /// </summary>
     /// <value>
-    ///   The <see cref="WallpaperChangerVM" /> instance used to wrap the <see cref="WallpaperChanger" /> instance in 
+    ///   The <see cref="WallpaperChangerVM" /> instance used to wrap the <see cref="WallpaperChanger" /> instance in
     ///   a Graphical User Interface context.
     /// </value>
-    protected WallpaperChangerVM WallpaperChangerVM {
-      get { return this.wallpaperChangerVM; }
-    }
-    #endregion
+    protected WallpaperChangerVM WallpaperChangerVM { get; private set; }
 
-    #region Property: MainWindow
     /// <summary>
     ///   Gets the <see cref="MainWindow" /> instance.
     /// </summary>
@@ -187,21 +138,12 @@ namespace WallpaperManager.Views {
       get {
         // It's possible that the Main Window is another Window (because WPF suggests any Window shown as Main Window if 
         // no Main Window is actually set).
-        if (base.MainWindow != null && !(base.MainWindow is MainWindow)) {
+        if (base.MainWindow != null && !(base.MainWindow is MainWindow))
           return null;
-        }
 
         return (MainWindow)base.MainWindow;
       }
     }
-    #endregion
-
-    #region Property: NotifyIcon
-    /// <summary>
-    ///   <inheritdoc cref="NotifyIcon" select='../value/node()' />
-    /// </summary>
-    /// <inheritdoc cref="NotifyIcon" select='seealso' />
-    private NotifyIconManager notifyIcon;
 
     /// <summary>
     ///   Gets the <see cref="NotifyIconManager" /> instance used to control the application's notify icon.
@@ -210,16 +152,7 @@ namespace WallpaperManager.Views {
     ///   The <see cref="NotifyIconManager" /> instance used to control the application's notify icon.
     /// </value>
     /// <seealso cref="NotifyIconManager">NotifyIconManager Class</seealso>
-    protected NotifyIconManager NotifyIcon {
-      get { return this.notifyIcon; }
-    }
-    #endregion
-
-    #region Property: ApplicationViewModel
-    /// <summary>
-    ///   <inheritdoc cref="ApplicationViewModel" select='../value/node()' />
-    /// </summary>
-    private ApplicationVM applicationViewModel;
+    protected NotifyIconManager NotifyIcon { get; private set; }
 
     /// <summary>
     ///   Gets the <see cref="ApplicationVM" /> instance.
@@ -227,13 +160,25 @@ namespace WallpaperManager.Views {
     /// <value>
     ///   The <see cref="ApplicationVM" /> instance.
     /// </value>
-    public ApplicationVM ApplicationViewModel {
-      get { return this.applicationViewModel; }
+    public ApplicationVM ApplicationViewModel { get; private set; }
+
+    /// <inheritdoc />
+    private Application() {}
+
+    /// <summary>
+    ///   Checks whether all properties have valid values.
+    /// </summary>
+    [ContractInvariantMethod]
+    private void CheckInvariants() {
+      // TODO: These invariants SHOULD be valid, refactor this class!
+      /*Contract.Invariant(this.Environment != null);
+      Contract.Invariant(this.Configuration != null);
+      Contract.Invariant(this.WallpaperChanger != null);
+      Contract.Invariant(this.WallpaperChangerVM != null);
+      Contract.Invariant(this.NotifyIcon != null);
+      Contract.Invariant(this.ApplicationViewModel != null);*/
     }
-    #endregion
 
-
-    #region Methods: Main, Constructor
     /// <summary>
     ///   The main entry point of the application.
     /// </summary>
@@ -250,10 +195,10 @@ namespace WallpaperManager.Views {
     [STAThread]
     private static void Main() {
       Thread.CurrentThread.Name = "Wallpaper Manager STA-Thread";
-      
+
       using (new Mutex(true, AppEnvironment.AppGuid, out Application.isFirstInstance)) {
-        Application.current = new Application();
-        Application.Current.environment = new AppEnvironment();
+        Application.Current = new Application();
+        Application.Current.Environment = new AppEnvironment();
         Debug.Listeners.Add(new TextWriterTraceListener(Application.Current.Environment.DebugFilePath));
         Debug.WriteLine("Listeners registered.");
         Application.Current.Environment.DebugWriteAppInfo();
@@ -263,20 +208,14 @@ namespace WallpaperManager.Views {
       }
     }
 
-    /// <inheritdoc />
-    private Application() {}
-    #endregion
-
-    #region Methods: OnStartup, OnExit
     /// <summary>
-    ///   Raises the <see cref="System.Windows.Application.Startup" /> event and handles the main initialization process of the 
+    ///   Raises the <see cref="System.Windows.Application.Startup" /> event and handles the main initialization process of the
     ///   program.
     /// </summary>
     /// <inheritdoc />
     protected override void OnStartup(StartupEventArgs e) {
-      if (this.isDisposed) {
+      if (this.IsDisposed)
         return;
-      }
       base.OnStartup(e);
 
       // Note: Has to be set BEFORE showing the first dialog, because the first shown dialog will be suggested as main window 
@@ -299,7 +238,8 @@ namespace WallpaperManager.Views {
         return;
       }
 
-      Debug.WriteLine("First step."); Debug.Flush();
+      Debug.WriteLine("First step.");
+      Debug.Flush();
       // Check whether the Use Default Settings argument is defined.
       if (!this.Environment.IsUseDefaultSettingsDefined) {
         if (!File.Exists(this.Environment.ConfigFilePath)) {
@@ -308,9 +248,9 @@ namespace WallpaperManager.Views {
           Debug.WriteLine("\" not found. Using default settings.");
           DialogManager.ShowConfig_FileNotFound(this.MainWindow, this.Environment.ConfigFilePath);
 
-          this.configuration = new Configuration();
+          this.Configuration = new Configuration();
         } else {
-          #if !DEBUG
+#if !DEBUG
           try {
             this.configuration = Configuration.Read(this.Environment.ConfigFilePath);
           } catch (Exception exception) {
@@ -323,20 +263,17 @@ namespace WallpaperManager.Views {
             }
           }
           #else
-          this.configuration = Configuration.Read(this.Environment.ConfigFilePath);
-          #endif
+          this.Configuration = Configuration.Read(this.Environment.ConfigFilePath);
+#endif
         }
       }
 
       this.propertyBindingManager = new LightPropertyBindingManager();
-      
-      Debug.WriteLine("Second step."); Debug.Flush();
-      this.wallpaperChanger = new WallpaperChanger(
-        this.Environment.AppliedWallpaperFilePath, this.Configuration.General.ScreensSettings
-      );
-      this.WallpaperChanger.RequestWallpapers += (senderLocal, eLocal) => {
-        eLocal.Wallpapers.AddRange(this.Configuration.WallpaperCategories.GetAllWallpapers());
-      };
+
+      Debug.WriteLine("Second step.");
+      Debug.Flush();
+      this.WallpaperChanger = new WallpaperChanger(this.Environment.AppliedWallpaperFilePath, this.Configuration.General.ScreensSettings);
+      this.WallpaperChanger.RequestWallpapers += (senderLocal, eLocal) => { eLocal.Wallpapers.AddRange(this.Configuration.WallpaperCategories.GetAllWallpapers()); };
       this.WallpaperChanger.AutocycleException += this.WallpaperChanger_AutocycleException;
 
       // Register light property bindings which make sure that the WallpaperChanger gets always updated with any changed 
@@ -348,43 +285,39 @@ namespace WallpaperManager.Views {
           new LightBoundProperty("LastActiveListSize"),
           new LightBoundProperty("CycleAfterDisplaySettingsChanged"),
           new LightBoundProperty("ScreensSettings")
-        }
-      );
+        });
 
-      this.wallpaperChangerVM = new WallpaperChangerVM(this.WallpaperChanger);
+      this.WallpaperChangerVM = new WallpaperChangerVM(this.WallpaperChanger);
       this.WallpaperChangerVM.UnhandledCommandException += this.WallpaperChangerVM_UnhandledCommandException;
 
-      this.applicationViewModel = new ApplicationVM(
+      this.ApplicationViewModel = new ApplicationVM(
         new WallpaperCategoryCollectionVM(
           this.Configuration.WallpaperCategories, this.WallpaperCategoryCollectionVM_RequestWallpaperCategoryVM
-        ),
-        this.WallpaperChangerVM, 
+          ),
+        this.WallpaperChangerVM,
         this.ApplicationVM_RequestShowMainWindow,
         this.ApplicationVM_RequestShowConfiguration,
         this.ApplicationVM_RequestShowChangelog,
         this.ApplicationVM_RequestShowAbout,
         this.ApplicationVM_RequestUpdateCheck,
-        this.ApplicationVM_RequestTerminateApplication
-      );
-      
-      Debug.WriteLine("Third step."); Debug.Flush();
+        this.ApplicationVM_RequestTerminateApplication);
+
+      Debug.WriteLine("Third step.");
+      Debug.Flush();
       // Cycle and start autocycling if requested.
       try {
-        if (this.Configuration.General.StartAutocyclingAfterStartup) {
+        if (this.Configuration.General.StartAutocyclingAfterStartup)
           this.WallpaperChanger.StartCycling();
-        }
 
-        if (this.Configuration.General.CycleAfterStartup) {
+        if (this.Configuration.General.CycleAfterStartup)
           this.WallpaperChanger.CycleNextRandomly();
-        }
       } catch (InvalidOperationException) {
         if (this.WallpaperChanger.IsAutocycling) {
           this.WallpaperChanger.StopCycling();
 
           DialogManager.ShowCycle_MissingWallpapers(this.MainWindow, true);
-        } else {
+        } else
           DialogManager.ShowCycle_MissingWallpapers(this.MainWindow, false);
-        }
       } catch (FileNotFoundException exception) {
         DialogManager.ShowGeneral_FileNotFound(this.MainWindow, exception.FileName);
       }
@@ -398,9 +331,8 @@ namespace WallpaperManager.Views {
 
           // Make sure that auto termination is still requested. It could have been disabled because the user performed
           // some actions in the Graphical User Interface.
-          if ((!this.isDisposed) && (!this.Environment.IsNoAutoTerminateDefined)) {
+          if ((!this.IsDisposed) && (!this.Environment.IsNoAutoTerminateDefined))
             this.Shutdown();
-          }
         };
 
         autoTerminateTimer.Start();
@@ -411,34 +343,31 @@ namespace WallpaperManager.Views {
             // it to be displayed in the Task Bar after application start.
             this.ApplicationViewModel.ShowMainCommand.Execute(true);
           }
-        } else {
+        } else
           this.ApplicationViewModel.ShowMainCommand.Execute(false);
-        }
       }
 
-      Debug.WriteLine("Fourth step."); Debug.Flush();
-      this.notifyIcon = new NotifyIconManager(this.ApplicationViewModel);
+      Debug.WriteLine("Fourth step.");
+      Debug.Flush();
+      this.NotifyIcon = new NotifyIconManager(this.ApplicationViewModel);
 
       // Register light property bindings which make sure that the NotifyIconManager gets always updated with any changed 
       // configuration settings related to it.
       this.propertyBindingManager.Register(
         this.Configuration.General, this.NotifyIcon, new[] {
-          new LightBoundProperty("TrayIconSingleClickAction"), 
+          new LightBoundProperty("TrayIconSingleClickAction"),
           new LightBoundProperty("TrayIconDoubleClickAction")
-        }
-      );
+        });
 
       UpdateManager updateManager = new UpdateManager(this.Environment);
       updateManager.VersionCheckSuccessful += (senderLocal, eLocal) => {
         // Execute the usual update handling, but only if there is actually an update available.
-        if (eLocal.IsUpdate) {
+        if (eLocal.IsUpdate)
           this.UpdateManager_VersionCheckSuccessful(senderLocal, eLocal);
-        }
       };
       updateManager.VersionCheckError += (senderLocal, eLocal) => {
-        if (eLocal.Exception is WebException || eLocal.Exception is FormatException) {
+        if (eLocal.Exception is WebException || eLocal.Exception is FormatException)
           eLocal.IsHandled = true;
-        }
 
         this.UpdateManager_VersionCheckError(senderLocal, eLocal);
       };
@@ -446,7 +375,8 @@ namespace WallpaperManager.Views {
       updateManager.DownloadUpdateError += this.UpdateManager_DownloadUpdateError;
       updateManager.BeginVersionCheck();
 
-      Debug.WriteLine("Initialization succeeded."); Debug.Flush();
+      Debug.WriteLine("Initialization succeeded.");
+      Debug.Flush();
       Debug.Unindent();
     }
 
@@ -461,9 +391,7 @@ namespace WallpaperManager.Views {
 
       base.OnExit(e);
     }
-    #endregion
 
-    #region Methods: WriteConfigFile
     /// <summary>
     ///   Writes the configuration data into a file.
     /// </summary>
@@ -474,7 +402,7 @@ namespace WallpaperManager.Views {
     ///   Missing file system access rights to write the configuration file.
     /// </exception>
     /// <permission cref="FileIOPermission">
-    ///   to write the configuration file's contents. Associated enumerations: 
+    ///   to write the configuration file's contents. Associated enumerations:
     ///   <see cref="FileIOPermissionAccess.Write" />.
     /// </permission>
     /// <exception cref="IOException">
@@ -483,9 +411,7 @@ namespace WallpaperManager.Views {
     /// <commondoc select='IDisposable/Methods/All/*' />
     /// <seealso cref="Configuration">Configuration Class</seealso>
     protected void WriteConfigFile() {
-      if (this.isDisposed) {
-        throw new ObjectDisposedException(ExceptionMessages.GetThisObjectIsDisposed());
-      }
+      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
 
       try {
         // Note: If the directory already exists this method will simply do nothing.
@@ -510,7 +436,6 @@ namespace WallpaperManager.Views {
         throw;
       }
     }
-    #endregion
 
     #region Methods: View Model Request Handlers
     /// <summary>
@@ -520,29 +445,27 @@ namespace WallpaperManager.Views {
     ///   The <see cref="ApplicationVM" /> instance requesting the update check.
     /// </param>
     /// <param name="showMinimized">
-    ///   A <see cref="Boolean" /> indicating whether the main view should be shown minimized or not.
+    ///   A <see cref="bool" /> indicating whether the main view should be shown minimized or not.
     /// </param>
-    private void ApplicationVM_RequestShowMainWindow(ApplicationVM applicationVM, Boolean showMinimized) {
+    private void ApplicationVM_RequestShowMainWindow(ApplicationVM applicationVM, bool showMinimized) {
       // Make sure that auto termination is no longer requested if a window is shown.
       this.Environment.IsNoAutoTerminateDefined = true;
 
       if (this.MainWindow == null) {
         base.MainWindow = new MainWindow(this.Environment, this.ApplicationViewModel);
-        
+
         // Register light property bindings which make sure that the MainWindow gets always updated with any changed 
         // configuration settings.
         LightPropertyBindingManager propertyBindings = new LightPropertyBindingManager();
         propertyBindings.Register(
           this.Configuration.General, base.MainWindow, new[] {
-            new LightBoundProperty("DisplayCycleTimeAsIconOverlay"), 
+            new LightBoundProperty("DisplayCycleTimeAsIconOverlay"),
             new LightBoundProperty("MinimizeOnClose"),
             new LightBoundProperty("WallpaperDoubleClickAction")
-          }
-        );
+          });
 
-        if (showMinimized) {
+        if (showMinimized)
           base.MainWindow.WindowState = WindowState.Minimized;
-        }
 
         base.MainWindow.Closed += (sender, e) => {
           MainWindow mainWindow = (MainWindow)sender;
@@ -553,9 +476,8 @@ namespace WallpaperManager.Views {
           GC.Collect();
         };
       } else {
-        if (this.MainWindow.WindowState == WindowState.Minimized) {
+        if (this.MainWindow.WindowState == WindowState.Minimized)
           this.MainWindow.WindowState = WindowState.Normal;
-        }
       }
 
       base.MainWindow.Show();
@@ -578,10 +500,9 @@ namespace WallpaperManager.Views {
       configWindow.Owner = this.MainWindow;
       configWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-      Boolean? dialogResult = configWindow.ShowDialog();
-      if ((dialogResult != null) && dialogResult.Value) {
+      bool? dialogResult = configWindow.ShowDialog();
+      if ((dialogResult != null) && dialogResult.Value)
         this.WriteConfigFile();
-      }
     }
 
     /// <summary>
@@ -625,9 +546,8 @@ namespace WallpaperManager.Views {
     ///   The <see cref="ApplicationVM" /> instance requesting the update check.
     /// </param>
     private void ApplicationVM_RequestUpdateCheck(ApplicationVM applicationVM) {
-      if (UpdateManager.IsDownloadingUpdate) {
+      if (UpdateManager.IsDownloadingUpdate)
         return;
-      }
 
       UpdateManager updateManager = new UpdateManager(this.Environment);
       updateManager.VersionCheckSuccessful += this.UpdateManager_VersionCheckSuccessful;
@@ -662,17 +582,14 @@ namespace WallpaperManager.Views {
     /// <seealso cref="WallpaperCategory">WallpaperCategory Class</seealso>
     /// <seealso cref="WallpaperCategoryVM">WallpaperCategoryVM Class</seealso>
     private WallpaperCategoryVM WallpaperCategoryCollectionVM_RequestWallpaperCategoryVM(WallpaperCategory category) {
-      if (category == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("category"));
-      }
+      Contract.Requires<ArgumentNullException>(category != null);
 
       // Provide the View Model with a new WallpaperCategoryVM object.
       return new WallpaperCategoryVM(
         category,
         this.WallpaperChangerVM,
-        this.WallpaperCategoryVM_RequestConfigureSelected, 
-        this.WallpaperCategoryVM_RequestConfigureDefaultSettings
-      );
+        this.WallpaperCategoryVM_RequestConfigureSelected,
+        this.WallpaperCategoryVM_RequestConfigureDefaultSettings);
     }
 
     /// <summary>
@@ -687,35 +604,28 @@ namespace WallpaperManager.Views {
     /// </exception>
     /// <seealso cref="WallpaperCategoryVM">WallpaperCategoryVM Class</seealso>
     private void WallpaperCategoryVM_RequestConfigureSelected(WallpaperCategoryVM categoryVM) {
-      if (categoryVM == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("categoryVM"));
-      }
+      Contract.Requires<ArgumentNullException>(categoryVM != null);
 
-      Wallpaper[] wallpapersToConfigure = new Wallpaper[categoryVM.SelectedWallpaperVMs.Count];
-      for (Int32 i = 0; i < categoryVM.SelectedWallpaperVMs.Count; i++) {
+      var wallpapersToConfigure = new Wallpaper[categoryVM.SelectedWallpaperVMs.Count];
+      for (int i = 0; i < categoryVM.SelectedWallpaperVMs.Count; i++)
         wallpapersToConfigure[i] = categoryVM.SelectedWallpaperVMs[i].Wallpaper;
-      }
 
-      ConfigWallpaperVM configWallpaperVM = new ConfigWallpaperVM(this.configuration.General, wallpapersToConfigure, categoryVM.IsSynchronizedCategory);
+      ConfigWallpaperVM configWallpaperVM = new ConfigWallpaperVM(this.Configuration.General, wallpapersToConfigure, categoryVM.IsSynchronizedCategory);
       configWallpaperVM.UnhandledCommandException += this.ConfigWallpaperVM_UnhandledCommandException;
 
-      ConfigWallpaperWindow configWallpaperWindow = new ConfigWallpaperWindow(
-        configWallpaperVM, this.Configuration.General.ScreensSettings
-      );
+      ConfigWallpaperWindow configWallpaperWindow = new ConfigWallpaperWindow(configWallpaperVM, this.Configuration.General.ScreensSettings);
 
       configWallpaperWindow.Owner = this.MainWindow;
 
-      Boolean? result = configWallpaperWindow.ShowDialog();
+      bool? result = configWallpaperWindow.ShowDialog();
       // If the settings have been confirmed by the user.
-      if ((result != null) && result.Value) {
+      if ((result != null) && result.Value)
         this.WriteConfigFile();
-      }
 
       // It could be possible that the ImagePath of a wallpaper has been changed, so we clear the thumbnails which will
       // then be recreated when the GUI requests them.
-      for (Int32 i = 0; i < categoryVM.SelectedWallpaperVMs.Count; i++) {
+      for (int i = 0; i < categoryVM.SelectedWallpaperVMs.Count; i++)
         categoryVM.SelectedWallpaperVMs[i].Thumbnail = null;
-      }
     }
 
     /// <summary>
@@ -730,24 +640,19 @@ namespace WallpaperManager.Views {
     /// </exception>
     /// <seealso cref="WallpaperCategoryVM">WallpaperCategoryVM Class</seealso>
     private void WallpaperCategoryVM_RequestConfigureDefaultSettings(WallpaperCategoryVM categoryVM) {
-      if (categoryVM == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("categoryVM"));
-      }
+      Contract.Requires<ArgumentNullException>(categoryVM != null);
 
       ConfigWallpaperVM configWallpaperVM = new ConfigWallpaperVM(categoryVM.Category.WallpaperDefaultSettings);
       configWallpaperVM.UnhandledCommandException += this.ConfigWallpaperVM_UnhandledCommandException;
 
-      ConfigWallpaperWindow configWallpaperWindow = new ConfigWallpaperWindow(
-        configWallpaperVM, this.Configuration.General.ScreensSettings
-      );
+      ConfigWallpaperWindow configWallpaperWindow = new ConfigWallpaperWindow(configWallpaperVM, this.Configuration.General.ScreensSettings);
 
       configWallpaperWindow.Owner = this.MainWindow;
 
-      Boolean? result = configWallpaperWindow.ShowDialog();
+      bool? result = configWallpaperWindow.ShowDialog();
       // If the settings have been confirmed by the user.
-      if ((result != null) && result.Value) {
+      if ((result != null) && result.Value)
         this.WriteConfigFile();
-      }
     }
     #endregion
 
@@ -757,7 +662,7 @@ namespace WallpaperManager.Views {
     ///   manages the dialog handling.
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
-    private void UpdateManager_VersionCheckSuccessful(Object sender, VersionCheckSuccessfulEventArgs e) {
+    private void UpdateManager_VersionCheckSuccessful(object sender, VersionCheckSuccessfulEventArgs e) {
       UpdateManager updateManager = (UpdateManager)sender;
 
       if (!e.IsUpdate) {
@@ -765,18 +670,15 @@ namespace WallpaperManager.Views {
         return;
       }
 
-      String resultKey = DialogManager.ShowUpdate_Available(
-        this.MainWindow, this.Environment.AppVersion.ToString(), e.Version.ToString(), e.CriticalMessage, e.InfoMessage
-      );
-      
+      string resultKey = DialogManager.ShowUpdate_Available(this.MainWindow, this.Environment.AppVersion.ToString(), e.Version.ToString(), e.CriticalMessage, e.InfoMessage);
+
       switch (resultKey) {
         case "Install":
           Window updateDownloadingWindow = DialogManager.ShowUpdate_Downloading(this.MainWindow);
           // Check if the cancel button was pressed.
           updateDownloadingWindow.Closed += delegate {
-            if (UpdateManager.IsDownloadingUpdate) {
+            if (UpdateManager.IsDownloadingUpdate)
               updateManager.AbortDownloadUpdate();
-            }
           };
           updateManager.DownloadUpdateError += delegate { updateDownloadingWindow.Close(); };
           updateManager.DownloadUpdateSuccessful += delegate { updateDownloadingWindow.Close(); };
@@ -794,10 +696,9 @@ namespace WallpaperManager.Views {
     ///   manages the dialog handling and downloads the update if requested.
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
-    private void UpdateManager_VersionCheckError(Object sender, ExceptionEventArgs e) {
-      if (e.IsHandled) {
+    private void UpdateManager_VersionCheckError(object sender, ExceptionEventArgs e) {
+      if (e.IsHandled)
         return;
-      }
 
       if (e.Exception is WebException) {
         DialogManager.ShowUpdate_UnableToConnect(this.MainWindow);
@@ -806,20 +707,20 @@ namespace WallpaperManager.Views {
       }
 
       if (e.Exception is FormatException) {
-        if (DialogManager.ShowUpdate_UpdateFileNotFound(this.MainWindow)) {
+        if (DialogManager.ShowUpdate_UpdateFileNotFound(this.MainWindow))
           Process.Start(AppEnvironment.WebsiteUrl);
-        }
+
         e.IsHandled = true;
-        return;
       }
     }
 
     /// <summary>
-    ///   Handles the <see cref="UpdateManager.DownloadUpdateSuccessful" /> event of a <see cref="UpdateManager" /> instance and
+    ///   Handles the <see cref="UpdateManager.DownloadUpdateSuccessful" /> event of a <see cref="UpdateManager" /> instance
+    ///   and
     ///   manages the dialog handling and apply operations.
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
-    private void UpdateManager_DownloadUpdateSuccessful(Object sender, EventArgs e) {
+    private void UpdateManager_DownloadUpdateSuccessful(object sender, EventArgs e) {
       UpdateManager updateManager = (UpdateManager)sender;
 
       updateManager.ApplyUpdate();
@@ -831,11 +732,10 @@ namespace WallpaperManager.Views {
     ///   manages the exception handling.
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
-    private void UpdateManager_DownloadUpdateError(Object sender, ExceptionEventArgs e) {
+    private void UpdateManager_DownloadUpdateError(object sender, ExceptionEventArgs e) {
       if (e.Exception is FormatException) {
-        if (DialogManager.ShowUpdate_UpdateFileNotFound(this.MainWindow)) {
+        if (DialogManager.ShowUpdate_UpdateFileNotFound(this.MainWindow))
           Process.Start(AppEnvironment.WebsiteUrl);
-        }
 
         e.IsHandled = true;
         return;
@@ -845,19 +745,17 @@ namespace WallpaperManager.Views {
         DialogManager.ShowUpdate_UnableToConnect(this.MainWindow);
 
         e.IsHandled = true;
-        return;
       }
     }
 
     /// <summary>
-    ///   Handles the <see cref="WallpaperManager.Models.WallpaperChanger.AutocycleException" /> event of a 
+    ///   Handles the <see cref="WallpaperManager.Models.WallpaperChanger.AutocycleException" /> event of a
     ///   <see cref="WallpaperChanger" /> instance and handles the thrown exception if possible.
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
-    private void WallpaperChanger_AutocycleException(Object sender, ExceptionEventArgs e) {
-      if (e.IsHandled) {
+    private void WallpaperChanger_AutocycleException(object sender, ExceptionEventArgs e) {
+      if (e.IsHandled)
         return;
-      }
 
       // Exceptions caused by overlapping cycles are simply ignored.
       if (e.Exception is NotSupportedException) {
@@ -865,91 +763,76 @@ namespace WallpaperManager.Views {
         return;
       }
 
-      if (this.HandleCycleException(e.Exception)) {
+      if (this.HandleCycleException(e.Exception))
         e.IsHandled = true;
-        return;
-      }
     }
 
     /// <summary>
-    ///   Handles the <see cref="ConfigWallpaperVM.UnhandledCommandException" /> event of a <see cref="ConfigWallpaperVM" /> 
+    ///   Handles the <see cref="ConfigWallpaperVM.UnhandledCommandException" /> event of a <see cref="ConfigWallpaperVM" />
     ///   instance and handles the thrown exception if possible.
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
-    private void ConfigWallpaperVM_UnhandledCommandException(Object sender, CommandExceptionEventArgs e) {
-      if (e.IsHandled) {
+    private void ConfigWallpaperVM_UnhandledCommandException(object sender, CommandExceptionEventArgs e) {
+      if (e.IsHandled)
         return;
-      }
 
       ConfigWallpaperVM configWallpaperVM = (ConfigWallpaperVM)sender;
 
       if (e.Command == configWallpaperVM.ApplySettingsCommand) {
-        if (e.Exception is InvalidOperationException) {
+        if (e.Exception is InvalidOperationException)
           DialogManager.ShowWallpapers_MultiscreenWallpaperOnDisabledScreens(null);
-        }
 
         e.IsHandled = true;
-        return;
       }
     }
 
     /// <summary>
-    ///   Handles the <see cref="WallpaperManager.ViewModels.WallpaperChangerVM.UnhandledCommandException" /> event of a 
-    ///   <see cref="WallpaperManager.ViewModels.WallpaperChangerVM" /> instance and handles the thrown exception if 
+    ///   Handles the <see cref="WallpaperManager.ViewModels.WallpaperChangerVM.UnhandledCommandException" /> event of a
+    ///   <see cref="WallpaperManager.ViewModels.WallpaperChangerVM" /> instance and handles the thrown exception if
     ///   possible.
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
-    private void WallpaperChangerVM_UnhandledCommandException(Object sender, CommandExceptionEventArgs e) {
-      if (e.IsHandled) {
+    private void WallpaperChangerVM_UnhandledCommandException(object sender, CommandExceptionEventArgs e) {
+      if (e.IsHandled)
         return;
-      }
 
       WallpaperChangerVM wallpaperChangerVM = (WallpaperChangerVM)sender;
 
       if (e.Command == wallpaperChangerVM.StartCyclingCommand || e.Command == wallpaperChangerVM.CycleNextCommand) {
-        if (this.HandleCycleException(e.Exception)) {
+        if (this.HandleCycleException(e.Exception))
           e.IsHandled = true;
-          return;
-        }
       }
     }
 
     /// <summary>
-    ///   Handles the <see cref="System.Windows.Application.DispatcherUnhandledException" /> event of an 
+    ///   Handles the <see cref="System.Windows.Application.DispatcherUnhandledException" /> event of an
     ///   <see cref="System.Windows.Application" /> instance and represents the last point where exceptions are handled.
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
-    private void Application_DispatcherUnhandledException(Object sender, DispatcherUnhandledExceptionEventArgs e) {
-      if (e.Handled) {
+    private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
+      if (e.Handled)
         return;
-      }
 
-      #if !DEBUG
-      if (e.Exception is SecurityException) {
+      if (e.Exception is SecurityException)
         DialogManager.ShowGeneral_MissingFrameworkRights(this.MainWindow, e.Exception.ToString());
-      } else if (e.Exception is DirectoryNotFoundException) {
+      else if (e.Exception is DirectoryNotFoundException)
         DialogManager.ShowGeneral_DirectoryNotFound(this.MainWindow, null);
-      } else if (e.Exception is FileNotFoundException) {
+      else if (e.Exception is FileNotFoundException)
         DialogManager.ShowGeneral_FileNotFound(this.MainWindow, (e.Exception as FileNotFoundException).FileName);
-      } else if (e.Exception is OutOfMemoryException) {
+      else if (e.Exception is OutOfMemoryException)
         DialogManager.ShowGeneral_OutOfMemory(this.MainWindow, e.Exception.ToString());
-      } else {
+      else
         DialogManager.ShowGeneral_UnhandledException(this.MainWindow, e.Exception.ToString());
-      }
 
       e.Handled = true;
-      #else
-      Debug.Write("Exception ");
-      Debug.WriteLine(e.Exception.ToString());
-      Debug.Flush();
-      #endif
     }
 
     /// <summary>
     ///   Handles a cycle related <see cref="Exception" />.
     /// </summary>
     /// <remarks>
-    ///   When <paramref name="occurredWhenAutocycling" /> is set to <c>false</c>, then this method will disable the autocycling 
+    ///   When <paramref name="occurredWhenAutocycling" /> is set to <c>false</c>, then this method will disable the
+    ///   autocycling
     ///   of wallpapers.
     /// </remarks>
     /// <param name="exception">
@@ -959,27 +842,24 @@ namespace WallpaperManager.Views {
     ///   Indicates whether the exception occurred on an autocycle.
     /// </param>
     /// <returns>
-    ///   A <see cref="Boolean" /> indicating whether the exception has been handled or not.
+    ///   A <see cref="bool" /> indicating whether the exception has been handled or not.
     /// </returns>
     /// <exception cref="ArgumentNullException">
     ///   <paramref name="exception" /> is <c>null</c>
     /// </exception>
-    protected Boolean HandleCycleException(Exception exception, Boolean occurredWhenAutocycling = false) {
-      if (exception == null) {
-        throw new ArgumentNullException(ExceptionMessages.GetVariableCanNotBeNull("exception"));
-      }
+    protected bool HandleCycleException(Exception exception, bool occurredWhenAutocycling = false) {
+      Contract.Requires<ArgumentNullException>(exception != null);
 
       if (exception is InvalidOperationException) {
         if ((occurredWhenAutocycling) && (this.WallpaperChanger.IsAutocycling)) {
           this.WallpaperChanger.StopCycling();
           DialogManager.ShowCycle_MissingWallpapers(this.MainWindow, true);
-        } else {
+        } else
           DialogManager.ShowCycle_MissingWallpapers(this.MainWindow, false);
-        }
 
         return true;
-      } 
-      
+      }
+
       if (exception is FileNotFoundException) {
         DialogManager.ShowGeneral_FileNotFound(this.MainWindow, ((FileNotFoundException)exception).FileName);
         return true;
@@ -1001,34 +881,26 @@ namespace WallpaperManager.Views {
     public event PropertyChangedEventHandler PropertyChanged;
 
     /// <commondoc select='INotifyPropertyChanged/Methods/OnPropertyChanged/*' />
-    protected virtual void OnPropertyChanged(String propertyName) {
-      if (this.PropertyChanged != null) {
-        this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-      }
+    protected virtual void OnPropertyChanged(string propertyName) {
+      this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     #endregion
-    
+
     #region IDisposable Implementation
     /// <commondoc select='IDisposable/Fields/isDisposed/*' />
-    private Boolean isDisposed;
+    public bool IsDisposed { get; private set; }
 
     /// <commondoc select='IDisposable/Methods/Dispose[@Params="Boolean"]/*' />
-    protected virtual void Dispose(Boolean disposing) {
-      if (!this.isDisposed) {
+    protected virtual void Dispose(bool disposing) {
+      if (!this.IsDisposed) {
         if (disposing) {
-          if (this.propertyBindingManager != null) {
-            this.propertyBindingManager.Dispose();
-          }
-          if (this.notifyIcon != null) {
-            this.notifyIcon.Dispose();
-          }
-          if (this.MainWindow != null) {
-            this.MainWindow.Dispose();
-          }
+          this.propertyBindingManager?.Dispose();
+          this.NotifyIcon?.Dispose();
+          this.MainWindow?.Dispose();
         }
       }
-      
-      this.isDisposed = true;
+
+      this.IsDisposed = true;
     }
 
     /// <commondoc select='IDisposable/Methods/Dispose[not(@*)]/*' />

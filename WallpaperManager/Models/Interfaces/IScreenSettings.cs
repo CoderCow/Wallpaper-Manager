@@ -1,37 +1,36 @@
 // This source is subject to the Creative Commons Public License.
 // Please see the README.MD file for more information.
 // All other rights reserved.
+
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Drawing;
+using System.Windows.Forms;
+using Common;
 
 namespace WallpaperManager.Models {
   /// <summary>
   ///   Defines screen related configuration data.
   /// </summary>
-  public interface IScreenSetting {
-    #region Property: Index
+  [ContractClass(typeof(IScreenSettingsContracts))]
+  public interface IScreenSettings {
     /// <summary>
     ///   Gets the index of the screen of which this instance defines settings for.
     /// </summary>
     /// <value>
     ///   The index of the screen of which this instance defines settings for.
     /// </value>
-    Int32 Index { get; }
-    #endregion
+    int Index { get; }
 
-    #region Property: CycleRandomly
     /// <summary>
     ///   Gets or sets a <see cref="Boolean" /> indicating whether wallpapers will be cycled randomly on this screen or not.
     /// </summary>
     /// <value>
     ///   A <see cref="Boolean" /> indicating whether wallpapers will be cycled randomly on this screen or not.
     /// </value>
-    Boolean CycleRandomly { get; set; }
-    #endregion
+    bool CycleRandomly { get; set; }
 
-    #region Property: StaticWallpaper
     /// <summary>
     ///   Gets the static <see cref="Wallpaper" /> which is used if <see cref="CycleRandomly" /> is set to <c>false</c>.
     /// </summary>
@@ -44,9 +43,7 @@ namespace WallpaperManager.Models {
     /// <seealso cref="CycleRandomly">CycleRandomly Property</seealso>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
     IWallpaper StaticWallpaper { get; set; }
-    #endregion
 
-    #region Property: Margins
     /// <summary>
     ///   Gets the margin definitions for this screen.
     /// </summary>
@@ -55,9 +52,16 @@ namespace WallpaperManager.Models {
     /// </value>
     /// <seealso cref="ScreenMargins">ScreenMargins Class</seealso>
     ScreenMargins Margins { get; }
-    #endregion
 
-    #region Properties: Bounds, BoundsWithMargin
+    /// <summary>
+    ///   Gets the collection of <see cref="WallpaperTextOverlay" /> objects which should be applied on this screen.
+    /// </summary>
+    /// <value>
+    ///   The collection of <see cref="WallpaperTextOverlay" /> objects which should be applied on this screen.
+    /// </value>
+    /// <seealso cref="WallpaperTextOverlay">WallpaperTextOverlay Class</seealso>
+    ObservableCollection<WallpaperTextOverlay> TextOverlays { get; }
+
     /// <summary>
     ///   Gets the bounds of the assigned screen.
     /// </summary>
@@ -73,17 +77,27 @@ namespace WallpaperManager.Models {
     ///   The bounds of the assigned screen with their margin substracted.
     /// </value>
     Rectangle BoundsWithMargin { get; }
-    #endregion
+  }
 
-    #region Property: TextOverlays
+  [ContractClassFor(typeof(IScreenSettings))]
+  internal abstract class IScreenSettingsContracts : IScreenSettings {
+    public abstract int Index { get; }
+    public abstract bool CycleRandomly { get; set; }
+    public abstract IWallpaper StaticWallpaper { get; set; }
+    public abstract ScreenMargins Margins { get; }
+    public abstract ObservableCollection<WallpaperTextOverlay> TextOverlays { get; }
+    public abstract Rectangle Bounds { get; }
+    public abstract Rectangle BoundsWithMargin { get; }
+
     /// <summary>
-    ///   Gets the collection of <see cref="WallpaperTextOverlay" /> objects which should be applied on this screen.
+    ///   Checks whether all properties have valid values.
     /// </summary>
-    /// <value>
-    ///   The collection of <see cref="WallpaperTextOverlay" /> objects which should be applied on this screen.
-    /// </value>
-    /// <seealso cref="WallpaperTextOverlay">WallpaperTextOverlay Class</seealso>
-    ObservableCollection<WallpaperTextOverlay> TextOverlays { get; }
-    #endregion
+    [ContractInvariantMethod]
+    private void CheckInvariants() {
+      Contract.Invariant(this.Index.IsBetween(0, Screen.AllScreens.Length - 1));
+      Contract.Invariant(this.StaticWallpaper != null);
+      Contract.Invariant(this.Margins != null);
+      Contract.Invariant(this.TextOverlays != null);
+    }
   }
 }
