@@ -11,6 +11,7 @@ using System.Diagnostics.Contracts;
 using System.Windows;
 using Common;
 using Common.IO;
+using PropertyChanged;
 
 namespace WallpaperManager.Models {
   /// <summary>
@@ -95,6 +96,7 @@ namespace WallpaperManager.Models {
     ///   Attempted to set a <c>null</c> value.
     /// </exception>
     /// <seealso cref="WallpaperSettingsBase.IsActivated">WallpaperSettingsBase.IsActivated Property</seealso>
+    [DoNotNotify]
     public bool? IsActivated {
       get {
         if (this.Count == 0)
@@ -147,11 +149,12 @@ namespace WallpaperManager.Models {
     /// <seealso cref="Name_InvalidChars">Name_InvalidChars Property</seealso>
     /// <seealso cref="Name_MinLength">Name_MinLength Constant</seealso>
     /// <seealso cref="Name_MaxLength">Name_MaxLength Constant</seealso>
+    [DoNotNotify]
     public string Name {
       get { return this.name; }
       set {
         Contract.Requires<ArgumentOutOfRangeException>(value.Length.IsBetween(WallpaperCategory.Name_MinLength, WallpaperCategory.Name_MaxLength));
-        Contract.Requires<ArgumentException>(WallpaperCategory.Name_InvalidChars.Any(value.Contains));
+        Contract.Requires<ArgumentException>(!WallpaperCategory.Name_InvalidChars.Any(value.Contains));
 
         this.name = value;
         this.OnPropertyChanged("Name");
