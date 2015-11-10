@@ -70,6 +70,8 @@ namespace WallpaperManager.Models {
     private void CheckInvariants() {
       Contract.Invariant(this.ImagePath != Path.Invalid);
       Contract.Invariant(this.ImageSize.Width > 0 && this.ImageSize.Height > 0);
+      Contract.Invariant(this.CycleCountWeek <= this.CycleCountTotal);
+      Contract.Invariant(this.TimeAdded <= this.TimeLastCycled);
     }
 
     public abstract object Clone();
