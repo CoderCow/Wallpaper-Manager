@@ -199,7 +199,7 @@ namespace WallpaperManager.Models {
                       screenIndex = 1;
 
                     Path filePath = wallpapers[screenIndex - 1].ImagePath;
-                    if (filePath != Path.None)
+                    if (filePath != Path.Invalid)
                       evaluatedText.Append(filePath.FileNameWithoutExt);
                   }
                 }
@@ -212,7 +212,7 @@ namespace WallpaperManager.Models {
                       screenIndex = 1;
 
                     Path filePath = wallpapers[screenIndex - 1].ImagePath;
-                    if (filePath != Path.None)
+                    if (filePath != Path.Invalid)
                       evaluatedText.Append(filePath.FileName);
                   }
                 }
@@ -225,7 +225,7 @@ namespace WallpaperManager.Models {
                       screenIndex = 1;
 
                     Path filePath = wallpapers[screenIndex - 1].ImagePath;
-                    if (filePath != Path.None)
+                    if (filePath != Path.Invalid)
                       evaluatedText.Append(filePath);
                   }
                 }

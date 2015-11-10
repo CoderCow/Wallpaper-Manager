@@ -108,7 +108,7 @@ namespace WallpaperManager.Models {
     [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")]
     public WallpaperCategoryFileSynchronizer(WallpaperCategory wallpaperCategory, Path directoryPath, Dispatcher invokeDispatcher) {
       Contract.Requires<ArgumentNullException>(wallpaperCategory != null);
-      Contract.Requires<ArgumentException>(directoryPath != Path.None);
+      Contract.Requires<ArgumentException>(directoryPath != Path.Invalid);
       Contract.Requires<DirectoryNotFoundException>(Directory.Exists(directoryPath));
       Contract.Requires<ArgumentNullException>(invokeDispatcher != null);
 
@@ -138,7 +138,7 @@ namespace WallpaperManager.Models {
     private void CheckInvariants() {
       Contract.Invariant(WallpaperCategoryFileSynchronizer.WallpaperFileExtensions != null);
       Contract.Invariant(this.InvokeDispatcher != null);
-      Contract.Invariant(this.DirectoryPath != Path.None);
+      Contract.Invariant(this.DirectoryPath != Path.Invalid);
       Contract.Invariant(this.FileSystemWatcher != null);
     }
 
@@ -242,7 +242,7 @@ namespace WallpaperManager.Models {
     ///   <paramref name="imagePath" /> is <c>null</c>.
     /// </exception>
     private void AddAsync(Path imagePath) {
-      Contract.Requires<ArgumentException>(imagePath != Path.None);
+      Contract.Requires<ArgumentException>(imagePath != Path.Invalid);
 
       BackgroundWorker worker = new BackgroundWorker();
       worker.DoWork += (sender, e) => {
@@ -293,7 +293,7 @@ namespace WallpaperManager.Models {
     ///   <paramref name="filePath" /> is <c>null</c>.
     /// </exception>
     private static bool IsImageFileExtensionSupported(Path filePath) {
-      Contract.Requires<ArgumentException>(filePath != Path.None);
+      Contract.Requires<ArgumentException>(filePath != Path.Invalid);
 
       string fileNameString = filePath.FileName;
       if (!fileNameString.Contains('.'))

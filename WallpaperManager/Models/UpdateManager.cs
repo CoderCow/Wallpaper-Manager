@@ -212,7 +212,7 @@ namespace WallpaperManager.Models {
 
       // We write the batch file even before the download started at all to check for errors.
       StreamWriter batchWriter = null;
-      Path batchFilePath = Path.None;
+      Path batchFilePath = Path.Invalid;
       try {
         batchFilePath = Path.Concat(this.Environment.SystemTempPath, UpdateManager.Update_BatchFileName);
 

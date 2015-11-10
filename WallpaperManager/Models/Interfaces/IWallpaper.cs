@@ -112,7 +112,7 @@ namespace WallpaperManager.Models {
     /// </summary>
     [ContractInvariantMethod]
     private void CheckInvariants() {
-      Contract.Invariant(this.ImagePath != Path.None);
+      Contract.Invariant(this.ImagePath != Path.Invalid);
       Contract.Invariant(this.ImageSize.Width > 0 && this.ImageSize.Height > 0);
     }
 

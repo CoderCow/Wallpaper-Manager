@@ -545,7 +545,7 @@ namespace WallpaperManager.Models {
     ///   The <see cref="Path" /> of the XML-file to be read from.
     /// </param>
     /// <exception cref="ArgumentException">
-    ///   <paramref name="filePath" /> is <c>Path.None</c>.
+    ///   <paramref name="filePath" /> is <c>Path.Invalid</c>.
     /// </exception>
     /// <exception cref="FileNotFoundException">
     ///   <paramref name="filePath" /> points to a file which does not exist.
@@ -567,7 +567,7 @@ namespace WallpaperManager.Models {
     /// <inheritdoc cref="Read(Stream)" select='returns' />
     /// <seealso cref="Path">Path Class</seealso>
     public static Configuration Read(Path filePath) {
-      Contract.Requires<ArgumentException>(filePath != Path.None);
+      Contract.Requires<ArgumentException>(filePath != Path.Invalid);
 
       using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
         return Configuration.Read(fileStream);
@@ -916,7 +916,7 @@ namespace WallpaperManager.Models {
     ///   The <see cref="Path" /> of the XML-file to be read from.
     /// </param>
     /// <exception cref="ArgumentException">
-    ///   <paramref name="filePath" /> is <c>Path.None</c>.
+    ///   <paramref name="filePath" /> is <c>Path.Invalid</c>.
     /// </exception>
     /// <exception cref="DirectoryNotFoundException">
     ///   <paramref name="filePath" /> points to a file in a directory which can not be found.
@@ -930,7 +930,7 @@ namespace WallpaperManager.Models {
     /// <inheritdoc cref="Write(Stream)" select='exception[@cref="IOException"]|exception[@cref="InvalidOperationException"]' />
     /// <seealso cref="Path">Path Class</seealso>
     public void Write(Path filePath) {
-      Contract.Requires<ArgumentException>(filePath != Path.None);
+      Contract.Requires<ArgumentException>(filePath != Path.Invalid);
 
       using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
         this.Write(fileStream);
@@ -963,7 +963,7 @@ namespace WallpaperManager.Models {
 
       if (wallpaperSettings != null) {
         currentElement = document.CreateElement("ImagePath");
-        if (wallpaperSettings.ImagePath != Path.None)
+        if (wallpaperSettings.ImagePath != Path.Invalid)
           currentElement.InnerText = wallpaperSettings.ImagePath;
         element.AppendChild(currentElement);
       }

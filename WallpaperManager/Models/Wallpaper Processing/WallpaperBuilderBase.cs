@@ -10,7 +10,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
-using Common.Drawing;
 using Path = Common.IO.Path;
 
 namespace WallpaperManager.Models {
@@ -337,7 +336,7 @@ namespace WallpaperManager.Models {
       using (SolidBrush backgroundBrush = new SolidBrush(wallpaper.BackgroundColor))
         destGraphics.FillRectangle(backgroundBrush, destScreenRect);
 
-      if ((wallpaper.ImagePath != Path.None) && (File.Exists(wallpaper.ImagePath))) {
+      if ((wallpaper.ImagePath != Path.Invalid) && (File.Exists(wallpaper.ImagePath))) {
         Image originalImage = null;
         Image imageToDraw = null;
 
@@ -468,11 +467,11 @@ namespace WallpaperManager.Models {
 
             switch (placement) {
               case WallpaperPlacement.Uniform:
-                destGraphics.DrawImageUniformed(imageToDraw, destScreenRect);
+                //destGraphics.DrawImageUniformed(imageToDraw, destScreenRect);
 
                 break;
               case WallpaperPlacement.UniformToFill:
-                destGraphics.DrawImageUniformedToFill(imageToDraw, destScreenRect);
+                //destGraphics.DrawImageUniformedToFill(imageToDraw, destScreenRect);
 
                 break;
               case WallpaperPlacement.Stretch:
@@ -480,12 +479,12 @@ namespace WallpaperManager.Models {
 
                 break;
               case WallpaperPlacement.Center:
-                destGraphics.DrawImageCentered(imageToDraw, destScreenRect);
+                //destGraphics.DrawImageCentered(imageToDraw, destScreenRect);
 
                 break;
               case WallpaperPlacement.Tile:
                 destGraphics.ScaleTransform((wallpaper.Scale.X + 100) / 100f, (wallpaper.Scale.Y + 100) / 100f);
-                destGraphics.DrawImageTiled(imageToDraw, destScreenRect);
+                //destGraphics.DrawImageTiled(imageToDraw, destScreenRect);
 
                 break;
             }
@@ -519,7 +518,9 @@ namespace WallpaperManager.Models {
       Contract.Requires<ArgumentNullException>(wallpaperImage != null);
 
       float scaleFactor = ((float)wallpaperImage.Width / WallpaperBuilderBase.FullScreenBounds.Width);
-      Rectangle scaledFullScreenBounds = WallpaperBuilderBase.FullScreenBounds.ScaleFull(scaleFactor);
+      // TODO: Removed because of common lib update:
+      // Rectangle scaledFullScreenBounds = WallpaperBuilderBase.FullScreenBounds.ScaleFull(scaleFactor);
+      Rectangle scaledFullScreenBounds = WallpaperBuilderBase.FullScreenBounds;
 
       // TODO: Buggy with 2x2 monitor systems and greater.
       // Are there screens on the left side of the primary screen?

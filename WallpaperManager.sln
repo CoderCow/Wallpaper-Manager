@@ -16,8 +16,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.IO.Serialization", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Presentation", "..\..\Framework\Common Library\Common.Presentation Library\Common.Presentation.csproj", "{F257C267-395B-4794-878D-2291C5C8A45E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{F64DA15F-7131-43D3-A30D-F372EC2B3AB5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Beta Release|Any CPU = Beta Release|Any CPU
@@ -58,24 +56,16 @@ Global
 		{F257C267-395B-4794-878D-2291C5C8A45E}.Release (deploy ready)|Any CPU.Build.0 = Release|Any CPU
 		{F257C267-395B-4794-878D-2291C5C8A45E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F257C267-395B-4794-878D-2291C5C8A45E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F64DA15F-7131-43D3-A30D-F372EC2B3AB5}.Beta Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F64DA15F-7131-43D3-A30D-F372EC2B3AB5}.Beta Release|Any CPU.Build.0 = Release|Any CPU
-		{F64DA15F-7131-43D3-A30D-F372EC2B3AB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F64DA15F-7131-43D3-A30D-F372EC2B3AB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F64DA15F-7131-43D3-A30D-F372EC2B3AB5}.Release (deploy ready)|Any CPU.ActiveCfg = Release|Any CPU
-		{F64DA15F-7131-43D3-A30D-F372EC2B3AB5}.Release (deploy ready)|Any CPU.Build.0 = Release|Any CPU
-		{F64DA15F-7131-43D3-A30D-F372EC2B3AB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F64DA15F-7131-43D3-A30D-F372EC2B3AB5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_BuildVersioningStyle = None.None.None.None
-		BuildVersion_ConfigurationName = Any
-		BuildVersion_UpdateFileVersion = False
-		BuildVersion_UpdateAssemblyVersion = False
 		BuildVersion_AssemblyInfoFilename = 
+		BuildVersion_UpdateAssemblyVersion = False
+		BuildVersion_UpdateFileVersion = False
+		BuildVersion_ConfigurationName = Any
+		BuildVersion_BuildVersioningStyle = None.None.None.None
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Wallpaper Manager.vsmdi

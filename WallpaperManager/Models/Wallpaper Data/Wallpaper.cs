@@ -81,7 +81,7 @@ namespace WallpaperManager.Models {
           return "Image width and height must be greater or eqal to zero.";
 
       else if (propertyName == nameof(this.ImagePath))
-        if (this.ImagePath == Path.None)
+        if (this.ImagePath == Path.Invalid)
           return "This is not a valid path.";
       
       string error = base.InvalidatePropertyInternal(propertyName);

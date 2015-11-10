@@ -14,7 +14,6 @@ using System.Security;
 using System.Security.Permissions;
 using System.Windows.Threading;
 using Common;
-using Common.Diagnostics;
 using Common.IO;
 using Common.Windows;
 using Microsoft.Win32;
@@ -333,7 +332,7 @@ namespace WallpaperManager.Models {
       Contract.Invariant(Enum.IsDefined(typeof(WallpaperChangeType), this.WallpaperChangeType));
       Contract.Invariant(this.LastActiveListSize.IsBetween(1, Configuration.LastActiveListSizeMax));
       Contract.Invariant(this.ScreensSettings != null);
-      Contract.Invariant(this.AppliedWallpaperFilePath != Path.None);
+      Contract.Invariant(this.AppliedWallpaperFilePath != Path.Invalid);
       Contract.Invariant(this.AutocycleTimer != null);
       Contract.Invariant(this.ActiveWallpapers != null);
       Contract.Invariant(this.ActiveWallpapersAccessor != null);
@@ -406,7 +405,6 @@ namespace WallpaperManager.Models {
         // Clone all Wallpaper-objects of the collection to make them thread safe for the background worker's thread.
         foreach (Wallpaper wallpaper in wallpapersToUse[i]) {
           Wallpaper clonedWallpaper = (Wallpaper)wallpaper.Clone();
-          DebugHelper.WriteObjectPropertyData(clonedWallpaper);
           wallpapersToUseSync[i].Add(clonedWallpaper);
         }
       }

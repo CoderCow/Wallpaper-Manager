@@ -133,7 +133,7 @@ namespace WallpaperManager.Models {
     /// </value>
     public Path DebugFilePath {
       get {
-        if (this.debugFilePath == Path.None)
+        if (this.debugFilePath == Path.Invalid)
           this.debugFilePath = Path.Concat(this.AppPath, AppEnvironment.DebugFilename);
 
         return this.debugFilePath;
@@ -154,7 +154,7 @@ namespace WallpaperManager.Models {
     /// </remarks>
     public Path ConfigFilePath {
       get {
-        if (this.configFilePath == Path.None) {
+        if (this.configFilePath == Path.Invalid) {
 #if !LocalConfig
           this.configFilePath = Path.Concat(this.AppDataPath, AppEnvironment.ConfigurationFilename);
 #else
@@ -174,7 +174,7 @@ namespace WallpaperManager.Models {
     /// </value>
     public Path ChangelogFilePath {
       get {
-        if (this.changelogFilePath == Path.None)
+        if (this.changelogFilePath == Path.Invalid)
           this.changelogFilePath = Path.Concat(this.AppPath, AppEnvironment.ChangelogFileName);
 
         return this.changelogFilePath;
@@ -189,12 +189,14 @@ namespace WallpaperManager.Models {
     /// </value>
     public Path AppliedWallpaperFilePath {
       get {
-        if (this.appliedWallpaperFilePath == Path.None)
+        if (this.appliedWallpaperFilePath == Path.Invalid)
           this.appliedWallpaperFilePath = Path.Concat(this.AppDataPath, AppEnvironment.AppliedWallpaperFilename);
 
         return this.appliedWallpaperFilePath;
       }
     }
+
+    public Path SystemTempPath => new Path(System.IO.Path.GetTempPath());
 
     /// <summary>
     ///   Gets a <see cref="bool" /> indicating whether the <see cref="Argument_DefaultSettings" /> argument is defined
@@ -227,19 +229,10 @@ namespace WallpaperManager.Models {
     /// </summary>
     [ContractInvariantMethod]
     private void CheckInvariants() {
-      Contract.Invariant(this.DebugFilePath != Path.None);
-      Contract.Invariant(this.ConfigFilePath != Path.None);
-      Contract.Invariant(this.ChangelogFilePath != Path.None);
-      Contract.Invariant(this.AppliedWallpaperFilePath != Path.None);
-    }
-
-    /// <inheritdoc />
-    protected override void DebugWriteAppInfoInternal() {
-      base.DebugWriteAppInfoInternal();
-
-      Debug.WriteLine("Multiscreen system: " + AppEnvironment.IsMultiscreenSystem);
-      Debug.WriteLine("Use default settings defined: " + this.IsUseDefaultSettingsDefined);
-      Debug.WriteLine("No Auto termination defined: " + this.IsNoAutoTerminateDefined);
+      Contract.Invariant(this.DebugFilePath != Path.Invalid);
+      Contract.Invariant(this.ConfigFilePath != Path.Invalid);
+      Contract.Invariant(this.ChangelogFilePath != Path.Invalid);
+      Contract.Invariant(this.AppliedWallpaperFilePath != Path.Invalid);
     }
 
     /// <summary>

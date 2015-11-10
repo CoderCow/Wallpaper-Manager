@@ -162,10 +162,6 @@
       <HintPath>..\packages\AvalonLibrary.2.2.0.0\lib\net40\AvalonLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common, Version=1.5.378.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\Common.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Presentation, Version=1.0.591.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>References\Common.Presentation.dll</HintPath>
@@ -232,7 +228,7 @@
     <Compile Include="Models\LocalizationManager.cs" />
     <Compile Include="Models\ScreenSettings.cs" />
     <Compile Include="Models\ScreenSettingsCollection.cs" />
-    <Compile Include="Models\Wallpaper Data\WallpaperCategoryFileSynchronizer.cs" />
+    <Compile Include="Models\WallpaperCategoryFileSynchronizer.cs" />
     <Compile Include="Models\Wallpaper Data\Wallpaper.cs" />
     <Compile Include="Models\Wallpaper Data\WallpaperCategory.cs" />
     <Compile Include="Models\Wallpaper Data\WallpaperCategoryCollection.cs" />
@@ -304,6 +300,12 @@
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Framework\Common Library\Common Library\Common Library.csproj">
+      <Project>{030c8ed2-1861-416d-afd9-1a01e8b515be}</Project>
+      <Name>Common Library</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF "$(ConfigurationName)" == "Release (deploy ready)" (
@@ -333,7 +335,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_ConfigurationName="Any" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Any" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\Fody.1.29.3\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.3\build\dotnet\Fody.targets')" />
