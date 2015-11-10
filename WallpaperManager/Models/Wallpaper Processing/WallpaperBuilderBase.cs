@@ -102,7 +102,7 @@ namespace WallpaperManager.Models {
     ///   The image file where the <paramref name="multiscreenWallpaper" /> object refers to could not be found.
     /// </exception>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
-    public Image CreateMultiscreenFromSingle(Wallpaper multiscreenWallpaper, float scaleFactor, bool useWindowsFix) {
+    public Image CreateMultiscreenFromSingle(IWallpaper multiscreenWallpaper, float scaleFactor, bool useWindowsFix) {
       Contract.Requires<ArgumentNullException>(multiscreenWallpaper != null);
 
       Rectangle fullScreenBounds = WallpaperBuilderBase.FullScreenBounds;
@@ -199,7 +199,7 @@ namespace WallpaperManager.Models {
     /// <param name="wallpapers">
     ///   The <see cref="Wallpaper" /> objects to use for each screen.
     /// </param>
-    public abstract Image CreateMultiscreenFromMultiple(IList<IList<Wallpaper>> wallpapers, float scaleFactor, bool useWindowsFix);
+    public abstract Image CreateMultiscreenFromMultiple(IList<IList<IWallpaper>> wallpapers, float scaleFactor, bool useWindowsFix);
 
     /// <summary>
     ///   Creates a multiscreen wallpaper from multiple <see cref="Wallpaper" /> objects (from multiple images).
@@ -239,7 +239,7 @@ namespace WallpaperManager.Models {
     /// <exception cref="FileNotFoundException">
     ///   The image file where on of the <see cref="Wallpaper" /> objects refers to could not be found.
     /// </exception>
-    protected Image CreateMultiscreenFromMultipleInternal(IList<Wallpaper> wallpapers, float scaleFactor, bool useWindowsFix) {
+    protected Image CreateMultiscreenFromMultipleInternal(IList<IWallpaper> wallpapers, float scaleFactor, bool useWindowsFix) {
       Contract.Requires<ArgumentNullException>(wallpapers != null);
       Contract.Requires<ArgumentException>(wallpapers.Count > 0);
       Contract.Requires<ArgumentException>(!wallpapers.Contains(null));
@@ -329,7 +329,7 @@ namespace WallpaperManager.Models {
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
     /// <seealso cref="WallpaperPlacement">WallpaperPlacement Enumeration</seealso>
     /// .
-    protected static void DrawWallpaper(Graphics destGraphics, Rectangle destScreenRect, Wallpaper wallpaper, WallpaperPlacement placement) {
+    protected static void DrawWallpaper(Graphics destGraphics, Rectangle destScreenRect, IWallpaper wallpaper, WallpaperPlacement placement) {
       Contract.Requires<ArgumentNullException>(destGraphics != null);
       Contract.Requires<ArgumentNullException>(wallpaper != null);
       Contract.Requires<ArgumentException>(Enum.IsDefined(typeof(WallpaperPlacement), placement));
@@ -580,7 +580,7 @@ namespace WallpaperManager.Models {
     /// <seealso cref="Graphics">Graphics Class</seealso>
     /// <seealso cref="WallpaperTextOverlay">WallpaperTextOverlay Class</seealso>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
-    private static void DrawOverlayTexts(Graphics destGraphics, Rectangle rect, IList<Wallpaper> wallpapers, IList<WallpaperTextOverlay> overlayTexts) {
+    private static void DrawOverlayTexts(Graphics destGraphics, Rectangle rect, IList<IWallpaper> wallpapers, IList<IWallpaperTextOverlay> overlayTexts) {
       Contract.Requires<ArgumentNullException>(destGraphics != null);
       Contract.Requires<ArgumentNullException>(wallpapers != null);
       Contract.Requires<ArgumentNullException>(overlayTexts != null);
@@ -665,7 +665,7 @@ namespace WallpaperManager.Models {
   internal abstract class WallpaperBuilderBaseContracts : WallpaperBuilderBase {
     public WallpaperBuilderBaseContracts(ScreenSettingsCollection screensSettings) : base(screensSettings) {}
 
-    public override Image CreateMultiscreenFromMultiple(IList<IList<Wallpaper>> wallpapers, float scaleFactor, bool useWindowsFix) {
+    public override Image CreateMultiscreenFromMultiple(IList<IList<IWallpaper>> wallpapers, float scaleFactor, bool useWindowsFix) {
       Contract.Requires<ArgumentNullException>(wallpapers != null);
       Contract.Requires<ArgumentException>(wallpapers.Count > 0);
       Contract.Requires<ArgumentException>(!wallpapers.Contains(null));

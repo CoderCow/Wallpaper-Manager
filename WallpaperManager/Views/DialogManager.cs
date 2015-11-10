@@ -146,7 +146,7 @@ namespace WallpaperManager.Views {
     }
 
     /// <summary>
-    ///   Creates and shows a dialog saying that the directory assigned with a <see cref="SynchronizedWallpaperCategory" />
+    ///   Creates and shows a dialog saying that the directory assigned with a <see cref="WallpaperCategoryFileSynchronizer" />
     ///   was not found.
     /// </summary>
     /// <param name="owner">
@@ -173,7 +173,7 @@ namespace WallpaperManager.Views {
 
     /// <summary>
     ///   Creates and shows a dialog saying that the directory assigned with a
-    ///   <see cref="SynchronizedWallpaperCategory" /> was not found.
+    ///   <see cref="WallpaperCategoryFileSynchronizer" /> was not found.
     /// </summary>
     /// <param name="owner">
     ///   The owner of the dialog window.

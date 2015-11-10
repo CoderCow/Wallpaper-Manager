@@ -4,97 +4,48 @@
 
 using System;
 using System.Diagnostics.Contracts;
+using Common;
+using PropertyChanged;
 
 namespace WallpaperManager.Models {
   /// <summary>
   ///   Contains data to be applied to newly added wallpapers.
   /// </summary>
   /// <threadsafety static="true" instance="false" />
-  public class WallpaperDefaultSettings : WallpaperSettingsBase {
-    /// <summary>
-    ///   <inheritdoc cref="AutoDetermineIsMultiscreen" select='../value/node()' />
-    /// </summary>
-    private bool autoDetermineIsMultiscreen;
+  [ImplementPropertyChanged]
+  public class WallpaperDefaultSettings : IWallpaperDefaultSettings, ICloneable, IAssignable {
+    /// <inheritdoc />  
+    public WallpaperBase Settings { get; set; }
 
-    /// <summary>
-    ///   <inheritdoc cref="AutoDeterminePlacement" select='../value/node()' />
-    /// </summary>
-    private bool autoDeterminePlacement;
+    /// <inheritdoc />
+    public bool AutoDetermineIsMultiscreen { get; set; }
 
-    /// <summary>
-    ///   Gets or sets a value indicating whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> property should be
-    ///   determined automatically or not.
-    /// </summary>
-    /// <value>
-    ///   <c>true</c> whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> property should be determined
-    ///   automatically; otherwise <c>false</c>.
-    /// </value>
-    public bool AutoDetermineIsMultiscreen {
-      get { return this.autoDetermineIsMultiscreen; }
-      set {
-        this.autoDetermineIsMultiscreen = value;
-        this.OnPropertyChanged("AutoDetermineIsMultiscreen");
-      }
-    }
-
-    /// <summary>
-    ///   Gets or sets a value indicating whether the <see cref="WallpaperSettingsBase.Placement" />
-    ///   property should be determined automatically or not.
-    /// </summary>
-    /// <value>
-    ///   <c>true</c> whether the <see cref="WallpaperSettingsBase.Placement" /> property should be
-    ///   determined automatically; otherwise <c>false</c>.
-    /// </value>
-    public bool AutoDeterminePlacement {
-      get { return this.autoDeterminePlacement; }
-      set {
-        this.autoDeterminePlacement = value;
-        this.OnPropertyChanged("AutoDeterminePlacement");
-      }
-    }
+    /// <inheritdoc />
+    public bool AutoDeterminePlacement { get; set; }
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperDefaultSettings" /> class.
     /// </summary>
-    public WallpaperDefaultSettings() {
-      this.autoDetermineIsMultiscreen = true;
-      this.autoDeterminePlacement = true;
+    public WallpaperDefaultSettings(WallpaperBase baseSettings) {
+      this.Settings = baseSettings;
+      this.AutoDetermineIsMultiscreen = true;
+      this.AutoDeterminePlacement = true;
     }
 
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />
-    public override object Clone() {
-      WallpaperDefaultSettings clonedInstance = new WallpaperDefaultSettings();
-
-      // Clone all fields defined by WallpaperSettingsBase.
-      base.Clone(clonedInstance);
-
-      clonedInstance.autoDetermineIsMultiscreen = this.AutoDetermineIsMultiscreen;
-      clonedInstance.autoDeterminePlacement = this.AutoDeterminePlacement;
-
-      return clonedInstance;
+    public object Clone() {
+      return this.MemberwiseClone();
     }
 
-    /// <summary>
-    ///   Assigns all member values of this instance to the respective members of the given instance.
-    /// </summary>
-    /// <param name="other">
-    ///   The target instance to assign to.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <paramref name="other" /> is <c>null</c>.
-    /// </exception>
-    protected override void AssignTo(WallpaperSettingsBase other) {
-      Contract.Requires<ArgumentNullException>(other != null);
+    /// <inheritdoc />
+    public void AssignTo(object other) {
+      Contract.Requires<ArgumentException>(other is WallpaperDefaultSettings);
 
-      // Assign all members defined by WallpaperSettingsBase.
-      base.AssignTo(other);
-
-      WallpaperDefaultSettings defaultSettingsInstance = (other as WallpaperDefaultSettings);
-      if (defaultSettingsInstance != null) {
-        defaultSettingsInstance.AutoDetermineIsMultiscreen = this.AutoDetermineIsMultiscreen;
-        defaultSettingsInstance.AutoDeterminePlacement = this.AutoDeterminePlacement;
-      }
+      WallpaperDefaultSettings defaultSettingsInstance = (WallpaperDefaultSettings)other;
+      defaultSettingsInstance.Settings = this.Settings;
+      defaultSettingsInstance.AutoDetermineIsMultiscreen = this.AutoDetermineIsMultiscreen;
+      defaultSettingsInstance.AutoDeterminePlacement = this.AutoDeterminePlacement;
     }
     #endregion
   }

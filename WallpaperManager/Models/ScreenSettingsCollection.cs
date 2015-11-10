@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using Common;
 
 namespace WallpaperManager.Models {
+  // TODO: implement as a proper observable collection
+  // TODO: allow for display dependent settings: http://stackoverflow.com/questions/4958683/how-do-i-get-the-actual-monitor-name-as-seen-in-the-resolution-dialog, http://pinvoke.net/default.aspx/user32/EnumDisplayDevices.html
   /// <summary>
   ///   Represents a collection of <see cref="ScreenSettings" /> objects.
   /// </summary>
@@ -18,7 +20,7 @@ namespace WallpaperManager.Models {
   ///   are available on the current computer.
   /// </remarks>
   /// <threadsafety static="false" instance="false" />
-  public class ScreenSettingsCollection : ReadOnlyCollection<ScreenSettings>, ICloneable, IAssignable {
+  public class ScreenSettingsCollection : ReadOnlyObservableCollection<ScreenSettings>, ICloneable, IAssignable {
     /// <summary>
     ///   Gets the number of <see cref="ScreenSettings" /> objects where no static wallpaper should be cycled on.
     /// </summary>
@@ -33,7 +35,7 @@ namespace WallpaperManager.Models {
           if (screenSetting.CycleRandomly)
             count++;
         }
-
+        
         return count;
       }
     }
@@ -58,15 +60,7 @@ namespace WallpaperManager.Models {
         return allStatic;
       }
     }
-
-    /// <summary>
-    ///   Initializes a new instance of the <see cref="ScreenSettingsCollection" /> class.
-    /// </summary>
-    public ScreenSettingsCollection() : base(new ScreenSettings[Screen.AllScreens.Length]) {
-      for (int i = 0; i < Screen.AllScreens.Length; i++)
-        this.Items[i] = new ScreenSettings(i);
-    }
-
+    
     /// <summary>
     ///   Initializes a new instance of the <see cref="ScreenSettingsCollection" /> class with a given collection of
     ///   <see cref="ScreenSettings" /> instances.
@@ -79,11 +73,13 @@ namespace WallpaperManager.Models {
     ///   screens.
     /// </exception>
     /// <seealso cref="ScreenSettings">ScreenSettings Class</seealso>
-    public ScreenSettingsCollection(IList<ScreenSettings> screenSettings) : base(new ScreenSettings[Screen.AllScreens.Length]) {
-      Contract.Requires<ArgumentException>(screenSettings.Count == Screen.AllScreens.Length);
-
-      for (int i = 0; i < Screen.AllScreens.Length; i++)
-        this.Items[i] = screenSettings[i];
+    public ScreenSettingsCollection(IList<ScreenSettings> screenSettings = null) : base(new ObservableCollection<ScreenSettings>()) {
+      if (screenSettings != null)
+        foreach (ScreenSettings settings in screenSettings)
+          this.Items.Add(settings);
+      else
+        for (int i = 0; i < Screen.AllScreens.Length; i++) 
+          this.Items.Add(new ScreenSettings(i));
     }
 
     /// <summary>
@@ -96,20 +92,8 @@ namespace WallpaperManager.Models {
     }
 
     #region ICloneable Implementation, IAssignable Implementation
-    /// <summary>
-    ///   Assigns all member values of this instance to the respective members of the given instance.
-    /// </summary>
-    /// <param name="other">
-    ///   The target instance to assign to.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <paramref name="other" /> is <c>null</c>.
-    /// </exception>
-    /// <exception cref="ArgumentException">
-    ///   <paramref name="other" /> is not castable to the <see cref="ScreenSettingsCollection" /> type.
-    /// </exception>
+    /// <inheritdoc />
     public void AssignTo(object other) {
-      Contract.Requires<ArgumentNullException>(other != null);
       Contract.Requires<ArgumentException>(other is ScreenSettingsCollection);
 
       ScreenSettingsCollection otherInstance = (ScreenSettingsCollection)other;

@@ -48,14 +48,14 @@ namespace WallpaperManager.ViewModels {
     private IList<WallpaperVM> selectedWallpaperVMs;
 
     /// <summary>
-    ///   Gets a value indicating whether this category is a <see cref="SynchronizedWallpaperCategory" /> or not.
+    ///   Gets a value indicating whether this category is a <see cref="WallpaperCategoryFileSynchronizer" /> or not.
     /// </summary>
     /// <value>
-    ///   <c>true</c> if this category is a <see cref="SynchronizedWallpaperCategory" />;
+    ///   <c>true</c> if this category is a <see cref="WallpaperCategoryFileSynchronizer" />;
     ///   otherwise <c>false</c>.
     /// </value>
     public bool IsSynchronizedCategory {
-      get { return (this.Category is SynchronizedWallpaperCategory); }
+      get { return (this.Category is WallpaperCategoryFileSynchronizer); }
     }
 
     /// <summary>
@@ -194,7 +194,7 @@ namespace WallpaperManager.ViewModels {
 
     /// <summary>
     ///   Copies an image file the selected folder of the selected
-    ///   <see cref="SynchronizedWallpaperCategory" />.
+    ///   <see cref="WallpaperCategoryFileSynchronizer" />.
     /// </summary>
     /// <param name="imagePath">
     ///   <c>true</c> to overwrite an already existing image file; otherwise <c>false</c>.
@@ -210,16 +210,16 @@ namespace WallpaperManager.ViewModels {
     ///   an I/O error has occurred.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///   The wrapped <see cref="WallpaperCategory" /> is no <see cref="SynchronizedWallpaperCategory" />.
+    ///   The wrapped <see cref="WallpaperCategory" /> is no <see cref="WallpaperCategoryFileSynchronizer" />.
     /// </exception>
     /// <inheritdoc cref="System.IO.File.Copy(string, string)" />
     public virtual void AddSynchronizedImage(Path imagePath, bool overwriteOnExist) {
       Contract.Requires<ArgumentException>(imagePath != Path.None);
       Contract.Requires<InvalidOperationException>(this.IsSynchronizedCategory);
 
-      SynchronizedWallpaperCategory synchronizedCategory = (this.Category as SynchronizedWallpaperCategory);
+      WallpaperCategoryFileSynchronizer synchronizedCategory = (this.Category as WallpaperCategoryFileSynchronizer);
       if (synchronizedCategory != null)
-        File.Copy(imagePath, Path.Concat(synchronizedCategory.SynchronizedDirectoryPath, imagePath.FileName), overwriteOnExist);
+        File.Copy(imagePath, Path.Concat(synchronizedCategory.DirectoryPath, imagePath.FileName), overwriteOnExist);
     }
 
     /// <commondoc select='ViewModels/Methods/OnUnhandledCommandException/*' />
@@ -441,7 +441,7 @@ namespace WallpaperManager.ViewModels {
 
     /// <summary>
     ///   Called when <see cref="ActivateDeactivateSelectedCommand" /> is executed.
-    ///   Toggles the <see cref="WallpaperSettingsBase.IsActivated" /> state of all <see cref="SelectedWallpaperVMs" />.
+    ///   Toggles the <see cref="WallpaperBase.IsActivated" /> state of all <see cref="SelectedWallpaperVMs" />.
     /// </summary>
     /// <exception cref="InvalidOperationException">
     ///   DEBUG only: <see cref="SelectedWallpaperVMs" /> is empty or contains a <c>null</c> item.

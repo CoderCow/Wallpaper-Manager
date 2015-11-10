@@ -24,7 +24,7 @@ using Point = System.Drawing.Point;
 namespace WallpaperManager.Views {
   // TODO: Put most of this stuff into a ViewModel.
   /// <summary>
-  ///   The Configuration Window used to configure one or more <see cref="WallpaperSettingsBase" /> instances using the
+  ///   The Configuration Window used to configure one or more <see cref="WallpaperBase" /> instances using the
   ///   <see cref="ConfigWallpaperVM">ConfigWallpaper View Model</see>.
   /// </summary>
   /// <seealso cref="ConfigWallpaperVM">ConfigWallpaperVM Class</seealso>

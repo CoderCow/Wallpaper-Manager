@@ -531,11 +531,11 @@ namespace WallpaperManager.Views {
 
     /// <summary>
     ///   Handles the <see cref="CommandBinding.Executed" /> event of a <see cref="CommandBinding" /> and creates a new
-    ///   <see cref="WallpaperCategory" /> or <see cref="SynchronizedWallpaperCategory" />.
+    ///   <see cref="WallpaperCategory" /> or <see cref="WallpaperCategoryFileSynchronizer" />.
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers/*' />
     /// <seealso cref="AddCategoryOrSyncFolderCommand" />
-    /// <seealso cref="SynchronizedWallpaperCategory">SynchronizedWallpaperCategory Class</seealso>
+    /// <seealso cref="WallpaperCategoryFileSynchronizer">WallpaperCategoryFileSynchronizer Class</seealso>
     protected virtual void AddCategoryOrSyncFolderCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
       if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
         if (MainWindow.AddSynchronizedCategoryCommand.CanExecute(null, e.Source as IInputElement))
@@ -612,11 +612,11 @@ namespace WallpaperManager.Views {
 
     /// <summary>
     ///   Handles the <see cref="CommandBinding.Executed" /> event of a <see cref="CommandBinding" /> and creates a new
-    ///   <see cref="SynchronizedWallpaperCategory" />.
+    ///   <see cref="WallpaperCategoryFileSynchronizer" />.
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers/*' />
     /// <seealso cref="AddCategoryCommand" />
-    /// <seealso cref="SynchronizedWallpaperCategory">SynchronizedWallpaperCategory Class</seealso>
+    /// <seealso cref="WallpaperCategoryFileSynchronizer">WallpaperCategoryFileSynchronizer Class</seealso>
     protected virtual void AddSynchronizedCategoryCommand_Executed(object sender, ExecutedRoutedEventArgs e) {
       Path selectedDirectory = new Path("C:\\");
 
@@ -629,7 +629,7 @@ namespace WallpaperManager.Views {
             WallpaperCategory wallpaperCategory;
 
             try {
-              wallpaperCategory = new SynchronizedWallpaperCategory(categoryName, selectedDirectory);
+              wallpaperCategory = new WallpaperCategoryFileSynchronizer(categoryName, selectedDirectory);
             } catch (ArgumentOutOfRangeException) {
               DialogManager.ShowCategory_NameInvalidLength(this);
               continue;

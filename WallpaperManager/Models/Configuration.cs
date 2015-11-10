@@ -9,10 +9,13 @@ using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Security;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using Common;
+using Common.Windows;
 using Path = Common.IO.Path;
 
 namespace WallpaperManager.Models {
@@ -29,9 +32,8 @@ namespace WallpaperManager.Models {
   ///     This class supports reading of version 1.0, 1.1 and 1.2 Wallpaper Manager configuration files.
   ///   </para>
   /// </remarks>
-  /// <seealso cref="GeneralConfig">GeneralConfig Class</seealso>
   /// <threadsafety static="true" instance="false" />
-  public class Configuration : INotifyPropertyChanged {
+  public class Configuration : ValidatableBase, IConfiguration, ICloneable, IAssignable {
     /// <summary>
     ///   Represents the version number of the configuration file for backward compatibility.
     /// </summary>
@@ -48,14 +50,174 @@ namespace WallpaperManager.Models {
     public const string XmlNamespace = "http://www.WallpaperManager.de.vu";
 
     /// <summary>
-    ///   Gets the <see cref="GeneralConfig" /> instance containing the general configuration data.
+    ///   Represents the value name of the autostart registry key.
+    /// </summary>
+    private const string AutostartEntryRegKeyName = "Wallpaper Manager";
+
+    /// <summary>
+    ///   Represents the minimum auto cycle interval value.
+    /// </summary>
+    /// <seealso cref="AutocycleInterval">AutocycleInterval Property</seealso>
+    public const int MinAutocycleIntervalSeconds = 10;
+
+    /// <summary>
+    ///   Represents the maxium last active list size value in percentage to the overall count of wallpapers.
+    /// </summary>
+    /// <seealso cref="LastActiveListSize">LastActiveListSize Property</seealso>
+    public const byte LastActiveListSizeMax = 80;
+
+    /// <summary>
+    ///   Gets or sets a <see cref="bool" /> indicating whether the application will start when the user logs in.
     /// </summary>
     /// <value>
-    ///   The <see cref="GeneralConfig" /> instance containing the general configuration data.
+    ///   A <see cref="bool" /> indicating whether the application will start when the user logs in.
     /// </value>
-    /// <seealso cref="GeneralConfig">GeneralConfig Class</seealso>
-    public GeneralConfig General { get; }
+    /// <remarks>
+    ///   This value is not saved into the configuration file. Its directly accessed from the registry.
+    /// </remarks>
+    public bool StartWithWindows {
+      get { return Autostart.CurrentUserEntries.ContainsKey(Configuration.AutostartEntryRegKeyName); }
+      set {
+        if (value) {
+          // Make sure the entry really doesn't exist.
+          if (!this.StartWithWindows)
+            Autostart.CurrentUserEntries.Add(Configuration.AutostartEntryRegKeyName, Assembly.GetExecutingAssembly().Location);
+        } else {
+          // If the entry does exist.
+          if (this.StartWithWindows)
+            Autostart.CurrentUserEntries.Remove(Configuration.AutostartEntryRegKeyName);
+        }
+      }
+    }
 
+    /// <summary>
+    ///   Gets or sets a <see cref="bool" /> indicating whether the application should do one cycle right after it has been
+    ///   started.
+    /// </summary>
+    /// <value>
+    ///   A <see cref="bool" /> indicating whether the application should do one cycle right after it has been started.
+    /// </value>
+    public bool CycleAfterStartup { get; set; }
+
+    /// <summary>
+    ///   Gets or sets a <see cref="bool" /> indicating whether the application should terminate right after it had been
+    ///   started.
+    /// </summary>
+    /// <remarks>
+    ///   If <c>true</c>, this property requires <see cref="CycleAfterStartup" /> also to be <c>true</c> to take effect.
+    /// </remarks>
+    /// <value>
+    ///   A <see cref="bool" /> indicating whether the application should terminate right after it had been started.
+    /// </value>
+    public bool TerminateAfterStartup { get; set; }
+
+    /// <summary>
+    ///   Gets or sets a <see cref="bool" /> indicating whether the main view will be shown after startup.
+    /// </summary>
+    /// <value>
+    ///   A <see cref="bool" /> indicating whether the main view will be shown after startup.
+    /// </value>
+    public bool MinimizeAfterStartup { get; set; }
+
+    /// <summary>
+    ///   Gets or sets a <see cref="bool" /> indicating whether the auto cycle timer will be started immedeately.
+    /// </summary>
+    /// <value>
+    ///   A <see cref="bool" /> indicating whether the auto cycle timer will be started immedeately.
+    /// </value>
+    public bool StartAutocyclingAfterStartup { get; set; }
+
+    /// <summary>
+    ///   Gets or sets the <see cref="WallpaperChangeType" /> defining how non-multiscreen wallpapers are built.
+    /// </summary>
+    /// <value>
+    ///   The change type for singlescreen wallpapers. <c>0</c> if the internal builder has no representation in the
+    ///   <see cref="WallpaperChangeType" /> enumeration.
+    /// </value>
+    /// <seealso cref="WallpaperChangeType">WallpaperChangeType Enumeration</seealso>
+    public WallpaperChangeType WallpaperChangeType { get; set; }
+
+    /// <summary>
+    ///   Gets or sets the <see cref="TimeSpan" /> to wait between each auto cycle.
+    /// </summary>
+    /// <value>
+    ///   The <see cref="TimeSpan" /> to wait between each auto cycle.
+    /// </value>
+    public TimeSpan AutocycleInterval { get; set; }
+
+    /// <summary>
+    ///   Gets or sets the percentage value indicating how large the last active list should be.
+    /// </summary>
+    /// <value>
+    ///   The percentage value indicating how large the last active list should be.
+    /// </value>
+    public byte LastActiveListSize { get; set; }
+
+    /// <summary>
+    ///   Gets or sets a <see cref="bool" /> indicating whether the next wallpaper should be cycled if the display settings
+    ///   have changed.
+    /// </summary>
+    /// <value>
+    ///   A <see cref="bool" /> indicating whether the next wallpaper should be cycled if the display settings have changed.
+    /// </value>
+    public bool CycleAfterDisplaySettingsChanged { get; set; }
+
+    /// <summary>
+    ///   Gets or sets a <see cref="bool" /> indicating whether the main window will always be minimized and be shown in the
+    ///   Windows Task Bar even if the close button is clicked.
+    /// </summary>
+    /// <value>
+    ///   A <see cref="bool" /> indicating whether the main window will always be minimized and be shown in the
+    ///   Windows Task Bar even if the close button is clicked.
+    /// </value>
+    public bool MinimizeOnClose { get; set; }
+
+    /// <summary>
+    ///   Gets or sets a <see cref="bool" /> indicating whether to show the remaining time for the next random cycle
+    ///   as overlay icon in the Windows Task Bar Windows 7 only.
+    /// </summary>
+    /// <value>
+    ///   A <see cref="bool" /> indicating whether to show the remaining time for the next random cycle as overlay icon
+    ///   in the Windows Task Bar Windows 7 only.
+    /// </value>
+    public bool DisplayCycleTimeAsIconOverlay { get; set; }
+
+    /// <summary>
+    ///   Gets or sets the default action when double clicking a wallpaper.
+    /// </summary>
+    /// <value>
+    ///   The default action when double clicking a wallpaper.
+    /// </value>
+    public WallpaperClickAction WallpaperDoubleClickAction { get; set; }
+
+    /// <summary>
+    ///   Gets or sets the default action when clicking the Tray-Icon.
+    /// </summary>
+    /// <value>
+    ///   The default action when clicking the Tray-Icon.
+    /// </value>
+    public TrayIconClickAction TrayIconSingleClickAction { get; set; }
+
+    /// <summary>
+    ///   Gets or sets the default action when double clicking the Tray-Icon.
+    /// </summary>
+    /// <value>
+    ///   The default action when double clicking the Tray-Icon.
+    /// </value>
+    public TrayIconClickAction TrayIconDoubleClickAction { get; set; }
+
+    /// <summary>
+    ///   Gets or sets a collection of <see cref="ScreenSettings" /> objects containing the specific properties for each single
+    ///   screen.
+    /// </summary>
+    /// <value>
+    ///   A collection of <see cref="ScreenSettings" /> objects containing the specific properties for each single screen.
+    /// </value>
+    /// <seealso cref="ScreenSettingsCollection">ScreenSettingsCollection Class</seealso>
+    /// <seealso cref="ScreenSettings">ScreenSettings Class</seealso>
+    public ScreenSettingsCollection ScreensSettings { get; set; }
+
+    // TODO: Extract this. The global configuration should have its own file.
     /// <summary>
     ///   Gets the <see cref="WallpaperCategoryCollection" /> holding the
     ///   <see cref="WallpaperCategory">Wallpaper wallpaperCategories</see> which's <see cref="Wallpaper" /> instances should
@@ -72,13 +234,39 @@ namespace WallpaperManager.Models {
     ///   Initializes a new instance of the <see cref="Configuration" /> class.
     /// </summary>
     public Configuration() {
-      this.General = new GeneralConfig();
+      this.CycleAfterStartup = false;
+      this.TerminateAfterStartup = false;
+      this.StartAutocyclingAfterStartup = false;
+      this.MinimizeOnClose = false;
+      this.CycleAfterDisplaySettingsChanged = false;
+      this.AutocycleInterval = new TimeSpan(0, 0, 30);
+      this.LastActiveListSize = 30;
+      this.WallpaperChangeType = WallpaperChangeType.ChangeAll;
+      this.WallpaperDoubleClickAction = WallpaperClickAction.ShowConfigurationWindow;
+      this.TrayIconSingleClickAction = TrayIconClickAction.NoAction;
+      this.TrayIconDoubleClickAction = TrayIconClickAction.ShowMainWindow;
+      this.ScreensSettings = new ScreenSettingsCollection();
       this.WallpaperCategories = new WallpaperCategoryCollection();
     }
 
+    #region Overrides of ValidatableBase
+    /// <summary>
+    ///   Checks whether all properties have valid values.
+    /// </summary>
+    [ContractInvariantMethod]
+    private void CheckInvariants() {
+      Contract.Invariant(Enum.IsDefined(typeof(WallpaperChangeType), this.WallpaperChangeType));
+      Contract.Invariant(Enum.IsDefined(typeof(WallpaperClickAction), this.WallpaperDoubleClickAction));
+      Contract.Invariant(Enum.IsDefined(typeof(TrayIconClickAction), this.TrayIconSingleClickAction));
+      Contract.Invariant(Enum.IsDefined(typeof(TrayIconClickAction), this.TrayIconDoubleClickAction));
+      Contract.Invariant(this.ScreensSettings != null);
+      Contract.Invariant(this.WallpaperCategories != null);
+    }
+    #endregion
+
     // TODO: Use XmlSerializer for reading and writing the config.
     // TODO: Extract Read/Write functionality into a new class (and interface perhaps)
-    /// <summary>
+    /*/// <summary>
     ///   Creates a new <see cref="Configuration" /> instance by reading the data from a <see cref="Stream" />.
     /// </summary>
     /// <remarks>
@@ -137,55 +325,55 @@ namespace WallpaperManager.Models {
 
       XmlElement element = generalElement["CycleAfterStartup"];
       if (element != null)
-        configuration.General.CycleAfterStartup = bool.Parse(element.InnerText);
+        configuration.CycleAfterStartup = bool.Parse(element.InnerText);
 
       element = generalElement["TerminateAfterStartup"];
       if (element != null)
-        configuration.General.TerminateAfterStartup = bool.Parse(element.InnerText);
+        configuration.TerminateAfterStartup = bool.Parse(element.InnerText);
 
       element = (generalElement["MinimizeAfterStart"] ?? generalElement["MinimizeAfterStartup"]);
       if (element != null)
-        configuration.General.MinimizeAfterStartup = bool.Parse(element.InnerText);
+        configuration.MinimizeAfterStartup = bool.Parse(element.InnerText);
 
       element = generalElement["StartAutoCyclingAfterStartup"];
       if (element != null)
-        configuration.General.StartAutocyclingAfterStartup = bool.Parse(element.InnerText);
+        configuration.StartAutocyclingAfterStartup = bool.Parse(element.InnerText);
 
       element = generalElement["WallpaperChangeType"];
       if (element != null)
-        configuration.General.WallpaperChangeType = (WallpaperChangeType)Enum.Parse(typeof(WallpaperChangeType), element.InnerText);
+        configuration.WallpaperChangeType = (WallpaperChangeType)Enum.Parse(typeof(WallpaperChangeType), element.InnerText);
 
       element = generalElement["AutoCycleInterval"];
       if (element != null)
-        configuration.General.AutocycleInterval = TimeSpan.Parse(element.InnerText, CultureInfo.InvariantCulture);
+        configuration.AutocycleInterval = TimeSpan.Parse(element.InnerText, CultureInfo.InvariantCulture);
 
       element = generalElement["LastActiveListSize"];
       if (element != null)
-        configuration.General.LastActiveListSize = byte.Parse(element.InnerText, CultureInfo.InvariantCulture);
+        configuration.LastActiveListSize = byte.Parse(element.InnerText, CultureInfo.InvariantCulture);
 
       element = generalElement["CycleAfterDisplaySettingsChanged"];
       if (element != null)
-        configuration.General.CycleAfterDisplaySettingsChanged = bool.Parse(element.InnerText);
+        configuration.CycleAfterDisplaySettingsChanged = bool.Parse(element.InnerText);
 
       element = generalElement["MinimizeOnClose"];
       if (element != null)
-        configuration.General.MinimizeOnClose = bool.Parse(element.InnerText);
+        configuration.MinimizeOnClose = bool.Parse(element.InnerText);
 
       element = generalElement["DisplayCycleTimeAsIconOverlay"];
       if (element != null)
-        configuration.General.DisplayCycleTimeAsIconOverlay = bool.Parse(element.InnerText);
+        configuration.DisplayCycleTimeAsIconOverlay = bool.Parse(element.InnerText);
 
       element = generalElement["WallpaperDoubleClickAction"];
       if (element != null)
-        configuration.General.WallpaperDoubleClickAction = (WallpaperClickAction)Enum.Parse(typeof(WallpaperClickAction), element.InnerText);
+        configuration.WallpaperDoubleClickAction = (WallpaperClickAction)Enum.Parse(typeof(WallpaperClickAction), element.InnerText);
 
       element = generalElement["TrayIconSingleClickAction"];
       if (element != null)
-        configuration.General.TrayIconSingleClickAction = (TrayIconClickAction)Enum.Parse(typeof(TrayIconClickAction), element.InnerText);
+        configuration.TrayIconSingleClickAction = (TrayIconClickAction)Enum.Parse(typeof(TrayIconClickAction), element.InnerText);
 
       element = generalElement["TrayIconDoubleClickAction"];
       if (element != null)
-        configuration.General.TrayIconDoubleClickAction = (TrayIconClickAction)Enum.Parse(typeof(TrayIconClickAction), element.InnerText);
+        configuration.TrayIconDoubleClickAction = (TrayIconClickAction)Enum.Parse(typeof(TrayIconClickAction), element.InnerText);
       #endregion
 
       #region <ScreensSettings>
@@ -209,19 +397,19 @@ namespace WallpaperManager.Models {
 
           element = screenSettingsElement["MarginLeft"];
           if (element != null)
-            screenSettings.Margins.Left = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
+            screenSettings.Margins.MarginLeft = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
 
           element = screenSettingsElement["MarginRight"];
           if (element != null)
-            screenSettings.Margins.Right = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
+            screenSettings.Margins.MarginRight = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
 
           element = screenSettingsElement["MarginTop"];
           if (element != null)
-            screenSettings.Margins.Top = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
+            screenSettings.Margins.MarginTop = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
 
           element = screenSettingsElement["MarginBottom"];
           if (element != null)
-            screenSettings.Margins.Bottom = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
+            screenSettings.Margins.MarginBottom = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
 
           #region <OverlayTexts>
           XmlElement overlayTextsElement = screenSettingsElement["OverlayTexts"];
@@ -282,7 +470,7 @@ namespace WallpaperManager.Models {
           settingsCounter++;
         }
 
-        configuration.General.ScreensSettings = new ScreenSettingsCollection(screensSettings);
+        configuration.ScreensSettings = new ScreenSettingsCollection(screensSettings);
       }
       #endregion
 
@@ -293,7 +481,7 @@ namespace WallpaperManager.Models {
           if (
             wallpaperCategoryElement.Name != "Category" &&
             wallpaperCategoryElement.Name != "SynchronizedFolder" &&
-            wallpaperCategoryElement.Name != "WatchedCategory" /* Version 1.1 name for synchronized folders. */
+            wallpaperCategoryElement.Name != "WatchedCategory" /* Version 1.1 name for synchronized folders. *//*
             )
             continue;
 
@@ -336,7 +524,7 @@ namespace WallpaperManager.Models {
             if (!Directory.Exists(synchronizedDirPath))
               continue;
 
-            category = new SynchronizedWallpaperCategory(categoryName, synchronizedDirPath, wallpapers);
+            category = new WallpaperCategoryFileSynchronizer(categoryName, synchronizedDirPath, wallpapers);
           } else
             category = new WallpaperCategory(categoryName, wallpapers);
 
@@ -395,7 +583,7 @@ namespace WallpaperManager.Models {
     ///   The type of the wallpaper settings to read.
     /// </param>
     /// <returns>
-    ///   An instance of a type inherited from <see cref="WallpaperSettingsBase" /> containing the data get from the
+    ///   An instance of a type inherited from <see cref="WallpaperBase" /> containing the data get from the
     ///   <see cref="XmlElement" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
@@ -404,11 +592,11 @@ namespace WallpaperManager.Models {
     /// <exception cref="XmlException">
     ///   The XML Data are invalid.
     /// </exception>
-    protected static WallpaperSettingsBase GetWallpaperDataFromXmlElement(XmlElement element, Type wallpaperSettingsType) {
+    protected static WallpaperBase GetWallpaperDataFromXmlElement(XmlElement element, Type wallpaperSettingsType) {
       Contract.Requires<ArgumentNullException>(element != null);
       Contract.Requires<ArgumentNullException>(wallpaperSettingsType != null);
 
-      WallpaperSettingsBase settings = null;
+      WallpaperBase settings = null;
       WallpaperDefaultSettings defaultSettings = null;
       XmlElement subElement;
 
@@ -547,55 +735,55 @@ namespace WallpaperManager.Models {
       document.DocumentElement.AppendChild(generalElement);
 
       currentElement = document.CreateElement("CycleAfterStartup");
-      currentElement.InnerText = this.General.CycleAfterStartup.ToString();
+      currentElement.InnerText = this.CycleAfterStartup.ToString();
       generalElement.AppendChild(currentElement);
 
       currentElement = document.CreateElement("TerminateAfterStartup");
-      currentElement.InnerText = this.General.TerminateAfterStartup.ToString();
+      currentElement.InnerText = this.TerminateAfterStartup.ToString();
       generalElement.AppendChild(currentElement);
 
       currentElement = document.CreateElement("MinimizeAfterStart");
-      currentElement.InnerText = this.General.MinimizeAfterStartup.ToString();
+      currentElement.InnerText = this.MinimizeAfterStartup.ToString();
       generalElement.AppendChild(currentElement);
 
       currentElement = document.CreateElement("StartAutoCyclingAfterStartup");
-      currentElement.InnerText = this.General.StartAutocyclingAfterStartup.ToString();
+      currentElement.InnerText = this.StartAutocyclingAfterStartup.ToString();
       generalElement.AppendChild(currentElement);
 
       currentElement = document.CreateElement("WallpaperChangeType");
-      currentElement.InnerText = this.General.WallpaperChangeType.ToString();
+      currentElement.InnerText = this.WallpaperChangeType.ToString();
       generalElement.AppendChild(currentElement);
 
       currentElement = document.CreateElement("AutoCycleInterval");
-      currentElement.InnerText = this.General.AutocycleInterval.ToString();
+      currentElement.InnerText = this.AutocycleInterval.ToString();
       generalElement.AppendChild(currentElement);
 
       currentElement = document.CreateElement("LastActiveListSize");
-      currentElement.InnerText = this.General.LastActiveListSize.ToString(CultureInfo.InvariantCulture);
+      currentElement.InnerText = this.LastActiveListSize.ToString(CultureInfo.InvariantCulture);
       generalElement.AppendChild(currentElement);
 
       currentElement = document.CreateElement("CycleAfterDisplaySettingsChanged");
-      currentElement.InnerText = this.General.CycleAfterDisplaySettingsChanged.ToString();
+      currentElement.InnerText = this.CycleAfterDisplaySettingsChanged.ToString();
       generalElement.AppendChild(currentElement);
 
       currentElement = document.CreateElement("MinimizeOnClose");
-      currentElement.InnerText = this.General.MinimizeOnClose.ToString();
+      currentElement.InnerText = this.MinimizeOnClose.ToString();
       generalElement.AppendChild(currentElement);
 
       currentElement = document.CreateElement("DisplayCycleTimeAsIconOverlay");
-      currentElement.InnerText = this.General.DisplayCycleTimeAsIconOverlay.ToString();
+      currentElement.InnerText = this.DisplayCycleTimeAsIconOverlay.ToString();
       generalElement.AppendChild(currentElement);
 
       currentElement = document.CreateElement("WallpaperDoubleClickAction");
-      currentElement.InnerText = this.General.WallpaperDoubleClickAction.ToString();
+      currentElement.InnerText = this.WallpaperDoubleClickAction.ToString();
       generalElement.AppendChild(currentElement);
 
       currentElement = document.CreateElement("TrayIconSingleClickAction");
-      currentElement.InnerText = this.General.TrayIconSingleClickAction.ToString();
+      currentElement.InnerText = this.TrayIconSingleClickAction.ToString();
       generalElement.AppendChild(currentElement);
 
       currentElement = document.CreateElement("TrayIconDoubleClickAction");
-      currentElement.InnerText = this.General.TrayIconDoubleClickAction.ToString();
+      currentElement.InnerText = this.TrayIconDoubleClickAction.ToString();
       generalElement.AppendChild(currentElement);
       #endregion
 
@@ -603,7 +791,7 @@ namespace WallpaperManager.Models {
       XmlElement screensSettingsElement = document.CreateElement("ScreensSettings");
       document.DocumentElement.AppendChild(screensSettingsElement);
 
-      foreach (ScreenSettings screenSettings in this.General.ScreensSettings) {
+      foreach (ScreenSettings screenSettings in this.ScreensSettings) {
         XmlElement screenSettingsElement = document.CreateElement("ScreenSettings");
         screensSettingsElement.AppendChild(screenSettingsElement);
 
@@ -612,19 +800,19 @@ namespace WallpaperManager.Models {
         screenSettingsElement.AppendChild(currentElement);
 
         currentElement = document.CreateElement("MarginLeft");
-        currentElement.InnerText = screenSettings.Margins.Left.ToString(CultureInfo.InvariantCulture);
+        currentElement.InnerText = screenSettings.Margins.MarginLeft.ToString(CultureInfo.InvariantCulture);
         screenSettingsElement.AppendChild(currentElement);
 
         currentElement = document.CreateElement("MarginRight");
-        currentElement.InnerText = screenSettings.Margins.Right.ToString(CultureInfo.InvariantCulture);
+        currentElement.InnerText = screenSettings.Margins.MarginRight.ToString(CultureInfo.InvariantCulture);
         screenSettingsElement.AppendChild(currentElement);
 
         currentElement = document.CreateElement("MarginTop");
-        currentElement.InnerText = screenSettings.Margins.Top.ToString(CultureInfo.InvariantCulture);
+        currentElement.InnerText = screenSettings.Margins.MarginTop.ToString(CultureInfo.InvariantCulture);
         screenSettingsElement.AppendChild(currentElement);
 
         currentElement = document.CreateElement("MarginBottom");
-        currentElement.InnerText = screenSettings.Margins.Bottom.ToString(CultureInfo.InvariantCulture);
+        currentElement.InnerText = screenSettings.Margins.MarginBottom.ToString(CultureInfo.InvariantCulture);
         screenSettingsElement.AppendChild(currentElement);
 
         #region <OverlayTexts>
@@ -684,7 +872,7 @@ namespace WallpaperManager.Models {
       document.DocumentElement.AppendChild(categoriesElement);
 
       foreach (WallpaperCategory wallpaperCategory in this.WallpaperCategories) {
-        SynchronizedWallpaperCategory synchronizedWallpaperCategory = wallpaperCategory as SynchronizedWallpaperCategory;
+        WallpaperCategoryFileSynchronizer synchronizedWallpaperCategory = wallpaperCategory as WallpaperCategoryFileSynchronizer;
         XmlElement categoryElement;
 
         if (synchronizedWallpaperCategory != null)
@@ -699,7 +887,7 @@ namespace WallpaperManager.Models {
 
         if (synchronizedWallpaperCategory != null) {
           currentElement = document.CreateElement("SynchronizedFolderPath");
-          currentElement.InnerText = synchronizedWallpaperCategory.SynchronizedDirectoryPath;
+          currentElement.InnerText = synchronizedWallpaperCategory.DirectoryPath;
           categoryElement.AppendChild(currentElement);
         }
 
@@ -757,20 +945,20 @@ namespace WallpaperManager.Models {
     /// <param name="element">
     ///   The <see cref="XmlElement" /> to add the data to.
     /// </param>
-    /// <param name="wallpaperBaseSettings">
+    /// <param name="wallpaperBase">
     ///   The wallpaper settings to add.
     /// </param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="document" /> or <paramref name="element" /> or <paramref name="wallpaperBaseSettings" /> is
+    ///   <paramref name="document" /> or <paramref name="element" /> or <paramref name="wallpaperBase" /> is
     ///   <c>null</c>.
     /// </exception>
-    protected static void AddWallpaperDataToXmlElement(XmlDocument document, XmlElement element, WallpaperSettingsBase wallpaperBaseSettings) {
+    protected static void AddWallpaperDataToXmlElement(XmlDocument document, XmlElement element, WallpaperBase wallpaperBase) {
       Contract.Requires<ArgumentNullException>(document != null);
       Contract.Requires<ArgumentNullException>(element != null);
-      Contract.Requires<ArgumentNullException>(wallpaperBaseSettings != null);
+      Contract.Requires<ArgumentNullException>(wallpaperBase != null);
 
-      Wallpaper wallpaperSettings = (wallpaperBaseSettings as Wallpaper);
-      WallpaperDefaultSettings defaultSettings = (wallpaperBaseSettings as WallpaperDefaultSettings);
+      Wallpaper wallpaperSettings = (wallpaperBase as Wallpaper);
+      WallpaperDefaultSettings defaultSettings = (wallpaperBase as WallpaperDefaultSettings);
       XmlElement currentElement;
 
       if (wallpaperSettings != null) {
@@ -781,60 +969,60 @@ namespace WallpaperManager.Models {
       }
 
       currentElement = document.CreateElement("IsActivated");
-      currentElement.InnerText = wallpaperBaseSettings.IsActivated.ToString();
+      currentElement.InnerText = wallpaperBase.IsActivated.ToString();
       element.AppendChild(currentElement);
 
       currentElement = document.CreateElement("IsMultiscreen");
-      currentElement.InnerText = wallpaperBaseSettings.IsMultiscreen.ToString();
+      currentElement.InnerText = wallpaperBase.IsMultiscreen.ToString();
       element.AppendChild(currentElement);
 
       currentElement = document.CreateElement("Priority");
-      currentElement.InnerText = wallpaperBaseSettings.Priority.ToString(CultureInfo.InvariantCulture);
+      currentElement.InnerText = wallpaperBase.Priority.ToString(CultureInfo.InvariantCulture);
       element.AppendChild(currentElement);
 
       currentElement = document.CreateElement("OnlyCycleBetweenStart");
-      currentElement.InnerText = wallpaperBaseSettings.OnlyCycleBetweenStart.ToString();
+      currentElement.InnerText = wallpaperBase.OnlyCycleBetweenStart.ToString();
       element.AppendChild(currentElement);
 
       currentElement = document.CreateElement("OnlyCycleBetweenStop");
-      currentElement.InnerText = wallpaperBaseSettings.OnlyCycleBetweenStop.ToString();
+      currentElement.InnerText = wallpaperBase.OnlyCycleBetweenStop.ToString();
       element.AppendChild(currentElement);
 
       currentElement = document.CreateElement("Placement");
-      currentElement.InnerText = wallpaperBaseSettings.Placement.ToString();
+      currentElement.InnerText = wallpaperBase.Placement.ToString();
       element.AppendChild(currentElement);
 
       currentElement = document.CreateElement("HorizontalOffset");
-      currentElement.InnerText = wallpaperBaseSettings.Offset.X.ToString(CultureInfo.InvariantCulture);
+      currentElement.InnerText = wallpaperBase.Offset.X.ToString(CultureInfo.InvariantCulture);
       element.AppendChild(currentElement);
 
       currentElement = document.CreateElement("VerticalOffset");
-      currentElement.InnerText = wallpaperBaseSettings.Offset.Y.ToString(CultureInfo.InvariantCulture);
+      currentElement.InnerText = wallpaperBase.Offset.Y.ToString(CultureInfo.InvariantCulture);
       element.AppendChild(currentElement);
 
       currentElement = document.CreateElement("HorizontalScale");
-      currentElement.InnerText = wallpaperBaseSettings.Scale.X.ToString(CultureInfo.InvariantCulture);
+      currentElement.InnerText = wallpaperBase.Scale.X.ToString(CultureInfo.InvariantCulture);
       element.AppendChild(currentElement);
 
       currentElement = document.CreateElement("VerticalScale");
-      currentElement.InnerText = wallpaperBaseSettings.Scale.Y.ToString(CultureInfo.InvariantCulture);
+      currentElement.InnerText = wallpaperBase.Scale.Y.ToString(CultureInfo.InvariantCulture);
       element.AppendChild(currentElement);
 
       currentElement = document.CreateElement("Effects");
-      currentElement.InnerText = wallpaperBaseSettings.Effects.ToString();
+      currentElement.InnerText = wallpaperBase.Effects.ToString();
       element.AppendChild(currentElement);
 
       currentElement = document.CreateElement("BackgroundColor");
-      currentElement.InnerText = ColorTranslator.ToHtml(wallpaperBaseSettings.BackgroundColor);
+      currentElement.InnerText = ColorTranslator.ToHtml(wallpaperBase.BackgroundColor);
       element.AppendChild(currentElement);
 
       currentElement = document.CreateElement("DisabledScreens");
-      StringBuilder disabledScreensString = new StringBuilder(wallpaperBaseSettings.DisabledScreens.Count * 2);
-      for (int i = 0; i < wallpaperBaseSettings.DisabledScreens.Count; i++) {
+      StringBuilder disabledScreensString = new StringBuilder(wallpaperBase.DisabledScreens.Count * 2);
+      for (int i = 0; i < wallpaperBase.DisabledScreens.Count; i++) {
         if (i > 0)
           disabledScreensString.Append(',');
 
-        disabledScreensString.Append(wallpaperBaseSettings.DisabledScreens[i]);
+        disabledScreensString.Append(wallpaperBase.DisabledScreens[i]);
       }
       currentElement.InnerText = disabledScreensString.ToString();
       element.AppendChild(currentElement);
@@ -848,17 +1036,35 @@ namespace WallpaperManager.Models {
         currentElement.InnerText = defaultSettings.AutoDeterminePlacement.ToString(CultureInfo.InvariantCulture);
         element.AppendChild(currentElement);
       }
+    }*/
+
+    /// <inheritdoc />
+    public object Clone() {
+      Configuration clone = (Configuration)this.MemberwiseClone();
+      clone.ScreensSettings = (ScreenSettingsCollection)this.ScreensSettings.Clone();
+
+      return clone;
     }
 
-    #region INotifyPropertyChanged Implementation
-    /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
-    public event PropertyChangedEventHandler PropertyChanged;
+    /// <inheritdoc />
+    public virtual void AssignTo(object other) {
+      Contract.Requires<ArgumentException>(other is Configuration);
 
-    /// <commondoc select='INotifyPropertyChanged/Methods/OnPropertyChanged/*' />
-    protected virtual void OnPropertyChanged(string propertyName) {
-      if (this.PropertyChanged != null)
-        this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+      Configuration otherInstance = (Configuration)other;
+      otherInstance.CycleAfterStartup = this.CycleAfterStartup;
+      otherInstance.TerminateAfterStartup = this.TerminateAfterStartup;
+      otherInstance.StartAutocyclingAfterStartup = this.StartAutocyclingAfterStartup;
+      otherInstance.MinimizeAfterStartup = this.MinimizeAfterStartup;
+      otherInstance.WallpaperChangeType = this.WallpaperChangeType;
+      otherInstance.AutocycleInterval = this.AutocycleInterval;
+      otherInstance.LastActiveListSize = this.LastActiveListSize;
+      otherInstance.CycleAfterDisplaySettingsChanged = this.CycleAfterDisplaySettingsChanged;
+      otherInstance.MinimizeOnClose = this.MinimizeOnClose;
+      otherInstance.DisplayCycleTimeAsIconOverlay = this.DisplayCycleTimeAsIconOverlay;
+      otherInstance.WallpaperDoubleClickAction = this.WallpaperDoubleClickAction;
+      otherInstance.TrayIconSingleClickAction = this.TrayIconSingleClickAction;
+      otherInstance.TrayIconDoubleClickAction = this.TrayIconDoubleClickAction;
+      otherInstance.ScreensSettings = (ScreenSettingsCollection)this.ScreensSettings.Clone();
     }
-    #endregion
   }
 }

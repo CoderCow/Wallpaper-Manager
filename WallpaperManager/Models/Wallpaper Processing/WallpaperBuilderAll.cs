@@ -44,10 +44,10 @@ namespace WallpaperManager.Models {
     ///   <see cref="Wallpaper" /> in the given collection is drawn in the same order as the screen indexes for each screen.
     /// </summary>
     /// <inheritdoc />
-    public override Image CreateMultiscreenFromMultiple(IList<IList<Wallpaper>> wallpapers, float scaleFactor, bool useWindowsFix) {
+    public override Image CreateMultiscreenFromMultiple(IList<IList<IWallpaper>> wallpapers, float scaleFactor, bool useWindowsFix) {
       // This is the collection of Wallpapers which is finally given to the generator method.
       // Note that the order of the Wallpapers in this collection has to be equal with the screen order.
-      var usedWallpapers = new List<Wallpaper>(this.ScreensSettings.Count);
+      var usedWallpapers = new List<IWallpaper>(this.ScreensSettings.Count);
 
       // Loop through all screen settings and use the defined static wallpaper if necessary.
       for (int i = 0; i < this.ScreensSettings.Count; i++) {

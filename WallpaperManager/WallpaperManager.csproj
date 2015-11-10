@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WallpaperManager</RootNamespace>
-    <AssemblyName>WallpaperManager</AssemblyName>
+    <AssemblyName>Wallpaper Manager</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -22,7 +22,7 @@
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
-    <StartupObject>WallpaperManager.Views.Application</StartupObject>
+    <StartupObject>WallpaperManager.App</StartupObject>
     <ApplicationIcon>
     </ApplicationIcon>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
@@ -175,7 +175,7 @@
     </Reference>
     <Reference Include="PropertyChanged, Version=1.50.3.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.1.50.3\lib\dotnet\PropertyChanged.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -203,15 +203,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ViewModels\ApplicationVM.cs" />
-    <Compile Include="ViewModels\ConfigTextOverlaysVM.cs" />
-    <Compile Include="ViewModels\ConfigurationVM.cs" />
-    <Compile Include="ViewModels\ConfigWallpaperVM.cs" />
-    <Compile Include="ViewModels\Enumerations\ConfigWallpaperMode.cs" />
-    <Compile Include="ViewModels\WallpaperCategoryCollectionVM.cs" />
-    <Compile Include="ViewModels\WallpaperCategoryVM.cs" />
-    <Compile Include="ViewModels\WallpaperChangerVM.cs" />
-    <Compile Include="ViewModels\WallpaperVM.cs" />
+    <Compile Include="App.cs" />
+    <Compile Include="CollectionPropertyChangedListener.cs" />
+    <Compile Include="Models\IWallpaperTextOverlay.cs" />
+    <Compile Include="Models\ValidatableBase.cs" />
     <Compile Include="Models\EventArgs\RequestWallpapersEventArgs.cs" />
     <Compile Include="Models\EventArgs\VersionCheckSuccessfulEventArgs.cs" />
     <Compile Include="Models\UpdateManager.cs" />
@@ -228,61 +223,24 @@
     <Compile Include="Models\Enumerations\WallpaperClickAction.cs" />
     <Compile Include="Models\Enumerations\WallpaperEffects.cs" />
     <Compile Include="Models\Enumerations\WallpaperPlacement.cs" />
-    <Compile Include="Models\GeneralConfig.cs" />
     <Compile Include="Models\Interfaces\IConfiguration.cs" />
-    <Compile Include="Models\Interfaces\IGeneralConfiguration.cs" />
     <Compile Include="Models\Interfaces\IScreenSettings.cs" />
     <Compile Include="Models\Interfaces\IWallpaper.cs" />
     <Compile Include="Models\Interfaces\IWallpaperCategory.cs" />
-    <Compile Include="Models\Interfaces\IWallpaperCommonAttributes.cs" />
+    <Compile Include="Models\Interfaces\IWallpaperBase.cs" />
     <Compile Include="Models\Interfaces\IWallpaperDefaultSettings.cs" />
     <Compile Include="Models\LocalizationManager.cs" />
-    <Compile Include="Models\ScreenMargins.cs" />
     <Compile Include="Models\ScreenSettings.cs" />
     <Compile Include="Models\ScreenSettingsCollection.cs" />
-    <Compile Include="Models\Wallpaper Data\LastActiveWallpaperCollection.cs" />
-    <Compile Include="Models\Wallpaper Data\ReadOnlyWallpaperCategoryCollection.cs" />
-    <Compile Include="Models\Wallpaper Data\SynchronizedWallpaperCategory.cs" />
+    <Compile Include="Models\Wallpaper Data\WallpaperCategoryFileSynchronizer.cs" />
     <Compile Include="Models\Wallpaper Data\Wallpaper.cs" />
     <Compile Include="Models\Wallpaper Data\WallpaperCategory.cs" />
     <Compile Include="Models\Wallpaper Data\WallpaperCategoryCollection.cs" />
     <Compile Include="Models\Wallpaper Data\WallpaperDefaultSettings.cs" />
-    <Compile Include="Models\Wallpaper Data\WallpaperSettingsBase.cs" />
+    <Compile Include="Models\Wallpaper Data\WallpaperBase.cs" />
     <Compile Include="Models\WallpaperTextOverlay.cs" />
-    <Compile Include="Views\Application.xaml.cs">
-      <DependentUpon>Application.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Converters\WallpaperPlacementConverter.cs" />
-    <Compile Include="Views\DialogManager.cs" />
-    <Compile Include="Views\Markup Extensions\LocalizedString.cs" />
-    <Compile Include="Views\NotifyIconManager.cs" />
     <Compile Include="Locale\PotGenerator.cs" />
     <Compile Include="Locale\ResxGenerator.cs" />
-    <Compile Include="Views\ToolTipData.cs" />
-    <Compile Include="Views\Windows\AboutWindow.xaml.cs">
-      <DependentUpon>AboutWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\ConfigWallpaperWindow.xaml.cs">
-      <DependentUpon>ConfigWallpaperWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\ConfigWindow\ConfigTextOverlaysWindow.xaml.cs">
-      <DependentUpon>ConfigTextOverlaysWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\ConfigWindow\ConfigWindow.xaml.cs">
-      <DependentUpon>ConfigWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\ConfigWindow\CyclingSettingsPage.xaml.cs">
-      <DependentUpon>CyclingSettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\ConfigWindow\GeneralSettingsPage.xaml.cs">
-      <DependentUpon>GeneralSettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\ConfigWindow\MonitorSettingsPage.xaml.cs">
-      <DependentUpon>MonitorSettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Windows\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -338,89 +296,6 @@
     <None Include="Changelog.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Views\Application.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Resources\Dialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Resources\Global.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Resources\Theme.GradualBlack.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Windows\AboutWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Windows\ConfigWallpaperWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Windows\ConfigWindow\ConfigTextOverlaysWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Windows\ConfigWindow\ConfigWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Windows\ConfigWindow\CyclingSettingsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Windows\ConfigWindow\GeneralSettingsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Windows\ConfigWindow\MonitorSettingsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Windows\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Resources\Icons\About.png" />
-    <Resource Include="Views\Resources\Icons\Add.png" />
-    <Resource Include="Views\Resources\Icons\Category.png" />
-    <EmbeddedResource Include="Views\Resources\Icons\Configuration.ico" />
-    <Resource Include="Views\Resources\Icons\Configuration.png" />
-    <Resource Include="Views\Resources\Icons\Cycle Next.png" />
-    <Resource Include="Views\Resources\Icons\Cycling Settings.png" />
-    <Resource Include="Views\Resources\Icons\Download.png" />
-    <Resource Include="Views\Resources\Icons\Error.png" />
-    <Resource Include="Views\Resources\Icons\General Settings.png" />
-    <Resource Include="Views\Resources\Icons\Information.png" />
-    <EmbeddedResource Include="Views\Resources\Icons\Main.ico" />
-    <Resource Include="Views\Resources\Icons\Main.png" />
-    <Resource Include="Views\Resources\Icons\Monitor Settings.png" />
-    <Resource Include="Views\Resources\Icons\Remove.png" />
-    <Resource Include="Views\Resources\Icons\Rename.png" />
-    <Resource Include="Views\Resources\Icons\Start Cycling.png" />
-    <EmbeddedResource Include="Views\Resources\Icons\StartCycling.ico" />
-    <Resource Include="Views\Resources\Icons\Stop Cycling.png" />
-    <EmbeddedResource Include="Views\Resources\Icons\StopCycling.ico" />
-    <Resource Include="Views\Resources\Icons\Synchronized Category.png" />
-    <Resource Include="Views\Resources\Icons\Wallpaper.png" />
-    <Resource Include="Views\Resources\Icons\Warning.png" />
-    <Resource Include="Views\Resources\Images\Image Load Error.png" />
-    <Resource Include="Views\Resources\Images\Main Large.png" />
-    <Resource Include="Views\Resources\Images\Main.jpg" />
-    <Resource Include="Views\Resources\Images\Main.png" />
-    <Resource Include="Views\Resources\Images\Multi Monitor Behaviour 1.png" />
-    <Resource Include="Views\Resources\Images\Multi Monitor Behaviour 2.png" />
-    <Resource Include="Views\Resources\Images\Multi Monitor Behaviour 3.png" />
-    <Resource Include="Views\Resources\Images\No Preview.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Locale\LocalizationData.de-DE.resx" />

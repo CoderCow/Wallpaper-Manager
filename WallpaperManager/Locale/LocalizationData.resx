@@ -126,7 +126,7 @@
     <comment>(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="About.ThridPartyResources" xml:space="preserve">
-    <value>Used otherwise resources:</value>
+    <value>Third party resources:</value>
     <comment>(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="About.Title" xml:space="preserve">
@@ -135,7 +135,7 @@
   </data>
   <data name="About.TranslatedBy" xml:space="preserve">
     <value>Translators of the current language:</value>
-    <comment>This translation entry is followed by  "About.Translators".</comment>
+    <comment>This translation entry is likely to be followed by  "About.Translators".</comment>
   </data>
   <data name="About.Translators" xml:space="preserve">
     <value>-</value>
@@ -147,11 +147,11 @@
   </data>
   <data name="About.VersionStringBeta" xml:space="preserve">
     <value>{0}.{1} Beta {3}</value>
-    <comment>{0}, {1}, {2}, {3} represent the single version components as numbers.</comment>
+    <comment>{0}, {1}, {2}, {3} represent the single version components as numbers.\n(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="About.VersionStringShort" xml:space="preserve">
     <value>{0}.{1}</value>
-    <comment>(Screenshot: www.alturl.com/ykz3u)</comment>
+    <comment>{0}, {1}, {2}, {3} represent the single version components as numbers.\n(Screenshot: www.alturl.com/ykz3u)</comment>
   </data>
   <data name="About.VisitHomepage" xml:space="preserve">
     <value>Wallpaper Manager Website</value>
@@ -1065,19 +1065,19 @@
     <value>Mirror Wallpaper on the Bottom</value>
   </data>
   <data name="ToolTip.WallpaperMirrorLeft.Description" xml:space="preserve">
-    <value>If checked, the wallpaper will have a mirrored clone of iteself on its left edge when cycled.</value>
+    <value>If checked, the wallpaper will have a mirrored clone of itself on its left edge when cycled.</value>
   </data>
   <data name="ToolTip.WallpaperMirrorLeft.Title" xml:space="preserve">
     <value>Mirror Wallpaper on the Left</value>
   </data>
   <data name="ToolTip.WallpaperMirrorRight.Description" xml:space="preserve">
-    <value>If checked, the wallpaper will have a mirrored clone of iteself on its right edge when cycled.</value>
+    <value>If checked, the wallpaper will have a mirrored clone of itself on its right edge when cycled.</value>
   </data>
   <data name="ToolTip.WallpaperMirrorRight.Title" xml:space="preserve">
     <value>Mirror Wallpaper on the Right</value>
   </data>
   <data name="ToolTip.WallpaperMirrorTop.Description" xml:space="preserve">
-    <value>If checked, the wallpaper will have a mirrored clone of iteself on its top edge when cycled.</value>
+    <value>If checked, the wallpaper will have a mirrored clone of itself on its top edge when cycled.</value>
   </data>
   <data name="ToolTip.WallpaperMirrorTop.Title" xml:space="preserve">
     <value>Mirror Wallpaper on the Top</value>
@@ -1346,7 +1346,7 @@
     <value>Missing File System Rights</value>
   </data>
   <data name="Dialog.Error.MissingFrameworkRights.Description" xml:space="preserve">
-    <value>Wallpaper Manager is missing .NET Framework rights to perform the requested operation.</value>
+    <value>Wallpaper Manager is missing .NET Framework access rights to perform the requested operation.</value>
   </data>
   <data name="Dialog.Error.MissingFrameworkRights.Title" xml:space="preserve">
     <value>Wallpaper Manager requires Framework Rights</value>

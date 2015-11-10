@@ -6,18 +6,19 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Drawing;
+using Common;
 
 namespace WallpaperManager.Models {
   /// <summary>
   ///   Defines common wallpaper attributes.
   /// </summary>
-  [ContractClass(typeof(IWallpaperCommonAttributesContracts))]
-  public interface IWallpaperCommonAttributes {
+  [ContractClass(typeof(IWallpaperBaseContracts))]
+  public interface IWallpaperBase: ICloneable, IAssignable {
     /// <summary>
-    ///   Gets or sets a <see cref="Boolean" /> indicating whether this wallpaper is activated.
+    ///   Gets or sets a <see cref="bool" /> indicating whether this wallpaper is activated.
     /// </summary>
     /// <value>
-    ///   A <see cref="Boolean" /> indicating whether this wallpaper is activated.
+    ///   A <see cref="bool" /> indicating whether this wallpaper is activated.
     /// </value>
     /// <remarks>
     ///   The activated status of a wallpaper usually indicates if it should be automatically cycled or not.
@@ -25,10 +26,10 @@ namespace WallpaperManager.Models {
     bool IsActivated { get; set; }
 
     /// <summary>
-    ///   Gets or sets a <see cref="Boolean" /> indicating whether this wallpaper represents a wallpaper for multiple screens.
+    ///   Gets or sets a <see cref="bool" /> indicating whether this wallpaper represents a wallpaper for multiple screens.
     /// </summary>
     /// <value>
-    ///   A <see cref="Boolean" /> indicating whether this wallpaper represents a wallpaper for multiple screens.
+    ///   A <see cref="bool" /> indicating whether this wallpaper represents a wallpaper for multiple screens.
     /// </value>
     bool IsMultiscreen { get; set; }
 
@@ -67,9 +68,6 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   A value defining how this wallpaper should be placed when drawn on a screen.
     /// </value>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///   Attempted to set a value which is not represented by a constant of the <see cref="WallpaperPlacement" /> enumeration.
-    /// </exception>
     WallpaperPlacement Placement { get; set; }
 
     /// <summary>
@@ -113,8 +111,8 @@ namespace WallpaperManager.Models {
     Collection<int> DisabledScreens { get; }
   }
 
-  [ContractClassFor(typeof(IWallpaperCommonAttributes))]
-  internal abstract class IWallpaperCommonAttributesContracts : IWallpaperCommonAttributes {
+  [ContractClassFor(typeof(IWallpaperBase))]
+  internal abstract class IWallpaperBaseContracts : IWallpaperBase {
     public abstract Color BackgroundColor { get; set; }
     public abstract Collection<int> DisabledScreens { get; }
     public abstract WallpaperEffects Effects { get; set; }
@@ -136,5 +134,8 @@ namespace WallpaperManager.Models {
       Contract.Invariant(Enum.IsDefined(typeof(WallpaperEffects), this.Effects));
       Contract.Invariant(Enum.IsDefined(typeof(WallpaperPlacement), this.Placement));
     }
+
+    public abstract object Clone();
+    public abstract void AssignTo(object other);
   }
 }

@@ -44,11 +44,11 @@ namespace WallpaperManager.Models {
     ///   Creates a multiscreen wallpaper from one <see cref="Wallpaper" /> object which is drawn for each screen.
     /// </summary>
     /// <inheritdoc />
-    public override Image CreateMultiscreenFromMultiple(IList<IList<Wallpaper>> wallpapers, float scaleFactor, bool useWindowsFix) {
+    public override Image CreateMultiscreenFromMultiple(IList<IList<IWallpaper>> wallpapers, float scaleFactor, bool useWindowsFix) {
       // This is the collection of Wallpapers which is finally assigned to the generator method.
       // Note that the order of the Wallpapers in this collection has to be equal with the screen order.
       // Since we want to clone the Wallpapers, this collection will probably contain the same Wallpaper object multiple times.
-      var usedWallpapers = new List<Wallpaper>(this.ScreensSettings.Count);
+      var usedWallpapers = new List<IWallpaper>(this.ScreensSettings.Count);
 
       // This is the screen index where the wallpaper is picked for which should be cloned over this and the other screens.
       int cloneSourceScreenIndex = 0;

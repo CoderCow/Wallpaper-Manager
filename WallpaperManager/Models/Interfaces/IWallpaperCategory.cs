@@ -3,7 +3,9 @@
 // All other rights reserved.
 
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
+using PropertyChanged;
 
 namespace WallpaperManager.Models {
   /// <summary>
@@ -12,11 +14,11 @@ namespace WallpaperManager.Models {
   [ContractClass(typeof(IWallpaperCategoryContracts))]
   public interface IWallpaperCategory {
     /// <summary>
-    ///   Gets a <see cref="Boolean" /> indicating whether this category and the underlying <see cref="Wallpaper" /> objects
+    ///   Gets a <see cref="bool" /> indicating whether this category and the underlying <see cref="Wallpaper" /> objects
     ///   are activated or not.
     /// </summary>
     /// <value>
-    ///   A <see cref="Boolean" /> indiciating whether this category and the underlying <see cref="Wallpaper" /> objects are
+    ///   A <see cref="bool" /> indiciating whether this category and the underlying <see cref="Wallpaper" /> objects are
     ///   activated or not. <c>null</c> if the underlying <see cref="Wallpaper" /> objects have a different activated status.
     /// </value>
     /// <remarks>
@@ -25,14 +27,15 @@ namespace WallpaperManager.Models {
     ///     automatically cycled or not.
     ///   </para>
     ///   <para>
-    ///     Setting this property will also update the <see cref="WallpaperSettingsBase.IsActivated" /> property of all
+    ///     Setting this property will also update the <see cref="WallpaperBase.IsActivated" /> property of all
     ///     underlying <see cref="Wallpaper" /> objects of this collection.
     ///   </para>
     /// </remarks>
     /// <exception cref="ArgumentNullException">
     ///   Attempted to set a <c>null</c> value.
     /// </exception>
-    /// <seealso cref="WallpaperSettingsBase.IsActivated">WallpaperSettingsBase.IsActivated Property</seealso>
+    /// <seealso cref="WallpaperBase.IsActivated">WallpaperBase.IsActivated Property</seealso>
+    [DoNotNotify]
     bool? IsActivated { get; set; }
 
     /// <summary>
@@ -41,17 +44,6 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The name of this category.
     /// </value>
-    /// <exception cref="ArgumentException">
-    ///   Attempted to set a <see cref="string" /> which contains invalid characters. Refer to the
-    ///   <see cref="Name_InvalidChars" /> property to get a list of invalid characters for a category name.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    ///   Attempted to set a <c>null</c> value.
-    /// </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///   Attempted to set a <see cref="string" /> of an invalid length. Refer to the <see cref="Name_MinLength" /> and
-    ///   <see cref="Name_MaxLength" /> constants for the respective suitable lengths.
-    /// </exception>
     /// <seealso cref="Name_InvalidChars">Name_InvalidChars Property</seealso>
     /// <seealso cref="Name_MinLength">Name_MinLength Constant</seealso>
     /// <seealso cref="Name_MaxLength">Name_MaxLength Constant</seealso>
@@ -63,11 +55,12 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The settings used for any new <see cref="Wallpaper" /> objects added to this collection.
     /// </value>
-    /// <exception cref="ArgumentNullException">
-    ///   Attempted to set a <c>null</c> value.
-    /// </exception>
     /// <seealso cref="Models.WallpaperDefaultSettings">WallpaperDefaultSettings Class</seealso>
     IWallpaperDefaultSettings WallpaperDefaultSettings { get; set; }
+
+    ObservableCollection<Wallpaper> Wallpapers { get; }
+
+    int Count { get; }
   }
 
   [ContractClassFor(typeof(IWallpaperCategory))]
@@ -75,6 +68,8 @@ namespace WallpaperManager.Models {
     public abstract bool? IsActivated { get; set; }
     public abstract string Name { get; set; }
     public abstract IWallpaperDefaultSettings WallpaperDefaultSettings { get; set; }
+    public abstract ObservableCollection<Wallpaper> Wallpapers { get; }
+    public abstract int Count { get; }
 
     /// <summary>
     ///   Checks whether all properties have valid values.
@@ -82,6 +77,7 @@ namespace WallpaperManager.Models {
     [ContractInvariantMethod]
     private void CheckInvariants() {
       Contract.Invariant(this.WallpaperDefaultSettings != null);
+      Contract.Invariant(!this.Wallpapers.Contains(null));
     }
   }
 }

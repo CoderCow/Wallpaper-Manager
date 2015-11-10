@@ -61,11 +61,6 @@ namespace WallpaperManager.Models {
     private static WallpaperChanger buildWallpaperWorkerCaller;
 
     /// <summary>
-    ///   A collection of the last applied <see cref="Wallpaper" /> objects.
-    /// </summary>
-    private readonly LastActiveWallpaperCollection lastCycledWallpapers;
-
-    /// <summary>
     ///   The <see cref="Random" /> object used to randomize the cycle process.
     /// </summary>
     private readonly Random random;
@@ -314,15 +309,13 @@ namespace WallpaperManager.Models {
       this.AppliedWallpaperFilePath = appliedWallpaperFilePath;
       this.screensSettings = screensSettings;
 
-      this.lastActiveListSize = GeneralConfig.LastActiveListSizeMax;
-      this.lastCycledWallpapers = new LastActiveWallpaperCollection(this.LastActiveListSize);
       this.activeWallpapersAccessor = new List<Wallpaper>();
       this.ActiveWallpapers = new ReadOnlyCollection<Wallpaper>(this.activeWallpapersAccessor);
 
       this.AutocycleTimer = new DispatcherTimer(DispatcherPriority.Background);
       this.AutocycleTimer.IsEnabled = false;
       this.AutocycleTimer.Tick += this.AutocycleTimer_Tick;
-      this.AutocycleInterval = TimeSpan.FromSeconds(GeneralConfig.MinAutocycleIntervalSeconds);
+      this.AutocycleInterval = TimeSpan.FromSeconds(Configuration.MinAutocycleIntervalSeconds);
 
       this.WallpaperBuilder = this.NewWallpaperBuilderByChangeType(WallpaperChangeType.ChangeAll);
       SystemEvents.DisplaySettingsChanged += this.System_DisplaySettingsChanged;
@@ -335,10 +328,10 @@ namespace WallpaperManager.Models {
     /// </summary>
     [ContractInvariantMethod]
     private void CheckInvariants() {
-      Contract.Invariant(this.AutocycleInterval.TotalSeconds >= GeneralConfig.MinAutocycleIntervalSeconds);
+      Contract.Invariant(this.AutocycleInterval.TotalSeconds >= Configuration.MinAutocycleIntervalSeconds);
       Contract.Invariant(this.WallpaperBuilder != null);
       Contract.Invariant(Enum.IsDefined(typeof(WallpaperChangeType), this.WallpaperChangeType));
-      Contract.Invariant(this.LastActiveListSize.IsBetween(1, GeneralConfig.LastActiveListSizeMax));
+      Contract.Invariant(this.LastActiveListSize.IsBetween(1, Configuration.LastActiveListSizeMax));
       Contract.Invariant(this.ScreensSettings != null);
       Contract.Invariant(this.AppliedWallpaperFilePath != Path.None);
       Contract.Invariant(this.AutocycleTimer != null);
@@ -422,7 +415,7 @@ namespace WallpaperManager.Models {
 
       WallpaperChanger.buildWallpaperWorker.DoWork += (sender, e) => {
         var args = (object[])e.Argument;
-        var wallpapersToUseLocal = (IList<Wallpaper>[])args[0];
+        var wallpapersToUseLocal = (IList<IWallpaper>[])args[0];
         bool applyMultipleLocal = (bool)args[1];
         Image wallpaperImage;
 
@@ -789,7 +782,7 @@ namespace WallpaperManager.Models {
       int lastWallpapersMaximum = (filteredWallpapers.Count * (this.LastActiveListSize / 100));
       if (lastWallpapersMaximum == 0)
         lastWallpapersMaximum = 3;
-      this.lastCycledWallpapers.MaximumSize = lastWallpapersMaximum;
+      //this.lastCycledWallpapers.MaximumSize = lastWallpapersMaximum;
 
       #region Pick the wallpapers by priority.
       Debug.WriteLine("Performing third pick step...");
@@ -806,10 +799,10 @@ namespace WallpaperManager.Models {
       // We genereally do not want to pick Wallpapers from the last cycles again, but we can't consider the last active 
       // Wallpapers if there are generally too few Wallpapers in the list.
       int lastActiveWallpapersCount = 0;
-      foreach (Wallpaper wallpaper in this.lastCycledWallpapers) {
+      /*foreach (Wallpaper wallpaper in this.lastCycledWallpapers) {
         if (wallpaper.IsMultiscreen == multiscreenMode)
           lastActiveWallpapersCount++;
-      }
+      }*/
 
       bool considerLastActives = (filteredWallpapers.Count >= (lastActiveWallpapersCount + requiredWallpaperCount));
 
@@ -841,7 +834,7 @@ namespace WallpaperManager.Models {
             break;
 
           if (
-            (considerLastActives && this.lastCycledWallpapers.Contains(wallpaper)) ||
+            //(considerLastActives && this.lastCycledWallpapers.Contains(wallpaper)) ||
             (considerConditions && !filteredWallpapers[i].EvaluateCycleConditions())) {
             // We shouldn't remove too many wallpapers.
             if (filteredWallpapers.Count == requiredWallpaperCount) {
@@ -894,12 +887,12 @@ namespace WallpaperManager.Models {
       #endregion
 
       // Set the picked wallpapers as last active.
-      if (!considerLastActives)
-        this.lastCycledWallpapers.Clear();
+      //if (!considerLastActives)
+      //  this.lastCycledWallpapers.Clear();
 
       var pickedWallpapers = new List<Wallpaper>(requiredWallpaperCount);
       for (int i = 0; i < pickedWallpapersForScreen.Length; i++) {
-        this.lastCycledWallpapers.AddRange(pickedWallpapersForScreen[i]);
+        //this.lastCycledWallpapers.AddRange(pickedWallpapersForScreen[i]);
         pickedWallpapers.AddRange(pickedWallpapersForScreen[i]);
       }
 
@@ -1038,7 +1031,7 @@ namespace WallpaperManager.Models {
       #endregion
 
       // Store the new Wallpapers in the cache, making sure not to pick them on the next cycles again.
-      this.lastCycledWallpapers.AddRange(wallpapersToUseFinally);
+      //this.lastCycledWallpapers.AddRange(wallpapersToUseFinally);
 
       if (this.WallpaperChangeType == WallpaperChangeType.ChangeOneByOne) {
         // If the change one builder is used, there is a special behavior since only one Wallpaper was picked but at least 2

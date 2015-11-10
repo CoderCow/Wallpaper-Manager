@@ -23,7 +23,7 @@ namespace WallpaperManager.Models {
   /// <seealso cref="WallpaperBuilderBase">WallpaperBuilderBase Class</seealso>
   /// <seealso cref="WallpaperChanger">WallpaperChanger Class</seealso>
   /// <threadsafety static="true" instance="false" />
-  public class WallpaperTextOverlay : INotifyPropertyChanged, ICloneable, IAssignable {
+  public class WallpaperTextOverlay: ValidatableBase, IWallpaperTextOverlay, ICloneable, IAssignable {
     /// <summary>
     ///   Represents the default font name.
     /// </summary>
@@ -45,54 +45,12 @@ namespace WallpaperManager.Models {
     private const TextOverlayPosition DefaultPosition = TextOverlayPosition.BottomRight;
 
     /// <summary>
-    ///   <inheritdoc cref="BorderColor" select='../value/node()' />
-    /// </summary>
-    private Color borderColor;
-
-    /// <summary>
-    ///   <inheritdoc cref="FontName" select='../value/node()' />
-    /// </summary>
-    private string fontName;
-
-    /// <summary>
-    ///   <inheritdoc cref="FontSize" select='../value/node()' />
-    /// </summary>
-    private float fontSize;
-
-    /// <summary>
-    ///   <inheritdoc cref="FontStyle" select='../value/node()' />
-    /// </summary>
-    private FontStyle fontStyle;
-
-    /// <summary>
-    ///   <inheritdoc cref="ForeColor" select='../value/node()' />
-    /// </summary>
-    private Color foreColor;
-
-    /// <summary>
-    ///   <inheritdoc cref="Format" select='../value/node()' />
-    /// </summary>
-    private string format;
-
-    /// <summary>
-    ///   <inheritdoc cref="Offset" select='../value/node()' />
-    /// </summary>
-    private Point offset;
-
-    /// <summary>
-    ///   <inheritdoc cref="Position" select='../value/node()' />
-    /// </summary>
-    private TextOverlayPosition position;
-
-    /// <summary>
     ///   Gets the default <see cref="ForeColor" /> value.
     /// </summary>
     /// <value>
     ///   The default <see cref="ForeColor" /> value.
     /// </value>
-    private static Color DefaultForeColor {
-      get { return Color.White; }
-    }
+    private static Color DefaultForeColor => Color.White;
 
     /// <summary>
     ///   Gets the default <see cref="BorderColor" /> value.
@@ -100,187 +58,68 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The default <see cref="BorderColor" /> value.
     /// </value>
-    private static Color DefaultBorderColor {
-      get { return Color.Black; }
-    }
+    private static Color DefaultBorderColor => Color.Black;
 
-    /// <summary>
-    ///   Gets or sets the content text.
-    /// </summary>
-    /// <value>
-    ///   The content text.
-    /// </value>
-    public string Format {
-      get { return this.format; }
-      set {
-        this.format = value;
-        this.OnPropertyChanged("Format");
-      }
-    }
+    /// <inheritdoc />
+    public string Format { get; set; }
 
-    /// <summary>
-    ///   Gets or sets the content text's font name.
-    /// </summary>
-    /// <value>
-    ///   The content text's font name.
-    /// </value>
-    public string FontName {
-      get { return this.fontName; }
-      set {
-        this.fontName = value;
-        this.OnPropertyChanged("FontName");
-      }
-    }
+    /// <inheritdoc />
+    public string FontName { get; set; }
 
-    /// <summary>
-    ///   Gets or sets the content text's font size in points.
-    /// </summary>
-    /// <value>
-    ///   The content text's font size in points.
-    /// </value>
-    public float FontSize {
-      get { return this.fontSize; }
-      set {
-        this.fontSize = value;
-        this.OnPropertyChanged("FontSize");
-      }
-    }
+    /// <inheritdoc />
+    public float FontSize { get; set; }
 
-    /// <summary>
-    ///   Gets or sets the content text's font style.
-    /// </summary>
-    /// <value>
-    ///   The content text's font style.
-    /// </value>
-    public FontStyle FontStyle {
-      get { return this.fontStyle; }
-      set {
-        this.fontStyle = value;
-        this.OnPropertyChanged("FontStyle");
-      }
-    }
+    /// <inheritdoc />
+    public FontStyle FontStyle { get; set; }
 
-    /// <summary>
-    ///   Gets or sets the content text's color.
-    /// </summary>
-    /// <value>
-    ///   The content text's color.
-    /// </value>
-    public Color ForeColor {
-      get { return this.foreColor; }
-      set {
-        this.foreColor = value;
-        this.OnPropertyChanged("ForeColor");
-      }
-    }
+    /// <inheritdoc />
+    public Color ForeColor { get; set; }
 
-    /// <summary>
-    ///   Gets or sets the content text's border color.
-    /// </summary>
-    /// <value>
-    ///   The content text's border color.
-    /// </value>
-    public Color BorderColor {
-      get { return this.borderColor; }
-      set {
-        this.borderColor = value;
-        this.OnPropertyChanged("BorderColor");
-      }
-    }
+    /// <inheritdoc />
+    public Color BorderColor { get; set; }
 
-    /// <summary>
-    ///   Gets or sets the content text's horizontal and vertical offset.
-    /// </summary>
-    /// <value>
-    ///   The content text's horizontal and vertical offset.
-    /// </value>
-    public Point Offset {
-      get { return this.offset; }
-      set {
-        this.offset = value;
-        this.OnPropertyChanged("Offset");
-      }
-    }
+    /// <inheritdoc />
+    public int HorizontalOffset { get; set; }
 
-    /// <summary>
-    ///   Gets or sets the content text's horizontal offset.
-    /// </summary>
-    /// <value>
-    ///   The content text's horizontal offset.
-    /// </value>
-    public int HorizontalOffset {
-      get { return this.offset.X; }
-      set {
-        this.offset = new Point(value, this.Offset.Y);
-        this.OnPropertyChanged("Offset");
-      }
-    }
+    /// <inheritdoc />
+    public int VerticalOffset { get; set; }
 
-    /// <summary>
-    ///   Gets or sets the content text's vertical offset.
-    /// </summary>
-    /// <value>
-    ///   The content text's vertical offset.
-    /// </value>
-    public int VerticalOffset {
-      get { return this.offset.Y; }
-      set {
-        this.offset = new Point(this.Offset.X, value);
-        this.OnPropertyChanged("Offset");
-      }
-    }
-
-    /// <summary>
-    ///   Gets or sets the position where the text should be displayed on the screen.
-    /// </summary>
-    /// <value>
-    ///   The position where the text should be displayed on the screen.
-    /// </value>
-    /// <seealso cref="TextOverlayPosition">TextOverlayPosition Enumeration</seealso>
-    public TextOverlayPosition Position {
-      get { return this.position; }
-      set {
-        this.position = value;
-        this.OnPropertyChanged("Position");
-      }
-    }
+    /// <inheritdoc />
+    public TextOverlayPosition Position { get; set; }
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperTextOverlay" /> class.
     /// </summary>
     public WallpaperTextOverlay() {
-      this.fontName = WallpaperTextOverlay.DefaultFontName;
-      this.fontSize = WallpaperTextOverlay.DefaultFontSize;
-      this.fontStyle = WallpaperTextOverlay.DefaultFontStyle;
-      this.format = LocalizationManager.GetLocalizedString("OverlayTextData.DefaultFormat");
-      this.foreColor = WallpaperTextOverlay.DefaultForeColor;
-      this.borderColor = WallpaperTextOverlay.DefaultBorderColor;
-      this.position = WallpaperTextOverlay.DefaultPosition;
+      this.FontName = WallpaperTextOverlay.DefaultFontName;
+      this.FontSize = WallpaperTextOverlay.DefaultFontSize;
+      this.FontStyle = WallpaperTextOverlay.DefaultFontStyle;
+      this.Format = LocalizationManager.GetLocalizedString("OverlayTextData.DefaultFormat");
+      this.ForeColor = WallpaperTextOverlay.DefaultForeColor;
+      this.BorderColor = WallpaperTextOverlay.DefaultBorderColor;
+      this.Position = WallpaperTextOverlay.DefaultPosition;
     }
-
-    /// <summary>
-    ///   Checks whether all properties have valid values.
-    /// </summary>
-    [ContractInvariantMethod]
-    private void CheckInvariants() {
-      Contract.Invariant(this.Format != null);
-      Contract.Invariant(this.FontName != null);
-      Contract.Invariant(this.FontName.Trim().Length > 0);
-      Contract.Invariant(Enum.IsDefined(typeof(FontStyle), this.FontStyle));
-      Contract.Invariant(Enum.IsDefined(typeof(TextOverlayPosition), this.Position));
+    
+    #region Overrides of ValidatableBase
+    /// <inheritdoc />
+    protected override string InvalidatePropertyInternal(string propertyName) {
+      if (propertyName == nameof(this.Format))
+        if (string.IsNullOrWhiteSpace(this.Format))
+          return "This field is mandatory.";
+      else if (propertyName == nameof(this.FontName))
+        if (string.IsNullOrWhiteSpace(this.FontName))
+          return "This field is mandatory.";
+      else if (propertyName == nameof(this.FontSize))
+        if (this.FontSize <= 0)
+          return "Must be a postive number.";
+      
+      return null;
     }
+    #endregion
 
-    /// <summary>
-    ///   Returns the format string with replaced parameter values.
-    /// </summary>
-    /// <param name="wallpapers">
-    ///   The collection of <see cref="Wallpaper" /> objects which are actually being applied.
-    /// </param>
-    /// <returns>
-    ///   The format string with replaced parameter values.
-    /// </returns>
-    /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
-    public string GetEvaluatedText(IList<Wallpaper> wallpapers) {
+    // TODO: split up, maybe extract?
+    /// <inheritdoc />
+    public string GetEvaluatedText(IList<IWallpaper> wallpapers) {
       StringBuilder evaluatedText = new StringBuilder();
 
       bool inParam = false;
@@ -435,32 +274,11 @@ namespace WallpaperManager.Models {
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />
     public virtual object Clone() {
-      return new WallpaperTextOverlay() {
-        Format = this.Format,
-        FontName = this.FontName,
-        FontSize = this.FontSize,
-        FontStyle = this.FontStyle,
-        ForeColor = this.ForeColor,
-        BorderColor = this.BorderColor,
-        Offset = this.Offset,
-        Position = this.Position
-      };
+      return (WallpaperTextOverlay)this.MemberwiseClone();
     }
 
-    /// <summary>
-    ///   Assigns all member values of this instance to the respective members of the given instance.
-    /// </summary>
-    /// <param name="other">
-    ///   The target instance to assign to.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <paramref name="other" /> is <c>null</c>.
-    /// </exception>
-    /// <exception cref="ArgumentException">
-    ///   <paramref name="other" /> is not castable to the <see cref="WallpaperTextOverlay" /> type.
-    /// </exception>
+    /// <inheritdoc />
     public virtual void AssignTo(object other) {
-      Contract.Requires<ArgumentNullException>(other != null);
       Contract.Requires<ArgumentException>(other is WallpaperTextOverlay);
 
       WallpaperTextOverlay otherInstance = (WallpaperTextOverlay)other;
@@ -470,18 +288,7 @@ namespace WallpaperManager.Models {
       otherInstance.FontStyle = this.FontStyle;
       otherInstance.ForeColor = this.ForeColor;
       otherInstance.BorderColor = this.BorderColor;
-      otherInstance.Offset = this.Offset;
       otherInstance.Position = this.Position;
-    }
-    #endregion
-
-    #region INotifyPropertyChanged Implementation
-    /// <inheritdoc cref="INotifyPropertyChanged.PropertyChanged" />
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    /// <commondoc select='INotifyPropertyChanged/Methods/OnPropertyChanged/*' />
-    protected virtual void OnPropertyChanged(string propertyName) {
-      this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     #endregion
   }

@@ -273,7 +273,7 @@ namespace WallpaperManager.Views {
       Debug.WriteLine("Second step.");
       Debug.Flush();
       this.WallpaperChanger = new WallpaperChanger(this.Environment.AppliedWallpaperFilePath, this.Configuration.General.ScreensSettings);
-      this.WallpaperChanger.RequestWallpapers += (senderLocal, eLocal) => { eLocal.Wallpapers.AddRange(this.Configuration.WallpaperCategories.GetAllWallpapers()); };
+      this.WallpaperChanger.RequestWallpapers += (senderLocal, eLocal) => { eLocal.Wallpapers.AddRange(this.Configuration.WallpaperCategories.EnumerateAllWallpapers()); };
       this.WallpaperChanger.AutocycleException += this.WallpaperChanger_AutocycleException;
 
       // Register light property bindings which make sure that the WallpaperChanger gets always updated with any changed 

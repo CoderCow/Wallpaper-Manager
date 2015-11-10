@@ -141,21 +141,21 @@ namespace WallpaperManager.ViewModels {
 
     /// <summary>
     ///   Gets a <see cref="bool" /> indicating whether the category of the <see cref="Wallpaper" /> instances is a
-    ///   <see cref="SynchronizedWallpaperCategory" /> or not.
+    ///   <see cref="WallpaperCategoryFileSynchronizer" /> or not.
     /// </summary>
     /// <value>
     ///   A <see cref="bool" /> indicating whether the category of the <see cref="Wallpaper" /> instances is a
-    ///   <see cref="SynchronizedWallpaperCategory" /> or not.
+    ///   <see cref="WallpaperCategoryFileSynchronizer" /> or not.
     /// </value>
     public bool ParentIsSynchronizedCategory { get; }
 
     /// <summary>
-    ///   Gets the collection of <see cref="WallpaperSettingsBase" /> objects to be configured.
+    ///   Gets the collection of <see cref="WallpaperBase" /> objects to be configured.
     /// </summary>
     /// <value>
-    ///   The collection of <see cref="WallpaperSettingsBase" /> objects to be configured.
+    ///   The collection of <see cref="WallpaperBase" /> objects to be configured.
     /// </value>
-    public IList<WallpaperSettingsBase> WallpaperData { get; }
+    public IList<WallpaperBase> WallpaperData { get; }
 
     /// <summary>
     ///   Gets or sets the cached <see cref="Wallpaper.ImagePath">image file's path</see> value.
@@ -196,10 +196,10 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets the cached <see cref="WallpaperSettingsBase.IsMultiscreen">multiscreen</see> value.
+    ///   Gets or sets the cached <see cref="WallpaperBase.IsMultiscreen">multiscreen</see> value.
     /// </summary>
     /// <value>
-    ///   The cached <see cref="WallpaperSettingsBase.IsMultiscreen">multiscreen</see> value.
+    ///   The cached <see cref="WallpaperBase.IsMultiscreen">multiscreen</see> value.
     ///   <c>null</c> if <see cref="WallpaperData" /> contains multiple items which values vary from each other.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -212,11 +212,11 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets a cached value indicating whether the <see cref="WallpaperSettingsBase.IsMultiscreen" />
+    ///   Gets or sets a cached value indicating whether the <see cref="WallpaperBase.IsMultiscreen" />
     ///   property should be determined automatically or not.
     /// </summary>
     /// <value>
-    ///   <c>true</c> whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> property should be
+    ///   <c>true</c> whether the <see cref="WallpaperBase.IsMultiscreen" /> property should be
     ///   determined automatically; otherwise <c>false</c>.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -229,10 +229,10 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets the cached <see cref="WallpaperSettingsBase.Priority">priority</see> value.
+    ///   Gets or sets the cached <see cref="WallpaperBase.Priority">priority</see> value.
     /// </summary>
     /// <value>
-    ///   The cached <see cref="WallpaperSettingsBase.Priority">priority</see> value.
+    ///   The cached <see cref="WallpaperBase.Priority">priority</see> value.
     ///   <c>null</c> if <see cref="WallpaperData" /> contains multiple items which values vary from each other.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -250,10 +250,10 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets the cached <see cref="WallpaperSettingsBase.Placement">placement</see> value.
+    ///   Gets or sets the cached <see cref="WallpaperBase.Placement">placement</see> value.
     /// </summary>
     /// <value>
-    ///   The cached <see cref="WallpaperSettingsBase.Placement">placement</see> value.
+    ///   The cached <see cref="WallpaperBase.Placement">placement</see> value.
     ///   <c>null</c> if <see cref="WallpaperData" /> contains multiple items which values vary from each other.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -266,11 +266,11 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets a value indicating whether the <see cref="WallpaperSettingsBase.Placement" />
+    ///   Gets or sets a value indicating whether the <see cref="WallpaperBase.Placement" />
     ///   property should be determined automatically or not.
     /// </summary>
     /// <value>
-    ///   <c>true</c> whether the <see cref="WallpaperSettingsBase.Placement" /> property should be
+    ///   <c>true</c> whether the <see cref="WallpaperBase.Placement" /> property should be
     ///   determined automatically; otherwise <c>false</c>.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -283,10 +283,10 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets the cached <see cref="WallpaperSettingsBase.Scale">horizontal scale</see> value.
+    ///   Gets or sets the cached <see cref="WallpaperBase.Scale">horizontal scale</see> value.
     /// </summary>
     /// <value>
-    ///   The cached <see cref="WallpaperSettingsBase.Scale">horizontal scale</see> value.
+    ///   The cached <see cref="WallpaperBase.Scale">horizontal scale</see> value.
     ///   <c>null</c> if <see cref="WallpaperData" /> contains multiple items which values vary from each other.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -299,10 +299,10 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets the cached <see cref="WallpaperSettingsBase.Scale">vertical scale</see> value.
+    ///   Gets or sets the cached <see cref="WallpaperBase.Scale">vertical scale</see> value.
     /// </summary>
     /// <value>
-    ///   The cached <see cref="WallpaperSettingsBase.Scale">vertical scale</see> value.
+    ///   The cached <see cref="WallpaperBase.Scale">vertical scale</see> value.
     ///   <c>null</c> if <see cref="WallpaperData" /> contains multiple items which values vary from each other.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -315,10 +315,10 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets the cached <see cref="WallpaperSettingsBase.Offset">horizontal offset</see> value.
+    ///   Gets or sets the cached <see cref="WallpaperBase.Offset">horizontal offset</see> value.
     /// </summary>
     /// <value>
-    ///   The cached <see cref="WallpaperSettingsBase.Offset">horizontal offset</see> value.
+    ///   The cached <see cref="WallpaperBase.Offset">horizontal offset</see> value.
     ///   <c>null</c> if <see cref="WallpaperData" /> contains multiple items which values vary from each other.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -331,10 +331,10 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets the cached <see cref="WallpaperSettingsBase.Offset">vertical offset</see> value.
+    ///   Gets or sets the cached <see cref="WallpaperBase.Offset">vertical offset</see> value.
     /// </summary>
     /// <value>
-    ///   The cached <see cref="WallpaperSettingsBase.Offset">vertical offset</see> value.
+    ///   The cached <see cref="WallpaperBase.Offset">vertical offset</see> value.
     ///   <c>null</c> if <see cref="WallpaperData" /> contains multiple items which values vary from each other.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -347,10 +347,10 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets the drawing <see cref="WallpaperSettingsBase.Effects">effects</see> value.
+    ///   Gets or sets the drawing <see cref="WallpaperBase.Effects">effects</see> value.
     /// </summary>
     /// <value>
-    ///   The drawing <see cref="WallpaperSettingsBase.Effects">effects</see> value.
+    ///   The drawing <see cref="WallpaperBase.Effects">effects</see> value.
     ///   <c>null</c> if <see cref="WallpaperData" /> contains multiple items which values vary from each other.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -501,10 +501,10 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets the cached <see cref="WallpaperSettingsBase.OnlyCycleBetweenStart">OnlyCycleBetweenStart</see> value.
+    ///   Gets or sets the cached <see cref="WallpaperBase.OnlyCycleBetweenStart">OnlyCycleBetweenStart</see> value.
     /// </summary>
     /// <value>
-    ///   The cached <see cref="WallpaperSettingsBase.OnlyCycleBetweenStart">OnlyCycleBetweenStart</see> value.
+    ///   The cached <see cref="WallpaperBase.OnlyCycleBetweenStart">OnlyCycleBetweenStart</see> value.
     ///   <c>null</c> if <see cref="WallpaperData" /> contains multiple items which values vary from each other.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -518,10 +518,10 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets the cached <see cref="WallpaperSettingsBase.OnlyCycleBetweenStop">OnlyCycleBetweenStop</see> value.
+    ///   Gets or sets the cached <see cref="WallpaperBase.OnlyCycleBetweenStop">OnlyCycleBetweenStop</see> value.
     /// </summary>
     /// <value>
-    ///   The cached <see cref="WallpaperSettingsBase.OnlyCycleBetweenStop">OnlyCycleBetweenStop</see> value.
+    ///   The cached <see cref="WallpaperBase.OnlyCycleBetweenStop">OnlyCycleBetweenStop</see> value.
     ///   <c>null</c> if <see cref="WallpaperData" /> contains multiple items which values vary from each other.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -535,10 +535,10 @@ namespace WallpaperManager.ViewModels {
     }
 
     /// <summary>
-    ///   Gets or sets the cached <see cref="WallpaperSettingsBase.BackgroundColor">background color</see> value.
+    ///   Gets or sets the cached <see cref="WallpaperBase.BackgroundColor">background color</see> value.
     /// </summary>
     /// <value>
-    ///   The cached <see cref="WallpaperSettingsBase.BackgroundColor">background color</see> value.
+    ///   The cached <see cref="WallpaperBase.BackgroundColor">background color</see> value.
     ///   <c>null</c> if <see cref="WallpaperData" /> contains multiple items which values vary from each other.
     /// </value>
     /// <inheritdoc cref="ImagePath" select='remarks' />
@@ -581,11 +581,11 @@ namespace WallpaperManager.ViewModels {
     ///   The <see cref="GeneralConfig" /> instance containing general application configuration data.
     /// </param>
     /// <param name="wallpapers">
-    ///   The collection of <see cref="WallpaperSettingsBase" /> objects to be configured.
+    ///   The collection of <see cref="WallpaperBase" /> objects to be configured.
     /// </param>
     /// <param name="parentIsSynchronizedCategory">
     ///   A <see cref="bool" /> indicating whether the category of the <see cref="Wallpaper" /> instances
-    ///   is a <see cref="SynchronizedWallpaperCategory" /> or not.
+    ///   is a <see cref="WallpaperCategoryFileSynchronizer" /> or not.
     /// </param>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
     /// <overloads>
@@ -605,7 +605,7 @@ namespace WallpaperManager.ViewModels {
       for (int i = 0; i < Screen.AllScreens.Length; i++)
         this.ScreensCycleState.Add(true);
 
-      this.WallpaperData = new List<WallpaperSettingsBase>(wallpapers.Count);
+      this.WallpaperData = new List<WallpaperBase>(wallpapers.Count);
       foreach (Wallpaper wallpaper in wallpapers)
         this.WallpaperData.Add(wallpaper);
 
@@ -638,7 +638,7 @@ namespace WallpaperManager.ViewModels {
       for (int i = 0; i < Screen.AllScreens.Length; i++)
         this.ScreensCycleState.Add(true);
 
-      this.WallpaperData = new List<WallpaperSettingsBase>();
+      this.WallpaperData = new List<WallpaperBase>();
       this.WallpaperData.Add(wallpaperDefaultSettings);
 
       this.FromWallpaperSettings(wallpaperDefaultSettings, false);
@@ -666,7 +666,7 @@ namespace WallpaperManager.ViewModels {
       for (int i = 0; i < Screen.AllScreens.Length; i++)
         this.ScreensCycleState.Add(true);
 
-      this.WallpaperData = new List<WallpaperSettingsBase>();
+      this.WallpaperData = new List<WallpaperBase>();
       this.WallpaperData.Add(staticWallpaper);
 
       this.FromWallpaperSettings(staticWallpaper, false);
@@ -683,8 +683,8 @@ namespace WallpaperManager.ViewModels {
       Contract.Invariant(this.WallpaperData.Count > 0);
       Contract.Invariant(!this.WallpaperData.Contains(null));
       Contract.Invariant(this.Placement == null || Enum.IsDefined(typeof(WallpaperPlacement), this.Placement));
-      Contract.Invariant(this.OnlyCycleBetweenStart == null || this.OnlyCycleBetweenStart <= this.OnlyCycleBetweenStop);
-      Contract.Invariant(this.OnlyCycleBetweenStop == null || this.OnlyCycleBetweenStop >= this.OnlyCycleBetweenStart);
+      //Contract.Invariant(this.OnlyCycleBetweenStart == null || this.OnlyCycleBetweenStart <= this.OnlyCycleBetweenStop);
+      //Contract.Invariant(this.OnlyCycleBetweenStop == null || this.OnlyCycleBetweenStop >= this.OnlyCycleBetweenStart);
       Contract.Invariant(this.ScreensCycleState != null);
       Contract.Invariant(this.RemoveImagePathCommand != null);
       Contract.Invariant(this.ApplySettingsCommand != null);
@@ -695,13 +695,13 @@ namespace WallpaperManager.ViewModels {
     ///   Assigns all settings of <paramref name="baseSettings" /> with the settings in this instance.
     /// </summary>
     /// <param name="baseSettings">
-    ///   The <see cref="WallpaperSettingsBase">wallpaper base settings</see>.
+    ///   The <see cref="WallpaperBase">wallpaper base settings</see>.
     /// </param>
     /// <param name="nullIfDifferent">
     ///   A <see cref="bool" /> indicating whether properties of this instance should be set to <c>null</c> if
     ///   the values of the <paramref name="baseSettings" /> parameter are different.
     /// </param>
-    private void FromWallpaperSettings(WallpaperSettingsBase baseSettings, bool nullIfDifferent) {
+    private void FromWallpaperSettings(WallpaperBase baseSettings, bool nullIfDifferent) {
       Wallpaper wallpaperSettings = (baseSettings as Wallpaper);
       WallpaperDefaultSettings wallpaperDefaultSettings = (baseSettings as WallpaperDefaultSettings);
 
@@ -843,9 +843,9 @@ namespace WallpaperManager.ViewModels {
     ///   Assigns all settings to the given <paramref name="baseSettings" /> instance.
     /// </summary>
     /// <param name="baseSettings">
-    ///   The <see cref="WallpaperSettingsBase">wallpaper base settings</see> where the current settings should be assigned to.
+    ///   The <see cref="WallpaperBase">wallpaper base settings</see> where the current settings should be assigned to.
     /// </param>
-    private void ToWallpaperSettings(WallpaperSettingsBase baseSettings) {
+    private void ToWallpaperSettings(WallpaperBase baseSettings) {
       Contract.Requires<ArgumentNullException>(baseSettings != null);
 
       Wallpaper wallpaperSettings = (baseSettings as Wallpaper);

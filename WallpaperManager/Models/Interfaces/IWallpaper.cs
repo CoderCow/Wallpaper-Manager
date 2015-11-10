@@ -13,24 +13,33 @@ namespace WallpaperManager.Models {
   ///   Defines general wallpaper related data.
   /// </summary>
   [ContractClass(typeof(IWallpaperContracts))]
-  public interface IWallpaper : IWallpaperCommonAttributes {
+  public interface IWallpaper : IWallpaperBase {
     /// <summary>
-    ///   Gets a <see cref="Boolean" /> indicating whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> setting
-    ///   should
+    ///   Gets a <see cref="bool" /> indicating whether any properties of this instance had been changed since it has been
+    ///   instanced.
+    /// </summary>
+    /// <value>
+    ///   A <see cref="bool" /> indicating whether any properties of this instance had been changed since it has been
+    ///   instanced.
+    /// </value>
+    bool IsBlank { get; }
+
+    /// <summary>
+    ///   Gets a <see cref="bool" /> indicating whether the <see cref="WallpaperBase.IsMultiscreen" /> setting should
     ///   be automatically suggested for this wallpaper or not.
     /// </summary>
     /// <value>
-    ///   A <see cref="Boolean" /> indicating whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> setting should be
+    ///   A <see cref="bool" /> indicating whether the <see cref="WallpaperBase.IsMultiscreen" /> setting should be
     ///   automatically suggested for this wallpaper or not.
     /// </value>
     bool SuggestIsMultiscreen { get; set; }
 
     /// <summary>
-    ///   Gets a <see cref="Boolean" /> indicating whether <see cref="WallpaperSettingsBase.Placement" /> setting should be
+    ///   Gets a <see cref="bool" /> indicating whether <see cref="WallpaperBase.Placement" /> setting should be
     ///   automatically suggested for this wallpaper or not.
     /// </summary>
     /// <value>
-    ///   A <see cref="Boolean" /> indicating whether <see cref="WallpaperSettingsBase.Placement" /> setting should be
+    ///   A <see cref="bool" /> indicating whether <see cref="WallpaperBase.Placement" /> setting should be
     ///   automatically suggested for this wallpaper or not.
     /// </value>
     bool SuggestPlacement { get; set; }
@@ -52,15 +61,27 @@ namespace WallpaperManager.Models {
     /// <remarks>
     ///   When this property is changed for the first time, and their respective <see cref="SuggestPlacement" /> and
     ///   <see cref="SuggestIsMultiscreen" /> properties are <c>true</c>, it will cause the
-    ///   <see cref="WallpaperSettingsBase.Placement" /> and <see cref="WallpaperSettingsBase.IsMultiscreen" /> properties to
+    ///   <see cref="WallpaperBase.Placement" /> and <see cref="WallpaperBase.IsMultiscreen" /> properties to
     ///   be
     ///   suggested automatically related to the new image size.
     /// </remarks>
-    /// <seealso cref="WallpaperSettingsBase.Placement">WallpaperSettingsBase.Placement Property</seealso>
-    /// <seealso cref="WallpaperSettingsBase.IsMultiscreen">WallpaperSettingsBase.IsMultiscreen Property</seealso>
+    /// <seealso cref="WallpaperBase.Placement">WallpaperBase.Placement Property</seealso>
+    /// <seealso cref="WallpaperBase.IsMultiscreen">WallpaperBase.IsMultiscreen Property</seealso>
     /// <seealso cref="SuggestPlacement">SuggestPlacement Property</seealso>
     /// <seealso cref="SuggestIsMultiscreen">SuggestIsMultiscreen Property</seealso>
     Size ImageSize { get; set; }
+
+    DateTime TimeLastCycled { get; set; }
+    DateTime TimeAdded { get; set; }
+    int CycleCount { get; set; }
+
+    /// <summary>
+    ///   Checks whether the cycle conditions for this wallpaper match or not.
+    /// </summary>
+    /// <returns>
+    ///   A <see cref="bool" /> indicating whether the cycle conditions match.
+    /// </returns>
+    bool EvaluateCycleConditions();
   }
 
   [ContractClassFor(typeof(IWallpaper))]
@@ -76,10 +97,15 @@ namespace WallpaperManager.Models {
     public abstract WallpaperEffects Effects { get; set; }
     public abstract Color BackgroundColor { get; set; }
     public abstract Collection<int> DisabledScreens { get; }
+    public abstract bool IsBlank { get; set; }
     public abstract bool SuggestIsMultiscreen { get; set; }
     public abstract bool SuggestPlacement { get; set; }
     public abstract Path ImagePath { get; set; }
     public abstract Size ImageSize { get; set; }
+    public abstract DateTime TimeLastCycled { get; set; }
+    public abstract DateTime TimeAdded { get; set; }
+    public abstract int CycleCount { get; set; }
+    public abstract bool EvaluateCycleConditions();
 
     /// <summary>
     ///   Checks whether all properties have valid values.
@@ -89,5 +115,8 @@ namespace WallpaperManager.Models {
       Contract.Invariant(this.ImagePath != Path.None);
       Contract.Invariant(this.ImageSize.Width > 0 && this.ImageSize.Height > 0);
     }
+
+    public abstract object Clone();
+    public abstract void AssignTo(object other);
   }
 }

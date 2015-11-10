@@ -398,7 +398,7 @@ namespace WallpaperManager.ViewModels {
 
     /// <summary>
     ///   Called when <see cref="ActivateDeactivateSelectedCommand" /> is executed.
-    ///   Toggles the <see cref="WallpaperSettingsBase.IsActivated" /> state of the <see cref="SelectedCategoryVM" />.
+    ///   Toggles the <see cref="WallpaperBase.IsActivated" /> state of the <see cref="SelectedCategoryVM" />.
     /// </summary>
     /// <seealso cref="ActivateDeactivateSelectedCommand" />
     protected void ActivateDeactivateSelectedCommand_Execute() {

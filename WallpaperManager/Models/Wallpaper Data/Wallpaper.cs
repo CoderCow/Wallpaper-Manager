@@ -8,106 +8,33 @@ using System.Drawing;
 using System.Windows.Forms;
 using Common;
 using Common.IO;
+using PropertyChanged;
 
 namespace WallpaperManager.Models {
   /// <summary>
   ///   Contains wallpaper related data.
   /// </summary>
   /// <threadsafety static="true" instance="false" />
-  public class Wallpaper : WallpaperSettingsBase, ICloneable, IAssignable {
-    /// <summary>
-    ///   <inheritdoc cref="ImagePath" select='../value/node()' />
-    /// </summary>
-    private Path imagePath;
-
+  [ImplementPropertyChanged]
+  public class Wallpaper : WallpaperBase, IWallpaper, ICloneable, IAssignable {
     /// <summary>
     ///   <inheritdoc cref="ImageSize" select='../value/node()' />
     /// </summary>
     private Size imageSize;
 
-    /// <summary>
-    ///   <inheritdoc cref="SuggestIsMultiscreen" select='../value/node()' />
-    /// </summary>
-    private bool suggestIsMultiscreen;
-
-    /// <summary>
-    ///   <inheritdoc cref="SuggestPlacement" select='../value/node()' />
-    /// </summary>
-    private bool suggestPlacement;
-
-    /// <summary>
-    ///   Gets a <see cref="bool" /> indicating whether any properties of this instance had been changed since it has been
-    ///   instanced.
-    /// </summary>
-    /// <value>
-    ///   A <see cref="bool" /> indicating whether any properties of this instance had been changed since it has been
-    ///   instanced.
-    /// </value>
+    /// <inheritdoc />
     public bool IsBlank { get; private set; }
 
-    /// <summary>
-    ///   Gets a <see cref="bool" /> indicating whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> setting should
-    ///   be automatically suggested for this wallpaper or not.
-    /// </summary>
-    /// <value>
-    ///   A <see cref="bool" /> indicating whether the <see cref="WallpaperSettingsBase.IsMultiscreen" /> setting should be
-    ///   automatically suggested for this wallpaper or not.
-    /// </value>
-    public bool SuggestIsMultiscreen {
-      get { return this.suggestIsMultiscreen; }
-      set {
-        this.suggestIsMultiscreen = value;
-        this.OnPropertyChanged("SuggestIsMultiscreen");
-      }
-    }
+    /// <inheritdoc />
+    public bool SuggestIsMultiscreen { get; set; }
 
-    /// <summary>
-    ///   Gets a <see cref="bool" /> indicating whether <see cref="WallpaperSettingsBase.Placement" /> setting should be
-    ///   automatically suggested for this wallpaper or not.
-    /// </summary>
-    /// <value>
-    ///   A <see cref="bool" /> indicating whether <see cref="WallpaperSettingsBase.Placement" /> setting should be
-    ///   automatically suggested for this wallpaper or not.
-    /// </value>
-    public bool SuggestPlacement {
-      get { return this.suggestPlacement; }
-      set {
-        this.suggestPlacement = value;
-        this.OnPropertyChanged("SuggestPlacement");
-      }
-    }
+    /// <inheritdoc />
+    public bool SuggestPlacement { get; set; }
 
-    /// <summary>
-    ///   Gets or sets the path of the image file of this wallpaper.
-    /// </summary>
-    /// <value>
-    ///   The path of the image file of this wallpaper.
-    /// </value>
-    public Path ImagePath {
-      get { return this.imagePath; }
-      set {
-        this.imagePath = value;
-        this.OnPropertyChanged("ImagePath");
-      }
-    }
+    /// <inheritdoc />
+    public Path ImagePath { get; set; }
 
-    /// <summary>
-    ///   Gets or sets the size of the image where <see cref="ImagePath" /> is reffering to.
-    /// </summary>
-    /// <value>
-    ///   The size of the image where <see cref="ImagePath" /> is reffering to.
-    /// </value>
-    /// <remarks>
-    ///   When this property is changed for the first time, and their respective <see cref="SuggestPlacement" /> and
-    ///   <see cref="SuggestIsMultiscreen" /> properties are <c>true</c>, it will cause the
-    ///   <see cref="WallpaperSettingsBase.Placement" /> and <see cref="WallpaperSettingsBase.IsMultiscreen" /> properties to
-    ///   be
-    ///   suggested automatically related to the new image size.
-    /// </remarks>
-    /// <seealso cref="WallpaperSettingsBase.Placement">WallpaperSettingsBase.Placement Property</seealso>
-    /// <seealso cref="WallpaperSettingsBase.IsMultiscreen">WallpaperSettingsBase.IsMultiscreen Property</seealso>
-    /// <seealso cref="SuggestPlacement">SuggestPlacement Property</seealso>
-    /// <seealso cref="SuggestIsMultiscreen">SuggestIsMultiscreen Property</seealso>
+    /// <inheritdoc />
     public Size ImageSize {
       get { return this.imageSize; }
       set {
@@ -116,9 +43,18 @@ namespace WallpaperManager.Models {
         this.SuggestSettings(value);
 
         this.imageSize = value;
-        this.OnPropertyChanged("ImageSize");
       }
     }
+
+    // TODO: Implement those in cycler
+    /// <inheritdoc />
+    public DateTime TimeLastCycled { get; set; }
+
+    /// <inheritdoc />
+    public DateTime TimeAdded { get; set; }
+
+    /// <inheritdoc />
+    public int CycleCount { get; set; }
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="Wallpaper" /> class.
@@ -134,24 +70,40 @@ namespace WallpaperManager.Models {
     ///   The path of the image file of this wallpaper.
     /// </param>
     public Wallpaper(Path imagePath) : this() {
-      this.imagePath = imagePath;
+      this.ImagePath = imagePath;
     }
 
-    /// <summary>
-    ///   Checks whether the cycle conditions for this wallpaper match or not.
-    /// </summary>
-    /// <returns>
-    ///   A <see cref="bool" /> indicating whether the cycle conditions match.
-    /// </returns>
+    #region Overrides of ValidatableBase
+    /// <inheritdoc />
+    protected override string InvalidatePropertyInternal(string propertyName) {
+      if (propertyName == nameof(this.imageSize))
+        if (this.imageSize.Width < 0 || this.ImageSize.Height < 0)
+          return "Image width and height must be greater or eqal to zero.";
+
+      else if (propertyName == nameof(this.ImagePath))
+        if (this.ImagePath == Path.None)
+          return "This is not a valid path.";
+      
+      string error = base.InvalidatePropertyInternal(propertyName);
+      if (!string.IsNullOrEmpty(error))
+        return error;
+
+      return null;
+    }
+    #endregion
+
+    // TODO: move to other type
+    /// <inheritdoc />
     public bool EvaluateCycleConditions() {
       TimeSpan timeOfDay = DateTime.Now.TimeOfDay;
 
       return ((timeOfDay >= this.OnlyCycleBetweenStart) && (timeOfDay <= this.OnlyCycleBetweenStop));
     }
 
+    // TODO: move to other type
     /// <summary>
-    ///   Automatically suggests <see cref="WallpaperSettingsBase.IsMultiscreen" /> and
-    ///   <see cref="WallpaperSettingsBase.Placement" /> using the given <paramref name="imageSize" /> value if their
+    ///   Automatically suggests <see cref="WallpaperBase.IsMultiscreen" /> and
+    ///   <see cref="WallpaperBase.Placement" /> using the given <paramref name="imageSize" /> value if their
     ///   respective
     ///   <see cref="SuggestIsMultiscreen" /> and <see cref="SuggestPlacement" /> properties return <c>true</c>.
     /// </summary>
@@ -187,17 +139,6 @@ namespace WallpaperManager.Models {
         this.IsMultiscreen = false;
     }
 
-    /// <commondoc select='INotifyPropertyChanged/Methods/OnPropertyChanged/*' />
-    protected override void OnPropertyChanged(string propertyName) {
-      base.OnPropertyChanged(propertyName);
-
-      // Image size is sometimes set after the class is being constructed.
-      if (propertyName != "ImageSize")
-        this.IsBlank = false;
-
-      base.OnPropertyChanged("IsBlank");
-    }
-
     /// <summary>
     ///   Generates a <see cref="string" /> containing the <see cref="ImagePath" />.
     /// </summary>
@@ -205,7 +146,7 @@ namespace WallpaperManager.Models {
     ///   A <see cref="string" /> containing the <see cref="ImagePath" />.
     /// </returns>
     public override string ToString() {
-      return $"ImagePath: {this.ImagePath}";
+      return $"{nameof(this.ImagePath)}: {this.ImagePath}";
     }
 
     #region ICloneable Implementation, IAssignable Implementation
@@ -213,29 +154,19 @@ namespace WallpaperManager.Models {
     public override object Clone() {
       Wallpaper clonedInstance = new Wallpaper(this.ImagePath);
 
-      // Clone all fields defined by WallpaperSettingsBase.
+      // Clone all fields defined by WallpaperBase.
       base.Clone(clonedInstance);
 
       clonedInstance.IsBlank = this.IsBlank;
-      clonedInstance.imagePath = this.ImagePath;
+      clonedInstance.ImagePath = this.ImagePath;
       clonedInstance.imageSize = this.ImageSize;
 
       return clonedInstance;
     }
 
-    /// <summary>
-    ///   Assigns all member values of this instance to the respective members of the given instance.
-    /// </summary>
-    /// <param name="other">
-    ///   The target instance to assign to.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <paramref name="other" /> is <c>null</c>.
-    /// </exception>
-    protected override void AssignTo(WallpaperSettingsBase other) {
-      Contract.Requires<ArgumentNullException>(other != null);
-
-      // Assign all members defined by WallpaperSettingsBase.
+    /// <inheritdoc />
+    protected override void AssignTo(WallpaperBase other) {
+      // Assign all members defined by WallpaperBase.
       base.AssignTo(other);
 
       Wallpaper wallpaperInstance = (other as Wallpaper);

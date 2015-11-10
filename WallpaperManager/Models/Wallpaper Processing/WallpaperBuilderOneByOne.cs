@@ -73,14 +73,14 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The collection of <see cref="Wallpaper" /> instances used for the last build.
     /// </value>
-    protected List<Wallpaper> LastScreenLayout { get; }
+    protected List<IWallpaper> LastScreenLayout { get; }
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperBuilderOneByOne" /> class.
     /// </summary>
     /// <inheritdoc />
     public WallpaperBuilderOneByOne(ScreenSettingsCollection screensSettings) : base(screensSettings) {
-      this.LastScreenLayout = new List<Wallpaper>(Screen.AllScreens.Length);
+      this.LastScreenLayout = new List<IWallpaper>(Screen.AllScreens.Length);
     }
 
     /// <summary>
@@ -98,10 +98,10 @@ namespace WallpaperManager.Models {
     ///   required on further calls.
     /// </summary>
     /// <inheritdoc />
-    public override Image CreateMultiscreenFromMultiple(IList<IList<Wallpaper>> wallpapers, float scaleFactor, bool useWindowsFix) {
+    public override Image CreateMultiscreenFromMultiple(IList<IList<IWallpaper>> wallpapers, float scaleFactor, bool useWindowsFix) {
       // This is the collection of Wallpapers which is finally given to the generator method.
       // Note that the order of the Wallpapers in this collection has to be equal with the screen order.
-      List<Wallpaper> usedWallpapers = this.LastScreenLayout;
+      List<IWallpaper> usedWallpapers = this.LastScreenLayout;
 
       // Check if we can use the last layout and if so, change just one of the Wallpapers in it.
       if ((this.LastScreenLayout.Count == this.ScreensSettings.Count) && (!this.ScreensSettings.AllStatic)) {
