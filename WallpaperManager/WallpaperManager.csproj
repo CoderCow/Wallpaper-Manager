@@ -34,6 +34,8 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>\publish\</PublishUrl>
     <Install>false</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -53,8 +55,6 @@
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>false</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -200,8 +200,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="CollectionPropertyChangedListener.cs" />
-    <Compile Include="Models\IWallpaperTextOverlay.cs" />
+    <Compile Include="Models\CollectionPropertyChangedListener.cs" />
+    <Compile Include="Models\Interfaces\IWallpaperTextOverlay.cs" />
     <Compile Include="Models\ValidatableBase.cs" />
     <Compile Include="Models\EventArgs\RequestWallpapersEventArgs.cs" />
     <Compile Include="Models\EventArgs\VersionCheckSuccessfulEventArgs.cs" />
@@ -212,7 +212,7 @@
     <Compile Include="Models\Wallpaper Processing\WallpaperBuilderOneByOne.cs" />
     <Compile Include="Models\Wallpaper Processing\WallpaperChanger.cs" />
     <Compile Include="Models\AppEnvironment.cs" />
-    <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\Configuration\Configuration.cs" />
     <Compile Include="Models\Enumerations\TextOverlayPosition.cs" />
     <Compile Include="Models\Enumerations\TrayIconClickAction.cs" />
     <Compile Include="Models\Enumerations\WallpaperChangeType.cs" />
@@ -335,7 +335,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Any" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_ConfigurationName="Any" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\Fody.1.29.3\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.3\build\dotnet\Fody.targets')" />

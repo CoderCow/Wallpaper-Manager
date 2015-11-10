@@ -61,4 +61,4 @@ using System.Windows;
 [assembly: AssemblyFileVersion("2.0.749.3")]
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: Guid("47E92347-58F0-4881-AB6B-2F9FC2362B76")]
-[assembly: CLSCompliant(true)]
+[assembly: CLSCompliant(false)]
