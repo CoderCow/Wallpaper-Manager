@@ -24,7 +24,7 @@ namespace WallpaperManager.Models {
         for (int i = 0; i < this.ScreensSettings.Count; i++) {
           // We want to use a random Wallpaper if random cycling is requested or if a Static Wallpaper should be used but its
           // cycle conditions don't match.
-          if ((this.ScreensSettings[i].CycleRandomly) || (!this.ScreensSettings[i].StaticWallpaper.EvaluateCycleConditions())) {
+          if ((this.ScreensSettings[i].CycleRandomly) || (!WallpaperChanger.EvaluateCycleConditions(this.ScreensSettings[i].StaticWallpaper))) {
             requiredWallpapersByScreen[i] = 1;
             break;
           }
@@ -55,7 +55,7 @@ namespace WallpaperManager.Models {
       for (int i = 0; i < this.ScreensSettings.Count; i++) {
         // We want to use a random Wallpaper if random cycling is requested or if a static wallpaper should be used but its
         // cycle conditions don't match.
-        if ((this.ScreensSettings[i].CycleRandomly) || (!this.ScreensSettings[i].StaticWallpaper.EvaluateCycleConditions())) {
+        if ((this.ScreensSettings[i].CycleRandomly) || (!WallpaperChanger.EvaluateCycleConditions(this.ScreensSettings[i].StaticWallpaper))) {
           cloneSourceScreenIndex = i;
           break;
         }
@@ -65,7 +65,7 @@ namespace WallpaperManager.Models {
       foreach (ScreenSettings screenSetting in this.ScreensSettings) {
         // We want to use a random Wallpaper if random cycling is requested or if a Static Wallpaper should be used but its
         // cycle conditions don't match.
-        if ((screenSetting.CycleRandomly) || (!screenSetting.StaticWallpaper.EvaluateCycleConditions())) {
+        if ((screenSetting.CycleRandomly) || (!WallpaperChanger.EvaluateCycleConditions(screenSetting.StaticWallpaper))) {
           // A random Wallpaper is requested for this screen.
           // Note that we always add the first random wallpaper here since it should be cloned on all screens.
           usedWallpapers.Add(wallpapers[cloneSourceScreenIndex][0]);

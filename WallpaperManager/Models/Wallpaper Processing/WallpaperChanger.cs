@@ -598,10 +598,10 @@ namespace WallpaperManager.Models {
         if (!wallpaper.IsActivated)
           continue;
 
-        if (isMultiscreenSystem && wallpaper.IsMultiscreen && wallpaper.EvaluateCycleConditions())
+        if (isMultiscreenSystem && wallpaper.IsMultiscreen && EvaluateCycleConditions(wallpaper))
           return true;
 
-        if (!wallpaper.IsMultiscreen && wallpaper.EvaluateCycleConditions()) {
+        if (!wallpaper.IsMultiscreen && EvaluateCycleConditions(wallpaper)) {
           singleScreenWPsNeeded--;
 
           if (singleScreenWPsNeeded <= 0)
@@ -610,6 +610,18 @@ namespace WallpaperManager.Models {
       }
 
       return false;
+    }
+
+    /// <summary>
+    ///   Checks whether the cycle conditions for this wallpaper match or not.
+    /// </summary>
+    /// <returns>
+    ///   A <see cref="bool" /> indicating whether the cycle conditions match.
+    /// </returns>
+    public static bool EvaluateCycleConditions(IWallpaper wallpaper) {
+      TimeSpan timeOfDay = DateTime.Now.TimeOfDay;
+
+      return ((timeOfDay >= wallpaper.OnlyCycleBetweenStart) && (timeOfDay <= wallpaper.OnlyCycleBetweenStop));
     }
 
     /// <summary>
@@ -833,7 +845,7 @@ namespace WallpaperManager.Models {
 
           if (
             //(considerLastActives && this.lastCycledWallpapers.Contains(wallpaper)) ||
-            (considerConditions && !filteredWallpapers[i].EvaluateCycleConditions())) {
+            (considerConditions && !WallpaperChanger.EvaluateCycleConditions(filteredWallpapers[i]))) {
             // We shouldn't remove too many wallpapers.
             if (filteredWallpapers.Count == requiredWallpaperCount) {
               considerLastActives = false;

@@ -142,7 +142,7 @@ namespace WallpaperManager.Models {
           Rectangle? multiscreenWallpaperRect = null;
 
           for (int i = 0; i < this.ScreensSettings.Count; i++) {
-            if (this.ScreensSettings[i].CycleRandomly || !this.ScreensSettings[i].StaticWallpaper.EvaluateCycleConditions()) {
+            if (this.ScreensSettings[i].CycleRandomly || !WallpaperChanger.EvaluateCycleConditions(this.ScreensSettings[i].StaticWallpaper)) {
               if (multiscreenWallpaperRect == null)
                 multiscreenWallpaperRect = this.ScreensSettings[i].BoundsWithMargin;
               else
@@ -165,7 +165,7 @@ namespace WallpaperManager.Models {
           for (int i = 0; i < this.ScreensSettings.Count; i++) {
             destinationGraphics.SetClip(this.ScreensSettings[i].BoundsWithMargin);
 
-            if (!this.ScreensSettings[i].CycleRandomly && this.ScreensSettings[i].StaticWallpaper.EvaluateCycleConditions()) {
+            if (!this.ScreensSettings[i].CycleRandomly && WallpaperChanger.EvaluateCycleConditions(this.ScreensSettings[i].StaticWallpaper)) {
               WallpaperBuilderBase.DrawWallpaper(
                 destinationGraphics,
                 this.ScreensSettings[i].BoundsWithMargin,

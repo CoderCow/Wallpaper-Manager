@@ -3,6 +3,7 @@
 // All other rights reserved.
 
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Windows.Forms;
@@ -17,36 +18,15 @@ namespace WallpaperManager.Models {
   /// <threadsafety static="true" instance="false" />
   [ImplementPropertyChanged]
   public class Wallpaper : WallpaperBase, IWallpaper, ICloneable, IAssignable {
-    /// <summary>
-    ///   <inheritdoc cref="ImageSize" select='../value/node()' />
-    /// </summary>
-    private Size imageSize;
-
     /// <inheritdoc />
-    public bool IsBlank { get; private set; }
-
-    /// <inheritdoc />
-    public bool SuggestIsMultiscreen { get; set; }
-
-    /// <inheritdoc />
-    public bool SuggestPlacement { get; set; }
+    public bool IsImageSizeResolved { get; set; }
 
     /// <inheritdoc />
     public Path ImagePath { get; set; }
 
     /// <inheritdoc />
-    public Size ImageSize {
-      get { return this.imageSize; }
-      set {
-        // Auto determine the best settings for the wallpaper, if necessary.
-        // TODO: Dont do this in a property setter
-        this.SuggestSettings(value);
+    public Size ImageSize { get; set; }
 
-        this.imageSize = value;
-      }
-    }
-
-    // TODO: Implement those in cycler
     /// <inheritdoc />
     public DateTime TimeLastCycled { get; set; }
 
@@ -54,14 +34,16 @@ namespace WallpaperManager.Models {
     public DateTime TimeAdded { get; set; }
 
     /// <inheritdoc />
-    public int CycleCount { get; set; }
+    public int CycleCountWeek { get; set; }
+
+    /// <inheritdoc />
+    public int CycleCountTotal { get; set; }
+    
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="Wallpaper" /> class.
     /// </summary>
-    public Wallpaper() {
-      this.IsBlank = true;
-    }
+    public Wallpaper() {}
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="Wallpaper" /> class using the given image path.
@@ -76,8 +58,8 @@ namespace WallpaperManager.Models {
     #region Overrides of ValidatableBase
     /// <inheritdoc />
     protected override string InvalidatePropertyInternal(string propertyName) {
-      if (propertyName == nameof(this.imageSize))
-        if (this.imageSize.Width < 0 || this.ImageSize.Height < 0)
+      if (propertyName == nameof(this.ImageSize))
+        if (this.ImageSize.Width < 0 || this.ImageSize.Height < 0)
           return "Image width and height must be greater or eqal to zero.";
 
       else if (propertyName == nameof(this.ImagePath))
@@ -92,53 +74,6 @@ namespace WallpaperManager.Models {
     }
     #endregion
 
-    // TODO: move to other type
-    /// <inheritdoc />
-    public bool EvaluateCycleConditions() {
-      TimeSpan timeOfDay = DateTime.Now.TimeOfDay;
-
-      return ((timeOfDay >= this.OnlyCycleBetweenStart) && (timeOfDay <= this.OnlyCycleBetweenStop));
-    }
-
-    // TODO: move to other type
-    /// <summary>
-    ///   Automatically suggests <see cref="WallpaperBase.IsMultiscreen" /> and
-    ///   <see cref="WallpaperBase.Placement" /> using the given <paramref name="imageSize" /> value if their
-    ///   respective
-    ///   <see cref="SuggestIsMultiscreen" /> and <see cref="SuggestPlacement" /> properties return <c>true</c>.
-    /// </summary>
-    /// <param name="imageSize">
-    ///   The size of the image to suggest settings for.
-    /// </param>
-    protected void SuggestSettings(Size imageSize) {
-      if (this.SuggestPlacement) {
-        // If the wallpaper is pretty small, we guess that it will maybe used 
-        // in "Tile" mode, otherwise we recommend "StretchWithRatio" mode.
-        if ((imageSize.Width < 640) || (imageSize.Height < 480))
-          this.Placement = WallpaperPlacement.Tile;
-        else
-          this.Placement = WallpaperPlacement.Uniform;
-
-        this.SuggestPlacement = false;
-      }
-
-      if (Screen.AllScreens.Length > 1) {
-        if (this.SuggestIsMultiscreen) {
-          Rectangle primaryScreenBounds = Screen.PrimaryScreen.Bounds;
-
-          // If the wallpaper's width is at least 150% of the primary screen, we guess that it will 
-          // be used as an multi screen wallpaper.
-          if (imageSize.Width > (primaryScreenBounds.Width * 1.50)) {
-            this.IsMultiscreen = true;
-            this.Placement = WallpaperPlacement.UniformToFill;
-          }
-
-          this.SuggestIsMultiscreen = false;
-        }
-      } else
-        this.IsMultiscreen = false;
-    }
-
     /// <summary>
     ///   Generates a <see cref="string" /> containing the <see cref="ImagePath" />.
     /// </summary>
@@ -152,27 +87,27 @@ namespace WallpaperManager.Models {
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />
     public override object Clone() {
-      Wallpaper clonedInstance = new Wallpaper(this.ImagePath);
+      Wallpaper clone = (Wallpaper)this.MemberwiseClone();
 
-      // Clone all fields defined by WallpaperBase.
-      base.Clone(clonedInstance);
+      clone.DisabledScreens = new Collection<int>();
+      foreach (int screenIndex in this.DisabledScreens)
+        clone.DisabledScreens.Add(screenIndex);
 
-      clonedInstance.IsBlank = this.IsBlank;
-      clonedInstance.ImagePath = this.ImagePath;
-      clonedInstance.imageSize = this.ImageSize;
-
-      return clonedInstance;
+      return clone;
     }
 
     /// <inheritdoc />
     protected override void AssignTo(WallpaperBase other) {
-      // Assign all members defined by WallpaperBase.
       base.AssignTo(other);
 
       Wallpaper wallpaperInstance = (other as Wallpaper);
       if (wallpaperInstance != null) {
         wallpaperInstance.ImagePath = this.ImagePath;
         wallpaperInstance.ImageSize = this.ImageSize;
+        wallpaperInstance.TimeLastCycled = this.TimeLastCycled;
+        wallpaperInstance.TimeAdded = this.TimeAdded;
+        wallpaperInstance.CycleCountWeek = this.CycleCountWeek;
+        wallpaperInstance.CycleCountTotal = this.CycleCountTotal;
       }
     }
     #endregion

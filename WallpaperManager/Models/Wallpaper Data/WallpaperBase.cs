@@ -3,6 +3,7 @@
 // All other rights reserved.
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Drawing;
@@ -53,7 +54,7 @@ namespace WallpaperManager.Models {
     public Color BackgroundColor { get; set; }
 
     /// <inheritdoc />
-    public Collection<int> DisabledScreens { get; private set; }
+    public ICollection<int> DisabledScreens { get; protected set; }
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperBase" /> class.
@@ -94,25 +95,6 @@ namespace WallpaperManager.Models {
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />
     public abstract object Clone();
-
-    /// <summary>
-    ///   Clones all members of the current instance and assigns them to the given instance.
-    /// </summary>
-    /// <param name="instance">
-    ///   The instance to assign the cloned members to.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    ///   <paramref name="instance" /> is <c>null</c>.
-    /// </exception>
-    protected void Clone(WallpaperBase instance) {
-      Contract.Requires<ArgumentNullException>(instance != null);
-
-      this.AssignTo(instance);
-
-      instance.DisabledScreens = new Collection<int>();
-      foreach (int screenIndex in this.DisabledScreens)
-        instance.DisabledScreens.Add(screenIndex);
-    }
 
     /// <inheritdoc />
     public void AssignTo(object other) {

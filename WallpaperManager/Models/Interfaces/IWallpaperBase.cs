@@ -3,6 +3,7 @@
 // All other rights reserved.
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Drawing;
@@ -108,13 +109,13 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   A collection of screen indexes where this wallpaper is not allowed to be cycled on.
     /// </value>
-    Collection<int> DisabledScreens { get; }
+    ICollection<int> DisabledScreens { get; }
   }
 
   [ContractClassFor(typeof(IWallpaperBase))]
   internal abstract class IWallpaperBaseContracts : IWallpaperBase {
     public abstract Color BackgroundColor { get; set; }
-    public abstract Collection<int> DisabledScreens { get; }
+    public abstract ICollection<int> DisabledScreens { get; }
     public abstract WallpaperEffects Effects { get; set; }
     public abstract bool IsActivated { get; set; }
     public abstract bool IsMultiscreen { get; set; }

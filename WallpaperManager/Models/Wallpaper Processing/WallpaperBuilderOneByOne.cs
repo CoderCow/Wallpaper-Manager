@@ -39,7 +39,7 @@ namespace WallpaperManager.Models {
             // cycle conditions don't match.
             if (
               this.ScreensSettings[currentScreenIndex].CycleRandomly ||
-              !this.ScreensSettings[currentScreenIndex].StaticWallpaper.EvaluateCycleConditions()) {
+              !WallpaperChanger.EvaluateCycleConditions(this.ScreensSettings[currentScreenIndex].StaticWallpaper)) {
               requiredWallpapersByScreen[currentScreenIndex] = 1;
               break;
             }
@@ -50,7 +50,7 @@ namespace WallpaperManager.Models {
           for (int i = 0; i < this.ScreensSettings.Count; i++) {
             // We want to use a random Wallpaper if random cycling is requested or if a Static Wallpaper should be used but its
             // cycle conditions don't match.
-            if ((this.ScreensSettings[i].CycleRandomly) || (!this.ScreensSettings[i].StaticWallpaper.EvaluateCycleConditions()))
+            if ((this.ScreensSettings[i].CycleRandomly) || (!WallpaperChanger.EvaluateCycleConditions(this.ScreensSettings[i].StaticWallpaper)))
               requiredWallpapersByScreen[i] = 1;
           }
         }
@@ -116,7 +116,7 @@ namespace WallpaperManager.Models {
 
           // We want to use a random Wallpaper if random cycling is requested or if a Static Wallpaper should be used but its
           // cycle conditions don't match.
-          if (this.ScreensSettings[currentScreenIndex].CycleRandomly || !this.ScreensSettings[currentScreenIndex].StaticWallpaper.EvaluateCycleConditions())
+          if (this.ScreensSettings[currentScreenIndex].CycleRandomly || !WallpaperChanger.EvaluateCycleConditions(this.ScreensSettings[currentScreenIndex].StaticWallpaper))
             break;
 
           currentScreenIndex++;
@@ -139,7 +139,7 @@ namespace WallpaperManager.Models {
       for (int i = 0; i < this.ScreensSettings.Count; i++) {
         // We use a random Wallpaper if random cycling is requested or if a Static Wallpaper should be used but its
         // cycle conditions don't match.
-        if ((this.ScreensSettings[i].CycleRandomly) || (!this.ScreensSettings[i].StaticWallpaper.EvaluateCycleConditions()))
+        if ((this.ScreensSettings[i].CycleRandomly) || (!WallpaperChanger.EvaluateCycleConditions(this.ScreensSettings[i].StaticWallpaper)))
           usedWallpapers.Add(wallpapers[i][0]);
         else
           usedWallpapers.Add(this.ScreensSettings[i].StaticWallpaper);
