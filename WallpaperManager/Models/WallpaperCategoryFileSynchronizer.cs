@@ -190,7 +190,7 @@ namespace WallpaperManager.Models {
       Path filePath = new Path(e.FullPath);
 
       this.InvokeDispatcher.Invoke(() => {
-        Wallpaper existingWallpaper = this.WallpaperCategory.Wallpapers.FirstOrDefault(wp => wp.ImagePath == filePath);
+        IWallpaper existingWallpaper = this.WallpaperCategory.Wallpapers.FirstOrDefault(wp => wp.ImagePath == filePath);
         if (existingWallpaper != null)
           this.WallpaperCategory.Wallpapers.Remove(existingWallpaper);
       }, DispatcherPriority.Background);
@@ -209,7 +209,7 @@ namespace WallpaperManager.Models {
       Path newFilePath = new Path(e.FullPath);
 
       this.InvokeDispatcher.Invoke(() => {
-        Wallpaper existingWallpaper = this.WallpaperCategory.Wallpapers.FirstOrDefault(wp => wp.ImagePath == oldFilePath);
+        IWallpaper existingWallpaper = this.WallpaperCategory.Wallpapers.FirstOrDefault(wp => wp.ImagePath == oldFilePath);
         if (existingWallpaper != null)
           existingWallpaper.ImagePath = newFilePath;
         else

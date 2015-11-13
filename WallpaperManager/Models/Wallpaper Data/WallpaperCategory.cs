@@ -21,14 +21,14 @@ namespace WallpaperManager.Models {
   /// <remarks>
   ///   <para>
   ///     This collection observes all containing <see cref="Wallpaper" /> objects for changes of their
-  ///     <see cref="WallpaperBase.IsActivated" /> property and updates its own <see cref="IsActivated" /> property
+  ///     <see cref="IWallpaperBase.IsActivated" /> property and updates its own <see cref="IsActivated" /> property
   ///     related to them.
   ///   </para>
   ///   <para>
   ///     <commondoc select='ObservableCollections/General/remarks/node()' />
   ///   </para>
   /// </remarks>
-  /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
+  /// <seealso cref="IWallpaper">Wallpaper Interface</seealso>
   public class WallpaperCategory : ValidatableBase, IWallpaperCategory {
     /// <summary>
     ///   Represents the version number contained in the serialization info for backward compatibility.
@@ -43,7 +43,7 @@ namespace WallpaperManager.Models {
     /// <summary>
     ///   Represents the highest length allowed for a category name.
     /// </summary>
-    public const int Name_MaxLength = 100;
+    public const int Name_MaxLength = 30;
 
     /// <summary>
     ///   <inheritdoc cref="IsActivated" select="../value/node()" />
@@ -51,14 +51,9 @@ namespace WallpaperManager.Models {
     private bool? isActivated;
 
     /// <summary>
-    ///   <inheritdoc cref="WallpaperDefaultSettings" select='../value/node()' />
-    /// </summary>
-    private WallpaperDefaultSettings wallpaperDefaultSettings;
-
-    /// <summary>
     ///   Used to listen for property changes on all wallpapers in this category.
     /// </summary>
-    private readonly CollectionPropertyChangedListener<Wallpaper> wallpapersPropertyChangedListener;
+    private readonly CollectionPropertyChangedListener<IWallpaper> wallpapersPropertyChangedListener;
 
     private bool ignoreWallpaperChanges;
 
@@ -79,7 +74,7 @@ namespace WallpaperManager.Models {
 
         try {
           this.ignoreWallpaperChanges = true;
-          foreach (Wallpaper wallpaper in this.Wallpapers)
+          foreach (IWallpaper wallpaper in this.Wallpapers)
             wallpaper.IsActivated = value.Value;
         } finally {
           this.ignoreWallpaperChanges = false;
@@ -96,7 +91,7 @@ namespace WallpaperManager.Models {
     /// <inheritdoc />
     public IWallpaperDefaultSettings WallpaperDefaultSettings { get; set; }
 
-    public ObservableCollection<Wallpaper> Wallpapers { get; }
+    public ObservableCollection<IWallpaper> Wallpapers { get; }
 
     public int Count => this.Wallpapers.Count;
 
@@ -110,40 +105,34 @@ namespace WallpaperManager.Models {
     ///   A collection of wallpapers which should be added to the category be default.
     ///   Set to <c>null</c> to create an empty category.
     /// </param>
-    /// <exception cref="ArgumentException">
-    ///   <paramref name="name" /> contains invalid characters.
-    /// </exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///   <paramref name="name" /> is a string which's length is lower than 1 or greater than 100 chars.
-    /// </exception>
-    /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
+    /// <seealso cref="IWallpaper">Wallpaper Interface</seealso>
     /// <overloads>
     ///   <summary>
     ///     Initializes a new instance of the <see cref="WallpaperCategory" /> class.
     ///   </summary>
-    ///   <seealso cref="Wallpaper">Wallpaper Class</seealso>
+    ///   <seealso cref="IWallpaper">Wallpaper Interface</seealso>
     /// </overloads>
-    public WallpaperCategory(string name, WallpaperDefaultSettings defaultSettings, IEnumerable<Wallpaper> wallpapers = null) {
-      Contract.Requires<ArgumentOutOfRangeException>(name.Length.IsBetween(WallpaperCategory.Name_MinLength, WallpaperCategory.Name_MaxLength));
-      Contract.Requires<ArgumentException>(!WallpaperCategory.Name_InvalidChars.Any(name.Contains));
+    public WallpaperCategory(string name, WallpaperDefaultSettings defaultSettings, IEnumerable<IWallpaper> wallpapers = null) {
+      Contract.Requires<ArgumentNullException>(name != null);
+      Contract.Requires<ArgumentNullException>(defaultSettings != null);
 
       this.Name = name;
       if (wallpapers == null)
-        this.Wallpapers = new ObservableCollection<Wallpaper>();
+        this.Wallpapers = new ObservableCollection<IWallpaper>();
       else
-        this.Wallpapers = new ObservableCollection<Wallpaper>(wallpapers);
+        this.Wallpapers = new ObservableCollection<IWallpaper>(wallpapers);
       
       this.Wallpapers.CollectionChanged += this.Wallpapers_CollectionChanged;
-      this.wallpaperDefaultSettings = defaultSettings;
+      this.WallpaperDefaultSettings = defaultSettings;
 
-      this.wallpapersPropertyChangedListener = new CollectionPropertyChangedListener<Wallpaper>(this.Wallpapers);
+      this.wallpapersPropertyChangedListener = new CollectionPropertyChangedListener<IWallpaper>(this.Wallpapers);
       this.wallpapersPropertyChangedListener.ItemPropertyChanged += this.Wallpaper_PropertyChanged;
     }
 
     private void Wallpapers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
       switch (e.Action) {
         case NotifyCollectionChangedAction.Add: {
-          foreach (Wallpaper newWallpaper in e.NewItems) {
+          foreach (IWallpaper newWallpaper in e.NewItems) {
             // TODO
             /*if (newWallpaper.IsBlank) {
               this.WallpaperDefaultSettings.AssignTo(newWallpaper);
@@ -170,8 +159,8 @@ namespace WallpaperManager.Models {
 
           bool isActivatedStatusRefreshRequired = false;
           for (int i = 0; i < e.NewItems.Count; i++) {
-            Wallpaper oldWallpaper = (Wallpaper)e.OldItems[i];
-            Wallpaper newWallpaper = (Wallpaper)e.NewItems[i];
+            IWallpaper oldWallpaper = (IWallpaper)e.OldItems[i];
+            IWallpaper newWallpaper = (IWallpaper)e.NewItems[i];
 
             if (oldWallpaper.IsActivated != newWallpaper.IsActivated) {
               if (this.IsActivated != null) {
@@ -202,7 +191,7 @@ namespace WallpaperManager.Models {
 
     private void MeasureActiveStatus() {
       bool? newActivatedStatus = null;
-      foreach (Wallpaper wallpaper in this.Wallpapers) {
+      foreach (IWallpaper wallpaper in this.Wallpapers) {
         if (newActivatedStatus != null && newActivatedStatus != wallpaper.IsActivated)
           newActivatedStatus = null;
         else
@@ -215,19 +204,19 @@ namespace WallpaperManager.Models {
     #region Overrides of ValidatableBase
     /// <inheritdoc />
     protected override string InvalidatePropertyInternal(string propertyName) {
-      if (propertyName == nameof(this.Name))
-        if (this.Name == null)
-          return "This field is mandatory.";
-        else if (this.Name.Length < WallpaperCategory.Name_MinLength)
-          return $"The name is too short (minimum is {WallpaperCategory.Name_MinLength}).";
-        else if (this.Name.Length > WallpaperCategory.Name_MaxLength)
-          return $"The name is too long (maximum is {WallpaperCategory.Name_MaxLength}).";
-        else if (WallpaperCategory.Name_InvalidChars.Any(this.Name.Contains))
-          return "The name contains an invalid character.";
-
-      else if (propertyName == nameof(this.WallpaperDefaultSettings))
+      if (propertyName == nameof(this.Name)) {
+        if (this.Name.Length < Name_MinLength)
+          return string.Format(LocalizationManager.GetLocalizedString("Error.Category.NameTooShort"), Name_MinLength);
+        else if (this.Name.Length > Name_MaxLength)
+          return string.Format(LocalizationManager.GetLocalizedString("Error.Category.NameTooLong"), Name_MaxLength);
+        else if (Name_InvalidChars.Any(this.Name.Contains))
+          return LocalizationManager.GetLocalizedString("Error.Category.NameContainsInvalidChar");
+        else if (this.Name.StartsWith(" ") || this.Name.EndsWith(" "))
+          return LocalizationManager.GetLocalizedString("Error.Category.NameStartsOrEndsWithSpace");
+      } else if (propertyName == nameof(this.WallpaperDefaultSettings)) {
         if (this.WallpaperDefaultSettings == null)
           return "This field is mandatory.";
+      }
       
       return null;
     }
@@ -256,12 +245,12 @@ namespace WallpaperManager.Models {
     }*/
 
     /// <summary>
-    ///   Handles the <see cref="WallpaperBase.PropertyChanged" /> event of a <see cref="Wallpaper" /> object.
+    ///   Handles the <see cref="WallpaperBase.PropertyChanged" /> event of a <see cref="IWallpaper" /> object.
     /// </summary>
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
-    private void Wallpaper_PropertyChanged(object sender, CollectionPropertyChangedListener<Wallpaper>.ItemPropertyChangedEventArgs e) {
+    private void Wallpaper_PropertyChanged(object sender, CollectionPropertyChangedListener<IWallpaper>.ItemPropertyChangedEventArgs e) {
       if (!this.ignoreWallpaperChanges) {
-        Wallpaper wallpaper = e.Item;
+        IWallpaper wallpaper = e.Item;
 
         if (e.PropertyName == nameof(wallpaper.IsActivated)) {
           if (this.IsActivated != null) {

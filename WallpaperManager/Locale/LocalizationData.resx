@@ -1495,4 +1495,42 @@
     <value>New Text-Overlay</value>
     <comment>The format string used for a newly created Text-Overlay.</comment>
   </data>
+  <data name="Error.Time.CantBeNegative" xml:space="preserve">
+    <value>Time cannot be a negative value.</value>
+  </data>
+  <data name="Error.Wallpaper.CycleTime.Greater" xml:space="preserve">
+    <value>Start time cannot be greater than stop time.</value>
+  </data>
+  <data name="Error.Wallpaper.CycleTime.Lesser" xml:space="preserve">
+    <value>Stop time cannot be less than start time.</value>
+  </data>
+  <data name="Error.Color.CantBeEmpty" xml:space="preserve">
+    <value>Must be a non-empty color.</value>
+  </data>
+  <data name="Error.FieldIsMandatory" xml:space="preserve">
+    <value>This field is mandatory.</value>
+  </data>
+  <data name="Error.Image.CantBeNegativeSize" xml:space="preserve">
+    <value>Width and height must be greater or eqal to zero.</value>
+  </data>
+  <data name="Error.Path.Invalid" xml:space="preserve">
+    <value>This is not a valid path.</value>
+  </data>
+  <data name="Error.Wallpaper.AddedCycledTimeInvalid" xml:space="preserve">
+    <value>According to its time stamps, the wallpaper was cycled prior it was even added.</value>
+  </data>
+  <data name="Error.Category.NameContainsInvalidChar" xml:space="preserve">
+    <value>The name contains an invalid character.</value>
+  </data>
+  <data name="Error.Category.NameStartsOrEndsWithSpace" xml:space="preserve">
+    <value>The name can not start or end with a whitespace.</value>
+  </data>
+  <data name="Error.Category.NameTooLong" xml:space="preserve">
+    <value>The name is too long (maximum is {0}).</value>
+    <comment>{0} will be replaced with a number.</comment>
+  </data>
+  <data name="Error.Category.NameTooShort" xml:space="preserve">
+    <value>The name is too short (minimum is {0}).</value>
+    <comment>{0} will be replaced with a number.</comment>
+  </data>
 </root>

@@ -19,13 +19,15 @@ namespace WallpaperManager.Models {
   [ImplementPropertyChanged]
   public class Wallpaper : WallpaperBase, IWallpaper, ICloneable, IAssignable {
     /// <inheritdoc />
-    public bool IsImageSizeResolved { get; set; }
+    [DependsOn(nameof(ImageSize))]
+    public bool IsImageSizeResolved => this.ImageSize != null;
 
     /// <inheritdoc />
     public Path ImagePath { get; set; }
 
     /// <inheritdoc />
-    public Size ImageSize { get; set; }
+    
+    public Size? ImageSize { get; set; }
 
     /// <inheritdoc />
     public DateTime TimeLastCycled { get; set; }
@@ -39,38 +41,28 @@ namespace WallpaperManager.Models {
     /// <inheritdoc />
     public int CycleCountTotal { get; set; }
     
-
-    /// <summary>
-    ///   Initializes a new instance of the <see cref="Wallpaper" /> class.
-    /// </summary>
-    public Wallpaper() {}
-
     /// <summary>
     ///   Initializes a new instance of the <see cref="Wallpaper" /> class using the given image path.
     /// </summary>
     /// <param name="imagePath">
     ///   The path of the image file of this wallpaper.
     /// </param>
-    public Wallpaper(Path imagePath) : this() {
+    public Wallpaper(Path imagePath) {
       this.ImagePath = imagePath;
     }
 
     #region Overrides of ValidatableBase
     /// <inheritdoc />
     protected override string InvalidatePropertyInternal(string propertyName) {
-      if (propertyName == nameof(this.ImageSize))
-        if (this.ImageSize.Width < 0 || this.ImageSize.Height < 0)
-          return "Image width and height must be greater or eqal to zero.";
+      if (propertyName == nameof(this.ImageSize)) {
+        if (this.ImageSize != null && (this.ImageSize.Value.Width < 0 || this.ImageSize.Value.Height < 0))
+          return LocalizationManager.GetLocalizedString("Error.Image.CantBeNegativeSize");
+      } else if (propertyName == nameof(this.TimeAdded) || propertyName == nameof(this.TimeLastCycled)) {
+        if (this.TimeAdded > this.TimeLastCycled)
+          return LocalizationManager.GetLocalizedString("Error.Wallpaper.AddedCycledTimeInvalid");
+      }
 
-      else if (propertyName == nameof(this.ImagePath))
-        if (this.ImagePath == Path.Invalid)
-          return "This is not a valid path.";
-      
-      string error = base.InvalidatePropertyInternal(propertyName);
-      if (!string.IsNullOrEmpty(error))
-        return error;
-
-      return null;
+      return base.InvalidatePropertyInternal(propertyName);
     }
     #endregion
 
@@ -104,10 +96,10 @@ namespace WallpaperManager.Models {
       if (wallpaperInstance != null) {
         wallpaperInstance.ImagePath = this.ImagePath;
         wallpaperInstance.ImageSize = this.ImageSize;
-        wallpaperInstance.TimeLastCycled = this.TimeLastCycled;
         wallpaperInstance.TimeAdded = this.TimeAdded;
-        wallpaperInstance.CycleCountWeek = this.CycleCountWeek;
+        wallpaperInstance.TimeLastCycled = this.TimeLastCycled;
         wallpaperInstance.CycleCountTotal = this.CycleCountTotal;
+        wallpaperInstance.CycleCountWeek = this.CycleCountWeek;
       }
     }
     #endregion

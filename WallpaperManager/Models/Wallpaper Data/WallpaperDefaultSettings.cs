@@ -48,13 +48,18 @@ namespace WallpaperManager.Models {
     /// <param name="target">
     ///   The <see cref="Wallpaper" /> to apply the settings to.
     /// </param>
+    /// <exception cref="ArgumentException">
+    ///   <paramref name="target" /> has no image size assigned.
+    /// </exception>
     public void ApplyToWallpaper(Wallpaper target) {
+      Contract.Requires<ArgumentException>(target.IsImageSizeResolved);
+
       this.Settings.AssignTo(target);
 
       if (this.AutoDeterminePlacement) {
         // If the wallpaper is pretty small, we guess that it will maybe used 
         // in "Tile" mode, otherwise we recommend "StretchWithRatio" mode.
-        if ((target.ImageSize.Width <= MaxImageSizeSuitableForTiledWallpaper.Width) || (target.ImageSize.Height <= MaxImageSizeSuitableForTiledWallpaper.Height))
+        if ((target.ImageSize.Value.Width <= MaxImageSizeSuitableForTiledWallpaper.Width) || (target.ImageSize.Value.Height <= MaxImageSizeSuitableForTiledWallpaper.Height))
           target.Placement = WallpaperPlacement.Tile;
         else
           target.Placement = WallpaperPlacement.Uniform;
@@ -67,7 +72,7 @@ namespace WallpaperManager.Models {
         if (this.AutoDetermineIsMultiscreen) {
           Rectangle primaryScreenBounds = Screen.PrimaryScreen.Bounds;
 
-          if (target.ImageSize.Width > (primaryScreenBounds.Width * (MultiscreenWidthOversizeFactor + 1f))) {
+          if (target.ImageSize.Value.Width > (primaryScreenBounds.Width * (MultiscreenWidthOversizeFactor + 1f))) {
             target.IsMultiscreen = true;
             target.Placement = WallpaperPlacement.UniformToFill;
           }

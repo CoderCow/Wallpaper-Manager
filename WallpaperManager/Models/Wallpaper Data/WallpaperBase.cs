@@ -66,27 +66,24 @@ namespace WallpaperManager.Models {
       this.Scale = new Point(0, 0);
       this.OnlyCycleBetweenStart = new TimeSpan(0, 0, 0);
       this.OnlyCycleBetweenStop = new TimeSpan(23, 59, 59);
+      this.BackgroundColor = DefaultBackgroundColor;
       this.DisabledScreens = new Collection<int>();
     }
 
     #region Overrides of ValidatableBase
     /// <inheritdoc />
     protected override string InvalidatePropertyInternal(string propertyName) {
-      if (propertyName == nameof(this.OnlyCycleBetweenStart))
+      if (propertyName == nameof(this.OnlyCycleBetweenStart) || propertyName == nameof(this.OnlyCycleBetweenStop)) {
         if (this.OnlyCycleBetweenStart > this.OnlyCycleBetweenStop)
-          return "Start time cannot be greater than stop time.";
-
-      else if (propertyName == nameof(this.OnlyCycleBetweenStop))
-        if (this.OnlyCycleBetweenStop < this.OnlyCycleBetweenStart)
-          return "Stop time cannot be less than start time.";
-
-      else if (propertyName == nameof(this.Placement))
-        if (!Enum.IsDefined(typeof(WallpaperPlacement), this.Placement))
-          return "Unknown placement provided.";
-
-      else if (propertyName == nameof(this.DisabledScreens))
-        if (this.DisabledScreens == null)
-          return "This field is mandatory.";
+          return LocalizationManager.GetLocalizedString("Error.Wallpaper.CycleTime.Greater");
+        else if (this.OnlyCycleBetweenStop < this.OnlyCycleBetweenStart)
+          return LocalizationManager.GetLocalizedString("Error.Wallpaper.CycleTime.Lesser");
+        else if (this.OnlyCycleBetweenStart < TimeSpan.Zero)
+          return LocalizationManager.GetLocalizedString("Error.Time.CantBeNegative");
+      } else if (propertyName == nameof(this.BackgroundColor)) {
+        if (this.BackgroundColor == Color.Empty)
+          return LocalizationManager.GetLocalizedString("Error.Color.CantBeEmpty");
+      }
 
       return null;
     }

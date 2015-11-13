@@ -15,7 +15,7 @@ namespace WallpaperManager.Models {
   /// </summary>
   [ContractClass(typeof(IWallpaperContracts))]
   public interface IWallpaper : IWallpaperBase {
-    bool IsImageSizeResolved { get; set; }
+    bool IsImageSizeResolved { get; }
 
     /// <summary>
     ///   Gets or sets the path of the image file of this wallpaper.
@@ -31,7 +31,7 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The size of the image where <see cref="ImagePath" /> is reffering to.
     /// </value>
-    Size ImageSize { get; set; }
+    Size? ImageSize { get; set; }
 
     DateTime TimeLastCycled { get; set; }
     DateTime TimeAdded { get; set; }
@@ -55,23 +55,46 @@ namespace WallpaperManager.Models {
     public abstract bool IsBlank { get; set; }
     public abstract bool SuggestIsMultiscreen { get; set; }
     public abstract bool SuggestPlacement { get; set; }
-    public abstract bool IsImageSizeResolved { get; set; }
-    public abstract Path ImagePath { get; set; }
-    public abstract Size ImageSize { get; set; }
     public abstract DateTime TimeLastCycled { get; set; }
     public abstract DateTime TimeAdded { get; set; }
-    public abstract int CycleCountWeek { get; set; }
-    public abstract int CycleCountTotal { get; set; }
 
-    /// <summary>
-    ///   Checks whether all properties have valid values.
-    /// </summary>
-    [ContractInvariantMethod]
-    private void CheckInvariants() {
-      Contract.Invariant(this.ImagePath != Path.Invalid);
-      Contract.Invariant(this.ImageSize.Width > 0 && this.ImageSize.Height > 0);
-      Contract.Invariant(this.CycleCountWeek <= this.CycleCountTotal);
-      Contract.Invariant(this.TimeAdded <= this.TimeLastCycled);
+    public bool IsImageSizeResolved { 
+      get {
+        Contract.Ensures(Contract.Result<bool>() == (this.ImageSize != null));
+        throw new NotImplementedException();
+      }
+    }
+
+    public Path ImagePath {
+      get { throw new NotImplementedException(); }
+      set {
+        Contract.Requires(value != Path.Invalid);
+        throw new NotImplementedException();
+      }
+    }
+
+    public Size? ImageSize {
+      get { throw new NotImplementedException(); }
+      set {
+        Contract.Requires(value == null || (value.Value.Width > 0 && value.Value.Height > 0));
+        throw new NotImplementedException();
+      }
+    }
+
+    public int CycleCountWeek {
+      get { throw new NotImplementedException(); }
+      set {
+        Contract.Requires(value >= 0);
+        throw new NotImplementedException();
+      }
+    }
+
+    public int CycleCountTotal {
+      get { throw new NotImplementedException(); }
+      set {
+        Contract.Requires(value >= 0);  
+        throw new NotImplementedException();
+      }
     }
 
     public abstract object Clone();

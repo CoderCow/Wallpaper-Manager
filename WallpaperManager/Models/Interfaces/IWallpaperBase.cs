@@ -115,25 +115,28 @@ namespace WallpaperManager.Models {
   [ContractClassFor(typeof(IWallpaperBase))]
   internal abstract class IWallpaperBaseContracts : IWallpaperBase {
     public abstract Color BackgroundColor { get; set; }
-    public abstract ICollection<int> DisabledScreens { get; }
-    public abstract WallpaperEffects Effects { get; set; }
     public abstract bool IsActivated { get; set; }
     public abstract bool IsMultiscreen { get; set; }
     public abstract Point Offset { get; set; }
     public abstract TimeSpan OnlyCycleBetweenStart { get; set; }
     public abstract TimeSpan OnlyCycleBetweenStop { get; set; }
-    public abstract WallpaperPlacement Placement { get; set; }
     public abstract byte Priority { get; set; }
     public abstract Point Scale { get; set; }
+    public abstract WallpaperEffects Effects { get; set; }
 
-    /// <summary>
-    ///   Checks whether all properties have valid values.
-    /// </summary>
-    [ContractInvariantMethod]
-    private void CheckInvariants() {
-      Contract.Invariant(this.DisabledScreens != null);
-      Contract.Invariant(Enum.IsDefined(typeof(WallpaperEffects), this.Effects));
-      Contract.Invariant(Enum.IsDefined(typeof(WallpaperPlacement), this.Placement));
+    public ICollection<int> DisabledScreens {
+      get {
+        Contract.Ensures(Contract.Result<ICollection<int>>() != null);
+        throw new NotImplementedException();
+      }
+    }
+
+    public WallpaperPlacement Placement {
+      get { throw new NotImplementedException(); }
+      set {
+        Contract.Requires(Enum.IsDefined(typeof(WallpaperPlacement), value));
+        throw new NotImplementedException();
+      }
     }
 
     public abstract object Clone();

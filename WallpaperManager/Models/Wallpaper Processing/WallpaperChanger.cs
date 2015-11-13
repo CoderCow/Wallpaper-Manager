@@ -663,7 +663,7 @@ namespace WallpaperManager.Models {
       if (this.ScreensSettings.AllStatic) {
         Debug.WriteLine("Applying by using a dummy wallpaper because all screens should display static wallpapers.");
         // Build by using a dummy wallpaper.
-        this.BuildAndApplyWallpaper(new[] {new[] {new Wallpaper()}}, false);
+        this.BuildAndApplyWallpaper(new[] {new[] {new Wallpaper(new Path("C:\\"))}}, false);
         this.ActiveWallpapersAccessor = new List<Wallpaper>();
         this.CyclePostActions();
         return;
@@ -974,7 +974,7 @@ namespace WallpaperManager.Models {
         Debug.WriteLine("Applying by using a dummy wallpaper because all screens should display static wallpapers.");
 
         // Build by using a dummy wallpaper.
-        this.BuildAndApplyWallpaper(new[] {new[] {new Wallpaper()}}, false);
+        this.BuildAndApplyWallpaper(new[] {new[] {new Wallpaper(new Path("C:\\"))}}, false);
         this.ActiveWallpapersAccessor = new List<Wallpaper>();
         this.CyclePostActions();
         return;

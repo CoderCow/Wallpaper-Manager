@@ -26,15 +26,6 @@ namespace WallpaperManager.Models {
     }
 
     /// <summary>
-    ///   Checks whether all properties have valid values.
-    /// </summary>
-    [ContractInvariantMethod]
-    private void CheckInvariants() {
-      string error = this.Error;
-      Contract.Invariant(error == string.Empty, error);
-    }
-
-    /// <summary>
     ///   Checks whether the current value of the property exposed by the instance ob this type is causing it to have a valid object status or not.
     /// </summary>
     /// <remarks>
