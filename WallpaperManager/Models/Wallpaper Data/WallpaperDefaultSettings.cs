@@ -36,6 +36,8 @@ namespace WallpaperManager.Models {
     ///   Initializes a new instance of the <see cref="WallpaperDefaultSettings" /> class.
     /// </summary>
     public WallpaperDefaultSettings(WallpaperBase baseSettings) {
+      Contract.Requires<ArgumentNullException>(baseSettings != null);
+
       this.Settings = baseSettings;
       this.AutoDetermineIsMultiscreen = true;
       this.AutoDeterminePlacement = true;

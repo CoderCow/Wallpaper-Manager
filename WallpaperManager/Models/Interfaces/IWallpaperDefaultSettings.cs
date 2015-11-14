@@ -37,16 +37,18 @@ namespace WallpaperManager.Models {
 
   [ContractClassFor(typeof(IWallpaperDefaultSettings))]
   internal abstract class IWallpaperDefaultSettingsContracts: IWallpaperDefaultSettings {
-    public abstract WallpaperBase Settings { get; set; }
     public abstract bool AutoDetermineIsMultiscreen { get; set; }
     public abstract bool AutoDeterminePlacement { get; set; }
 
-    /// <summary>
-    ///   Checks whether all properties have valid values.
-    /// </summary>
-    [ContractInvariantMethod]
-    private void CheckInvariants() {
-      Contract.Invariant(this.Settings != null);
+    public WallpaperBase Settings {
+      get {
+        Contract.Ensures(Contract.Result<WallpaperBase>() != null);
+        throw new NotImplementedException();
+      }
+      set {
+        Contract.Requires<ArgumentNullException>(value != null);
+        throw new NotImplementedException();
+      }
     }
 
     public abstract object Clone();

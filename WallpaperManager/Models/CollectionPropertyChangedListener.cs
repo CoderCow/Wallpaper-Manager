@@ -14,9 +14,10 @@ using WallpaperManager.Models;
 namespace WallpaperManager {
   /// <seealso cref="IWeakEventListener">IWeakEventListener Interface</seealso>
   /// <threadsafety static="true" instance="false" />
-  public class CollectionPropertyChangedListener<TItem>: IWeakEventListener, IDisposable {
+  public class CollectionPropertyChangedListener<TItem>: IWeakEventListener, IDisposable where TItem: INotifyPropertyChanged {
     private readonly INotifyCollectionChanged notifier;
     private readonly IEnumerable collection;
+    private bool resetHasHappened;
 
     public event EventHandler<ItemPropertyChangedEventArgs> ItemPropertyChanged;
 
@@ -24,15 +25,15 @@ namespace WallpaperManager {
       Contract.Requires<ArgumentNullException>(collection != null);
     }
 
-    public CollectionPropertyChangedListener(INotifyCollectionChanged notifier, IEnumerable collection) {
+    public CollectionPropertyChangedListener(INotifyCollectionChanged notifier, IEnumerable<TItem> collection) {
       Contract.Requires<ArgumentNullException>(notifier != null);
       Contract.Requires<ArgumentNullException>(collection != null);
       
       this.notifier = notifier;
       this.collection = collection;
       CollectionChangedEventManager.AddListener(notifier, this);
-
-      foreach (INotifyPropertyChanged item in collection)
+      
+      foreach (TItem item in collection)
         PropertyChangedEventManager.AddListener(item, this, string.Empty);
     }
 
@@ -62,16 +63,16 @@ namespace WallpaperManager {
     private void Collection_Changed(object sender, NotifyCollectionChangedEventArgs e) {
       switch (e.Action) {
         case NotifyCollectionChangedAction.Add: {
-          foreach (Wallpaper newWallpaper in e.NewItems)
-            PropertyChangedEventManager.AddListener(newWallpaper, this, string.Empty);
+          foreach (Wallpaper newItem in e.NewItems)
+            if (newItem != null)
+              PropertyChangedEventManager.AddListener(newItem, this, string.Empty);
           
           break;
         }
         case NotifyCollectionChangedAction.Remove: {
-          foreach (Wallpaper deletedWallpaper in e.OldItems) {
-            Contract.Assert(deletedWallpaper != null);
-            PropertyChangedEventManager.RemoveListener(deletedWallpaper, this, string.Empty);
-          }
+          foreach (Wallpaper deletedItem in e.OldItems)
+            if (deletedItem != null)
+              PropertyChangedEventManager.RemoveListener(deletedItem, this, string.Empty);
           
           break;
         }
@@ -79,21 +80,24 @@ namespace WallpaperManager {
           Contract.Assert(e.NewItems.Count == e.OldItems.Count);
 
           for (int i = 0; i < e.NewItems.Count; i++) {
-            Wallpaper oldWallpaper = (Wallpaper)e.OldItems[i];
-            Wallpaper newWallpaper = (Wallpaper)e.NewItems[i];
+            Wallpaper oldItem = (Wallpaper)e.OldItems[i];
+            Wallpaper newItem = (Wallpaper)e.NewItems[i];
 
-            PropertyChangedEventManager.RemoveListener(oldWallpaper, this, string.Empty);
-            PropertyChangedEventManager.AddListener(newWallpaper, this, string.Empty);
+            if (oldItem != null)
+              PropertyChangedEventManager.RemoveListener(oldItem, this, string.Empty);
+
+            if (newItem != null)
+              PropertyChangedEventManager.AddListener(newItem, this, string.Empty);
           }
 
           break;
         }
         case NotifyCollectionChangedAction.Reset: {
-          foreach (Wallpaper oldWallpaper in e.OldItems)
-            PropertyChangedEventManager.RemoveListener(oldWallpaper, this, string.Empty);
-          foreach (Wallpaper newWallpaper in e.NewItems)
-            PropertyChangedEventManager.AddListener(newWallpaper, this, string.Empty);
+          foreach (Wallpaper item in this.collection)
+            if (item != null)
+              PropertyChangedEventManager.AddListener(item, this, string.Empty);
           
+          this.resetHasHappened = true;
           break;
         }
       }
@@ -102,8 +106,28 @@ namespace WallpaperManager {
     protected virtual void OnItemPropertyChanged(ItemPropertyChangedEventArgs e) {
       Contract.Requires<ArgumentNullException>(e != null);
 
-      EventHandler<ItemPropertyChangedEventArgs> handler = this.ItemPropertyChanged;
-      handler?.Invoke(this, e);
+      bool itemExists;
+      // TODO: Bad implementation. Improve this in the future
+      if (this.resetHasHappened) {
+        itemExists = false;
+        // As NotifyCollectionChangedAction.Reset is issued, we have no way to know which items have been previously in the
+        // collection, thus this temporary workaround is required.
+        foreach (TItem item in this.collection) {
+          if (item.Equals(e.Item)) {
+            itemExists = true;
+            break;
+          }
+        }
+      } else {
+        itemExists = true;
+      }
+
+      if (itemExists) {
+        EventHandler<ItemPropertyChangedEventArgs> handler = this.ItemPropertyChanged;
+        handler?.Invoke(this, e);
+      } else if (e.Item != null) {
+        PropertyChangedEventManager.RemoveListener(e.Item, this, string.Empty);
+      }
     }
 
     #region IDisposable Implementation

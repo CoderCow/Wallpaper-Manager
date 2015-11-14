@@ -5,16 +5,19 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using Common.IO;
+using PropertyChanged;
 
 namespace WallpaperManager.Models {
   /// <summary>
   ///   Defines general wallpaper related data.
   /// </summary>
   [ContractClass(typeof(IWallpaperContracts))]
-  public interface IWallpaper : IWallpaperBase {
+  public interface IWallpaper : IWallpaperBase, INotifyPropertyChanged {
     bool IsImageSizeResolved { get; }
 
     /// <summary>
@@ -39,6 +42,7 @@ namespace WallpaperManager.Models {
     int CycleCountTotal { get; set; }
   }
 
+  [DoNotNotify]
   [ContractClassFor(typeof(IWallpaper))]
   internal abstract class IWallpaperContracts : IWallpaper {
     public abstract bool IsActivated { get; set; }
@@ -99,5 +103,8 @@ namespace WallpaperManager.Models {
 
     public abstract object Clone();
     public abstract void AssignTo(object other);
+
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected abstract void OnPropertyChanged([CallerMemberName] string propertyName = null);
   }
 }

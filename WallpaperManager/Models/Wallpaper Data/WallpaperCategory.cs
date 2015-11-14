@@ -117,13 +117,16 @@ namespace WallpaperManager.Models {
       Contract.Requires<ArgumentNullException>(defaultSettings != null);
 
       this.Name = name;
+
       if (wallpapers == null)
         this.Wallpapers = new ObservableCollection<IWallpaper>();
       else
         this.Wallpapers = new ObservableCollection<IWallpaper>(wallpapers);
-      
-      this.Wallpapers.CollectionChanged += this.Wallpapers_CollectionChanged;
+
+      this.MeasureActiveStatus();
+
       this.WallpaperDefaultSettings = defaultSettings;
+      this.Wallpapers.CollectionChanged += this.Wallpapers_CollectionChanged;
 
       this.wallpapersPropertyChangedListener = new CollectionPropertyChangedListener<IWallpaper>(this.Wallpapers);
       this.wallpapersPropertyChangedListener.ItemPropertyChanged += this.Wallpaper_PropertyChanged;
@@ -132,24 +135,24 @@ namespace WallpaperManager.Models {
     private void Wallpapers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
       switch (e.Action) {
         case NotifyCollectionChangedAction.Add: {
+          bool? newActivationStatus = this.IsActivated;
           foreach (IWallpaper newWallpaper in e.NewItems) {
-            // TODO
-            /*if (newWallpaper.IsBlank) {
-              this.WallpaperDefaultSettings.AssignTo(newWallpaper);
+            bool collectionWasEmptyBefore = (this.Wallpapers.Count == 1);
+            if (collectionWasEmptyBefore)
+              newActivationStatus = newWallpaper.IsActivated;
+            else if (newActivationStatus != null && newWallpaper.IsActivated != newActivationStatus)
+              newActivationStatus = null;
+          }
 
-              newWallpaper.SuggestIsMultiscreen = this.WallpaperDefaultSettings.AutoDetermineIsMultiscreen;
-              newWallpaper.SuggestPlacement = this.WallpaperDefaultSettings.AutoDeterminePlacement;
-            }*/
-            if (this.IsActivated != null && newWallpaper.IsActivated != this.IsActivated) {
-              this.IsActivated = null;
-              this.OnPropertyChanged(nameof(this.IsActivated));
-            }
+          if (this.IsActivated != newActivationStatus) {
+            this.isActivated = newActivationStatus;
+            this.OnPropertyChanged(nameof(this.IsActivated));
           }
           
           break;
         }
         case NotifyCollectionChangedAction.Remove: {
-          if (this.IsActivated == null)
+          if (this.IsActivated == null || this.Wallpapers.Count == 0)
             this.MeasureActiveStatus();
           
           break;
@@ -190,15 +193,24 @@ namespace WallpaperManager.Models {
     }
 
     private void MeasureActiveStatus() {
-      bool? newActivatedStatus = null;
-      foreach (IWallpaper wallpaper in this.Wallpapers) {
-        if (newActivatedStatus != null && newActivatedStatus != wallpaper.IsActivated)
-          newActivatedStatus = null;
-        else
-          newActivatedStatus = wallpaper.IsActivated;
+      bool? newActivatedStatus;
+
+      if (this.Wallpapers.Count == 0) {
+        newActivatedStatus = true;
+      } else {
+        newActivatedStatus = this.Wallpapers[0].IsActivated;
+        foreach (IWallpaper wallpaper in this.Wallpapers.Skip(1)) {
+          if (wallpaper.IsActivated != newActivatedStatus.Value) {
+            newActivatedStatus = null;
+            break;
+          }
+        }
       }
 
-      this.IsActivated = newActivatedStatus;
+      if (this.isActivated != newActivatedStatus) {
+        this.isActivated = newActivatedStatus;
+        this.OnPropertyChanged(nameof(this.IsActivated));
+      }
     }
 
     #region Overrides of ValidatableBase
@@ -221,28 +233,6 @@ namespace WallpaperManager.Models {
       return null;
     }
     #endregion
-
-    /*/// <summary>
-    ///   Gets the index of the first <see cref="Wallpaper">Wallpaper instance</see> with an
-    ///   <see cref="Wallpaper.ImagePath" /> value of <paramref name="imagePath" />.
-    /// </summary>
-    /// <param name="imagePath">
-    ///   The path of the image.
-    /// </param>
-    /// <returns>
-    ///   <c>-1</c> if no <see cref="Wallpaper" /> with an <see cref="Wallpaper.ImagePath" /> value of
-    ///   <paramref name="imagePath" /> can be found; otherwise the zero-based index of the first matching
-    ///   <see cref="Wallpaper" />.
-    /// </returns>
-    // TODO: Convert into extension method?
-    public int IndexOfByImagePath(Path imagePath) {
-      for (int i = 0; i < this.Count; i++) {
-        if (this[i].ImagePath == imagePath)
-          return i;
-      }
-
-      return -1;
-    }*/
 
     /// <summary>
     ///   Handles the <see cref="WallpaperBase.PropertyChanged" /> event of a <see cref="IWallpaper" /> object.

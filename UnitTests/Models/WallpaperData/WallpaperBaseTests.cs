@@ -19,7 +19,7 @@ namespace UnitTests {
   public class WallpaperBaseTests {
     [Fact]
     public void IsDefaultBackgroundColorAssigned() {
-      WallpaperBase sut = WallpaperBaseFromFixture();
+      WallpaperBase sut = TestUtils.WallpaperBaseFromFixture();
 
       sut.BackgroundColor.Should().Be(WallpaperBase.DefaultBackgroundColor);
     }
@@ -29,7 +29,7 @@ namespace UnitTests {
     [InlineAutoData(0, -1)]
     [InlineAutoData(1, 0)]
     public void ShouldReportErrorWhenCycleStartTimeTooHigh(int onlyCycleBetweenStart, int onlyCycleBetweenStop) {
-      WallpaperBase sut = WallpaperBaseFromFixture();
+      WallpaperBase sut = TestUtils.WallpaperBaseFromFixture();
 
       sut.OnlyCycleBetweenStop = new TimeSpan(onlyCycleBetweenStop);
       sut.OnlyCycleBetweenStart = new TimeSpan(onlyCycleBetweenStart);
@@ -42,7 +42,7 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldReportErrorWhenCycleStartTimeBelowZero() {
-      WallpaperBase sut = WallpaperBaseFromFixture();
+      WallpaperBase sut = TestUtils.WallpaperBaseFromFixture();
 
       sut.OnlyCycleBetweenStart = new TimeSpan(-1);
 
@@ -52,7 +52,7 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldReportErrorWhenCycleStopTimeBelowZero() {
-      WallpaperBase sut = WallpaperBaseFromFixture();
+      WallpaperBase sut = TestUtils.WallpaperBaseFromFixture();
 
       sut.OnlyCycleBetweenStart = new TimeSpan(-2); // because start time must be below stop time
       sut.OnlyCycleBetweenStop = new TimeSpan(-1);
@@ -63,14 +63,14 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldThrowWhenAssigningToInvalidObject() {
-      WallpaperBase sut = WallpaperBaseFromFixture();
+      WallpaperBase sut = TestUtils.WallpaperBaseFromFixture();
 
       sut.Invoking(x => x.AssignTo(new object())).ShouldThrow<ArgumentException>();
     }
 
     [Fact]
     public void ShouldThrowOnInvalidPlacement() {
-      WallpaperBase sut = WallpaperBaseFromFixture();
+      WallpaperBase sut = TestUtils.WallpaperBaseFromFixture();
 
       sut.Invoking(x => x.Placement = (WallpaperPlacement)(-1)).ShouldThrow<Exception>();
     }
@@ -78,7 +78,7 @@ namespace UnitTests {
     [Fact]
     public void ShouldAssignAllProperties() {
       for (int i = 0; i < 10; i++) {
-        Fixture fixture = WallpaperFixture();
+        Fixture fixture = TestUtils.WallpaperFixture();
         WallpaperBaseImpl sutA = fixture.Create<WallpaperBaseImpl>();
         WallpaperBaseImpl subB = fixture.Create<WallpaperBaseImpl>();
 
@@ -86,18 +86,6 @@ namespace UnitTests {
 
         sutA.Should().BePropertyValueEqual(subB);
       }
-    }
-
-    private static WallpaperBaseImpl WallpaperBaseFromFixture() {
-      Fixture fixture = WallpaperFixture();
-      return fixture.Create<WallpaperBaseImpl>();
-    }
-
-    private static Fixture WallpaperFixture() {
-      Fixture fixture = new Fixture();
-      fixture.Customize(new WallpaperCustomization());
-
-      return fixture;
     }
   }
 }

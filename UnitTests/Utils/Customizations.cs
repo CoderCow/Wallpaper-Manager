@@ -13,17 +13,24 @@ namespace UnitTests {
       fixture.Register(() => 
         fixture.Build<WallpaperBaseImpl>()
         .Without((x) => x.OnlyCycleBetweenStart)
-        .Without((x) => x.OnlyCycleBetweenStop));
+        .Without((x) => x.OnlyCycleBetweenStop)
+        .Create());
 
       fixture.Register(() => 
         fixture.Build<Wallpaper>()
-        .Without((x) => x.OnlyCycleBetweenStart)
         .With((x) => x.CycleCountTotal, 100)
         .With((x) => x.CycleCountWeek, 10)
         .With((x) => x.TimeAdded, new DateTime(1999, 1, 1))
         .With((x) => x.TimeLastCycled, new DateTime(2000, 1, 1))
         .With((x) => x.ImageSize, new Size(10, 10))
-        .Without((x) => x.OnlyCycleBetweenStop));
+        .Without((x) => x.OnlyCycleBetweenStart)
+        .Without((x) => x.OnlyCycleBetweenStop)
+        .Create());
+
+      fixture.Register(() => 
+        fixture.Build<WallpaperCategory>()
+        .Without((x) => x.Wallpapers)
+        .Create());
 
       fixture.Register(() => new Size(10, 10));
 
@@ -35,12 +42,6 @@ namespace UnitTests {
 
       fixture.Customizations.Add(new StringSpeciemenBuilder());
       fixture.Customizations.Add(new FullPathSpeciemenBuilder());
-    }
-  }
-
-  class WallpaperBaseImpl: WallpaperBase {
-    public override object Clone() {
-      throw new NotImplementedException();
     }
   }
 }
