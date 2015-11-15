@@ -23,7 +23,7 @@ namespace WallpaperManager.Models {
   /// </remarks>
   /// <threadsafety static="true" instance="false" />
   [ImplementPropertyChanged]
-  public class WallpaperTextOverlay: ValidatableBase, IWallpaperTextOverlay, ICloneable, IAssignable {
+  public class TextOverlay: ValidatableBase, ITextOverlay, ICloneable, IAssignable {
     /// <summary>
     ///   Represents the default font name.
     /// </summary>
@@ -88,9 +88,9 @@ namespace WallpaperManager.Models {
     public TextOverlayPosition Position { get; set; }
 
     /// <summary>
-    ///   Initializes a new instance of the <see cref="WallpaperTextOverlay" /> class.
+    ///   Initializes a new instance of the <see cref="TextOverlay" /> class.
     /// </summary>
-    public WallpaperTextOverlay() {
+    public TextOverlay() {
       this.FontName = DefaultFontName;
       this.FontSize = DefaultFontSize;
       this.FontStyle = DefaultFontStyle;
@@ -121,14 +121,14 @@ namespace WallpaperManager.Models {
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />
     public virtual object Clone() {
-      return (WallpaperTextOverlay)this.MemberwiseClone();
+      return (TextOverlay)this.MemberwiseClone();
     }
 
     /// <inheritdoc />
     public virtual void AssignTo(object other) {
-      Contract.Requires<ArgumentException>(other is WallpaperTextOverlay);
+      Contract.Requires<ArgumentException>(other is TextOverlay);
 
-      WallpaperTextOverlay otherInstance = (WallpaperTextOverlay)other;
+      TextOverlay otherInstance = (TextOverlay)other;
       otherInstance.Format = this.Format;
       otherInstance.FontName = this.FontName;
       otherInstance.FontSize = this.FontSize;

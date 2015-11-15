@@ -66,13 +66,13 @@ namespace WallpaperManager.Models {
     int MarginBottom { get; set; }
 
     /// <summary>
-    ///   Gets the collection of <see cref="WallpaperTextOverlay" /> objects which should be applied on this screen.
+    ///   Gets the collection of <see cref="TextOverlay" /> objects which should be applied on this screen.
     /// </summary>
     /// <value>
-    ///   The collection of <see cref="WallpaperTextOverlay" /> objects which should be applied on this screen.
+    ///   The collection of <see cref="TextOverlay" /> objects which should be applied on this screen.
     /// </value>
-    /// <seealso cref="WallpaperTextOverlay">WallpaperTextOverlay Class</seealso>
-    ObservableCollection<IWallpaperTextOverlay> TextOverlays { get; }
+    /// <seealso cref="TextOverlay">TextOverlay Class</seealso>
+    ObservableCollection<ITextOverlay> TextOverlays { get; }
   }
 
   [ContractClassFor(typeof(IScreenSettings))]
@@ -84,9 +84,9 @@ namespace WallpaperManager.Models {
     public abstract int MarginTop { get; set; }
     public abstract int MarginBottom { get; set; }
 
-    public ObservableCollection<IWallpaperTextOverlay> TextOverlays {
+    public ObservableCollection<ITextOverlay> TextOverlays {
       get {
-        Contract.Ensures(Contract.Result<ObservableCollection<IWallpaperTextOverlay>>() != null);
+        Contract.Ensures(Contract.Result<ObservableCollection<ITextOverlay>>() != null);
         throw new NotImplementedException();
       }
     }

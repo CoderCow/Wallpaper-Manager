@@ -15,15 +15,15 @@ namespace UnitTests {
 
     [Fact]
     public void CtorShouldSetDefaultValues() {
-      WallpaperTextOverlay sut = new WallpaperTextOverlay();
+      TextOverlay sut = new TextOverlay();
 
-      sut.FontName.Should().Be(WallpaperTextOverlay.DefaultFontName);
-      sut.FontSize.Should().Be(WallpaperTextOverlay.DefaultFontSize);
-      sut.FontStyle.Should().Be(WallpaperTextOverlay.DefaultFontStyle);
+      sut.FontName.Should().Be(TextOverlay.DefaultFontName);
+      sut.FontSize.Should().Be(TextOverlay.DefaultFontSize);
+      sut.FontStyle.Should().Be(TextOverlay.DefaultFontStyle);
       sut.Format.Should().Be(LocalizationManager.GetLocalizedString("OverlayTextData.DefaultFormat"));
-      sut.ForeColor.Should().Be(WallpaperTextOverlay.DefaultForeColor);
-      sut.BorderColor.Should().Be(WallpaperTextOverlay.DefaultBorderColor);
-      sut.Position.Should().Be(WallpaperTextOverlay.DefaultPosition);
+      sut.ForeColor.Should().Be(TextOverlay.DefaultForeColor);
+      sut.BorderColor.Should().Be(TextOverlay.DefaultBorderColor);
+      sut.Position.Should().Be(TextOverlay.DefaultPosition);
     }
 
     [Theory]
@@ -31,7 +31,7 @@ namespace UnitTests {
     [InlineData(" ")]
     [InlineData("    ")]
     public void ShouldReportErrorWhenFormatTextIsInvalid(string formatString) {
-      WallpaperTextOverlay sut = this.modelFixtures.Create<WallpaperTextOverlay>();
+      TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
 
       sut.Format = formatString;
 
@@ -41,14 +41,14 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldThrowWhenFormatIsSetToNull() {
-      WallpaperTextOverlay sut = this.modelFixtures.Create<WallpaperTextOverlay>();
+      TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
       
       sut.Invoking((x) => x.Format = null).ShouldThrow<Exception>();
     }
 
     [Fact]
     public void ShouldThrowWhenFontNameIsSetToNull() {
-      WallpaperTextOverlay sut = this.modelFixtures.Create<WallpaperTextOverlay>();
+      TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
       
       sut.Invoking((x) => x.FontName = null).ShouldThrow<Exception>();
     }
@@ -56,7 +56,7 @@ namespace UnitTests {
     [Theory]
     [AutoInvalidEnumData(typeof(TextOverlayPosition))]
     public void ShouldThrowWhenPositionIsSetToUndefinedValue(TextOverlayPosition position) {
-      WallpaperTextOverlay sut = this.modelFixtures.Create<WallpaperTextOverlay>();
+      TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
       
       sut.Invoking((x) => x.Position = position).ShouldThrow<Exception>();
     }
@@ -64,7 +64,7 @@ namespace UnitTests {
     [Theory]
     [AutoValidEnumData(typeof(TextOverlayPosition))]
     public void ShouldNotThrowWhenFontStyleIsSetToDefinedValue(TextOverlayPosition position) {
-      WallpaperTextOverlay sut = this.modelFixtures.Create<WallpaperTextOverlay>();
+      TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
       
       sut.Invoking((x) => x.Position = position).ShouldNotThrow();
     }
@@ -76,7 +76,7 @@ namespace UnitTests {
     [InlineData("x %test%")]
     [InlineData("thisisaveryveryveryveryveryveryveryveryveryveryveryveryveryverylongstring")]
     public void ShouldNotReportErrorWhenFormatTextIsValid(string formatString) {
-      WallpaperTextOverlay sut = this.modelFixtures.Create<WallpaperTextOverlay>();
+      TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
 
       sut.Format = formatString;
 
@@ -89,7 +89,7 @@ namespace UnitTests {
     [InlineData(" ")]
     [InlineData("    ")]
     public void ShouldReportErrorWhenFontNameIsInvalid(string fontName) {
-      WallpaperTextOverlay sut = this.modelFixtures.Create<WallpaperTextOverlay>();
+      TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
 
       sut.FontName = fontName;
 
@@ -105,7 +105,7 @@ namespace UnitTests {
     [InlineData("Verdana")]
     [InlineData("thisisaveryveryveryveryveryveryveryveryveryveryveryveryveryverylongstring")]
     public void ShouldNotReportErrorWhenFontNameIsValid(string fontName) {
-      WallpaperTextOverlay sut = this.modelFixtures.Create<WallpaperTextOverlay>();
+      TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
 
       sut.FontName = fontName;
 
@@ -115,9 +115,9 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldCreateProperClones() {
-      WallpaperTextOverlay sut = this.modelFixtures.Create<WallpaperTextOverlay>();
+      TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
       
-      WallpaperTextOverlay sutClone = (WallpaperTextOverlay)sut.Clone();
+      TextOverlay sutClone = (TextOverlay)sut.Clone();
 
       sutClone.Should().BeCloneOf(sut);
     }
@@ -125,8 +125,8 @@ namespace UnitTests {
     [Fact]
     public void ShouldAssignAllProperties() {
       for (int i = 0; i < 10; i++) {
-        WallpaperTextOverlay target = this.modelFixtures.Create<WallpaperTextOverlay>();
-        WallpaperTextOverlay sut = this.modelFixtures.Create<WallpaperTextOverlay>();
+        TextOverlay target = this.modelFixtures.Create<TextOverlay>();
+        TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
 
         sut.AssignTo(target);
 

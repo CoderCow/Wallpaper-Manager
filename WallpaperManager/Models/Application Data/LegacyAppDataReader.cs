@@ -154,7 +154,7 @@ namespace WallpaperManager.Models {
                 foreach (XmlElement overlayTextElement in overlayTextsElement) {
                   if (overlayTextElement.Name != "OverlayText")
                     continue;
-                  WallpaperTextOverlay textOverlay = new WallpaperTextOverlay();
+                  TextOverlay textOverlay = new TextOverlay();
 
                   element = overlayTextElement["Format"];
                   if (element != null)

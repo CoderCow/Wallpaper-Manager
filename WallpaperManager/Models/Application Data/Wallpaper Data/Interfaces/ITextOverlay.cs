@@ -7,8 +7,8 @@ using Common;
 using PropertyChanged;
 
 namespace WallpaperManager.Models {
-  [ContractClass(typeof(IWallpaperTextOverlayContracts))]
-  public interface IWallpaperTextOverlay : ICloneable, IAssignable, INotifyPropertyChanged {
+  [ContractClass(typeof(TextOverlayContracts))]
+  public interface ITextOverlay : ICloneable, IAssignable, INotifyPropertyChanged {
     /// <summary>
     ///   Gets or sets the content text.
     /// </summary>
@@ -84,8 +84,8 @@ namespace WallpaperManager.Models {
   }
 
   [DoNotNotify]
-  [ContractClassFor(typeof(IWallpaperTextOverlay))]
-  internal abstract class IWallpaperTextOverlayContracts: IWallpaperTextOverlay {
+  [ContractClassFor(typeof(ITextOverlay))]
+  internal abstract class TextOverlayContracts: ITextOverlay {
     public abstract float FontSize { get; set; }
     public abstract Color ForeColor { get; set; }
     public abstract FontStyle FontStyle { get; set; }

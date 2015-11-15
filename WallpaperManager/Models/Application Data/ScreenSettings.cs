@@ -32,14 +32,14 @@ namespace WallpaperManager.Models {
     public int MarginBottom { get; set; }
 
     /// <inheritdoc />
-    public ObservableCollection<IWallpaperTextOverlay> TextOverlays { get; private set; }
+    public ObservableCollection<ITextOverlay> TextOverlays { get; private set; }
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="ScreenSettings" /> class for the screen with the given index.
     /// </summary>
     public ScreenSettings() {
       this.CycleRandomly = true;
-      this.TextOverlays = new ObservableCollection<IWallpaperTextOverlay>();
+      this.TextOverlays = new ObservableCollection<ITextOverlay>();
     }
 
     /// <inheritdoc />
@@ -54,9 +54,9 @@ namespace WallpaperManager.Models {
       if (this.StaticWallpaper != null)
         clone.StaticWallpaper = (Wallpaper)this.StaticWallpaper.Clone();
 
-      clone.TextOverlays = new ObservableCollection<IWallpaperTextOverlay>();
-      foreach (IWallpaperTextOverlay overlayText in this.TextOverlays)
-        clone.TextOverlays.Add((IWallpaperTextOverlay)overlayText.Clone());
+      clone.TextOverlays = new ObservableCollection<ITextOverlay>();
+      foreach (ITextOverlay overlayText in this.TextOverlays)
+        clone.TextOverlays.Add((ITextOverlay)overlayText.Clone());
 
       return clone;
     }

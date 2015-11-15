@@ -237,7 +237,7 @@
     <Compile Include="Models\Application Data\Interfaces\IApplicationDataReader.cs" />
     <Compile Include="Models\Application Data\Interfaces\IApplicationDataWriter.cs" />
     <Compile Include="Models\Application Data\Interfaces\IApplicationData.cs" />
-    <Compile Include="Models\Application Data\Wallpaper Data\Interfaces\IWallpaperTextOverlay.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Interfaces\ITextOverlay.cs" />
     <Compile Include="Models\Application Data\LegacyAppDataReader.cs" />
     <Compile Include="Models\EventArgs\RequestWallpapersEventArgs.cs" />
     <Compile Include="Models\EventArgs\VersionCheckSuccessfulEventArgs.cs" />
@@ -263,7 +263,7 @@
     <Compile Include="Models\Application Data\Wallpaper Data\WallpaperCategory.cs" />
     <Compile Include="Models\Application Data\Wallpaper Data\WallpaperDefaultSettings.cs" />
     <Compile Include="Models\Application Data\Wallpaper Data\WallpaperBase.cs" />
-    <Compile Include="Models\Application Data\Wallpaper Data\WallpaperTextOverlay.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\TextOverlay.cs" />
     <Compile Include="Locale\PotGenerator.cs" />
     <Compile Include="Locale\ResxGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -371,7 +371,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_ConfigurationName="Any" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Any" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\Fody.1.29.3\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.3\build\dotnet\Fody.targets')" />
