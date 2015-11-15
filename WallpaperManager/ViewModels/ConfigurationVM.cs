@@ -16,6 +16,11 @@ namespace WallpaperManager.ViewModels {
   /// <threadsafety static="true" instance="false" />
   public class ConfigurationVM : INotifyPropertyChanged {
     /// <summary>
+    ///   Represents the value name of the autostart registry key.
+    /// </summary>
+    private const string AutostartEntryRegKeyName = "Wallpaper Manager";
+
+    /// <summary>
     ///   <inheritdoc cref="SelectedScreenIndex" select='../value/node()' />
     /// </summary>
     private int selectedScreenIndex;
@@ -97,6 +102,30 @@ namespace WallpaperManager.ViewModels {
     /// </value>
     public ScreenSettings SelectedScreenSettings {
       get { return this.Configuration.ScreensSettings[this.SelectedScreenIndex]; }
+    }
+
+    /// <summary>
+    ///   Gets or sets a <see cref="bool" /> indicating whether the application will start when the user logs in.
+    /// </summary>
+    /// <value>
+    ///   A <see cref="bool" /> indicating whether the application will start when the user logs in.
+    /// </value>
+    /// <remarks>
+    ///   This value is not saved into the configuration file. Its directly accessed from the registry.
+    /// </remarks>
+    public bool StartWithWindows {
+      get { return Autostart.CurrentUserEntries.ContainsKey(AutostartEntryRegKeyName); }
+      set {
+        if (value) {
+          // Make sure the entry really doesn't exist.
+          if (!this.StartWithWindows)
+            Autostart.CurrentUserEntries.Add(AutostartEntryRegKeyName, Assembly.GetExecutingAssembly().Location);
+        } else {
+          // If the entry does exist.
+          if (this.StartWithWindows)
+            Autostart.CurrentUserEntries.Remove(AutostartEntryRegKeyName);
+        }
+      }
     }
 
     /// <summary>

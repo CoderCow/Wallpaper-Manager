@@ -16,17 +16,6 @@ namespace WallpaperManager.Models {
   [ContractClass(typeof(IConfigurationContracts))]
   public interface IConfiguration : INotifyPropertyChanged, IAssignable, ICloneable {
     /// <summary>
-    ///   Gets or sets a <see cref="bool" /> indicating whether the application will start when the user logs in.
-    /// </summary>
-    /// <value>
-    ///   A <see cref="bool" /> indicating whether the application will start when the user logs in.
-    /// </value>
-    /// <remarks>
-    ///   This value is not saved into the configuration file. Its directly accessed from the registry.
-    /// </remarks>
-    bool StartWithWindows { get; set; }
-
-    /// <summary>
     ///   Gets or sets a <see cref="bool" /> indicating whether the application should do one cycle right after it has been
     ///   started.
     /// </summary>
@@ -139,23 +128,22 @@ namespace WallpaperManager.Models {
     TrayIconClickAction TrayIconDoubleClickAction { get; set; }
 
     /// <summary>
-    ///   Gets or sets a collection of <see cref="ScreenSettings" /> objects containing the specific properties for each single
+    ///   Gets or sets a collection of <see cref="Models.ScreenSettings" /> objects containing the specific properties for each single
     ///   screen.
     /// </summary>
     /// <value>
-    ///   A collection of <see cref="ScreenSettings" /> objects containing the specific properties for each single screen.
+    ///   A collection of <see cref="Models.ScreenSettings" /> objects containing the specific properties for each single screen.
     /// </value>
     /// <exception cref="ArgumentNullException">
     ///   Attempted to set a <c>null</c> value.
     /// </exception>
-    /// <seealso cref="ScreenSettings">ScreenSettings Class</seealso>
-    Dictionary<string, ScreenSettings> ScreensSettings { get; set; }
+    /// <seealso cref="Models.ScreenSettings">ScreenSettings Class</seealso>
+    Dictionary<string, ScreenSettings> ScreenSettings { get; set; }
   }
 
   [DoNotNotify]
   [ContractClassFor(typeof(IConfiguration))]
   internal abstract class IConfigurationContracts : IConfiguration {
-    public abstract bool StartWithWindows { get; set; }
     public abstract bool CycleAfterStartup { get; set; }
     public abstract bool TerminateAfterStartup { get; set; }
     public abstract bool MinimizeAfterStartup { get; set; }
@@ -167,7 +155,7 @@ namespace WallpaperManager.Models {
 
     public WallpaperClickAction WallpaperDoubleClickAction {
       get {
-        Contract.Ensures(Enum.IsDefined(typeof(WallpaperChangeType), Contract.Result<WallpaperClickAction>()));
+        Contract.Ensures(Enum.IsDefined(typeof(WallpaperClickAction), Contract.Result<WallpaperClickAction>()));
         throw new NotImplementedException();
       }
       set {
@@ -178,7 +166,7 @@ namespace WallpaperManager.Models {
 
     public TrayIconClickAction TrayIconSingleClickAction {
       get {
-        Contract.Ensures(Enum.IsDefined(typeof(WallpaperChangeType), Contract.Result<TrayIconClickAction>()));
+        Contract.Ensures(Enum.IsDefined(typeof(TrayIconClickAction), Contract.Result<TrayIconClickAction>()));
         throw new NotImplementedException();
       }
       set {
@@ -189,7 +177,7 @@ namespace WallpaperManager.Models {
 
     public TrayIconClickAction TrayIconDoubleClickAction {
       get {
-        Contract.Ensures(Enum.IsDefined(typeof(WallpaperChangeType), Contract.Result<TrayIconClickAction>()));
+        Contract.Ensures(Enum.IsDefined(typeof(TrayIconClickAction), Contract.Result<TrayIconClickAction>()));
         throw new NotImplementedException();
       }
       set {
@@ -209,7 +197,7 @@ namespace WallpaperManager.Models {
       }
     }
 
-    public Dictionary<string, ScreenSettings> ScreensSettings {
+    public Dictionary<string, ScreenSettings> ScreenSettings {
       get {
         Contract.Ensures(Contract.Result<Dictionary<string, ScreenSettings>>() != null);
         throw new NotImplementedException();

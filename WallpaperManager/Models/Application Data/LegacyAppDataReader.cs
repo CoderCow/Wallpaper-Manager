@@ -13,6 +13,16 @@ using Path = Common.IO.Path;
 
 namespace WallpaperManager.Models {
   public class LegacyAppDataReader: IApplicationDataReader {
+    /// <summary>
+    ///   Represents the name of the root node of the XML-data.
+    /// </summary>
+    public const string RootNodeName = "WallpaperManagerConfiguration";
+
+    /// <summary>
+    ///   Represents the XML namespace of the root node of the XML-data.
+    /// </summary>
+    public const string XmlNamespace = "http://www.WallpaperManager.de.vu";
+
     private readonly Path inputFileName;
 
     /// <param name="inputFileName">
@@ -45,7 +55,7 @@ namespace WallpaperManager.Models {
           XmlDocument document = new XmlDocument();
           document.Load(fileStream);
 
-          if ((document.DocumentElement == null) || (document.DocumentElement.Name != Configuration.RootNodeName))
+          if ((document.DocumentElement == null) || (document.DocumentElement.Name != RootNodeName))
             throw new XmlException("The configuration file has an invalid root element.");
 
           XmlAttribute versionAttribute = document.DocumentElement.Attributes["Version"];
@@ -113,8 +123,8 @@ namespace WallpaperManager.Models {
             configuration.TrayIconDoubleClickAction = (TrayIconClickAction)Enum.Parse(typeof(TrayIconClickAction), element.InnerText);
           #endregion
 
-          #region <ScreensSettings>
-          XmlElement screensSettingsElement = document.DocumentElement["ScreensSettings"];
+          #region <ScreenSettings>
+          XmlElement screensSettingsElement = document.DocumentElement["ScreenSettings"];
           if (screensSettingsElement != null) {
             int settingsCounter = 0;
             var screensSettings = new List<ScreenSettings>();
@@ -207,7 +217,7 @@ namespace WallpaperManager.Models {
               settingsCounter++;
             }
 
-            configuration.ScreensSettings = new ScreenSettingsCollection(screensSettings);
+            configuration.ScreenSettings = new ScreenSettingsCollection(screensSettings);
           }
           #endregion
 
