@@ -213,9 +213,8 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   A collection of <see cref="ScreenSettings" /> objects containing the specific properties for each single screen.
     /// </value>
-    /// <seealso cref="ScreenSettingsCollection">ScreenSettingsCollection Class</seealso>
     /// <seealso cref="ScreenSettings">ScreenSettings Class</seealso>
-    public ScreenSettingsCollection ScreensSettings { get; set; }
+    public Dictionary<string, ScreenSettings> ScreensSettings { get; set; }
 
     // TODO: Extract this. The global configuration should have its own file.
     /// <summary>
@@ -245,7 +244,7 @@ namespace WallpaperManager.Models {
       this.WallpaperDoubleClickAction = WallpaperClickAction.ShowConfigurationWindow;
       this.TrayIconSingleClickAction = TrayIconClickAction.NoAction;
       this.TrayIconDoubleClickAction = TrayIconClickAction.ShowMainWindow;
-      this.ScreensSettings = new ScreenSettingsCollection();
+      this.ScreensSettings = new Dictionary<string, ScreenSettings>();
       this.WallpaperCategories = new WallpaperCategoryCollection();
     }
 
@@ -1041,7 +1040,10 @@ namespace WallpaperManager.Models {
     /// <inheritdoc />
     public object Clone() {
       Configuration clone = (Configuration)this.MemberwiseClone();
-      clone.ScreensSettings = (ScreenSettingsCollection)this.ScreensSettings.Clone();
+
+      clone.ScreensSettings = new Dictionary<string, ScreenSettings>();
+      foreach (KeyValuePair<string, ScreenSettings> pair in this.ScreensSettings)
+        clone.ScreensSettings.Add(pair.Key, pair.Value);
 
       return clone;
     }
@@ -1064,7 +1066,7 @@ namespace WallpaperManager.Models {
       otherInstance.WallpaperDoubleClickAction = this.WallpaperDoubleClickAction;
       otherInstance.TrayIconSingleClickAction = this.TrayIconSingleClickAction;
       otherInstance.TrayIconDoubleClickAction = this.TrayIconDoubleClickAction;
-      otherInstance.ScreensSettings = (ScreenSettingsCollection)this.ScreensSettings.Clone();
+      otherInstance.ScreensSettings = this.ScreensSettings;
     }
   }
 }

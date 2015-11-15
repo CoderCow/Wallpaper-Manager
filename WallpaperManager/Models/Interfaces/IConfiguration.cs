@@ -3,6 +3,7 @@
 // All other rights reserved.
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Common;
 
@@ -160,9 +161,8 @@ namespace WallpaperManager.Models {
     /// <exception cref="ArgumentNullException">
     ///   Attempted to set a <c>null</c> value.
     /// </exception>
-    /// <seealso cref="ScreenSettingsCollection">ScreenSettingsCollection Class</seealso>
     /// <seealso cref="ScreenSettings">ScreenSettings Class</seealso>
-    ScreenSettingsCollection ScreensSettings { get; set; }
+    Dictionary<string, ScreenSettings> ScreensSettings { get; set; }
 
     /// <summary>
     ///   Gets the <see cref="WallpaperCategoryCollection" /> holding the
@@ -196,7 +196,7 @@ namespace WallpaperManager.Models {
     public abstract WallpaperClickAction WallpaperDoubleClickAction { get; set; }
     public abstract TrayIconClickAction TrayIconSingleClickAction { get; set; }
     public abstract TrayIconClickAction TrayIconDoubleClickAction { get; set; }
-    public abstract ScreenSettingsCollection ScreensSettings { get; set; }
+    public abstract Dictionary<string, ScreenSettings> ScreensSettings { get; set; }
     public abstract WallpaperCategoryCollection WallpaperCategories { get; }
 
     /// <summary>

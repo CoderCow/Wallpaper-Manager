@@ -243,11 +243,6 @@
     <Compile Include="Models\EventArgs\RequestWallpapersEventArgs.cs" />
     <Compile Include="Models\EventArgs\VersionCheckSuccessfulEventArgs.cs" />
     <Compile Include="Models\UpdateManager.cs" />
-    <Compile Include="Models\Wallpaper Processing\WallpaperBuilderAll.cs" />
-    <Compile Include="Models\Wallpaper Processing\WallpaperBuilderAllCloned.cs" />
-    <Compile Include="Models\Wallpaper Processing\WallpaperBuilderBase.cs" />
-    <Compile Include="Models\Wallpaper Processing\WallpaperBuilderOneByOne.cs" />
-    <Compile Include="Models\Wallpaper Processing\WallpaperChanger.cs" />
     <Compile Include="Models\AppEnvironment.cs" />
     <Compile Include="Models\Configuration\Configuration.cs" />
     <Compile Include="Models\Enumerations\TextOverlayPosition.cs" />
@@ -264,7 +259,6 @@
     <Compile Include="Models\Interfaces\IWallpaperDefaultSettings.cs" />
     <Compile Include="Models\LocalizationManager.cs" />
     <Compile Include="Models\ScreenSettings.cs" />
-    <Compile Include="Models\ScreenSettingsCollection.cs" />
     <Compile Include="Models\WallpaperCategoryFileSynchronizer.cs" />
     <Compile Include="Models\Wallpaper Data\Wallpaper.cs" />
     <Compile Include="Models\Wallpaper Data\WallpaperCategory.cs" />
@@ -372,7 +366,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Any" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_ConfigurationName="Any" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\Fody.1.29.3\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.3\build\dotnet\Fody.targets')" />
