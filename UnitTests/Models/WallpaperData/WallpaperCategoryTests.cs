@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Common.Windows;
 using FluentAssertions;
 using Ploeh.AutoFixture;
 using WallpaperManager.Models;
@@ -11,7 +12,7 @@ namespace UnitTests {
 
     [Fact]
     public void CtorShouldThrowOnNullName() {
-      Action construct = () => new WallpaperCategory(null, new WallpaperDefaultSettings(new WallpaperBaseImpl(), null));
+      Action construct = () => new WallpaperCategory(null, this.modelFixtures.Create<WallpaperDefaultSettings>());
 
       construct.ShouldThrow<ArgumentNullException>();
     }
@@ -30,9 +31,9 @@ namespace UnitTests {
 
     [Fact]
     public void CtorShouldSetDefaultSettings() {
-      IWallpaperDefaultSettings expectedDefaultSettings = new WallpaperDefaultSettings(new WallpaperBaseImpl(), null);
+      IWallpaperDefaultSettings expectedDefaultSettings = this.modelFixtures.Create<WallpaperDefaultSettings>();
 
-      WallpaperCategory sut = NewCategory(defaultSettings: expectedDefaultSettings);
+      WallpaperCategory sut = this.NewCategory(defaultSettings: expectedDefaultSettings);
 
       sut.WallpaperDefaultSettings.Should().Be(expectedDefaultSettings);
     }
@@ -41,7 +42,7 @@ namespace UnitTests {
     public void CtorShouldAddWallpapers() {
       var wallpapers = this.modelFixtures.Create<List<IWallpaper>>();
 
-      WallpaperCategory sut = NewCategory(wallpapers: wallpapers);
+      WallpaperCategory sut = this.NewCategory(wallpapers: wallpapers);
 
       sut.Wallpapers.Should().BeEquivalentTo(wallpapers);
     }
@@ -126,7 +127,7 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldBeActiveAfterCreation() {
-      WallpaperCategory sut = NewCategory();
+      WallpaperCategory sut = this.NewCategory();
 
       sut.IsActivated.Should().BeTrue();
     }
@@ -135,7 +136,7 @@ namespace UnitTests {
     public void ShouldBeActiveWhenActiveWallpapersAreAddedOnCreation() {
       List<IWallpaper> wallpapers = this.NewWallpaperList(3, true);
 
-      WallpaperCategory sut = NewCategory(wallpapers: wallpapers);
+      WallpaperCategory sut = this.NewCategory(wallpapers: wallpapers);
 
       sut.IsActivated.Should().BeTrue();
     }
@@ -144,7 +145,7 @@ namespace UnitTests {
     public void ShouldBeInactiveWhenInactiveWallpapersAreAddedOnCreation() {
       List<IWallpaper> wallpapers = this.NewWallpaperList(3, false);
 
-      WallpaperCategory sut = NewCategory(wallpapers: wallpapers);
+      WallpaperCategory sut = this.NewCategory(wallpapers: wallpapers);
 
       sut.IsActivated.Should().BeFalse();
     }
@@ -153,7 +154,7 @@ namespace UnitTests {
     public void ShouldBeNullWhenActiveAndInactiveWallpapersAreAddedOnCreation() {
       List<IWallpaper> wallpapers = this.NewWallpaperList(3, null);
 
-      WallpaperCategory sut = NewCategory(wallpapers: wallpapers);
+      WallpaperCategory sut = this.NewCategory(wallpapers: wallpapers);
 
       sut.IsActivated.Should().Be(null);
     }
@@ -161,7 +162,7 @@ namespace UnitTests {
     [Theory]
     [InlineData(1, false), InlineData(2, false), InlineData(3, false)]
     public void ShouldStayActiveWhenActiveWallpapersAreAddedAfterCreation(int wallpaperCount, bool lastAddShouldRaisePropertyChanged) {
-      WallpaperCategory sut = NewCategory();
+      WallpaperCategory sut = this.NewCategory();
 
       AddWallpapers(sut, this.NewWallpaperList(wallpaperCount, true), lastAddShouldRaisePropertyChanged);
 
@@ -171,7 +172,7 @@ namespace UnitTests {
     [Theory]
     [InlineData(1, true), InlineData(2, false), InlineData(3, false)]
     public void ShouldBecomeInactiveWhenInactiveWallpapersAreAddedAfterCreation(int wallpaperCount, bool lastAddShouldRaisePropertyChanged) {
-      WallpaperCategory sut = NewCategory();
+      WallpaperCategory sut = this.NewCategory();
 
       AddWallpapers(sut, this.NewWallpaperList(wallpaperCount, false), lastAddShouldRaisePropertyChanged);
 
@@ -181,7 +182,7 @@ namespace UnitTests {
     [Theory]
     [InlineData(2, true), InlineData(3, false), InlineData(4, false)]
     public void ShouldBecomeNullWhenInactiveAndActiveWallpapersAreAddedAfterCreation(int wallpaperCount, bool lastAddShouldRaisePropertyChanged) {
-      WallpaperCategory sut = NewCategory();
+      WallpaperCategory sut = this.NewCategory();
 
       AddWallpapers(sut, this.NewWallpaperList(wallpaperCount, null), lastAddShouldRaisePropertyChanged);
 
@@ -190,7 +191,7 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldBecomeActiveWhenLastInactiveWasRemoved() {
-      WallpaperCategory sut = NewCategory(wallpapers: new[] {
+      WallpaperCategory sut = this.NewCategory(wallpapers: new[] {
         this.NewWallpaper(true),
         this.NewWallpaper(false),
         this.NewWallpaper(true)
@@ -205,7 +206,7 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldBecomeInactiveWhenLastActiveWasRemoved() {
-      WallpaperCategory sut = NewCategory(wallpapers: new[] {
+      WallpaperCategory sut = this.NewCategory(wallpapers: new[] {
         this.NewWallpaper(true),
         this.NewWallpaper(false),
         this.NewWallpaper(false)
@@ -221,7 +222,7 @@ namespace UnitTests {
     [Fact]
     public void ShouldBecomeActiveWhenCleared() {
       List<IWallpaper> mixedWallpapers = this.NewWallpaperList(4, null);
-      WallpaperCategory sut = NewCategory(wallpapers: mixedWallpapers);
+      WallpaperCategory sut = this.NewCategory(wallpapers: mixedWallpapers);
       sut.MonitorEvents();
 
       sut.Wallpapers.Clear();
@@ -232,7 +233,7 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldBecomeActiveWhenEmptied() {
-      WallpaperCategory sut = NewCategory(wallpapers: new[] {
+      WallpaperCategory sut = this.NewCategory(wallpapers: new[] {
         this.NewWallpaper(true),
         this.NewWallpaper(false),
         this.NewWallpaper(false)
@@ -249,7 +250,7 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldBecomeActiveWhenLastInactiveIsToggled() {
-      WallpaperCategory sut = NewCategory(wallpapers: new[] {
+      WallpaperCategory sut = this.NewCategory(wallpapers: new[] {
         this.NewWallpaper(true),
         this.NewWallpaper(false),
         this.NewWallpaper(true)
@@ -264,7 +265,7 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldBecomeInactiveWhenLastActiveIsToggled() {
-      WallpaperCategory sut = NewCategory(wallpapers: new[] {
+      WallpaperCategory sut = this.NewCategory(wallpapers: new[] {
         this.NewWallpaper(false),
         this.NewWallpaper(true),
         this.NewWallpaper(false)
@@ -279,7 +280,7 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldBecomeNullWhenWallpapersAreToggledIntoMixedState() {
-      WallpaperCategory sut = NewCategory(wallpapers: new[] {
+      WallpaperCategory sut = this.NewCategory(wallpapers: new[] {
         this.NewWallpaper(false),
         this.NewWallpaper(false),
         this.NewWallpaper(false)
@@ -293,8 +294,8 @@ namespace UnitTests {
     }
 
     #region Helpers
-    private static WallpaperCategory NewCategory(string name = "New Category", IWallpaperDefaultSettings defaultSettings = null, ICollection<IWallpaper> wallpapers = null) {
-      defaultSettings = defaultSettings ?? new WallpaperDefaultSettings(new WallpaperBaseImpl(), null);
+    private WallpaperCategory NewCategory(string name = "New Category", IWallpaperDefaultSettings defaultSettings = null, ICollection<IWallpaper> wallpapers = null) {
+      defaultSettings = defaultSettings ?? new WallpaperDefaultSettings(new WallpaperBaseImpl(), this.modelFixtures.Create<IDisplayInfo>());
 
       return new WallpaperCategory(name, defaultSettings, wallpapers);
     }
@@ -320,7 +321,7 @@ namespace UnitTests {
     }
 
     private IWallpaper NewWallpaper(bool isActive) {
-      return this.modelFixtures.Build<IWallpaper>().With((x) => x.IsActivated, isActive).Create();
+      return this.modelFixtures.Build<Wallpaper>().With((x) => x.IsActivated, isActive).Create();
     }
 
     private static void AddWallpapers(WallpaperCategory category, IList<IWallpaper> wallpapers, bool lastShouldRaisePropertyChanged) {

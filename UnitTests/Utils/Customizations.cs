@@ -16,6 +16,7 @@ namespace UnitTests {
         fixture.Build<WallpaperBaseImpl>()
         .Without((x) => x.OnlyCycleBetweenStart)
         .Without((x) => x.OnlyCycleBetweenStop)
+        .Without((x) => x.BackgroundColor)
         .Create());
 
       fixture.Register(() => 
@@ -32,7 +33,6 @@ namespace UnitTests {
 
       fixture.Register(() => 
         fixture.Build<WallpaperCategory>()
-        .Without((x) => x.Wallpapers)
         .Create());
 
       fixture.Register(() => new Size(10, 10));

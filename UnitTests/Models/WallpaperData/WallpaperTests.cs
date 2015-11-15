@@ -91,13 +91,6 @@ namespace UnitTests {
       sut.IsImageSizeResolved.Should().BeFalse();
     }
 
-    [Fact]
-    public void ShouldIndicateWhenImageSizeWasNotResolved2() {
-      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
-
-      sut.IsImageSizeResolved.Should().BeFalse();
-    }
-
     [Theory]
     [InlineData(0, 0)]
     [InlineData(-1, 0)]
