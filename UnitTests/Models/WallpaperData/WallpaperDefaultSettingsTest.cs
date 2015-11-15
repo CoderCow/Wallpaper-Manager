@@ -14,12 +14,12 @@ using Xunit;
 
 namespace UnitTests {
   public class WallpaperDefaultSettingsTest {
-    private readonly Fixture concreteValidModels = TestUtils.WallpaperFixture();
+    private readonly Fixture modelFixtures = TestUtils.WallpaperFixture();
 
     [Fact]
     public void CtorShouldSetBaseSettings() {
-      IWallpaperBase baseSettings = this.concreteValidModels.Create<WallpaperBase>();
-      IDisplayInfo displayInfo = this.concreteValidModels.Create<DisplayInfo>();
+      IWallpaperBase baseSettings = this.modelFixtures.Create<WallpaperBase>();
+      IDisplayInfo displayInfo = this.modelFixtures.Create<DisplayInfo>();
       
       WallpaperDefaultSettings sut = new WallpaperDefaultSettings(baseSettings, displayInfo);
 
@@ -28,7 +28,7 @@ namespace UnitTests {
 
     [Fact]
     public void CtorShouldThrowOnNoBaseSettings() {
-      IDisplayInfo displayInfo = this.concreteValidModels.Create<DisplayInfo>();
+      IDisplayInfo displayInfo = this.modelFixtures.Create<DisplayInfo>();
       Action construct = () => new WallpaperDefaultSettings(null, displayInfo);
 
       construct.ShouldThrow<Exception>();
@@ -36,7 +36,7 @@ namespace UnitTests {
 
     [Fact]
     public void CtorShouldThrowOnNoDisplayInfo() {
-      IWallpaperBase baseSettings = this.concreteValidModels.Create<WallpaperBase>();
+      IWallpaperBase baseSettings = this.modelFixtures.Create<WallpaperBase>();
       Action construct = () => new WallpaperDefaultSettings(baseSettings, null);
 
       construct.ShouldThrow<Exception>();
@@ -44,8 +44,8 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldApplySettingsProperlyWithoutAutoDetermination() {
-      IWallpaper target = this.concreteValidModels.Create<Wallpaper>();
-      WallpaperDefaultSettings sut = this.concreteValidModels.Create<WallpaperDefaultSettings>();
+      IWallpaper target = this.modelFixtures.Create<Wallpaper>();
+      WallpaperDefaultSettings sut = this.modelFixtures.Create<WallpaperDefaultSettings>();
       sut.AutoDeterminePlacement = false;
       sut.AutoDetermineIsMultiscreen = false;
 
@@ -62,9 +62,9 @@ namespace UnitTests {
     [InlineData(641, 481, WallpaperPlacement.Uniform)]
     [InlineData(1280, 1024, WallpaperPlacement.Uniform)]
     public void ShouldAutoDeterminePlacementForSingleScreenSystemProperly(int wallpaperWidth, int wallpaperHeight, WallpaperPlacement expectedPlacement) {
-      IWallpaper target = this.concreteValidModels.Create<Wallpaper>();
+      IWallpaper target = this.modelFixtures.Create<Wallpaper>();
       target.ImageSize = new Size(wallpaperWidth, wallpaperHeight);
-      WallpaperDefaultSettings sut = this.concreteValidModels.Create<WallpaperDefaultSettings>();
+      WallpaperDefaultSettings sut = this.modelFixtures.Create<WallpaperDefaultSettings>();
       sut.Settings.IsMultiscreen = false;
       sut.AutoDeterminePlacement = true;
       sut.AutoDetermineIsMultiscreen = false;
@@ -82,7 +82,7 @@ namespace UnitTests {
     [InlineData(640 * 1.5 + 1, 480, WallpaperPlacement.UniformToFill, true)]
     [InlineData(640 * 2, 480, WallpaperPlacement.UniformToFill, true)]
     public void ShouldAutoDetermineForMultiScreenSystemProperly(int wallpaperWidth, int wallpaperHeight, WallpaperPlacement expectedPlacement, bool expectedIsMultiscreen) {
-      IWallpaper target = this.concreteValidModels.Create<Wallpaper>();
+      IWallpaper target = this.modelFixtures.Create<Wallpaper>();
       target.IsMultiscreen = !expectedIsMultiscreen;
       target.ImageSize = new Size(wallpaperWidth, wallpaperHeight);
 
@@ -104,7 +104,7 @@ namespace UnitTests {
     [InlineData(640 * 1.5 + 1, 480, true)]
     [InlineData(640 * 2, 480, true)]
     public void ShouldAutoDetermineMultiScreenButNotPlacement(int wallpaperWidth, int wallpaperHeight, bool expectedIsMultiscreen) {
-      IWallpaper target = this.concreteValidModels.Create<Wallpaper>();
+      IWallpaper target = this.modelFixtures.Create<Wallpaper>();
       target.IsMultiscreen = !expectedIsMultiscreen;
       target.ImageSize = new Size(wallpaperWidth, wallpaperHeight);
 
@@ -122,8 +122,8 @@ namespace UnitTests {
     [Fact]
     public void ShouldCreateProperClones() {
       WallpaperDefaultSettings sut = 
-        this.concreteValidModels.Build<WallpaperDefaultSettings>()
-        .With((x) => x.Settings, this.concreteValidModels.Create<Wallpaper>()) // Note: WallpaperBaseImpl does not implement clone.
+        this.modelFixtures.Build<WallpaperDefaultSettings>()
+        .With((x) => x.Settings, this.modelFixtures.Create<Wallpaper>()) // Note: WallpaperBaseImpl does not implement clone.
         .Create();
       
       var sutClone = (WallpaperDefaultSettings)sut.Clone();
@@ -135,8 +135,8 @@ namespace UnitTests {
     [Fact]
     public void ShouldAssignAllProperties() {
       for (int i = 0; i < 10; i++) {
-        WallpaperDefaultSettings sut = this.concreteValidModels.Create<WallpaperDefaultSettings>();
-        WallpaperDefaultSettings target = this.concreteValidModels.Create<WallpaperDefaultSettings>();
+        WallpaperDefaultSettings sut = this.modelFixtures.Create<WallpaperDefaultSettings>();
+        WallpaperDefaultSettings target = this.modelFixtures.Create<WallpaperDefaultSettings>();
 
         sut.AssignTo(target);
 
@@ -147,18 +147,18 @@ namespace UnitTests {
     #region Helpers
     private WallpaperDefaultSettings DefaultSettingsWithMultiscreenDisplayInfo() {
       IDisplay primaryDisplay =
-        this.concreteValidModels.Build<DisplayStub>()
+        this.modelFixtures.Build<DisplayStub>()
           .With((x) => x.IsPrimary, true)
           .With((x) => x.Bounds, new Rectangle(0, 0, 640, 480))
           .Create();
       IDisplayInfo displayInfo =
-        this.concreteValidModels.Build<DisplayInfoStub>()
+        this.modelFixtures.Build<DisplayInfoStub>()
           .With((x) => x.IsMultiDisplaySystem, true)
           .With((x) => x.PrimaryDisplay, primaryDisplay)
           .With((x) => x.Displays, new ReadOnlyCollection<IDisplay>(new IDisplay[] {}))
           .Create();
 
-      return new WallpaperDefaultSettings(this.concreteValidModels.Create<WallpaperBase>(), displayInfo);
+      return new WallpaperDefaultSettings(this.modelFixtures.Create<WallpaperBase>(), displayInfo);
     }
     #endregion
   }

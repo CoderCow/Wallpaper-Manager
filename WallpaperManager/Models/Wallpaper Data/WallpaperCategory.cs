@@ -112,7 +112,7 @@ namespace WallpaperManager.Models {
     ///   </summary>
     ///   <seealso cref="IWallpaper">Wallpaper Interface</seealso>
     /// </overloads>
-    public WallpaperCategory(string name, WallpaperDefaultSettings defaultSettings, IEnumerable<IWallpaper> wallpapers = null) {
+    public WallpaperCategory(string name, IWallpaperDefaultSettings defaultSettings, IEnumerable<IWallpaper> wallpapers = null) {
       Contract.Requires<ArgumentNullException>(name != null);
       Contract.Requires<ArgumentNullException>(defaultSettings != null);
 

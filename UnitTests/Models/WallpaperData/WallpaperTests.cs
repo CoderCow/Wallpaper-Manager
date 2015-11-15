@@ -10,8 +10,9 @@ using WallpaperManager.Models;
 using Xunit;
 
 namespace UnitTests {
-  
   public class WallpaperTests {
+    private readonly Fixture modelFixtures = TestUtils.WallpaperFixture();
+
     [Fact]
     public void CtorShouldSetImagePath() {
       Path testPath = new Path("SomeFile.png");
@@ -30,14 +31,14 @@ namespace UnitTests {
 
     [Fact]
     public void CtorShouldAssignDefaultBackgroundColor() {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.BackgroundColor.Should().Be(WallpaperBase.DefaultBackgroundColor);
     }
 
     [Fact]
     public void ShouldThrowOnInvalidImagePath() {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.Invoking((x) => x.ImagePath = Path.Invalid).ShouldThrow<Exception>();
     }
@@ -47,7 +48,7 @@ namespace UnitTests {
     [InlineData(-2)]
     [InlineData(-999)]
     public void ShouldThrowOnInvalidTotalCycleCount(int valueToTest) {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.Invoking((x) => x.CycleCountTotal = valueToTest).ShouldThrow<Exception>();
     }
@@ -57,7 +58,7 @@ namespace UnitTests {
     [InlineData(-2)]
     [InlineData(-999)]
     public void ShouldThrowOnInvalidWeekCycleCount(int valueToTest) {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.Invoking((x) => x.CycleCountWeek = valueToTest).ShouldThrow<Exception>();
     }
@@ -67,14 +68,14 @@ namespace UnitTests {
     [InlineData(1)]
     [InlineData(999)]
     public void ShouldntThrowOnValidCycleCount(int valueToTest) {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.Invoking((x) => x.CycleCountTotal = valueToTest);
     }
 
     [Fact]
     public void ShouldIndicateWhenImageSizeWasResolved() {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.ImageSize = new Size(10, 10);
 
@@ -83,7 +84,7 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldIndicateWhenImageSizeWasNotResolved() {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.ImageSize = null;
 
@@ -92,7 +93,7 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldIndicateWhenImageSizeWasNotResolved2() {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.IsImageSizeResolved.Should().BeFalse();
     }
@@ -103,7 +104,7 @@ namespace UnitTests {
     [InlineData(0, -1)]
     [InlineData(-1, -1)]
     public void ShouldThrowOnImageSizeIsZeroOrLess(int width, int height) {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.Invoking((x) => x.ImageSize = new Size(width, height)).ShouldThrow<Exception>();
     }
@@ -114,14 +115,14 @@ namespace UnitTests {
     [InlineData(1, 10)]
     [InlineData(999, 999)]
     public void ShouldNotThrowWhenImageSizeIsGreaterThanZero(int width, int height) {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.ImageSize = new Size(width, height);
     }
 
     [Fact]
     public void ShouldReportErrorWhenCycleTimeIsBelowAddTime() {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.TimeAdded = new DateTime(2000, 1, 1);
       sut.TimeLastCycled = new DateTime(1999, 1, 1);
@@ -136,7 +137,7 @@ namespace UnitTests {
     [InlineData(0, 1)]
     [InlineData(1000, 2000)]
     public void ShouldNotReportErrorWhenCycleTimeIsEqualOrGreater(int addedTimestamp, int cycleTimestamp) {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.TimeAdded = DateTime.FromFileTimeUtc(addedTimestamp);
       sut.TimeLastCycled = DateTime.FromFileTimeUtc(cycleTimestamp);
@@ -148,11 +149,10 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldCreateProperClones() {
-      Wallpaper sut = TestUtils.WallpaperFromFixture();
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
       sut.DisabledScreens.Add(1);
       sut.DisabledScreens.Add(3);
       sut.DisabledScreens.Add(6);
-      var originalDisabledScreens = sut.DisabledScreens;
       
       Wallpaper sutClone = (Wallpaper)sut.Clone();
 
@@ -165,9 +165,8 @@ namespace UnitTests {
     [Fact]
     public void ShouldAssignAllProperties() {
       for (int i = 0; i < 10; i++) {
-        Fixture fixture = TestUtils.WallpaperFixture();
-        Wallpaper target = fixture.Create<Wallpaper>();
-        Wallpaper sut = fixture.Create<Wallpaper>();
+        Wallpaper target = this.modelFixtures.Create<Wallpaper>();
+        Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
         sut.AssignTo(target);
 

@@ -11,7 +11,7 @@ using Xunit;
 
 namespace UnitTests {
   public class ScreenSettingsTest {
-    private readonly Fixture concreteValidModels = TestUtils.WallpaperFixture();
+    private readonly Fixture modelFactory = TestUtils.WallpaperFixture();
 
     [Fact]
     public void TextOverlaysShouldNotBeNull() {
@@ -22,7 +22,7 @@ namespace UnitTests {
 
     [Fact]
     public void ShouldCreateProperClones() {
-      ScreenSettings sut = this.concreteValidModels.Create<ScreenSettings>();
+      ScreenSettings sut = this.modelFactory.Create<ScreenSettings>();
       
       var sutClone = (ScreenSettings)sut.Clone();
 
@@ -35,8 +35,8 @@ namespace UnitTests {
     [Fact]
     public void ShouldAssignAllProperties() {
       for (int i = 0; i < 10; i++) {
-        ScreenSettings sut = this.concreteValidModels.Create<ScreenSettings>();
-        ScreenSettings target = this.concreteValidModels.Create<ScreenSettings>();
+        ScreenSettings sut = this.modelFactory.Create<ScreenSettings>();
+        ScreenSettings target = this.modelFactory.Create<ScreenSettings>();
 
         sut.AssignTo(target);
 
