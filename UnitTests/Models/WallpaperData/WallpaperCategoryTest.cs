@@ -7,7 +7,7 @@ using WallpaperManager.Models;
 using Xunit;
 
 namespace UnitTests {
-  public class WallpaperCategoryTests {
+  public class WallpaperCategoryTest {
     private readonly Fixture modelFixtures = TestUtils.WallpaperFixture();
 
     [Fact]

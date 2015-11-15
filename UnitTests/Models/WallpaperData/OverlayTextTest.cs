@@ -10,7 +10,7 @@ using WallpaperManager.Models;
 using Xunit;
 
 namespace UnitTests {
-  public class WallpaperTextOverlayTest {
+  public class OverlayTextTest {
     private readonly Fixture modelFixtures = TestUtils.WallpaperFixture();
 
     [Fact]

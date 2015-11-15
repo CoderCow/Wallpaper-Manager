@@ -129,20 +129,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ConfigurationTest.cs" />
     <Compile Include="Models\ScreenSettingsTest.cs" />
     <Compile Include="Models\WallpaperData\Stubs\DisplayInfoStub.cs" />
     <Compile Include="Models\WallpaperData\Stubs\DisplayStub.cs" />
-    <Compile Include="Models\WallpaperData\WallpaperTextOverlayTest.cs" />
+    <Compile Include="Models\WallpaperData\OverlayTextTest.cs" />
     <Compile Include="Utils\AutoInvalidEnumData.cs" />
     <Compile Include="Utils\AutoValidEnumData.cs" />
     <Compile Include="Utils\TestUtils.cs" />
-    <Compile Include="Models\WallpaperData\WallpaperCategoryTests.cs" />
+    <Compile Include="Models\WallpaperData\WallpaperCategoryTest.cs" />
     <Compile Include="Models\WallpaperData\WallpaperDefaultSettingsTest.cs" />
     <Compile Include="Utils\Customizations.cs" />
     <Compile Include="Utils\FluentAssertionsExtensions.cs" />
     <Compile Include="Utils\SpeciemenBuilders.cs" />
-    <Compile Include="Models\WallpaperData\WallpaperBaseTests.cs" />
-    <Compile Include="Models\WallpaperData\WallpaperTests.cs" />
+    <Compile Include="Models\WallpaperData\WallpaperBaseTest.cs" />
+    <Compile Include="Models\WallpaperData\WallpaperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\WallpaperData\Stubs\WallpaperBaseImpl.cs" />
   </ItemGroup>
