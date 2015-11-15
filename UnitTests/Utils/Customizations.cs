@@ -55,6 +55,8 @@ namespace UnitTests {
         .With((x) => x.IsMultiDisplaySystem, false)
         .Create());
 
+      fixture.Register<IScreenSettings>(fixture.Create<ScreenSettings>);
+      
       fixture.Customizations.Add(new StringSpeciemenBuilder());
       fixture.Customizations.Add(new FullPathSpeciemenBuilder());
     }

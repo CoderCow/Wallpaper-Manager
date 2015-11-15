@@ -143,10 +143,10 @@ namespace WallpaperManager.Models {
 
           for (int i = 0; i < this.ScreensSettings.Count; i++) {
             if (this.ScreensSettings[i].CycleRandomly || !WallpaperChanger.EvaluateCycleConditions(this.ScreensSettings[i].StaticWallpaper)) {
-              if (multiscreenWallpaperRect == null)
+              /*if (multiscreenWallpaperRect == null)
                 multiscreenWallpaperRect = this.ScreensSettings[i].BoundsWithMargin;
               else
-                multiscreenWallpaperRect = Rectangle.Union(multiscreenWallpaperRect.Value, this.ScreensSettings[i].BoundsWithMargin);
+                multiscreenWallpaperRect = Rectangle.Union(multiscreenWallpaperRect.Value, this.ScreensSettings[i].BoundsWithMargin);*/
             }
           }
 
@@ -163,7 +163,7 @@ namespace WallpaperManager.Models {
 
           // Draw or overdraw all static wallpapers and draw the Overlay Texts for all screens.
           for (int i = 0; i < this.ScreensSettings.Count; i++) {
-            destinationGraphics.SetClip(this.ScreensSettings[i].BoundsWithMargin);
+            /*destinationGraphics.SetClip(this.ScreensSettings[i].BoundsWithMargin);
 
             if (!this.ScreensSettings[i].CycleRandomly && WallpaperChanger.EvaluateCycleConditions(this.ScreensSettings[i].StaticWallpaper)) {
               WallpaperBuilderBase.DrawWallpaper(
@@ -178,7 +178,7 @@ namespace WallpaperManager.Models {
               this.ScreensSettings[i].BoundsWithMargin,
               new[] {multiscreenWallpaper},
               this.ScreensSettings[i].TextOverlays);
-            destinationGraphics.ResetClip();
+            destinationGraphics.ResetClip();*/
           }
 
           if (requiresWindowsFix) {
@@ -280,14 +280,14 @@ namespace WallpaperManager.Models {
           destinationGraphics.ScaleTransform(scaleFactor, scaleFactor);
 
           for (int i = 0; i < screenCount; i++) {
-            Rectangle screenBounds = this.ScreensSettings[i].BoundsWithMargin;
+            /*Rectangle screenBounds = this.ScreensSettings[i].BoundsWithMargin;
             screenBounds.X += xOriginAdd;
             screenBounds.Y += yOriginAdd;
 
             destinationGraphics.SetClip(screenBounds, CombineMode.Replace);
             WallpaperBuilderBase.DrawWallpaper(destinationGraphics, screenBounds, wallpapers[i], wallpapers[i].Placement);
             WallpaperBuilderBase.DrawOverlayTexts(destinationGraphics, screenBounds, wallpapers, this.ScreensSettings[i].TextOverlays);
-            destinationGraphics.ResetClip();
+            destinationGraphics.ResetClip();*/
           }
 
           if (requiresWindowsFix) {

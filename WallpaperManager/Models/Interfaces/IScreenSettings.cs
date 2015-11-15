@@ -16,14 +16,6 @@ namespace WallpaperManager.Models {
   [ContractClass(typeof(IScreenSettingsContracts))]
   public interface IScreenSettings: ICloneable, IAssignable {
     /// <summary>
-    ///   Gets the index of the screen of which this instance defines settings for.
-    /// </summary>
-    /// <value>
-    ///   The index of the screen of which this instance defines settings for.
-    /// </value>
-    int Index { get; }
-
-    /// <summary>
     ///   Gets or sets a <see cref="bool" /> indicating whether wallpapers will be cycled randomly on this screen or not.
     /// </summary>
     /// <value>
@@ -74,22 +66,6 @@ namespace WallpaperManager.Models {
     int MarginBottom { get; set; }
 
     /// <summary>
-    ///   Gets the bounds of the assigned screen.
-    /// </summary>
-    /// <value>
-    ///   The bounds of the assigned screen.
-    /// </value>
-    Rectangle Bounds { get; }
-
-    /// <summary>
-    ///   Gets the bounds of the assigned screen with their margin substracted.
-    /// </summary>
-    /// <value>
-    ///   The bounds of the assigned screen with their margin substracted.
-    /// </value>
-    Rectangle BoundsWithMargin { get; }
-
-    /// <summary>
     ///   Gets the collection of <see cref="WallpaperTextOverlay" /> objects which should be applied on this screen.
     /// </summary>
     /// <value>
@@ -101,27 +77,18 @@ namespace WallpaperManager.Models {
 
   [ContractClassFor(typeof(IScreenSettings))]
   internal abstract class IScreenSettingsContracts : IScreenSettings {
-    public abstract int Index { get; }
     public abstract bool CycleRandomly { get; set; }
     public abstract IWallpaper StaticWallpaper { get; set; }
     public abstract int MarginLeft { get; set; }
     public abstract int MarginRight { get; set; }
     public abstract int MarginTop { get; set; }
     public abstract int MarginBottom { get; set; }
-    public abstract Rectangle Bounds { get; }
-    public abstract Rectangle BoundsWithMargin { get; }
-    public abstract ObservableCollection<IWallpaperTextOverlay> TextOverlays { get; }
 
-    /// <summary>
-    ///   Checks whether all properties have valid values.
-    /// </summary>
-    [ContractInvariantMethod]
-    private void CheckInvariants() {
-      Contract.Invariant(this.Index.IsBetween(0, Screen.AllScreens.Length - 1));
-      Contract.Invariant(this.StaticWallpaper != null);
-      Contract.Invariant(this.TextOverlays != null);
-      Contract.Invariant(this.TextOverlays != null);
-      Contract.Invariant(this.Bounds.Width > 0 && this.Bounds.Height > 0);
+    public ObservableCollection<IWallpaperTextOverlay> TextOverlays {
+      get {
+        Contract.Ensures(Contract.Result<ObservableCollection<IWallpaperTextOverlay>>() != null);
+        throw new NotImplementedException();
+      }
     }
 
     public abstract object Clone();

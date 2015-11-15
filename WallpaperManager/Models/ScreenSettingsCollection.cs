@@ -74,12 +74,12 @@ namespace WallpaperManager.Models {
     /// </exception>
     /// <seealso cref="ScreenSettings">ScreenSettings Class</seealso>
     public ScreenSettingsCollection(IList<ScreenSettings> screenSettings = null) : base(new ObservableCollection<ScreenSettings>()) {
-      if (screenSettings != null)
+      /*if (screenSettings != null)
         foreach (ScreenSettings settings in screenSettings)
           this.Items.Add(settings);
       else
         for (int i = 0; i < Screen.AllScreens.Length; i++) 
-          this.Items.Add(new ScreenSettings(i));
+          this.Items.Add(new ScreenSettings(i));*/
     }
 
     /// <summary>
@@ -87,8 +87,8 @@ namespace WallpaperManager.Models {
     ///   <see cref="ScreenSettings.BoundsWithMargin" /> of all <see cref="ScreenSettings" /> instances in this collection.
     /// </summary>
     public void RefreshBounds() {
-      foreach (ScreenSettings screenSettings in this)
-        screenSettings.RefreshBounds();
+      /*foreach (ScreenSettings screenSettings in this)
+        screenSettings.RefreshBounds();*/
     }
 
     #region ICloneable Implementation, IAssignable Implementation

@@ -129,6 +129,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ScreenSettingsTest.cs" />
     <Compile Include="Models\WallpaperData\Stubs\DisplayInfoStub.cs" />
     <Compile Include="Models\WallpaperData\Stubs\DisplayStub.cs" />
     <Compile Include="Utils\TestUtils.cs" />
