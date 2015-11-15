@@ -166,12 +166,12 @@ namespace UnitTests {
     public void ShouldAssignAllProperties() {
       for (int i = 0; i < 10; i++) {
         Fixture fixture = TestUtils.WallpaperFixture();
-        Wallpaper sutA = fixture.Create<Wallpaper>();
-        Wallpaper sutB = fixture.Create<Wallpaper>();
+        Wallpaper target = fixture.Create<Wallpaper>();
+        Wallpaper sut = fixture.Create<Wallpaper>();
 
-        sutB.AssignTo(sutA);
+        sut.AssignTo(target);
 
-        sutA.Should().BePropertyValueEqual(sutB);
+        target.Should().BePropertyValueEqual(sut);
       }
     }
   }

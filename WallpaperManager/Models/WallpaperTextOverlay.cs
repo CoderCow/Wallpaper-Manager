@@ -91,13 +91,13 @@ namespace WallpaperManager.Models {
     ///   Initializes a new instance of the <see cref="WallpaperTextOverlay" /> class.
     /// </summary>
     public WallpaperTextOverlay() {
-      this.FontName = WallpaperTextOverlay.DefaultFontName;
-      this.FontSize = WallpaperTextOverlay.DefaultFontSize;
-      this.FontStyle = WallpaperTextOverlay.DefaultFontStyle;
+      this.FontName = DefaultFontName;
+      this.FontSize = DefaultFontSize;
+      this.FontStyle = DefaultFontStyle;
       this.Format = LocalizationManager.GetLocalizedString("OverlayTextData.DefaultFormat");
-      this.ForeColor = WallpaperTextOverlay.DefaultForeColor;
-      this.BorderColor = WallpaperTextOverlay.DefaultBorderColor;
-      this.Position = WallpaperTextOverlay.DefaultPosition;
+      this.ForeColor = DefaultForeColor;
+      this.BorderColor = DefaultBorderColor;
+      this.Position = DefaultPosition;
     }
     
     #region Overrides of ValidatableBase

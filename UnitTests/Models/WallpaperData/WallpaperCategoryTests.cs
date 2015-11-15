@@ -9,11 +9,11 @@ using Ploeh.AutoFixture;
 using WallpaperManager.Models;
 using Xunit;
 
-namespace UnitTests.Models.WallpaperData {
+namespace UnitTests {
   public class WallpaperCategoryTests {
     [Fact]
     public void CtorShouldThrowOnNullName() {
-      Action construct = () => new WallpaperCategory(null, new WallpaperDefaultSettings(new WallpaperBaseImpl()));
+      Action construct = () => new WallpaperCategory(null, new WallpaperDefaultSettings(new WallpaperBaseImpl(), null));
 
       construct.ShouldThrow<ArgumentNullException>();
     }
@@ -32,7 +32,7 @@ namespace UnitTests.Models.WallpaperData {
 
     [Fact]
     public void CtorShouldSetDefaultSettings() {
-      WallpaperDefaultSettings expectedDefaultSettings = new WallpaperDefaultSettings(new WallpaperBaseImpl());
+      WallpaperDefaultSettings expectedDefaultSettings = new WallpaperDefaultSettings(new WallpaperBaseImpl(), null);
       
       WallpaperCategory sut = NewCategory(defaultSettings: expectedDefaultSettings);
 
@@ -303,7 +303,7 @@ namespace UnitTests.Models.WallpaperData {
 
     #region Helpers
     private static WallpaperCategory NewCategory(string name = "New Category", WallpaperDefaultSettings defaultSettings = null, ICollection<Wallpaper> wallpapers = null) {
-      defaultSettings = defaultSettings ?? new WallpaperDefaultSettings(new WallpaperBaseImpl());
+      defaultSettings = defaultSettings ?? new WallpaperDefaultSettings(new WallpaperBaseImpl(), null);
 
       return new WallpaperCategory(name, defaultSettings, wallpapers);
     }
