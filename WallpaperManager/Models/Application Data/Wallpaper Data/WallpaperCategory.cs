@@ -12,6 +12,7 @@ using System.Diagnostics.Contracts;
 using System.Windows;
 using Common;
 using Common.IO;
+using Common.Presentation;
 using PropertyChanged;
 
 namespace WallpaperManager.Models {

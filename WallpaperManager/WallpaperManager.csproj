@@ -183,10 +183,6 @@
       <HintPath>..\packages\AvalonLibrary.2.2.0.0\lib\net40\AvalonLibrary.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Common.Presentation, Version=1.0.591.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>References\Common.Presentation.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -240,11 +236,9 @@
     <Compile Include="Models\Application Data\Interfaces\ApplicationData.cs" />
     <Compile Include="Models\Application Data\Interfaces\IApplicationDataReader.cs" />
     <Compile Include="Models\Application Data\Interfaces\IApplicationDataWriter.cs" />
-    <Compile Include="Models\CollectionPropertyChangedListener.cs" />
     <Compile Include="Models\Application Data\Interfaces\IApplicationData.cs" />
     <Compile Include="Models\Application Data\Wallpaper Data\Interfaces\IWallpaperTextOverlay.cs" />
-    <Compile Include="Models\LegacyAppDataReader.cs" />
-    <Compile Include="Models\ValidatableBase.cs" />
+    <Compile Include="Models\Application Data\LegacyAppDataReader.cs" />
     <Compile Include="Models\EventArgs\RequestWallpapersEventArgs.cs" />
     <Compile Include="Models\EventArgs\VersionCheckSuccessfulEventArgs.cs" />
     <Compile Include="Models\UpdateManager.cs" />
@@ -339,6 +333,10 @@
     <ProjectReference Include="..\..\..\Framework\Common Library\Common Library\Common Library.csproj">
       <Project>{030c8ed2-1861-416d-afd9-1a01e8b515be}</Project>
       <Name>Common Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Framework\Common Library\Common.Presentation Library\Common.Presentation.csproj">
+      <Project>{f257c267-395b-4794-878d-2291c5c8a45e}</Project>
+      <Name>Common.Presentation</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

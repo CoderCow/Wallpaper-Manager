@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Drawing;
 using Common;
+using Common.Presentation;
 
 namespace WallpaperManager.Models {
   /// <summary>

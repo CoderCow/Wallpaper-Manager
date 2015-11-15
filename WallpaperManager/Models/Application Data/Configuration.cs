@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Reflection;
 using Common;
+using Common.Presentation;
 using Common.Windows;
 
 namespace WallpaperManager.Models {

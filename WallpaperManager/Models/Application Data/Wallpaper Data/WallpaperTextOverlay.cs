@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Text;
 using Common;
 using Common.IO;
+using Common.Presentation;
 
 namespace WallpaperManager.Models {
   /// <summary>

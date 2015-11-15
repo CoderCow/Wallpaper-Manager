@@ -152,6 +152,10 @@
       <Project>{030c8ed2-1861-416d-afd9-1a01e8b515be}</Project>
       <Name>Common Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Framework\Common Library\Common.Presentation Library\Common.Presentation.csproj">
+      <Project>{f257c267-395b-4794-878d-2291c5c8a45e}</Project>
+      <Name>Common.Presentation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WallpaperManager\WallpaperManager.csproj">
       <Project>{3b6ebf8b-bd01-4b66-800e-2e3dfd27c9e5}</Project>
       <Name>WallpaperManager</Name>
