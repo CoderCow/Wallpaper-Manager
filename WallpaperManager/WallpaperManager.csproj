@@ -238,6 +238,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Models\CollectionPropertyChangedListener.cs" />
+    <Compile Include="Models\Interfaces\IApplicationData.cs" />
     <Compile Include="Models\Interfaces\IWallpaperTextOverlay.cs" />
     <Compile Include="Models\ValidatableBase.cs" />
     <Compile Include="Models\EventArgs\RequestWallpapersEventArgs.cs" />
