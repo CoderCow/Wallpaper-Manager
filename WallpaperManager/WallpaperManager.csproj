@@ -237,36 +237,39 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Models\Application Data\Interfaces\ApplicationData.cs" />
+    <Compile Include="Models\Application Data\Interfaces\IApplicationDataReader.cs" />
+    <Compile Include="Models\Application Data\Interfaces\IApplicationDataWriter.cs" />
     <Compile Include="Models\CollectionPropertyChangedListener.cs" />
-    <Compile Include="Models\Interfaces\IApplicationData.cs" />
-    <Compile Include="Models\Interfaces\IWallpaperTextOverlay.cs" />
+    <Compile Include="Models\Application Data\Interfaces\IApplicationData.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Interfaces\IWallpaperTextOverlay.cs" />
+    <Compile Include="Models\LegacyAppDataReader.cs" />
     <Compile Include="Models\ValidatableBase.cs" />
     <Compile Include="Models\EventArgs\RequestWallpapersEventArgs.cs" />
     <Compile Include="Models\EventArgs\VersionCheckSuccessfulEventArgs.cs" />
     <Compile Include="Models\UpdateManager.cs" />
     <Compile Include="Models\AppEnvironment.cs" />
-    <Compile Include="Models\Configuration\Configuration.cs" />
-    <Compile Include="Models\Enumerations\TextOverlayPosition.cs" />
-    <Compile Include="Models\Enumerations\TrayIconClickAction.cs" />
-    <Compile Include="Models\Enumerations\WallpaperChangeType.cs" />
-    <Compile Include="Models\Enumerations\WallpaperClickAction.cs" />
-    <Compile Include="Models\Enumerations\WallpaperEffects.cs" />
-    <Compile Include="Models\Enumerations\WallpaperPlacement.cs" />
-    <Compile Include="Models\Interfaces\IConfiguration.cs" />
-    <Compile Include="Models\Interfaces\IScreenSettings.cs" />
-    <Compile Include="Models\Interfaces\IWallpaper.cs" />
-    <Compile Include="Models\Interfaces\IWallpaperCategory.cs" />
-    <Compile Include="Models\Interfaces\IWallpaperBase.cs" />
-    <Compile Include="Models\Interfaces\IWallpaperDefaultSettings.cs" />
+    <Compile Include="Models\Application Data\Configuration.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Enumerations\TextOverlayPosition.cs" />
+    <Compile Include="Models\Application Data\Enumerations\TrayIconClickAction.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Enumerations\WallpaperChangeType.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Enumerations\WallpaperClickAction.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Enumerations\WallpaperEffects.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Enumerations\WallpaperPlacement.cs" />
+    <Compile Include="Models\Application Data\Interfaces\IConfiguration.cs" />
+    <Compile Include="Models\Application Data\Interfaces\IScreenSettings.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Interfaces\IWallpaper.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Interfaces\IWallpaperCategory.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Interfaces\IWallpaperBase.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Interfaces\IWallpaperDefaultSettings.cs" />
     <Compile Include="Models\LocalizationManager.cs" />
-    <Compile Include="Models\ScreenSettings.cs" />
+    <Compile Include="Models\Application Data\ScreenSettings.cs" />
     <Compile Include="Models\WallpaperCategoryFileSynchronizer.cs" />
-    <Compile Include="Models\Wallpaper Data\Wallpaper.cs" />
-    <Compile Include="Models\Wallpaper Data\WallpaperCategory.cs" />
-    <Compile Include="Models\Wallpaper Data\WallpaperCategoryCollection.cs" />
-    <Compile Include="Models\Wallpaper Data\WallpaperDefaultSettings.cs" />
-    <Compile Include="Models\Wallpaper Data\WallpaperBase.cs" />
-    <Compile Include="Models\WallpaperTextOverlay.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Wallpaper.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\WallpaperCategory.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\WallpaperDefaultSettings.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\WallpaperBase.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\WallpaperTextOverlay.cs" />
     <Compile Include="Locale\PotGenerator.cs" />
     <Compile Include="Locale\ResxGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -337,6 +340,9 @@
       <Project>{030c8ed2-1861-416d-afd9-1a01e8b515be}</Project>
       <Name>Common Library</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
