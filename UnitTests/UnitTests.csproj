@@ -129,6 +129,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\WallpaperData\Stubs\DisplayInfoStub.cs" />
+    <Compile Include="Models\WallpaperData\Stubs\DisplayStub.cs" />
     <Compile Include="Utils\TestUtils.cs" />
     <Compile Include="Models\WallpaperData\WallpaperCategoryTests.cs" />
     <Compile Include="Models\WallpaperData\WallpaperDefaultSettingsTest.cs" />

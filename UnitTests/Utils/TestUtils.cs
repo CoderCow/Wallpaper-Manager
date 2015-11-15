@@ -1,5 +1,5 @@
 using Ploeh.AutoFixture;
-using UnitTests.Models.WallpaperData;
+using UnitTests;
 using WallpaperManager.Models;
 
 namespace UnitTests {

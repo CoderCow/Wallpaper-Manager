@@ -5,8 +5,8 @@
 using System;
 using System.Diagnostics.Contracts;
 using System.Drawing;
-using System.Windows.Forms;
 using Common;
+using Common.Windows;
 using PropertyChanged;
 
 namespace WallpaperManager.Models {
@@ -16,15 +16,17 @@ namespace WallpaperManager.Models {
   /// <threadsafety static="true" instance="false" />
   [ImplementPropertyChanged]
   public class WallpaperDefaultSettings : IWallpaperDefaultSettings, ICloneable, IAssignable {
-    private static Size MaxImageSizeSuitableForTiledWallpaper = new Size(640, 480);
+    public static Size MaxImageSizeSuitableForTiledWallpaper = new Size(640, 480);
     /// <summary>
     ///   The factor by which a wallpaper's width must be larger than the primary screen to be 
     ///   automatically considered a multiscreen wallpaper.
     /// </summary>
-    private const float MultiscreenWidthOversizeFactor = 0.5f;
+    public const float MultiscreenWidthOversizeFactor = 0.5f;
+
+    private readonly IDisplayInfo displayInfo;
 
     /// <inheritdoc />  
-    public WallpaperBase Settings { get; set; }
+    public IWallpaperBase Settings { get; set; }
 
     /// <inheritdoc />
     public bool AutoDetermineIsMultiscreen { get; set; }
@@ -35,27 +37,24 @@ namespace WallpaperManager.Models {
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperDefaultSettings" /> class.
     /// </summary>
-    public WallpaperDefaultSettings(WallpaperBase baseSettings) {
+    public WallpaperDefaultSettings(IWallpaperBase baseSettings, IDisplayInfo displayInfo) {
       Contract.Requires<ArgumentNullException>(baseSettings != null);
+      Contract.Requires<ArgumentNullException>(displayInfo != null);
 
       this.Settings = baseSettings;
+      this.displayInfo = displayInfo;
       this.AutoDetermineIsMultiscreen = true;
       this.AutoDeterminePlacement = true;
     }
 
     /// <summary>
-    ///   Automatically suggests <see cref="WallpaperBase.IsMultiscreen" /> and <see cref="WallpaperBase.Placement" /> for the given <paramref name="target" /> 
+    ///   Automatically suggests <see cref="IWallpaperBase.IsMultiscreen" /> and <see cref="IWallpaperBase.Placement" /> for the given <paramref name="target" /> 
     ///   according to <see cref="AutoDetermineIsMultiscreen" /> and <see cref="AutoDeterminePlacement" />.
     /// </summary>
     /// <param name="target">
-    ///   The <see cref="Wallpaper" /> to apply the settings to.
+    ///   The <see cref="IWallpaper" /> to apply the settings to.
     /// </param>
-    /// <exception cref="ArgumentException">
-    ///   <paramref name="target" /> has no image size assigned.
-    /// </exception>
-    public void ApplyToWallpaper(Wallpaper target) {
-      Contract.Requires<ArgumentException>(target.IsImageSizeResolved);
-
+    public void ApplyToWallpaper(IWallpaper target) {
       this.Settings.AssignTo(target);
 
       if (this.AutoDeterminePlacement) {
@@ -67,25 +66,22 @@ namespace WallpaperManager.Models {
           target.Placement = WallpaperPlacement.Uniform;
       }
 
-      bool isMultiscreenSystem = Screen.AllScreens.Length > 1;
-      if (!isMultiscreenSystem) {
-        target.IsMultiscreen = false;
-      } else {
-        if (this.AutoDetermineIsMultiscreen) {
-          Rectangle primaryScreenBounds = Screen.PrimaryScreen.Bounds;
+      if (this.AutoDetermineIsMultiscreen) {
+        Rectangle primaryDisplayBounds = this.displayInfo.PrimaryDisplay.Bounds;
 
-          if (target.ImageSize.Value.Width > (primaryScreenBounds.Width * (MultiscreenWidthOversizeFactor + 1f))) {
-            target.IsMultiscreen = true;
-            target.Placement = WallpaperPlacement.UniformToFill;
-          }
-        }
+        target.IsMultiscreen = this.displayInfo.IsMultiDisplaySystem && (target.ImageSize.Value.Width > (primaryDisplayBounds.Width * (MultiscreenWidthOversizeFactor + 1f)));
+        if (this.AutoDeterminePlacement && target.IsMultiscreen)
+          target.Placement = WallpaperPlacement.UniformToFill;
       }
     }
 
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />
     public object Clone() {
-      return this.MemberwiseClone();
+      var clone = (WallpaperDefaultSettings)this.MemberwiseClone();
+      clone.Settings = (IWallpaperBase)this.Settings.Clone();
+
+      return clone;
     }
 
     /// <inheritdoc />

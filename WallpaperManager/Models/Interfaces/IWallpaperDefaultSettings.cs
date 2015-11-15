@@ -12,27 +12,39 @@ namespace WallpaperManager.Models {
   /// </summary>
   [ContractClass(typeof(IWallpaperDefaultSettingsContracts))]
   public interface IWallpaperDefaultSettings : ICloneable, IAssignable {
-    WallpaperBase Settings { get; set; }
+    IWallpaperBase Settings { get; set; }
 
     /// <summary>
-    ///   Gets or sets a value indicating whether the <see cref="WallpaperBase.IsMultiscreen" /> property should be
+    ///   Gets or sets a value indicating whether the <see cref="IWallpaperBase.IsMultiscreen" /> property should be
     ///   determined automatically or not.
     /// </summary>
     /// <value>
-    ///   <c>true</c> whether the <see cref="WallpaperBase.IsMultiscreen" /> property should be determined
+    ///   <c>true</c> whether the <see cref="IWallpaperBase.IsMultiscreen" /> property should be determined
     ///   automatically; otherwise <c>false</c>.
     /// </value>
     bool AutoDetermineIsMultiscreen { get; set; }
 
     /// <summary>
-    ///   Gets or sets a value indicating whether the <see cref="WallpaperBase.Placement" />
+    ///   Gets or sets a value indicating whether the <see cref="IWallpaperBase.Placement" />
     ///   property should be determined automatically or not.
     /// </summary>
     /// <value>
-    ///   <c>true</c> whether the <see cref="WallpaperBase.Placement" /> property should be
+    ///   <c>true</c> whether the <see cref="IWallpaperBase.Placement" /> property should be
     ///   determined automatically; otherwise <c>false</c>.
     /// </value>
     bool AutoDeterminePlacement { get; set; }
+
+    /// <summary>
+    ///   Automatically suggests <see cref="IWallpaperBase.IsMultiscreen" /> and <see cref="IWallpaperBase.Placement" /> for the given <paramref name="target" /> 
+    ///   according to <see cref="WallpaperDefaultSettings.AutoDetermineIsMultiscreen" /> and <see cref="WallpaperDefaultSettings.AutoDeterminePlacement" />.
+    /// </summary>
+    /// <param name="target">
+    ///   The <see cref="IWallpaper" /> to apply the settings to.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    ///   <paramref name="target" /> has no image size assigned.
+    /// </exception>
+    void ApplyToWallpaper(IWallpaper target);
   }
 
   [ContractClassFor(typeof(IWallpaperDefaultSettings))]
@@ -40,15 +52,20 @@ namespace WallpaperManager.Models {
     public abstract bool AutoDetermineIsMultiscreen { get; set; }
     public abstract bool AutoDeterminePlacement { get; set; }
 
-    public WallpaperBase Settings {
+    public IWallpaperBase Settings {
       get {
-        Contract.Ensures(Contract.Result<WallpaperBase>() != null);
+        Contract.Ensures(Contract.Result<IWallpaperBase>() != null);
         throw new NotImplementedException();
       }
       set {
         Contract.Requires<ArgumentNullException>(value != null);
         throw new NotImplementedException();
       }
+    }
+
+    public void ApplyToWallpaper(IWallpaper target) {
+      Contract.Requires<ArgumentNullException>(target != null);
+      Contract.Requires<ArgumentException>(target.IsImageSizeResolved);
     }
 
     public abstract object Clone();
