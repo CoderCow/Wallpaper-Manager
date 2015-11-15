@@ -662,6 +662,143 @@ namespace WallpaperManager.Models {
     }
   }
 
+  /// <summary>
+  ///   Returns the format string with replaced parameter values.
+  /// </summary>
+  /// <param name="wallpapers">
+  ///   The collection of <see cref="Wallpaper" /> objects which are actually being applied.
+  /// </param>
+  /// <returns>
+  ///   The format string with replaced parameter values.
+  /// </returns>
+  /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
+  public string GetEvaluatedText(IList<IWallpaper> wallpapers) {
+    StringBuilder evaluatedText = new StringBuilder();
+
+    bool inParam = false;
+    int lastParamStart = 0;
+    for (int i = 0; i < this.Format.Length; i++) {
+      char currentChar = this.Format[i];
+
+      if (currentChar == '%') {
+        if (inParam) {
+          string parameter = this.Format.Substring(lastParamStart + 1, i - lastParamStart - 1);
+          parameter = parameter.ToUpperInvariant();
+
+          switch (parameter) {
+            case "DATE":
+              evaluatedText.Append(DateTime.Today.ToString("dd.MM.yy", CultureInfo.CurrentCulture));
+              break;
+            case "DATEFMT":
+              evaluatedText.Append(DateTime.Today.ToString("MMMM d, yyyy", CultureInfo.CurrentCulture));
+              break;
+            case "TIME":
+              evaluatedText.Append(DateTime.Now.ToString("hh:mm:ss", CultureInfo.CurrentCulture));
+              break;
+            case "DAYOFWEEK":
+              evaluatedText.Append(DateTime.Today.DayOfWeek);
+              break;
+            case "USERNAME":
+              evaluatedText.Append(Environment.UserName);
+              break;
+            case "MACHINENAME":
+              evaluatedText.Append(Environment.MachineName);
+              break;
+            case "OSVERSION":
+              evaluatedText.Append(Environment.OSVersion.VersionString);
+              break;
+            case "SYSTEMRUNTIME":
+              TimeSpan runtime = TimeSpan.FromMilliseconds(Environment.TickCount);
+
+              if (runtime.Days > 0)
+                evaluatedText.Append(string.Format(CultureInfo.CurrentCulture, "{0}.{1:00}:{2:00}:{3:00}", runtime.Days, runtime.Hours, runtime.Minutes, runtime.Seconds));
+              else
+                evaluatedText.Append(string.Format(CultureInfo.CurrentCulture, "{0:00}:{1:00}:{2:00}", runtime.Hours, runtime.Minutes, runtime.Seconds));
+
+              break;
+            case "SYSTEMRUNTIMEFMT":
+              TimeSpan runtime2 = TimeSpan.FromMilliseconds(Environment.TickCount);
+
+              if (runtime2.Days > 0)
+                evaluatedText.Append(string.Format(CultureInfo.CurrentCulture, "{0} days, {1} hours, {2} minutes", runtime2.Days, runtime2.Hours, runtime2.Minutes));
+              else
+                evaluatedText.Append(string.Format(CultureInfo.CurrentCulture, "{0} hours, {1} minutes", runtime2.Hours, runtime2.Minutes));
+
+              break;
+            case "SYSTEMSTARTTIME":
+              TimeSpan runtime3 = TimeSpan.FromMilliseconds(Environment.TickCount);
+
+              evaluatedText.Append(DateTime.Now.Subtract(runtime3).ToString("hh:mm:ss", CultureInfo.CurrentCulture));
+              break;
+            case "SYSTEMSTARTTIMED":
+              TimeSpan runtime4 = TimeSpan.FromMilliseconds(Environment.TickCount);
+
+              evaluatedText.Append(DateTime.Now.Subtract(runtime4).ToString("dd.MM.yy, hh:mm:ss", CultureInfo.CurrentCulture));
+              break;
+            case "SYSTEMSTARTTIMEDFMT":
+              TimeSpan runtime5 = TimeSpan.FromMilliseconds(Environment.TickCount);
+
+              evaluatedText.Append(DateTime.Now.Subtract(runtime5).ToString("MMMM d, yyyy hh:mm:ss", CultureInfo.CurrentCulture));
+              break;
+            case "LB":
+              evaluatedText.AppendLine();
+              break;
+            default:
+              if (parameter.Length > 9 && parameter.StartsWith("WALLPAPER", StringComparison.OrdinalIgnoreCase)) {
+                int screenIndex;
+
+                if (int.TryParse(parameter.Substring(9), out screenIndex)) {
+                  if (screenIndex > wallpapers.Count || screenIndex <= 0)
+                    screenIndex = 1;
+
+                  Path filePath = wallpapers[screenIndex - 1].ImagePath;
+                  if (filePath != Path.Invalid)
+                    evaluatedText.Append(filePath.FileNameWithoutExt);
+                }
+              }
+
+              if (parameter.Length > 13 && parameter.StartsWith("WALLPAPERFILE", StringComparison.OrdinalIgnoreCase)) {
+                int screenIndex;
+
+                if (int.TryParse(parameter.Substring(13), out screenIndex)) {
+                  if (screenIndex > wallpapers.Count || screenIndex <= 0)
+                    screenIndex = 1;
+
+                  Path filePath = wallpapers[screenIndex - 1].ImagePath;
+                  if (filePath != Path.Invalid)
+                    evaluatedText.Append(filePath.FileName);
+                }
+              }
+
+              if (parameter.Length > 13 && parameter.StartsWith("WALLPAPERPATH", StringComparison.OrdinalIgnoreCase)) {
+                int screenIndex;
+
+                if (int.TryParse(parameter.Substring(13), out screenIndex)) {
+                  if (screenIndex > wallpapers.Count || screenIndex <= 0)
+                    screenIndex = 1;
+
+                  Path filePath = wallpapers[screenIndex - 1].ImagePath;
+                  if (filePath != Path.Invalid)
+                    evaluatedText.Append(filePath);
+                }
+              }
+              break;
+          }
+
+          inParam = false;
+        } else {
+          inParam = true;
+          lastParamStart = i;
+        }
+      } else {
+        if (!inParam)
+          evaluatedText.Append(currentChar);
+      }
+    }
+
+    return evaluatedText.ToString();
+  }
+
   [ContractClassFor(typeof(WallpaperBuilderBase))]
   internal abstract class WallpaperBuilderBaseContracts : WallpaperBuilderBase {
     public WallpaperBuilderBaseContracts(ScreenSettingsCollection screensSettings) : base(screensSettings) {}

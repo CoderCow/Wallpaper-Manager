@@ -1537,4 +1537,7 @@
     <value>The minimum is {0} seconds.</value>
     <comment>{0} will be replaced with a number.</comment>
   </data>
+  <data name="Error.Number.MustBePositive" xml:space="preserve">
+    <value>Must be a positive number.</value>
+  </data>
 </root>
