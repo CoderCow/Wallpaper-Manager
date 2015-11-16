@@ -233,7 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="Models\Application Data\Interfaces\ApplicationData.cs" />
+    <Compile Include="Models\Application Data\ApplicationData.cs" />
     <Compile Include="Models\Application Data\Interfaces\IApplicationDataReader.cs" />
     <Compile Include="Models\Application Data\Interfaces\IApplicationDataWriter.cs" />
     <Compile Include="Models\Application Data\Interfaces\IApplicationData.cs" />
