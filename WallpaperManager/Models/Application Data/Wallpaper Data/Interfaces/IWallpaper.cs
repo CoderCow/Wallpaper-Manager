@@ -55,12 +55,16 @@ namespace WallpaperManager.Models {
     public abstract Point Scale { get; set; }
     public abstract WallpaperEffects Effects { get; set; }
     public abstract Color BackgroundColor { get; set; }
-    public abstract ICollection<string> DisabledDevices { get; }
+    public abstract HashSet<string> DisabledDevices { get; }
     public abstract bool IsBlank { get; set; }
     public abstract bool SuggestIsMultiscreen { get; set; }
     public abstract bool SuggestPlacement { get; set; }
+    public abstract Size? ImageSize { get; set; }
     public abstract DateTime TimeLastCycled { get; set; }
     public abstract DateTime TimeAdded { get; set; }
+    public abstract int CycleCountWeek { get; set; }
+    public abstract int CycleCountTotal { get; set; }
+    public abstract Path ImagePath { get; set; }
 
     public bool IsImageSizeResolved { 
       get {
@@ -68,39 +72,6 @@ namespace WallpaperManager.Models {
         throw new NotImplementedException();
       }
     }
-
-    public Path ImagePath {
-      get { throw new NotImplementedException(); }
-      set {
-        Contract.Requires(value != Path.Invalid);
-        throw new NotImplementedException();
-      }
-    }
-
-    public Size? ImageSize {
-      get { throw new NotImplementedException(); }
-      set {
-        Contract.Requires(value == null || (value.Value.Width > 0 && value.Value.Height > 0));
-        throw new NotImplementedException();
-      }
-    }
-
-    public int CycleCountWeek {
-      get { throw new NotImplementedException(); }
-      set {
-        Contract.Requires(value >= 0);
-        throw new NotImplementedException();
-      }
-    }
-
-    public int CycleCountTotal {
-      get { throw new NotImplementedException(); }
-      set {
-        Contract.Requires(value >= 0);  
-        throw new NotImplementedException();
-      }
-    }
-
     public abstract object Clone();
     public abstract void AssignTo(object other);
 

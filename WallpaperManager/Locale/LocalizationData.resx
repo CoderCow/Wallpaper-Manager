@@ -1509,9 +1509,10 @@
   </data>
   <data name="Error.FieldIsMandatory" xml:space="preserve">
     <value>This field is mandatory.</value>
+    <comment>Note: In this context, field refers to a form field / an input field.</comment>
   </data>
   <data name="Error.Image.CantBeNegativeSize" xml:space="preserve">
-    <value>Width and height must be greater or eqal to zero.</value>
+    <value>Width and height must be greater than zero.</value>
   </data>
   <data name="Error.Path.Invalid" xml:space="preserve">
     <value>This is not a valid path.</value>
@@ -1543,5 +1544,13 @@
   <data name="Error.Path.DirectoryNotFound" xml:space="preserve">
     <value>Directory "{0}" was not found.</value>
     <comment>{0} will be replaced with the full directory path.</comment>
+  </data>
+  <data name="Error.Path.FileNotFound" xml:space="preserve">
+    <value>File "{0}" was not found.</value>
+    <comment>{0} will be replaced with the full file path.</comment>
+  </data>
+  <data name="Error.FieldIsInvalid" xml:space="preserve">
+    <value>The field is invalid.</value>
+    <comment>Note: In this context, field refers to a form field / an input field.</comment>
   </data>
 </root>

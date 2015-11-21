@@ -211,6 +211,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
@@ -233,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Models\Application Data\AppDataReaderWriter.cs" />
     <Compile Include="Models\Application Data\ApplicationData.cs" />
     <Compile Include="Models\Application Data\Interfaces\IApplicationDataReader.cs" />
     <Compile Include="Models\Application Data\Interfaces\IApplicationDataWriter.cs" />

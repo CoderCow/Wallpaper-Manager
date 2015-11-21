@@ -51,17 +51,7 @@ namespace WallpaperManager.Models {
   internal abstract class IWallpaperDefaultSettingsContracts: IWallpaperDefaultSettings {
     public abstract bool AutoDetermineIsMultiscreen { get; set; }
     public abstract bool AutoDeterminePlacement { get; set; }
-
-    public IWallpaperBase Settings {
-      get {
-        Contract.Ensures(Contract.Result<IWallpaperBase>() != null);
-        throw new NotImplementedException();
-      }
-      set {
-        Contract.Requires<ArgumentNullException>(value != null);
-        throw new NotImplementedException();
-      }
-    }
+    public abstract IWallpaperBase Settings { get; set; }
 
     public void ApplyToWallpaper(IWallpaper target) {
       Contract.Requires<ArgumentNullException>(target != null);

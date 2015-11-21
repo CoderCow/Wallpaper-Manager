@@ -7,16 +7,19 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Drawing;
+using System.IO;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using Common;
-using Common.IO;
 using PropertyChanged;
+using Path = Common.IO.Path;
 
 namespace WallpaperManager.Models {
   /// <summary>
   ///   Contains wallpaper related data.
   /// </summary>
   /// <threadsafety static="true" instance="false" />
+  [DataContract]
   [ImplementPropertyChanged]
   public class Wallpaper : WallpaperBase, IWallpaper, ICloneable, IAssignable {
     /// <inheritdoc />
@@ -24,21 +27,27 @@ namespace WallpaperManager.Models {
     public bool IsImageSizeResolved => this.ImageSize != null;
 
     /// <inheritdoc />
+    [DataMember(Order = 1)]
     public Path ImagePath { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 2)]
     public Size? ImageSize { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 3)]
     public DateTime TimeLastCycled { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 4)]
     public DateTime TimeAdded { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 5)]
     public int CycleCountWeek { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 6)]
     public int CycleCountTotal { get; set; }
     
     /// <summary>
@@ -47,19 +56,30 @@ namespace WallpaperManager.Models {
     /// <param name="imagePath">
     ///   The path of the image file of this wallpaper.
     /// </param>
-    public Wallpaper(Path imagePath) {
+    public Wallpaper(Path imagePath = default(Path)) {
       this.ImagePath = imagePath;
     }
 
     #region Overrides of ValidatableBase
     /// <inheritdoc />
     protected override string InvalidatePropertyInternal(string propertyName) {
-      if (propertyName == nameof(this.ImageSize)) {
-        if (this.ImageSize != null && (this.ImageSize.Value.Width < 0 || this.ImageSize.Value.Height < 0))
+      if (propertyName == nameof(this.ImagePath)) {
+        if (this.ImagePath == Path.Invalid)
+          return LocalizationManager.GetLocalizedString("Error.FieldIsMandatory");
+        else if (!File.Exists(this.ImagePath))
+          return string.Format(LocalizationManager.GetLocalizedString("Error.Path.FileNotFound"), this.ImagePath);
+      } else if (propertyName == nameof(this.ImageSize)) {
+        if (this.ImageSize != null && (this.ImageSize.Value.Width <= 0 || this.ImageSize.Value.Height <= 0))
           return LocalizationManager.GetLocalizedString("Error.Image.CantBeNegativeSize");
       } else if (propertyName == nameof(this.TimeAdded) || propertyName == nameof(this.TimeLastCycled)) {
         if (this.TimeAdded > this.TimeLastCycled)
           return LocalizationManager.GetLocalizedString("Error.Wallpaper.AddedCycledTimeInvalid");
+      } else if (propertyName == nameof(this.CycleCountTotal)) {
+        if (this.CycleCountTotal < 0)
+          return LocalizationManager.GetLocalizedString("Error.FieldIsInvalid");
+      } else if (propertyName == nameof(this.CycleCountWeek)) {
+        if (this.CycleCountWeek < 0)
+          return LocalizationManager.GetLocalizedString("Error.FieldIsInvalid");
       }
 
       return base.InvalidatePropertyInternal(propertyName);
@@ -80,7 +100,7 @@ namespace WallpaperManager.Models {
     /// <inheritdoc />
     public override object Clone() {
       Wallpaper clone = (Wallpaper)this.MemberwiseClone();
-      clone.DisabledDevices = new List<string>(this.DisabledDevices);
+      clone.DisabledDevices = new HashSet<string>(this.DisabledDevices);
 
       return clone;
     }

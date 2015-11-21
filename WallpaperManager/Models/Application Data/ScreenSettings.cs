@@ -5,33 +5,44 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
+using System.Runtime.Serialization;
 using Common;
+using PropertyChanged;
 
 namespace WallpaperManager.Models {
   /// <summary>
   ///   Contains settings related to a screen.
   /// </summary>
   /// <threadsafety static="true" instance="false" />
+  [DataContract]
+  [ImplementPropertyChanged]
   public class ScreenSettings : IScreenSettings, ICloneable, IAssignable {
     /// <inheritdoc />
+    [DataMember(Order = 1)]
     public bool CycleRandomly { get; set; }
 
     /// <inheritdoc />
-    public IWallpaper StaticWallpaper { get; set; }
-
-    /// <inheritdoc />
+    [DataMember(Order = 2)]
     public int MarginLeft { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 3)]
     public int MarginRight { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 4)]
     public int MarginTop { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 5)]
     public int MarginBottom { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 6)]
+    public IWallpaper StaticWallpaper { get; set; }
+
+    /// <inheritdoc />
+    [DataMember(Order = 7)]
     public ObservableCollection<ITextOverlay> TextOverlays { get; private set; }
 
     /// <summary>

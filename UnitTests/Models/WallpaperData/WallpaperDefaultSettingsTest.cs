@@ -21,23 +21,15 @@ namespace UnitTests {
       IWallpaperBase baseSettings = this.modelFixtures.Create<WallpaperBase>();
       IDisplayInfo displayInfo = this.modelFixtures.Create<DisplayInfo>();
       
-      WallpaperDefaultSettings sut = new WallpaperDefaultSettings(baseSettings, displayInfo);
+      WallpaperDefaultSettings sut = new WallpaperDefaultSettings(displayInfo, baseSettings);
 
       sut.Settings.Should().Be(baseSettings);
     }
 
     [Fact]
-    public void CtorShouldThrowOnNoBaseSettings() {
-      IDisplayInfo displayInfo = this.modelFixtures.Create<DisplayInfo>();
-      Action construct = () => new WallpaperDefaultSettings(null, displayInfo);
-
-      construct.ShouldThrow<Exception>();
-    }
-
-    [Fact]
     public void CtorShouldThrowOnNoDisplayInfo() {
       IWallpaperBase baseSettings = this.modelFixtures.Create<WallpaperBase>();
-      Action construct = () => new WallpaperDefaultSettings(baseSettings, null);
+      Action construct = () => new WallpaperDefaultSettings(null, baseSettings);
 
       construct.ShouldThrow<Exception>();
     }
@@ -120,6 +112,24 @@ namespace UnitTests {
     }
 
     [Fact]
+    public void ShouldReportErrorWhenSettingsIsInvalid() {
+      WallpaperDefaultSettings sut = this.modelFixtures.Create<WallpaperDefaultSettings>();
+
+      sut.Settings = null;
+
+      sut[nameof(sut.Settings)].Should().Be(LocalizationManager.GetLocalizedString("Error.FieldIsMandatory"));
+      sut.Error.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public void ShouldNotReportErrorWhenSettingsIsValid() {
+      WallpaperDefaultSettings sut = this.modelFixtures.Create<WallpaperDefaultSettings>();
+
+      sut[nameof(sut.Settings)].Should().BeNullOrEmpty();
+      sut.Error.Should().BeNullOrEmpty();
+    }
+
+    [Fact]
     public void ShouldCreateProperClones() {
       WallpaperDefaultSettings sut = 
         this.modelFixtures.Build<WallpaperDefaultSettings>()
@@ -158,7 +168,7 @@ namespace UnitTests {
           .With((x) => x.Displays, new ReadOnlyCollection<IDisplay>(new IDisplay[] {}))
           .Create();
 
-      return new WallpaperDefaultSettings(this.modelFixtures.Create<WallpaperBase>(), displayInfo);
+      return new WallpaperDefaultSettings(displayInfo, this.modelFixtures.Create<WallpaperBase>());
     }
     #endregion
   }

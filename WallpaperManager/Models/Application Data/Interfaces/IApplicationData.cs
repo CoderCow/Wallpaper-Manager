@@ -5,26 +5,9 @@ using System.Diagnostics.Contracts;
 using Common.IO;
 
 namespace WallpaperManager.Models {
-  [ContractClass(typeof(IApplicationDataContracts))]
   public interface IApplicationData {
+    int DataVersion { get; set; }
     IConfiguration Configuration { get; }
     ObservableCollection<IWallpaperCategory> WallpaperCategories { get; }
-  }
-
-  [ContractClassFor(typeof(IApplicationData))]
-  internal abstract class IApplicationDataContracts: IApplicationData {
-    public IConfiguration Configuration {
-      get {
-        Contract.Ensures(Contract.Result<IConfiguration>() != null);
-        throw new NotImplementedException();
-      }
-    }
-
-    public ObservableCollection<IWallpaperCategory> WallpaperCategories {
-      get {
-        Contract.Ensures(Contract.Result<ObservableCollection<IWallpaperCategory>>() != null);
-        throw new NotImplementedException();
-      }
-    }
   }
 }

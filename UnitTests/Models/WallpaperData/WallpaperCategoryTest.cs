@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using Common.Windows;
 using FluentAssertions;
 using Ploeh.AutoFixture;
@@ -9,20 +10,6 @@ using Xunit;
 namespace UnitTests {
   public class WallpaperCategoryTest {
     private readonly Fixture modelFixtures = TestUtils.WallpaperFixture();
-
-    [Fact]
-    public void CtorShouldThrowOnNullName() {
-      Action construct = () => new WallpaperCategory(null, this.modelFixtures.Create<WallpaperDefaultSettings>());
-
-      construct.ShouldThrow<ArgumentNullException>();
-    }
-
-    [Fact]
-    public void CtorShouldThrowOnNullDefaultSettings() {
-      Action construct = () => new WallpaperCategory("New Category", null);
-
-      construct.ShouldThrow<ArgumentNullException>();
-    }
 
     [Fact]
     public void CtorShouldntThrowOnEmptyWallpapers() {
@@ -48,17 +35,44 @@ namespace UnitTests {
     }
 
     [Fact]
-    public void ShouldThrowOnNullName() {
-      WallpaperCategory sut = this.modelFixtures.Create<WallpaperCategory>();
+    public void ShouldRemainActiveWhenEmpty() {
+      WallpaperCategory sut = new WallpaperCategory();
+      sut.MonitorEvents();
+      
+      sut.IsActivated = false;
 
-      sut.Invoking((x) => x.Name = null).ShouldThrow<Exception>();
+      sut.IsActivated.Should().BeTrue();
+      sut.ShouldRaisePropertyChangeFor((x) => x.IsActivated);
     }
 
     [Fact]
-    public void ShouldThrowOnNullDefaultSettings() {
+    public void ShouldReportErrorWhenNameIsNull() {
       WallpaperCategory sut = this.modelFixtures.Create<WallpaperCategory>();
 
-      sut.Invoking((x) => x.WallpaperDefaultSettings = null).ShouldThrow<Exception>();
+      sut.Name = null;
+
+      string expectedErrorMsg = LocalizationManager.GetLocalizedString("Error.FieldIsMandatory");
+      sut[nameof(sut.Name)].Should().Be(expectedErrorMsg);
+      sut.Error.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public void ShouldReportErrorWhenDefaultSettingsIsNull() {
+      WallpaperCategory sut = this.modelFixtures.Create<WallpaperCategory>();
+
+      sut.WallpaperDefaultSettings = null;
+
+      string expectedErrorMsg = LocalizationManager.GetLocalizedString("Error.FieldIsMandatory");
+      sut[nameof(sut.WallpaperDefaultSettings)].Should().Be(expectedErrorMsg);
+      sut.Error.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public void ShouldNotReportErrorWhenDefaultSettingsIsNotNull() {
+      WallpaperCategory sut = this.modelFixtures.Create<WallpaperCategory>();
+
+      sut[nameof(sut.WallpaperDefaultSettings)].Should().BeNullOrEmpty();
+      sut.Error.Should().BeNullOrEmpty();
     }
 
     [Theory]
@@ -295,7 +309,7 @@ namespace UnitTests {
 
     #region Helpers
     private WallpaperCategory NewCategory(string name = "New Category", IWallpaperDefaultSettings defaultSettings = null, ICollection<IWallpaper> wallpapers = null) {
-      defaultSettings = defaultSettings ?? new WallpaperDefaultSettings(new WallpaperBase(), this.modelFixtures.Create<IDisplayInfo>());
+      defaultSettings = defaultSettings ?? new WallpaperDefaultSettings(this.modelFixtures.Create<IDisplayInfo>(), new WallpaperBase());
 
       return new WallpaperCategory(name, defaultSettings, wallpapers);
     }

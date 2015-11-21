@@ -64,30 +64,11 @@ namespace WallpaperManager.Models {
 
   [ContractClassFor(typeof(IWallpaperCategory))]
   internal abstract class IWallpaperCategoryContracts : IWallpaperCategory {
+    public abstract string Name { get; set; }
+    public abstract IWallpaperDefaultSettings WallpaperDefaultSettings { get; set; }
+
     public bool? IsActivated {
       get {
-        throw new NotImplementedException();
-      }
-      set {
-        Contract.Requires<ArgumentNullException>(value != null);
-        throw new NotImplementedException();
-      }
-    }
-
-    public string Name {
-      get {
-        Contract.Ensures(Contract.Result<string>() != null);
-        throw new NotImplementedException();
-      }
-      set {
-        Contract.Requires<ArgumentNullException>(value != null);
-        throw new NotImplementedException();
-      }
-    }
-
-    public IWallpaperDefaultSettings WallpaperDefaultSettings {
-      get {
-        Contract.Ensures(Contract.Result<IWallpaperDefaultSettings>() != null);
         throw new NotImplementedException();
       }
       set {

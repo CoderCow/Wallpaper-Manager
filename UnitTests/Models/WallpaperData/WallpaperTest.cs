@@ -23,54 +23,10 @@ namespace UnitTests {
     }
 
     [Fact]
-    public void CtorShouldThrowOnInvalidImagePath() {
-      Action construct = () => new Wallpaper(Path.Invalid);
-
-      construct.ShouldThrow<Exception>();
-    }
-
-    [Fact]
     public void CtorShouldAssignDefaultBackgroundColor() {
       Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
 
       sut.BackgroundColor.Should().Be(WallpaperBase.DefaultBackgroundColor);
-    }
-
-    [Fact]
-    public void ShouldThrowOnInvalidImagePath() {
-      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
-
-      sut.Invoking((x) => x.ImagePath = Path.Invalid).ShouldThrow<Exception>();
-    }
-
-    [Theory]
-    [InlineData(-1)]
-    [InlineData(-2)]
-    [InlineData(-999)]
-    public void ShouldThrowOnInvalidTotalCycleCount(int valueToTest) {
-      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
-
-      sut.Invoking((x) => x.CycleCountTotal = valueToTest).ShouldThrow<Exception>();
-    }
-
-    [Theory]
-    [InlineData(-1)]
-    [InlineData(-2)]
-    [InlineData(-999)]
-    public void ShouldThrowOnInvalidWeekCycleCount(int valueToTest) {
-      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
-
-      sut.Invoking((x) => x.CycleCountWeek = valueToTest).ShouldThrow<Exception>();
-    }
-
-    [Theory]
-    [InlineData(0)]
-    [InlineData(1)]
-    [InlineData(999)]
-    public void ShouldntThrowOnValidCycleCount(int valueToTest) {
-      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
-
-      sut.Invoking((x) => x.CycleCountTotal = valueToTest);
     }
 
     [Fact]
@@ -89,28 +45,6 @@ namespace UnitTests {
       sut.ImageSize = null;
 
       sut.IsImageSizeResolved.Should().BeFalse();
-    }
-
-    [Theory]
-    [InlineData(0, 0)]
-    [InlineData(-1, 0)]
-    [InlineData(0, -1)]
-    [InlineData(-1, -1)]
-    public void ShouldThrowOnImageSizeIsZeroOrLess(int width, int height) {
-      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
-
-      sut.Invoking((x) => x.ImageSize = new Size(width, height)).ShouldThrow<Exception>();
-    }
-
-    [Theory]
-    [InlineData(1, 1)]
-    [InlineData(10, 1)]
-    [InlineData(1, 10)]
-    [InlineData(999, 999)]
-    public void ShouldNotThrowWhenImageSizeIsGreaterThanZero(int width, int height) {
-      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
-
-      sut.ImageSize = new Size(width, height);
     }
 
     [Fact]
@@ -137,6 +71,71 @@ namespace UnitTests {
 
       sut[nameof(sut.TimeAdded)].Should().BeNullOrEmpty();
       sut[nameof(sut.TimeLastCycled)].Should().BeNullOrEmpty();
+      sut.Error.Should().BeNullOrEmpty();
+    }
+
+    [Theory]
+    [InlineData(false, 0, 0)]
+    [InlineData(false, 1, -9999)]
+    [InlineData(false, -1, 1)]
+    [InlineData(false, 1, -1)]
+    [InlineData(false, -10, -10)]
+    public void ShouldReportErrorWhenImageSizeIsInvalid(bool isVullValue, int width, int height) {
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
+      Size? valueToTest = null;
+      if (!isVullValue)
+        valueToTest = new Size(width, height);
+
+      sut.ImageSize = valueToTest;
+
+      sut[nameof(sut.ImageSize)].Should().Be(LocalizationManager.GetLocalizedString("Error.Image.CantBeNegativeSize"));
+      sut.Error.Should().NotBeNullOrEmpty();
+    }
+
+    [Theory]
+    [InlineData(true, 0, 0)]
+    [InlineData(false, 1, 1)]
+    [InlineData(false, 9999, 1)]
+    [InlineData(false, 1, 9999)]
+    public void ShouldNotReportErrorWhenImageSizeIsValid(bool isVullValue, int width, int height) {
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
+      Size? valueToTest = null;
+      if (!isVullValue)
+        valueToTest = new Size(width, height);
+
+      sut.ImageSize = valueToTest;
+
+      sut[nameof(sut.ImageSize)].Should().BeNullOrEmpty();
+      sut.Error.Should().BeNullOrEmpty();
+    }
+
+    [Theory]
+    [InlineData(-1)]
+    [InlineData(-2)]
+    [InlineData(-999)]
+    public void ShouldReportErrorWhenCountsAreInvalid(int valueToTest) {
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
+
+      sut.CycleCountTotal = valueToTest;
+      sut.CycleCountWeek = valueToTest;
+
+      sut[nameof(sut.CycleCountTotal)].Should().Be(LocalizationManager.GetLocalizedString("Error.FieldIsInvalid"));
+      sut[nameof(sut.CycleCountWeek)].Should().Be(LocalizationManager.GetLocalizedString("Error.FieldIsInvalid"));
+      sut.Error.Should().NotBeNullOrEmpty();
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(999)]
+    public void ShouldNotReportErrorWhenCountsAreValid(int valueToTest) {
+      Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
+
+      sut.CycleCountTotal = valueToTest;
+      sut.CycleCountWeek = valueToTest;
+
+      sut[nameof(sut.CycleCountTotal)].Should().BeNullOrEmpty();
+      sut[nameof(sut.CycleCountWeek)].Should().BeNullOrEmpty();
       sut.Error.Should().BeNullOrEmpty();
     }
 

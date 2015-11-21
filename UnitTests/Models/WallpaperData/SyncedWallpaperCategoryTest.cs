@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Fakes;
 using System.IO.Fakes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common.IO;
 using FluentAssertions;
 using Microsoft.QualityTools.Testing.Fakes;
@@ -12,15 +9,20 @@ using Ploeh.AutoFixture;
 using WallpaperManager.Models;
 using Xunit;
 
-namespace UnitTests.Models.WallpaperData {
-  class SyncedWallpaperCategoryTest {
+namespace UnitTests {
+  public class SyncedWallpaperCategoryTest {
     private readonly Fixture modelFixtures = TestUtils.WallpaperFixture();
 
     [Fact]
-    public void CtorShouldThrowOnInvalidPath() {
-      Action construct = () => new SyncedWallpaperCategory(null, this.modelFixtures.Create<WallpaperDefaultSettings>(), Path.Invalid);
+    public void ShouldReportErrorWhenDirectoryIsInvalid() {
+      Path directoryToSync = Path.Invalid;
+      SyncedWallpaperCategory sut = new SyncedWallpaperCategory(this.modelFixtures.Create<string>(), this.modelFixtures.Create<WallpaperDefaultSettings>(), directoryToSync);
 
-      construct.ShouldThrow<ArgumentNullException>();
+      sut.DirectoryPath = directoryToSync;
+
+      string expectedErrorMsg = LocalizationManager.GetLocalizedString("Error.FieldIsInvalid");
+      sut[nameof(sut.DirectoryPath)].Should().Be(expectedErrorMsg);
+      sut.Error.Should().NotBeNullOrEmpty();
     }
 
     [Fact]
@@ -45,7 +47,7 @@ namespace UnitTests.Models.WallpaperData {
       using (ShimsContext.Create()) {
         SyncedWallpaperCategory sut = new SyncedWallpaperCategory(this.modelFixtures.Create<string>(), this.modelFixtures.Create<WallpaperDefaultSettings>(), directoryToSync);
 
-        ShimDirectory.ExistsString = directoryPath => false;
+        ShimDirectory.ExistsString = directoryPath => true;
 
         sut[nameof(sut.DirectoryPath)].Should().BeNullOrEmpty();
         sut.Error.Should().BeNullOrEmpty();

@@ -3,18 +3,23 @@
 // All other rights reserved.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Drawing;
+using System.Runtime.Serialization;
 using Common;
 using Common.Presentation;
+using PropertyChanged;
 
 namespace WallpaperManager.Models {
   /// <summary>
   ///   Contains general wallpaper related data.
   /// </summary>
   /// <threadsafety static="true" instance="false" />
+  [DataContract]
+  [ImplementPropertyChanged]
   public class WallpaperBase : ValidatableBase, IWallpaperBase, ICloneable, IAssignable {
     /// <summary>
     ///   Gets the default background color used for a new instance of this class.
@@ -25,37 +30,48 @@ namespace WallpaperManager.Models {
     public static Color DefaultBackgroundColor { get; } = Color.Black;
 
     /// <inheritdoc />
+    [DataMember(Order = 1)]
     public bool IsActivated { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 2)]
     public bool IsMultiscreen { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 3)]
     public byte Priority { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 4)]
     public TimeSpan OnlyCycleBetweenStart { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 5)]
     public TimeSpan OnlyCycleBetweenStop { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 6)]
     public WallpaperPlacement Placement { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 7)]
     public Point Offset { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 8)]
     public Point Scale { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 9)]
     public WallpaperEffects Effects { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 10)]
     public Color BackgroundColor { get; set; }
 
     /// <inheritdoc />
-    public ICollection<string> DisabledDevices { get; protected set; }
+    [DataMember(Order = 11)]
+    public HashSet<string> DisabledDevices { get; protected set; }
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperBase" /> class.
@@ -68,7 +84,7 @@ namespace WallpaperManager.Models {
       this.OnlyCycleBetweenStart = new TimeSpan(0, 0, 0);
       this.OnlyCycleBetweenStop = new TimeSpan(23, 59, 59);
       this.BackgroundColor = DefaultBackgroundColor;
-      this.DisabledDevices = new List<string>(0);
+      this.DisabledDevices = new HashSet<string>();
     }
 
     #region Overrides of ValidatableBase
@@ -94,7 +110,7 @@ namespace WallpaperManager.Models {
     /// <inheritdoc />
     public virtual object Clone() {
       WallpaperBase clone = (WallpaperBase)this.MemberwiseClone();
-      clone.DisabledDevices = new List<string>(this.DisabledDevices);
+      clone.DisabledDevices = new HashSet<string>(this.DisabledDevices);
 
       return clone;
     }

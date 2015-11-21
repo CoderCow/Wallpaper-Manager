@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Ploeh.AutoFixture;
 using WallpaperManager.Models;
 using Xunit;
 
 namespace UnitTests {
-  public class OverlayTextTest {
+  public class TextOverlayTest {
     private readonly Fixture modelFixtures = TestUtils.WallpaperFixture();
 
     [Fact]
@@ -27,6 +22,7 @@ namespace UnitTests {
     }
 
     [Theory]
+    [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
     [InlineData("    ")]
@@ -39,34 +35,26 @@ namespace UnitTests {
       sut.Error.Should().NotBeNullOrEmpty();
     }
 
-    [Fact]
-    public void ShouldThrowWhenFormatIsSetToNull() {
-      TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
-      
-      sut.Invoking((x) => x.Format = null).ShouldThrow<Exception>();
-    }
-
-    [Fact]
-    public void ShouldThrowWhenFontNameIsSetToNull() {
-      TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
-      
-      sut.Invoking((x) => x.FontName = null).ShouldThrow<Exception>();
-    }
-
     [Theory]
     [AutoInvalidEnumData(typeof(TextOverlayPosition))]
-    public void ShouldThrowWhenPositionIsSetToUndefinedValue(TextOverlayPosition position) {
+    public void ShouldReportErrorWhenPositionIsInvalid(TextOverlayPosition valueToTest) {
       TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
-      
-      sut.Invoking((x) => x.Position = position).ShouldThrow<Exception>();
+
+      sut.Position = valueToTest;
+
+      sut[nameof(sut.Position)].Should().Be(LocalizationManager.GetLocalizedString("Error.FieldIsInvalid"));
+      sut.Error.Should().NotBeNullOrEmpty();
     }
 
     [Theory]
     [AutoValidEnumData(typeof(TextOverlayPosition))]
-    public void ShouldNotThrowWhenFontStyleIsSetToDefinedValue(TextOverlayPosition position) {
+    public void ShouldNotReportErrorWhenPositionIsValid(TextOverlayPosition valueToTest) {
       TextOverlay sut = this.modelFixtures.Create<TextOverlay>();
-      
-      sut.Invoking((x) => x.Position = position).ShouldNotThrow();
+
+      sut.Position = valueToTest;
+
+      sut[nameof(sut.Position)].Should().BeNullOrEmpty();
+      sut.Error.Should().BeNullOrEmpty();
     }
 
     [Theory]

@@ -5,7 +5,9 @@
 using System;
 using System.Diagnostics.Contracts;
 using System.Drawing;
+using System.Runtime.Serialization;
 using Common;
+using Common.Presentation;
 using Common.Windows;
 using PropertyChanged;
 
@@ -14,8 +16,9 @@ namespace WallpaperManager.Models {
   ///   Contains data to be applied to newly added wallpapers.
   /// </summary>
   /// <threadsafety static="true" instance="false" />
+  [DataContract]
   [ImplementPropertyChanged]
-  public class WallpaperDefaultSettings : IWallpaperDefaultSettings, ICloneable, IAssignable {
+  public class WallpaperDefaultSettings : ValidatableBase, IWallpaperDefaultSettings, ICloneable, IAssignable {
     public static Size MaxImageSizeSuitableForTiledWallpaper = new Size(640, 480);
     /// <summary>
     ///   The factor by which a wallpaper's width must be larger than the primary screen to be 
@@ -25,20 +28,22 @@ namespace WallpaperManager.Models {
 
     private readonly IDisplayInfo displayInfo;
 
-    /// <inheritdoc />  
+    /// <inheritdoc />
+    [DataMember]
     public IWallpaperBase Settings { get; set; }
 
     /// <inheritdoc />
+    [DataMember]
     public bool AutoDetermineIsMultiscreen { get; set; }
 
     /// <inheritdoc />
+    [DataMember]
     public bool AutoDeterminePlacement { get; set; }
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperDefaultSettings" /> class.
     /// </summary>
-    public WallpaperDefaultSettings(IWallpaperBase baseSettings, IDisplayInfo displayInfo) {
-      Contract.Requires<ArgumentNullException>(baseSettings != null);
+    public WallpaperDefaultSettings(IDisplayInfo displayInfo, IWallpaperBase baseSettings = null) {
       Contract.Requires<ArgumentNullException>(displayInfo != null);
 
       this.Settings = baseSettings;
@@ -55,6 +60,7 @@ namespace WallpaperManager.Models {
     ///   The <see cref="IWallpaper" /> to apply the settings to.
     /// </param>
     public void ApplyToWallpaper(IWallpaper target) {
+      Contract.Assert(this.Settings != null);
       this.Settings.AssignTo(target);
 
       if (this.AutoDeterminePlacement) {
@@ -74,6 +80,18 @@ namespace WallpaperManager.Models {
           target.Placement = WallpaperPlacement.UniformToFill;
       }
     }
+
+    #region Overrides of ValidatableBase
+    /// <inheritdoc />
+    protected override string InvalidatePropertyInternal(string propertyName) {
+      if (propertyName == nameof(this.Settings)) {
+        if (this.Settings == null)
+          return LocalizationManager.GetLocalizedString("Error.FieldIsMandatory");
+      }
+      
+      return null;
+    }
+    #endregion
 
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />

@@ -7,7 +7,6 @@ using Common;
 using PropertyChanged;
 
 namespace WallpaperManager.Models {
-  [ContractClass(typeof(TextOverlayContracts))]
   public interface ITextOverlay : ICloneable, IAssignable, INotifyPropertyChanged {
     /// <summary>
     ///   Gets or sets the content text.
@@ -81,53 +80,5 @@ namespace WallpaperManager.Models {
     /// </value>
     /// <seealso cref="TextOverlayPosition">TextOverlayPosition Enumeration</seealso>
     TextOverlayPosition Position { get; set; }
-  }
-
-  [DoNotNotify]
-  [ContractClassFor(typeof(ITextOverlay))]
-  internal abstract class TextOverlayContracts: ITextOverlay {
-    public abstract float FontSize { get; set; }
-    public abstract Color ForeColor { get; set; }
-    public abstract FontStyle FontStyle { get; set; }
-    public abstract Color BorderColor { get; set; }
-    public abstract int HorizontalOffset { get; set; }
-    public abstract int VerticalOffset { get; set; }
-
-    public string Format {
-      get {
-        Contract.Ensures(Contract.Result<string>() != null);
-        throw new NotImplementedException();
-      }
-      set {
-        Contract.Requires<ArgumentNullException>(value != null);
-        throw new NotImplementedException();
-      }
-    }
-
-    public string FontName {
-      get {
-        Contract.Ensures(Contract.Result<string>() != null);
-        throw new NotImplementedException();
-      }
-      set {
-        Contract.Requires<ArgumentNullException>(value != null);
-        throw new NotImplementedException();
-      }
-    }
-
-    public TextOverlayPosition Position {
-      get {
-        Contract.Ensures(Enum.IsDefined(typeof(TextOverlayPosition), Contract.Result<TextOverlayPosition>()));
-        throw new NotImplementedException();
-      }
-      set {
-        Contract.Requires<ArgumentException>(Enum.IsDefined(typeof(TextOverlayPosition), value));
-        throw new NotImplementedException();
-      }
-    }
-
-    public abstract object Clone();
-    public abstract void AssignTo(object other);
-    public abstract event PropertyChangedEventHandler PropertyChanged;
   }
 }

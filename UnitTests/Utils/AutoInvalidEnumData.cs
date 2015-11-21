@@ -13,8 +13,8 @@ namespace UnitTests {
     private readonly int max;
 
     public AutoInvalidEnumData(Type enumType) {
-      this.min = int.MinValue;
-      this.max = int.MaxValue;
+      this.min = int.MaxValue;
+      this.max = int.MinValue;
 
       foreach (int value in enumType.GetEnumValues()) {
         this.min = Math.Min(value, min);

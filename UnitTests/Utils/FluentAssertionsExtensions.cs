@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using FluentAssertions.Common;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
+using KellermanSoftware.CompareNetObjects;
+using WallpaperManager.Models;
 
 namespace UnitTests {
   internal static class FluentAssertionsExtensions {
@@ -21,6 +23,14 @@ namespace UnitTests {
           throw new Exception($"The properties \"{propertyInfo.Name}\" did not return equal values.");
       };
       CompareProperties(assertions, other, comparator);
+    }
+
+    public static void BeDeepPropertyEqual(this ObjectAssertions assertions, object other) {
+      CompareLogic compareLogic = new CompareLogic(new ComparisonConfig { CompareReadOnly = false });
+      ComparisonResult compareResult = compareLogic.Compare(assertions.Subject, other);
+
+      if (!compareResult.AreEqual)
+        throw new Exception(compareResult.DifferencesString);
     }
 
     public static void BeCloneOf(this ObjectAssertions assertions, object other, ICollection<string> excludedProperties = null) {

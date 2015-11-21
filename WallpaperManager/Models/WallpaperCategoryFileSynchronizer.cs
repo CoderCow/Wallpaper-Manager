@@ -49,7 +49,7 @@ namespace WallpaperManager.Models {
       "jpg", "jpeg", "jpe", "jfif", "exif", "gif", "png", "tif", "tiff", "bmp", "dib"
     });
 
-    public WallpaperCategory WallpaperCategory { get; }
+    public IWallpaperCategory WallpaperCategory { get; }
 
     /// <summary>
     ///   Gets the <see cref="Dispatcher" /> used to invoke operations in another thread.
@@ -78,15 +78,12 @@ namespace WallpaperManager.Models {
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperCategoryFileSynchronizer" /> class with the given
-    ///   <see cref="Wallpaper" /> objects added natively.
+    ///   <see cref="IWallpaperCategory" />.
     /// </summary>
-    /// <inheritdoc cref="WallpaperCategory(string, System.Collections.Generic.IEnumerable{WallpaperManager.Models.Wallpaper})"
+    /// <inheritdoc cref="WallpaperCategory(string, IEnumerable{IWallpaper})"
     ///   select='param[@name="name"]' />
     /// <param name="directoryPath">
     ///   The path of the directory to be watched.
-    /// </param>
-    /// <param name="wallpapers">
-    ///   A collection of wallpapers which should be added to the category nativley. <c>null</c> to create an empty category.
     /// </param>
     /// <exception cref="ArgumentNullException">
     ///   <paramref name="name" /> or <paramref name="directoryPath" /> is <c>null</c>.
@@ -97,16 +94,16 @@ namespace WallpaperManager.Models {
     /// <permission cref="SecurityAction.LinkDemand">
     ///   for full trust for the immediate caller. This member cannot be used by partially trusted code.
     /// </permission>
-    /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
+    /// <seealso cref="IWallpaperCategory">IWallpaperCategory Interface</seealso>
     /// <overloads>
     ///   <summary>
     ///     Initializes a new instance of the <see cref="WallpaperCategoryFileSynchronizer" /> class.
     ///   </summary>
-    ///   <seealso cref="Wallpaper">Wallpaper Class</seealso>
+    ///   <seealso cref="IWallpaperCategory">IWallpaperCategory Interface</seealso>
     /// </overloads>
     [PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust")]
     [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")]
-    public WallpaperCategoryFileSynchronizer(WallpaperCategory wallpaperCategory, Path directoryPath, Dispatcher invokeDispatcher) {
+    public WallpaperCategoryFileSynchronizer(IWallpaperCategory wallpaperCategory, Path directoryPath, Dispatcher invokeDispatcher) {
       Contract.Requires<ArgumentNullException>(wallpaperCategory != null);
       Contract.Requires<ArgumentException>(directoryPath != Path.Invalid);
       Contract.Requires<DirectoryNotFoundException>(Directory.Exists(directoryPath));
@@ -161,7 +158,7 @@ namespace WallpaperManager.Models {
       }
   
       // Remove wallpapers which are in this category but don't exist on the hard disk.
-      foreach (Wallpaper wallpaper in this.WallpaperCategory.Wallpapers)
+      foreach (IWallpaper wallpaper in this.WallpaperCategory.Wallpapers)
         if (!filesNames.Contains(wallpaper.ImagePath))
           this.WallpaperCategory.Wallpapers.Remove(wallpaper);
     }

@@ -28,23 +28,23 @@ namespace WallpaperManager.Models {
     /// </summary>
     public const string XmlNamespace = "http://www.WallpaperManager.de.vu";
 
-    private readonly Path inputFileName;
+    private readonly Path inputFilePath;
     private readonly IDisplayInfo displayInfo;
 
-    /// <param name="inputFileName">
+    /// <param name="inputFilePath">
     ///   The <see cref="Path" /> of the XML-file to be read from.
     /// </param>
     /// <param name="displayInfo">
     ///   The display information provider used to verify and correct screen settings.
     /// </param>
     /// <exception cref="ArgumentException">
-    ///   <paramref name="inputFileName" /> is <c>Path.Invalid</c>.
+    ///   <paramref name="inputFilePath" /> is <c>Path.Invalid</c>.
     /// </exception>
-    public LegacyAppDataReader(Path inputFileName, IDisplayInfo displayInfo) {
-      Contract.Requires<ArgumentException>(inputFileName != Path.Invalid);
+    public LegacyAppDataReader(Path inputFilePath, IDisplayInfo displayInfo) {
+      Contract.Requires<ArgumentException>(inputFilePath != Path.Invalid);
       Contract.Requires<ArgumentNullException>(displayInfo != null);
 
-      this.inputFileName = inputFileName;
+      this.inputFilePath = inputFilePath;
       this.displayInfo = displayInfo;
     }
 
@@ -61,7 +61,7 @@ namespace WallpaperManager.Models {
     /// <inheritdoc />
     public IApplicationData Read() {
       try {
-        using (FileStream fileStream = new FileStream(this.inputFileName, FileMode.Open)) {
+        using (FileStream fileStream = new FileStream(this.inputFilePath, FileMode.Open)) {
           XmlDocument document = new XmlDocument();
           document.Load(fileStream);
 
@@ -343,7 +343,7 @@ namespace WallpaperManager.Models {
       WallpaperBase baseSettings = new WallpaperBase();
       this.AssignWallpaperBaseFromXmlElement(xmlElement, baseSettings);
 
-      IWallpaperDefaultSettings resultingSettings = new WallpaperDefaultSettings(baseSettings, this.displayInfo);
+      IWallpaperDefaultSettings resultingSettings = new WallpaperDefaultSettings(this.displayInfo, baseSettings);
     
       XmlElement subElement;
       subElement = xmlElement["AutoDetermineIsMultiscreen"];

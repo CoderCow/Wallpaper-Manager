@@ -18,14 +18,4 @@ namespace UnitTests {
         return new NoSpecimen(request);
     }
   }
-
-  public class FullPathSpeciemenBuilder: ISpecimenBuilder {
-    public object Create(object request, ISpecimenContext context) {
-      PropertyInfo property = request as PropertyInfo;
-      if (property != null && property.PropertyType == typeof(Path))
-        return new Path($"C:\\{property.Name}.ext");
-      else
-        return new NoSpecimen(request);
-    }
-  }
 }

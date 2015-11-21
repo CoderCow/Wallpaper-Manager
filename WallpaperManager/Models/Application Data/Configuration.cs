@@ -6,9 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Reflection;
+using System.Runtime.Serialization;
 using Common;
 using Common.Presentation;
 using Common.Windows;
+using PropertyChanged;
 
 namespace WallpaperManager.Models {
   // TODO: Add zoom functionality
@@ -16,12 +18,9 @@ namespace WallpaperManager.Models {
   ///   The application's user-defined configuration data holder.
   /// </summary>
   /// <threadsafety static="true" instance="false" />
+  [DataContract]
+  [ImplementPropertyChanged]
   public class Configuration : ValidatableBase, IConfiguration, ICloneable, IAssignable {
-    /// <summary>
-    ///   Represents the version number of the configuration file for backward compatibility.
-    /// </summary>
-    public const string DataVersion = "1.2";
-
     /// <summary>
     ///   Represents the minimum auto cycle interval value.
     /// </summary>
@@ -35,42 +34,55 @@ namespace WallpaperManager.Models {
     public static TrayIconClickAction DefaultTrayIconDoubleClickAction = TrayIconClickAction.ShowMainWindow;
 
     /// <inheritdoc />
+    [DataMember(Order = 1)]
     public bool CycleAfterStartup { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 2)]
     public bool TerminateAfterStartup { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 3)]
     public bool MinimizeAfterStartup { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 4)]
     public bool StartAutocyclingAfterStartup { get; set; }
 
     /// <inheritdoc />
-    public WallpaperChangeType WallpaperChangeType { get; set; }
+    [DataMember(Order = 5)]
+    public TimeSpan AutocycleInterval { get; set; }
 
     /// <inheritdoc />
-    public TimeSpan AutocycleInterval { get; set; }
-    
-    /// <inheritdoc />
+    [DataMember(Order = 6)]
     public bool CycleAfterDisplaySettingsChanged { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 7)]
+    public WallpaperChangeType WallpaperChangeType { get; set; }
+
+    /// <inheritdoc />
+    [DataMember(Order = 8)]
     public bool MinimizeOnClose { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 9)]
     public bool DisplayCycleTimeAsIconOverlay { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 10)]
     public WallpaperClickAction WallpaperDoubleClickAction { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 11)]
     public TrayIconClickAction TrayIconSingleClickAction { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 12)]
     public TrayIconClickAction TrayIconDoubleClickAction { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 13)]
     public Dictionary<string, IScreenSettings> ScreenSettings { get; set; }
 
     /// <summary>

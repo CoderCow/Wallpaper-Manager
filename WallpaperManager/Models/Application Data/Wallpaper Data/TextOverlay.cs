@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Globalization;
+using System.Runtime.Serialization;
 using System.Text;
 using Common;
 using Common.IO;
@@ -22,6 +23,7 @@ namespace WallpaperManager.Models {
   ///   Wallpaper Overlay Texts are meant to be drawn over a wallpaper when it is applied.
   /// </remarks>
   /// <threadsafety static="true" instance="false" />
+  [DataContract]
   [ImplementPropertyChanged]
   public class TextOverlay: ValidatableBase, ITextOverlay, ICloneable, IAssignable {
     /// <summary>
@@ -61,30 +63,39 @@ namespace WallpaperManager.Models {
     public static Color DefaultBorderColor => Color.Black;
 
     /// <inheritdoc />
+    [DataMember(Order = 1)]
     public string Format { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 2)]
     public string FontName { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 3)]
     public float FontSize { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 4)]
     public Color ForeColor { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 5)]
     public FontStyle FontStyle { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 6)]
     public Color BorderColor { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 7)]
     public int HorizontalOffset { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 8)]
     public int VerticalOffset { get; set; }
 
     /// <inheritdoc />
+    [DataMember(Order = 9)]
     public TextOverlayPosition Position { get; set; }
 
     /// <summary>
@@ -112,6 +123,9 @@ namespace WallpaperManager.Models {
       } else if (propertyName == nameof(this.FontSize)) {
         if (this.FontSize <= 0)
           return LocalizationManager.GetLocalizedString("Error.Number.MustBePositive");
+      } else if (propertyName == nameof(this.Position)) {
+        if (!Enum.IsDefined(typeof(TextOverlayPosition), this.Position))
+          return LocalizationManager.GetLocalizedString("Error.FieldIsInvalid");
       }
 
       return null;
