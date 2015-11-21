@@ -109,7 +109,7 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   A collection of screen indexes where this wallpaper is not allowed to be cycled on.
     /// </value>
-    ICollection<int> DisabledScreens { get; }
+    ICollection<string> DisabledDevices { get; }
   }
 
   [ContractClassFor(typeof(IWallpaperBase))]
@@ -124,9 +124,9 @@ namespace WallpaperManager.Models {
     public abstract Point Scale { get; set; }
     public abstract WallpaperEffects Effects { get; set; }
 
-    public ICollection<int> DisabledScreens {
+    public ICollection<string> DisabledDevices {
       get {
-        Contract.Ensures(Contract.Result<ICollection<int>>() != null);
+        Contract.Ensures(Contract.Result<ICollection<string>>() != null);
         throw new NotImplementedException();
       }
     }

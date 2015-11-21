@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace UnitTests {
     public event DisplaysChanged DisplaysChanged;
 
     public IDisplay PrimaryDisplay { get; set; }
-    public IReadOnlyCollection<IDisplay> Displays { get; set; }
+    public ReadOnlyCollection<IDisplay> Displays { get; set; }
     public bool IsMultiDisplaySystem { get; set; }
 
     public void RaiseDisplaysChanged() {

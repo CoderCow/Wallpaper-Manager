@@ -26,7 +26,6 @@ namespace WallpaperManager.Models {
     public Path ImagePath { get; set; }
 
     /// <inheritdoc />
-    
     public Size? ImageSize { get; set; }
 
     /// <inheritdoc />
@@ -81,9 +80,9 @@ namespace WallpaperManager.Models {
     public override object Clone() {
       Wallpaper clone = (Wallpaper)this.MemberwiseClone();
 
-      clone.DisabledScreens = new Collection<int>();
-      foreach (int screenIndex in this.DisabledScreens)
-        clone.DisabledScreens.Add(screenIndex);
+      clone.DisabledDevices = new Collection<string>();
+      foreach (string uniqueDeviceId in this.DisabledDevices)
+        clone.DisabledDevices.Add(uniqueDeviceId);
 
       return clone;
     }

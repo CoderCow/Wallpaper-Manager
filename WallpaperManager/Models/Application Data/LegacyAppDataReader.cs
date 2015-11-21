@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Globalization;
@@ -9,9 +10,13 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using Common.Windows;
 using Path = Common.IO.Path;
 
 namespace WallpaperManager.Models {
+  /// <summary>
+  ///  Reads Wallpaper Manager 1.x and 2.x configuration files.
+  /// </summary>
   public class LegacyAppDataReader: IApplicationDataReader {
     /// <summary>
     ///   Represents the name of the root node of the XML-data.
@@ -24,17 +29,23 @@ namespace WallpaperManager.Models {
     public const string XmlNamespace = "http://www.WallpaperManager.de.vu";
 
     private readonly Path inputFileName;
+    private readonly IDisplayInfo displayInfo;
 
     /// <param name="inputFileName">
     ///   The <see cref="Path" /> of the XML-file to be read from.
     /// </param>
+    /// <param name="displayInfo">
+    ///   The display information provider used to verify and correct screen settings.
+    /// </param>
     /// <exception cref="ArgumentException">
     ///   <paramref name="inputFileName" /> is <c>Path.Invalid</c>.
     /// </exception>
-    public LegacyAppDataReader(Path inputFileName) {
+    public LegacyAppDataReader(Path inputFileName, IDisplayInfo displayInfo) {
       Contract.Requires<ArgumentException>(inputFileName != Path.Invalid);
+      Contract.Requires<ArgumentNullException>(displayInfo != null);
 
       this.inputFileName = inputFileName;
+      this.displayInfo = displayInfo;
     }
 
     /// <summary>
@@ -48,7 +59,6 @@ namespace WallpaperManager.Models {
     ///   A new <see cref="IApplicationData" /> object containing the read data.
     /// </returns>
     /// <inheritdoc />
-    /// <seealso cref="Path">Path Class</seealso>
     public IApplicationData Read() {
       try {
         using (FileStream fileStream = new FileStream(this.inputFileName, FileMode.Open)) {
@@ -63,225 +73,27 @@ namespace WallpaperManager.Models {
           if ((versionAttribute == null) || (!Version.TryParse(versionAttribute.InnerText, out configVersion)))
             throw new XmlException("The configuration file has an invalid root element.");
 
-          Configuration configuration = new Configuration();
-          /*
-          #region <General>
           XmlElement generalElement = document.DocumentElement["General"];
           if (generalElement == null)
             throw new XmlException("The configuration file does not contain expected element 'General'.");
 
-          XmlElement element = generalElement["CycleAfterStartup"];
-          if (element != null)
-            configuration.CycleAfterStartup = bool.Parse(element.InnerText);
+          IConfiguration resultingConfiguration = ConfigurationFromXmlElement(generalElement);
 
-          element = generalElement["TerminateAfterStartup"];
-          if (element != null)
-            configuration.TerminateAfterStartup = bool.Parse(element.InnerText);
-
-          element = (generalElement["MinimizeAfterStart"] ?? generalElement["MinimizeAfterStartup"]);
-          if (element != null)
-            configuration.MinimizeAfterStartup = bool.Parse(element.InnerText);
-
-          element = generalElement["StartAutoCyclingAfterStartup"];
-          if (element != null)
-            configuration.StartAutocyclingAfterStartup = bool.Parse(element.InnerText);
-
-          element = generalElement["WallpaperChangeType"];
-          if (element != null)
-            configuration.WallpaperChangeType = (WallpaperChangeType)Enum.Parse(typeof(WallpaperChangeType), element.InnerText);
-
-          element = generalElement["AutoCycleInterval"];
-          if (element != null)
-            configuration.AutocycleInterval = TimeSpan.Parse(element.InnerText, CultureInfo.InvariantCulture);
-
-          element = generalElement["LastActiveListSize"];
-          if (element != null)
-            configuration.LastActiveListSize = byte.Parse(element.InnerText, CultureInfo.InvariantCulture);
-
-          element = generalElement["CycleAfterDisplaySettingsChanged"];
-          if (element != null)
-            configuration.CycleAfterDisplaySettingsChanged = bool.Parse(element.InnerText);
-
-          element = generalElement["MinimizeOnClose"];
-          if (element != null)
-            configuration.MinimizeOnClose = bool.Parse(element.InnerText);
-
-          element = generalElement["DisplayCycleTimeAsIconOverlay"];
-          if (element != null)
-            configuration.DisplayCycleTimeAsIconOverlay = bool.Parse(element.InnerText);
-
-          element = generalElement["WallpaperDoubleClickAction"];
-          if (element != null)
-            configuration.WallpaperDoubleClickAction = (WallpaperClickAction)Enum.Parse(typeof(WallpaperClickAction), element.InnerText);
-
-          element = generalElement["TrayIconSingleClickAction"];
-          if (element != null)
-            configuration.TrayIconSingleClickAction = (TrayIconClickAction)Enum.Parse(typeof(TrayIconClickAction), element.InnerText);
-
-          element = generalElement["TrayIconDoubleClickAction"];
-          if (element != null)
-            configuration.TrayIconDoubleClickAction = (TrayIconClickAction)Enum.Parse(typeof(TrayIconClickAction), element.InnerText);
-          #endregion
-
-          #region <ScreenSettings>
           XmlElement screensSettingsElement = document.DocumentElement["ScreenSettings"];
-          if (screensSettingsElement != null) {
-            int settingsCounter = 0;
-            var screensSettings = new List<ScreenSettings>();
-
-            foreach (XmlElement screenSettingsElement in screensSettingsElement) {
-              if (screenSettingsElement.Name != "ScreenSettings")
-                continue;
-
-              // Make sure there aren't too many screen settings in the configuration.
-              if (settingsCounter >= Screen.AllScreens.Length)
-                break;
-
-              ScreenSettings screenSettings = new ScreenSettings(settingsCounter);
-              element = screenSettingsElement["CycleRandomly"];
-              if (element != null)
-                screenSettings.CycleRandomly = bool.Parse(element.InnerText);
-
-              element = screenSettingsElement["MarginLeft"];
-              if (element != null)
-                screenSettings.MarginLeft = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
-
-              element = screenSettingsElement["MarginRight"];
-              if (element != null)
-                screenSettings.MarginRight = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
-
-              element = screenSettingsElement["MarginTop"];
-              if (element != null)
-                screenSettings.MarginTop = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
-
-              element = screenSettingsElement["MarginBottom"];
-              if (element != null)
-                screenSettings.MarginBottom = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
-
-              #region <OverlayTexts>
-              XmlElement overlayTextsElement = screenSettingsElement["OverlayTexts"];
-              if (overlayTextsElement != null) {
-                foreach (XmlElement overlayTextElement in overlayTextsElement) {
-                  if (overlayTextElement.Name != "OverlayText")
-                    continue;
-                  TextOverlay textOverlay = new TextOverlay();
-
-                  element = overlayTextElement["Format"];
-                  if (element != null)
-                    textOverlay.Format = element.InnerText;
-
-                  element = overlayTextElement["Position"];
-                  if (element != null)
-                    textOverlay.Position = (TextOverlayPosition)Enum.Parse(typeof(TextOverlayPosition), element.InnerText);
-
-                  element = overlayTextElement["FontName"];
-                  if (element != null)
-                    textOverlay.FontName = element.InnerText;
-
-                  element = overlayTextElement["FontSize"];
-                  if (element != null)
-                    textOverlay.FontSize = float.Parse(element.InnerText, CultureInfo.InvariantCulture);
-
-                  element = overlayTextElement["FontStyle"];
-                  if (element != null)
-                    textOverlay.FontStyle = (FontStyle)Enum.Parse(typeof(FontStyle), element.InnerText);
-
-                  element = overlayTextElement["ForeColor"];
-                  if (element != null)
-                    textOverlay.ForeColor = ColorTranslator.FromHtml(element.InnerText);
-
-                  element = overlayTextElement["BorderColor"];
-                  if (element != null)
-                    textOverlay.BorderColor = ColorTranslator.FromHtml(element.InnerText);
-
-                  element = overlayTextElement["HorizontalOffset"];
-                  if (element != null)
-                    textOverlay.HorizontalOffset = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
-
-                  element = overlayTextElement["VerticalOffset"];
-                  if (element != null)
-                    textOverlay.VerticalOffset = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
-
-                  screenSettings.TextOverlays.Add(textOverlay);
-                }
-              }
-              #endregion
-
-              #region <StaticWallpaper>
-              XmlElement staticWallpaperElement = screenSettingsElement["StaticWallpaper"];
-              if (staticWallpaperElement != null)
-                screenSettings.StaticWallpaper = (Wallpaper)GetWallpaperDataFromXmlElement(staticWallpaperElement, typeof(Wallpaper));
-              #endregion
-
-              screensSettings.Add(screenSettings);
-              settingsCounter++;
-            }
-
-            configuration.ScreenSettings = new ScreenSettingsCollection(screensSettings);
-          }
-          #endregion
-
-          #region <WallpaperCategories>
+          if (screensSettingsElement != null)
+            resultingConfiguration.ScreenSettings = this.ScreenSettingDictionaryFromXmlElement(screensSettingsElement);
+          
+          List<IWallpaperCategory> resultingCategories;
+          Dictionary<IWallpaperCategory, Path> resultingCategoryFolderAssociations;
           XmlElement wallpaperCategoriesElement = document.DocumentElement["WallpaperCategories"];
           if (wallpaperCategoriesElement != null) {
-            foreach (XmlElement wallpaperCategoryElement in wallpaperCategoriesElement) {
-              if (
-                wallpaperCategoryElement.Name != "Category" &&
-                wallpaperCategoryElement.Name != "SynchronizedFolder" &&
-                wallpaperCategoryElement.Name != "WatchedCategory")
-                continue;
-
-              element = wallpaperCategoryElement["Name"];
-              if (element == null)
-                continue;
-              string categoryName = element.InnerText;
-
-              WallpaperDefaultSettings defaultSettings = null;
-              element = wallpaperCategoryElement["WallpaperDefaultSettings"];
-              if (element != null)
-                defaultSettings = (WallpaperDefaultSettings)GetWallpaperDataFromXmlElement(element, typeof(WallpaperDefaultSettings));
-
-              #region <Wallpapers>
-              List<Wallpaper> wallpapers;
-
-              XmlElement wallpapersElement = wallpaperCategoryElement["Wallpapers"];
-              if (wallpapersElement != null) {
-                wallpapers = new List<Wallpaper>(wallpapersElement.ChildNodes.Count);
-
-                foreach (XmlElement wallpaperElement in wallpapersElement) {
-                  if (wallpaperElement.Name != "Wallpaper")
-                    continue;
-
-                  Wallpaper wallpaper = (Wallpaper)GetWallpaperDataFromXmlElement(wallpaperElement, typeof(Wallpaper));
-                  wallpapers.Add(wallpaper);
-                }
-              } else
-                wallpapers = new List<Wallpaper>(0);
-              #endregion
-
-              bool isSynchronizedFolder = ((wallpaperCategoryElement.Name == "SynchronizedFolder") || (wallpaperCategoryElement.Name == "WatchedCategory"));
-              WallpaperCategory category;
-              if (isSynchronizedFolder) {
-                element = (wallpaperCategoryElement["SynchronizedFolderPath"] ?? wallpaperCategoryElement["WatchedDirectoryPath"]);
-                if (element == null)
-                  continue;
-                Path synchronizedDirPath = new Path(element.InnerText);
-
-                if (!Directory.Exists(synchronizedDirPath))
-                  continue;
-
-                category = new WallpaperCategoryFileSynchronizer(categoryName, synchronizedDirPath, wallpapers);
-              } else
-                category = new WallpaperCategory(categoryName, wallpapers);
-
-              category.WallpaperDefaultSettings = defaultSettings;
-              configuration.WallpaperCategories.Add(category);
-            }
+            resultingCategories = this.WallpaperCategoryCollectionFromXmlElement(wallpaperCategoriesElement, out resultingCategoryFolderAssociations);
+          } else {
+            resultingCategories = new List<IWallpaperCategory>(0);
+            resultingCategoryFolderAssociations = new Dictionary<IWallpaperCategory, Path>();
           }
-          #endregion
-          */
-
-          return new ApplicationData(null, null);
+          
+          return new ApplicationData(resultingConfiguration, new ObservableCollection<IWallpaperCategory>(resultingCategories), resultingCategoryFolderAssociations);
         }
       } catch (IOException) {
         throw;
@@ -290,79 +102,290 @@ namespace WallpaperManager.Models {
       }
     }
 
+    private static IConfiguration ConfigurationFromXmlElement(XmlElement generalElement) {
+      IConfiguration resultingConfiguration = new Configuration();
+
+      XmlElement element = generalElement["CycleAfterStartup"];
+      if (element != null)
+        resultingConfiguration.CycleAfterStartup = bool.Parse(element.InnerText);
+
+      element = generalElement["TerminateAfterStartup"];
+      if (element != null)
+        resultingConfiguration.TerminateAfterStartup = bool.Parse(element.InnerText);
+
+      element = (generalElement["MinimizeAfterStart"] ?? generalElement["MinimizeAfterStartup"]);
+      if (element != null)
+        resultingConfiguration.MinimizeAfterStartup = bool.Parse(element.InnerText);
+
+      element = generalElement["StartAutoCyclingAfterStartup"];
+      if (element != null)
+        resultingConfiguration.StartAutocyclingAfterStartup = bool.Parse(element.InnerText);
+
+      element = generalElement["WallpaperChangeType"];
+      if (element != null)
+        resultingConfiguration.WallpaperChangeType = (WallpaperChangeType)Enum.Parse(typeof(WallpaperChangeType), element.InnerText);
+
+      element = generalElement["AutoCycleInterval"];
+      if (element != null)
+        resultingConfiguration.AutocycleInterval = TimeSpan.Parse(element.InnerText, CultureInfo.InvariantCulture);
+
+      element = generalElement["CycleAfterDisplaySettingsChanged"];
+      if (element != null)
+        resultingConfiguration.CycleAfterDisplaySettingsChanged = bool.Parse(element.InnerText);
+
+      element = generalElement["MinimizeOnClose"];
+      if (element != null)
+        resultingConfiguration.MinimizeOnClose = bool.Parse(element.InnerText);
+
+      element = generalElement["DisplayCycleTimeAsIconOverlay"];
+      if (element != null)
+        resultingConfiguration.DisplayCycleTimeAsIconOverlay = bool.Parse(element.InnerText);
+
+      element = generalElement["WallpaperDoubleClickAction"];
+      if (element != null)
+        resultingConfiguration.WallpaperDoubleClickAction = (WallpaperClickAction)Enum.Parse(typeof(WallpaperClickAction), element.InnerText);
+
+      element = generalElement["TrayIconSingleClickAction"];
+      if (element != null)
+        resultingConfiguration.TrayIconSingleClickAction = (TrayIconClickAction)Enum.Parse(typeof(TrayIconClickAction), element.InnerText);
+
+      element = generalElement["TrayIconDoubleClickAction"];
+      if (element != null)
+        resultingConfiguration.TrayIconDoubleClickAction = (TrayIconClickAction)Enum.Parse(typeof(TrayIconClickAction), element.InnerText);
+
+      return resultingConfiguration;
+    }
+
+    private Dictionary<string, IScreenSettings> ScreenSettingDictionaryFromXmlElement(XmlElement screensSettingsElement) {
+      var resultingScreenSettings = new Dictionary<string, IScreenSettings>();
+
+      int settingsCounter = 0;
+      foreach (XmlElement screenSettingsElement in screensSettingsElement) {
+        if (screenSettingsElement.Name != "ScreenSettings")
+          continue;
+
+        // ScreenSettings in the old configuration file were identified by screen indexes only, thus if there are more displays configured than actually connected to the computer
+        // we can just skip the remaining settings.
+        int screenIndex = settingsCounter;
+        if (screenIndex >= this.displayInfo.Displays.Count)
+          break;
+
+        IScreenSettings screenSettings = this.ScreenSettingsFromXmlElement(screenSettingsElement);
+        string deviceId = this.displayInfo.Displays[screenIndex].UniqueDeviceId;
+        resultingScreenSettings.Add(deviceId, screenSettings);
+
+        settingsCounter++;
+      }
+
+      return resultingScreenSettings;
+    }
+
+    private IScreenSettings ScreenSettingsFromXmlElement(XmlElement screenSettingsElement) {
+      IScreenSettings screenSettings = new ScreenSettings();
+      XmlElement element = screenSettingsElement["CycleRandomly"];
+      if (element != null)
+        screenSettings.CycleRandomly = bool.Parse(element.InnerText);
+
+      element = screenSettingsElement["MarginLeft"];
+      if (element != null)
+        screenSettings.MarginLeft = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
+
+      element = screenSettingsElement["MarginRight"];
+      if (element != null)
+        screenSettings.MarginRight = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
+
+      element = screenSettingsElement["MarginTop"];
+      if (element != null)
+        screenSettings.MarginTop = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
+
+      element = screenSettingsElement["MarginBottom"];
+      if (element != null)
+        screenSettings.MarginBottom = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
+
+      XmlElement overlayTextsElement = screenSettingsElement["OverlayTexts"];
+      if (overlayTextsElement != null) {
+        foreach (XmlElement overlayTextElement in overlayTextsElement) {
+          if (overlayTextElement.Name != "OverlayText")
+            continue;
+
+          ITextOverlay textOverlay = OverlayTextFromXmlElement(overlayTextsElement);
+          screenSettings.TextOverlays.Add(textOverlay);
+        }
+      }
+
+      XmlElement staticWallpaperElement = screenSettingsElement["StaticWallpaper"];
+      if (staticWallpaperElement != null)
+        screenSettings.StaticWallpaper = this.WallpaperFromXmlElement(staticWallpaperElement);
+
+      return screenSettings;
+    }
+
+    private static ITextOverlay OverlayTextFromXmlElement(XmlElement overlayTextElement) {
+      ITextOverlay textOverlay = new TextOverlay();
+
+      XmlElement element = overlayTextElement["Format"];
+      if (element != null)
+        textOverlay.Format = element.InnerText;
+
+      element = overlayTextElement["Position"];
+      if (element != null)
+        textOverlay.Position = (TextOverlayPosition)Enum.Parse(typeof(TextOverlayPosition), element.InnerText);
+
+      element = overlayTextElement["FontName"];
+      if (element != null)
+        textOverlay.FontName = element.InnerText;
+
+      element = overlayTextElement["FontSize"];
+      if (element != null)
+        textOverlay.FontSize = float.Parse(element.InnerText, CultureInfo.InvariantCulture);
+
+      element = overlayTextElement["FontStyle"];
+      if (element != null)
+        textOverlay.FontStyle = (FontStyle)Enum.Parse(typeof(FontStyle), element.InnerText);
+
+      element = overlayTextElement["ForeColor"];
+      if (element != null)
+        textOverlay.ForeColor = ColorTranslator.FromHtml(element.InnerText);
+
+      element = overlayTextElement["BorderColor"];
+      if (element != null)
+        textOverlay.BorderColor = ColorTranslator.FromHtml(element.InnerText);
+
+      element = overlayTextElement["HorizontalOffset"];
+      if (element != null)
+        textOverlay.HorizontalOffset = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
+
+      element = overlayTextElement["VerticalOffset"];
+      if (element != null)
+        textOverlay.VerticalOffset = int.Parse(element.InnerText, CultureInfo.InvariantCulture);
+
+      return textOverlay;
+    }
+
+    private List<IWallpaperCategory> WallpaperCategoryCollectionFromXmlElement(XmlElement wallpaperCategoriesElement, out Dictionary<IWallpaperCategory, Path> categoryFolderAssociations) {
+      List<IWallpaperCategory> categories = new List<IWallpaperCategory>(wallpaperCategoriesElement.ChildNodes.Count);
+      categoryFolderAssociations = new Dictionary<IWallpaperCategory, Path>();
+
+      foreach (XmlElement wallpaperCategoryElement in wallpaperCategoriesElement) {
+        bool isSynchronizedFolder = ((wallpaperCategoryElement.Name == "SynchronizedFolder") || (wallpaperCategoryElement.Name == "WatchedCategory"));
+        if (wallpaperCategoryElement.Name != "Category" && !isSynchronizedFolder)
+          continue;
+
+        XmlElement element = wallpaperCategoryElement["Name"];
+        if (element == null)
+          continue;
+
+        string categoryName = element.InnerText;
+
+        IWallpaperDefaultSettings defaultSettings = null;
+        element = wallpaperCategoryElement["WallpaperDefaultSettings"];
+        if (element != null)
+          defaultSettings = this.WallpaperDefaultSettingsFromXmlElement(element);
+
+        List<IWallpaper> wallpapers;
+        XmlElement wallpapersElement = wallpaperCategoryElement["Wallpapers"];
+        if (wallpapersElement != null) {
+          wallpapers = new List<IWallpaper>(wallpapersElement.ChildNodes.Count);
+
+          foreach (XmlElement wallpaperElement in wallpapersElement) {
+            if (wallpaperElement.Name != "Wallpaper")
+              continue;
+
+            IWallpaper wallpaper = this.WallpaperFromXmlElement(wallpaperElement);
+            wallpapers.Add(wallpaper);
+          }
+        } else
+          wallpapers = new List<IWallpaper>(0);
+
+        IWallpaperCategory category;
+        if (isSynchronizedFolder) {
+          element = (wallpaperCategoryElement["SynchronizedFolderPath"] ?? wallpaperCategoryElement["WatchedDirectoryPath"]);
+          Contract.Assert(element != null);
+
+          Path synchronizedDirPath = new Path(element.InnerText);
+          if (!Directory.Exists(synchronizedDirPath))
+            continue;
+
+          category = new WallpaperCategory(categoryName, defaultSettings, wallpapers);
+          categoryFolderAssociations.Add(category, synchronizedDirPath);
+        } else
+          category = new WallpaperCategory(categoryName, defaultSettings, wallpapers);
+
+        category.WallpaperDefaultSettings = defaultSettings;
+      }
+
+      categories.Capacity = categories.Count;
+      return categories;
+    }
+
     /// <summary>
     ///   Gets wallpaper related settings from a given <see cref="XmlElement" />.
     /// </summary>
-    /// <param name="element">
+    /// <param name="xmlElement">
     ///   The <see cref="XmlElement" /> to get the data from.
-    /// </param>
-    /// <param name="wallpaperSettingsType">
-    ///   The type of the wallpaper settings to read.
     /// </param>
     /// <returns>
     ///   An instance of a type inherited from <see cref="WallpaperBase" /> containing the data get from the
     ///   <see cref="XmlElement" />.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="element" /> or <paramref name="wallpaperSettingsType" /> is <c>null</c>.
+    ///   <paramref name="xmlElement" /> is <c>null</c>.
     /// </exception>
     /// <exception cref="XmlException">
     ///   The XML Data are invalid.
     /// </exception>
-    protected static WallpaperBase GetWallpaperDataFromXmlElement(XmlElement element, Type wallpaperSettingsType) {
-      Contract.Requires<ArgumentNullException>(element != null);
-      Contract.Requires<ArgumentNullException>(wallpaperSettingsType != null);
+    private IWallpaper WallpaperFromXmlElement(XmlElement xmlElement) {
+      XmlElement subElement = xmlElement["ImagePath"];
+      IWallpaper wallpaper = new Wallpaper(new Path(subElement.InnerText));
 
-      WallpaperBase settings = null;
-      WallpaperDefaultSettings defaultSettings = null;
+      this.AssignWallpaperBaseFromXmlElement(xmlElement, wallpaper);
+
+      return wallpaper;
+    }
+
+    private IWallpaperDefaultSettings WallpaperDefaultSettingsFromXmlElement(XmlElement xmlElement) {
+      Wallpaper baseSettings = new Wallpaper(new Path("dummypath"));
+      this.AssignWallpaperBaseFromXmlElement(xmlElement, baseSettings);
+
+      IWallpaperDefaultSettings resultingSettings = new WallpaperDefaultSettings(baseSettings, this.displayInfo);
+    
       XmlElement subElement;
+      subElement = xmlElement["AutoDetermineIsMultiscreen"];
+      if (subElement != null)
+        resultingSettings.AutoDetermineIsMultiscreen = bool.Parse(subElement.InnerText);
 
-      /*
-      if (wallpaperSettingsType == typeof(Wallpaper)) {
-        subElement = element["ImagePath"];
-        if (subElement != null) {
-          Wallpaper wallpaper;
+      subElement = xmlElement["AutoDeterminePlacement"];
+      if (subElement != null)
+        resultingSettings.AutoDeterminePlacement = bool.Parse(subElement.InnerText);
 
-          if (subElement.InnerText.Length > 0)
-            wallpaper = new Wallpaper(new Path(subElement.InnerText));
-          else
-            wallpaper = new Wallpaper();
+      return resultingSettings;
+    }
 
-          wallpaper.SuggestIsMultiscreen = false;
-          wallpaper.SuggestPlacement = false;
-          settings = wallpaper;
-        }
-      } else if (wallpaperSettingsType == typeof(WallpaperDefaultSettings)) {
-        defaultSettings = new WallpaperDefaultSettings();
-        settings = defaultSettings;
-      }
-
-      if (settings == null)
-        throw new XmlException("A wallpaper setting node is missing.");
-
+    private void AssignWallpaperBaseFromXmlElement(XmlElement element, IWallpaperBase wallpaperBase) {
+      XmlElement subElement;
       subElement = element["IsActivated"];
       if (subElement != null)
-        settings.IsActivated = bool.Parse(subElement.InnerText);
+        wallpaperBase.IsActivated = bool.Parse(subElement.InnerText);
 
       subElement = element["IsMultiscreen"];
       if (subElement != null)
-        settings.IsMultiscreen = bool.Parse(subElement.InnerText);
+        wallpaperBase.IsMultiscreen = bool.Parse(subElement.InnerText);
 
       subElement = element["Priority"];
       if (subElement != null)
-        settings.Priority = byte.Parse(subElement.InnerText, CultureInfo.InvariantCulture);
+        wallpaperBase.Priority = byte.Parse(subElement.InnerText, CultureInfo.InvariantCulture);
 
       subElement = element["OnlyCycleBetweenStart"];
       if (subElement != null)
-        settings.OnlyCycleBetweenStart = TimeSpan.Parse(subElement.InnerText, CultureInfo.InvariantCulture);
+        wallpaperBase.OnlyCycleBetweenStart = TimeSpan.Parse(subElement.InnerText, CultureInfo.InvariantCulture);
 
       subElement = element["OnlyCycleBetweenStop"];
       if (subElement != null)
-        settings.OnlyCycleBetweenStop = TimeSpan.Parse(subElement.InnerText, CultureInfo.InvariantCulture);
+        wallpaperBase.OnlyCycleBetweenStop = TimeSpan.Parse(subElement.InnerText, CultureInfo.InvariantCulture);
 
       subElement = element["Placement"];
       if (subElement != null)
-        settings.Placement = (WallpaperPlacement)Enum.Parse(typeof(WallpaperPlacement), subElement.InnerText);
+        wallpaperBase.Placement = (WallpaperPlacement)Enum.Parse(typeof(WallpaperPlacement), subElement.InnerText);
 
       subElement = element["HorizontalOffset"];
       if (subElement != null) {
@@ -370,7 +393,7 @@ namespace WallpaperManager.Models {
 
         subElement = element["VerticalOffset"];
         if (subElement != null)
-          settings.Offset = new Point(horizontalOffset, int.Parse(subElement.InnerText, CultureInfo.InvariantCulture));
+          wallpaperBase.Offset = new Point(horizontalOffset, int.Parse(subElement.InnerText, CultureInfo.InvariantCulture));
       }
 
       subElement = element["HorizontalScale"];
@@ -379,16 +402,16 @@ namespace WallpaperManager.Models {
 
         subElement = element["VerticalScale"];
         if (subElement != null)
-          settings.Offset = new Point(horizontalScale, int.Parse(subElement.InnerText, CultureInfo.InvariantCulture));
+          wallpaperBase.Offset = new Point(horizontalScale, int.Parse(subElement.InnerText, CultureInfo.InvariantCulture));
       }
 
       subElement = element["Effects"];
       if (subElement != null)
-        settings.Effects = (WallpaperEffects)Enum.Parse(typeof(WallpaperEffects), subElement.InnerText);
+        wallpaperBase.Effects = (WallpaperEffects)Enum.Parse(typeof(WallpaperEffects), subElement.InnerText);
 
       subElement = element["BackgroundColor"];
       if (subElement != null)
-        settings.BackgroundColor = ColorTranslator.FromHtml(subElement.InnerText);
+        wallpaperBase.BackgroundColor = ColorTranslator.FromHtml(subElement.InnerText);
 
       subElement = element["DisabledScreens"];
       if (subElement != null) {
@@ -397,22 +420,13 @@ namespace WallpaperManager.Models {
         for (int i = 0; i < disabledScreens.Length; i++) {
           string disabledScreenString = disabledScreens[i].Trim();
 
-          if (disabledScreens[i].Length != 0)
-            settings.DisabledScreens.Add(int.Parse(disabledScreenString, CultureInfo.InvariantCulture));
+          if (disabledScreenString.Length > 0) {
+            int disabledScreenIndex = int.Parse(disabledScreenString, CultureInfo.InvariantCulture);
+            if (disabledScreenIndex < this.displayInfo.Displays.Count)
+              wallpaperBase.DisabledDevices.Add(this.displayInfo.Displays[disabledScreenIndex].UniqueDeviceId);
+          }
         }
       }
-
-      if (defaultSettings != null) {
-        subElement = element["AutoDetermineIsMultiscreen"];
-        if (subElement != null)
-          defaultSettings.AutoDetermineIsMultiscreen = bool.Parse(subElement.InnerText);
-
-        subElement = element["AutoDeterminePlacement"];
-        if (subElement != null)
-          defaultSettings.AutoDeterminePlacement = bool.Parse(subElement.InnerText);
-      }*/
-
-      return settings;
     }
   }
 }

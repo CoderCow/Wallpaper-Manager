@@ -55,7 +55,7 @@ namespace WallpaperManager.Models {
     public Color BackgroundColor { get; set; }
 
     /// <inheritdoc />
-    public ICollection<int> DisabledScreens { get; protected set; }
+    public ICollection<string> DisabledDevices { get; protected set; }
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperBase" /> class.
@@ -68,7 +68,7 @@ namespace WallpaperManager.Models {
       this.OnlyCycleBetweenStart = new TimeSpan(0, 0, 0);
       this.OnlyCycleBetweenStop = new TimeSpan(23, 59, 59);
       this.BackgroundColor = DefaultBackgroundColor;
-      this.DisabledScreens = new Collection<int>();
+      this.DisabledDevices = new Collection<string>();
     }
 
     #region Overrides of ValidatableBase
@@ -116,7 +116,7 @@ namespace WallpaperManager.Models {
       other.BackgroundColor = this.BackgroundColor;
       other.OnlyCycleBetweenStart = this.OnlyCycleBetweenStart;
       other.OnlyCycleBetweenStop = this.OnlyCycleBetweenStop;
-      other.DisabledScreens = this.DisabledScreens;
+      other.DisabledDevices = this.DisabledDevices;
     }
     #endregion
   }

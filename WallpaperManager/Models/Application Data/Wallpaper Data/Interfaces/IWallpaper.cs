@@ -55,7 +55,7 @@ namespace WallpaperManager.Models {
     public abstract Point Scale { get; set; }
     public abstract WallpaperEffects Effects { get; set; }
     public abstract Color BackgroundColor { get; set; }
-    public abstract ICollection<int> DisabledScreens { get; }
+    public abstract ICollection<string> DisabledDevices { get; }
     public abstract bool IsBlank { get; set; }
     public abstract bool SuggestIsMultiscreen { get; set; }
     public abstract bool SuggestPlacement { get; set; }

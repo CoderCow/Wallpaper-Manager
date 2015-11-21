@@ -143,16 +143,16 @@ namespace UnitTests {
     [Fact]
     public void ShouldCreateProperClones() {
       Wallpaper sut = this.modelFixtures.Create<Wallpaper>();
-      sut.DisabledScreens.Add(1);
-      sut.DisabledScreens.Add(3);
-      sut.DisabledScreens.Add(6);
+      sut.DisabledDevices.Add(new Path("C:\\"));
+      sut.DisabledDevices.Add(new Path("C:\\File.jpg"));
+      sut.DisabledDevices.Add(new Path("SomeFile.png"));
       
       Wallpaper sutClone = (Wallpaper)sut.Clone();
 
       sutClone.Should().BeCloneOf(sut);
-      sutClone.DisabledScreens.Should().NotBeSameAs(sut.DisabledScreens);
-      sutClone.DisabledScreens.Should().ContainInOrder(sutClone.DisabledScreens);
-      sutClone.DisabledScreens.Count.Should().Be(sut.DisabledScreens.Count);
+      sutClone.DisabledDevices.Should().NotBeSameAs(sut.DisabledDevices);
+      sutClone.DisabledDevices.Should().ContainInOrder(sutClone.DisabledDevices);
+      sutClone.DisabledDevices.Count.Should().Be(sut.DisabledDevices.Count);
     }
 
     [Fact]

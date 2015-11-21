@@ -138,7 +138,7 @@ namespace WallpaperManager.Models {
     ///   Attempted to set a <c>null</c> value.
     /// </exception>
     /// <seealso cref="Models.ScreenSettings">ScreenSettings Class</seealso>
-    Dictionary<string, ScreenSettings> ScreenSettings { get; set; }
+    Dictionary<string, IScreenSettings> ScreenSettings { get; set; }
   }
 
   [DoNotNotify]
@@ -197,9 +197,9 @@ namespace WallpaperManager.Models {
       }
     }
 
-    public Dictionary<string, ScreenSettings> ScreenSettings {
+    public Dictionary<string, IScreenSettings> ScreenSettings {
       get {
-        Contract.Ensures(Contract.Result<Dictionary<string, ScreenSettings>>() != null);
+        Contract.Ensures(Contract.Result<Dictionary<string, IScreenSettings>>() != null);
         throw new NotImplementedException();
       }
       set {

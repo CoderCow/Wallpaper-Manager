@@ -71,7 +71,7 @@ namespace WallpaperManager.Models {
     public TrayIconClickAction TrayIconDoubleClickAction { get; set; }
 
     /// <inheritdoc />
-    public Dictionary<string, ScreenSettings> ScreenSettings { get; set; }
+    public Dictionary<string, IScreenSettings> ScreenSettings { get; set; }
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="Configuration" /> class.
@@ -82,7 +82,7 @@ namespace WallpaperManager.Models {
       this.WallpaperDoubleClickAction = DefaultWallpaperDoubleClickAction;
       this.TrayIconSingleClickAction = DefaultTrayIconSingleClickAction;
       this.TrayIconDoubleClickAction = DefaultTrayIconDoubleClickAction;
-      this.ScreenSettings = new Dictionary<string, ScreenSettings>();
+      this.ScreenSettings = new Dictionary<string, IScreenSettings>();
     }
 
     #region Overrides of ValidatableBase
@@ -100,9 +100,9 @@ namespace WallpaperManager.Models {
     public object Clone() {
       Configuration clone = (Configuration)this.MemberwiseClone();
 
-      clone.ScreenSettings = new Dictionary<string, ScreenSettings>();
-      foreach (KeyValuePair<string, ScreenSettings> pair in this.ScreenSettings)
-        clone.ScreenSettings.Add(pair.Key, (ScreenSettings)pair.Value.Clone());
+      clone.ScreenSettings = new Dictionary<string, IScreenSettings>();
+      foreach (KeyValuePair<string, IScreenSettings> pair in this.ScreenSettings)
+        clone.ScreenSettings.Add(pair.Key, (IScreenSettings)pair.Value.Clone());
 
       return clone;
     }
