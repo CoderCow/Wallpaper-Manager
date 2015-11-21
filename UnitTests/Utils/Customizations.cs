@@ -31,15 +31,12 @@ namespace UnitTests {
         .Without((x) => x.BackgroundColor)
         .Create());
 
-      fixture.Register(() => 
-        fixture.Build<WallpaperCategory>()
-        .Create());
-
       fixture.Register(() => new Size(10, 10));
 
       fixture.Register<IWallpaperBase>(fixture.Create<WallpaperBase>);
       fixture.Register<IWallpaper>(fixture.Create<Wallpaper>);
       fixture.Register<IWallpaperCategory>(fixture.Create<WallpaperCategory>);
+      fixture.Register<ISyncedWallpaperCategory>(fixture.Create<SyncedWallpaperCategory>);
       fixture.Register<IWallpaperDefaultSettings>(fixture.Create<WallpaperDefaultSettings>);
 
       fixture.Register<IDisplay>(() =>

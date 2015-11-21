@@ -9,7 +9,6 @@ namespace WallpaperManager.Models {
   public interface IApplicationData {
     IConfiguration Configuration { get; }
     ObservableCollection<IWallpaperCategory> WallpaperCategories { get; }
-    Dictionary<IWallpaperCategory, Path> CategoryWatchedFoldersAssociations { get; }
   }
 
   [ContractClassFor(typeof(IApplicationData))]
@@ -24,13 +23,6 @@ namespace WallpaperManager.Models {
     public ObservableCollection<IWallpaperCategory> WallpaperCategories {
       get {
         Contract.Ensures(Contract.Result<ObservableCollection<IWallpaperCategory>>() != null);
-        throw new NotImplementedException();
-      }
-    }
-
-    public Dictionary<IWallpaperCategory, Path> CategoryWatchedFoldersAssociations {
-      get {
-        Contract.Ensures(Contract.Result<Dictionary<IWallpaperCategory, Path>>() != null);
         throw new NotImplementedException();
       }
     }

@@ -237,8 +237,10 @@
     <Compile Include="Models\Application Data\Interfaces\IApplicationDataReader.cs" />
     <Compile Include="Models\Application Data\Interfaces\IApplicationDataWriter.cs" />
     <Compile Include="Models\Application Data\Interfaces\IApplicationData.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\Interfaces\ISyncedWallpaperCategory.cs" />
     <Compile Include="Models\Application Data\Wallpaper Data\Interfaces\ITextOverlay.cs" />
     <Compile Include="Models\Application Data\LegacyAppDataReader.cs" />
+    <Compile Include="Models\Application Data\Wallpaper Data\SyncedWallpaperCategory.cs" />
     <Compile Include="Models\EventArgs\RequestWallpapersEventArgs.cs" />
     <Compile Include="Models\EventArgs\VersionCheckSuccessfulEventArgs.cs" />
     <Compile Include="Models\UpdateManager.cs" />
@@ -371,7 +373,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Any" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_ConfigurationName="Any" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="..\packages\Fody.1.29.3\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.3\build\dotnet\Fody.targets')" />

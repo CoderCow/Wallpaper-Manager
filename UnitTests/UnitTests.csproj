@@ -86,9 +86,15 @@
       <HintPath>..\packages\FluentAssertions.4.0.1\lib\net45\FluentAssertions.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="Moq, Version=4.1.1308.2120, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.1.1308.2120\lib\net40\Moq.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="mscorlib.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\mscorlib.4.0.0.0.Fakes.dll</HintPath>
     </Reference>
     <Reference Include="Ploeh.AutoFixture, Version=3.36.10.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoFixture.3.36.10\lib\net40\Ploeh.AutoFixture.dll</HintPath>
@@ -103,6 +109,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.4.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\System.4.0.0.0.Fakes.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
@@ -135,6 +144,7 @@
     <Compile Include="Models\WallpaperData\Stubs\DisplayInfoStub.cs" />
     <Compile Include="Models\WallpaperData\Stubs\DisplayStub.cs" />
     <Compile Include="Models\WallpaperData\OverlayTextTest.cs" />
+    <Compile Include="Models\WallpaperData\SyncedWallpaperCategoryTest.cs" />
     <Compile Include="Utils\AutoInvalidEnumData.cs" />
     <Compile Include="Utils\AutoValidEnumData.cs" />
     <Compile Include="Utils\TestUtils.cs" />
@@ -149,6 +159,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Fakes Include="Fakes\System.fakes" />
+    <Fakes Include="Fakes\mscorlib.fakes" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

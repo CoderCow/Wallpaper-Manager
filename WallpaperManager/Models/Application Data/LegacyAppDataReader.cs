@@ -84,16 +84,14 @@ namespace WallpaperManager.Models {
             resultingConfiguration.ScreenSettings = this.ScreenSettingDictionaryFromXmlElement(screensSettingsElement);
           
           List<IWallpaperCategory> resultingCategories;
-          Dictionary<IWallpaperCategory, Path> resultingCategoryFolderAssociations;
           XmlElement wallpaperCategoriesElement = document.DocumentElement["WallpaperCategories"];
           if (wallpaperCategoriesElement != null) {
-            resultingCategories = this.WallpaperCategoryCollectionFromXmlElement(wallpaperCategoriesElement, out resultingCategoryFolderAssociations);
+            resultingCategories = this.WallpaperCategoryCollectionFromXmlElement(wallpaperCategoriesElement);
           } else {
             resultingCategories = new List<IWallpaperCategory>(0);
-            resultingCategoryFolderAssociations = new Dictionary<IWallpaperCategory, Path>();
           }
           
-          return new ApplicationData(resultingConfiguration, new ObservableCollection<IWallpaperCategory>(resultingCategories), resultingCategoryFolderAssociations);
+          return new ApplicationData(resultingConfiguration, new ObservableCollection<IWallpaperCategory>(resultingCategories));
         }
       } catch (IOException) {
         throw;
@@ -262,9 +260,8 @@ namespace WallpaperManager.Models {
       return textOverlay;
     }
 
-    private List<IWallpaperCategory> WallpaperCategoryCollectionFromXmlElement(XmlElement wallpaperCategoriesElement, out Dictionary<IWallpaperCategory, Path> categoryFolderAssociations) {
+    private List<IWallpaperCategory> WallpaperCategoryCollectionFromXmlElement(XmlElement wallpaperCategoriesElement) {
       List<IWallpaperCategory> categories = new List<IWallpaperCategory>(wallpaperCategoriesElement.ChildNodes.Count);
-      categoryFolderAssociations = new Dictionary<IWallpaperCategory, Path>();
 
       foreach (XmlElement wallpaperCategoryElement in wallpaperCategoriesElement) {
         bool isSynchronizedFolder = ((wallpaperCategoryElement.Name == "SynchronizedFolder") || (wallpaperCategoryElement.Name == "WatchedCategory"));
@@ -306,8 +303,7 @@ namespace WallpaperManager.Models {
           if (!Directory.Exists(synchronizedDirPath))
             continue;
 
-          category = new WallpaperCategory(categoryName, defaultSettings, wallpapers);
-          categoryFolderAssociations.Add(category, synchronizedDirPath);
+          category = new SyncedWallpaperCategory(categoryName, defaultSettings, synchronizedDirPath, wallpapers);
         } else
           category = new WallpaperCategory(categoryName, defaultSettings, wallpapers);
 
