@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Common.IO;
 using FluentAssertions;
 using FluentAssertions.Common;
 using FluentAssertions.Execution;
@@ -75,6 +76,21 @@ namespace UnitTests {
       WallpaperBase sut = this.modelFixtures.Create<WallpaperBase>();
 
       sut.Invoking(x => x.Placement = (WallpaperPlacement)(-1)).ShouldThrow<Exception>();
+    }
+
+    [Fact]
+    public void ShouldCreateProperClones() {
+      WallpaperBase sut = this.modelFixtures.Create<WallpaperBase>();
+      sut.DisabledDevices.Add(new Path("C:\\"));
+      sut.DisabledDevices.Add(new Path("C:\\File.jpg"));
+      sut.DisabledDevices.Add(new Path("SomeFile.png"));
+      
+      WallpaperBase sutClone = (WallpaperBase)sut.Clone();
+
+      sutClone.Should().BeCloneOf(sut);
+      sutClone.DisabledDevices.Should().NotBeSameAs(sut.DisabledDevices);
+      sutClone.DisabledDevices.Should().ContainInOrder(sutClone.DisabledDevices);
+      sutClone.DisabledDevices.Count.Should().Be(sut.DisabledDevices.Count);
     }
 
     [Fact]

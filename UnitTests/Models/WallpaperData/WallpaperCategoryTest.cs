@@ -295,7 +295,7 @@ namespace UnitTests {
 
     #region Helpers
     private WallpaperCategory NewCategory(string name = "New Category", IWallpaperDefaultSettings defaultSettings = null, ICollection<IWallpaper> wallpapers = null) {
-      defaultSettings = defaultSettings ?? new WallpaperDefaultSettings(new WallpaperBaseImpl(), this.modelFixtures.Create<IDisplayInfo>());
+      defaultSettings = defaultSettings ?? new WallpaperDefaultSettings(new WallpaperBase(), this.modelFixtures.Create<IDisplayInfo>());
 
       return new WallpaperCategory(name, defaultSettings, wallpapers);
     }

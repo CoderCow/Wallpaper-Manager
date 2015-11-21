@@ -15,7 +15,7 @@ namespace WallpaperManager.Models {
   ///   Contains general wallpaper related data.
   /// </summary>
   /// <threadsafety static="true" instance="false" />
-  public abstract class WallpaperBase : ValidatableBase, IWallpaperBase, ICloneable, IAssignable {
+  public class WallpaperBase : ValidatableBase, IWallpaperBase, ICloneable, IAssignable {
     /// <summary>
     ///   Gets the default background color used for a new instance of this class.
     /// </summary>
@@ -60,7 +60,7 @@ namespace WallpaperManager.Models {
     /// <summary>
     ///   Initializes a new instance of the <see cref="WallpaperBase" /> class.
     /// </summary>
-    protected WallpaperBase() {
+    public WallpaperBase() {
       this.IsActivated = true;
       this.Priority = 100;
       this.Offset = new Point(0, 0);
@@ -68,7 +68,7 @@ namespace WallpaperManager.Models {
       this.OnlyCycleBetweenStart = new TimeSpan(0, 0, 0);
       this.OnlyCycleBetweenStop = new TimeSpan(23, 59, 59);
       this.BackgroundColor = DefaultBackgroundColor;
-      this.DisabledDevices = new Collection<string>();
+      this.DisabledDevices = new List<string>(0);
     }
 
     #region Overrides of ValidatableBase
@@ -92,31 +92,29 @@ namespace WallpaperManager.Models {
 
     #region ICloneable Implementation, IAssignable Implementation
     /// <inheritdoc />
-    public abstract object Clone();
+    public virtual object Clone() {
+      WallpaperBase clone = (WallpaperBase)this.MemberwiseClone();
+      clone.DisabledDevices = new List<string>(this.DisabledDevices);
 
-    /// <inheritdoc />
-    public void AssignTo(object other) {
-      Contract.Requires<ArgumentException>(other is WallpaperBase);
-
-      WallpaperBase otherInstance = (WallpaperBase)other;
-      this.AssignTo(otherInstance);
+      return clone;
     }
 
-    /// <inheritdoc cref="AssignTo(object)" />
-    protected virtual void AssignTo(WallpaperBase other) {
-      Contract.Requires<ArgumentNullException>(other != null);
+    /// <inheritdoc />
+    public virtual void AssignTo(object other) {
+      Contract.Requires<ArgumentException>(other is WallpaperBase);
 
-      other.IsActivated = this.IsActivated;
-      other.IsMultiscreen = this.IsMultiscreen;
-      other.Placement = this.Placement;
-      other.Scale = this.Scale;
-      other.Offset = this.Offset;
-      other.Effects = this.Effects;
-      other.Priority = this.Priority;
-      other.BackgroundColor = this.BackgroundColor;
-      other.OnlyCycleBetweenStart = this.OnlyCycleBetweenStart;
-      other.OnlyCycleBetweenStop = this.OnlyCycleBetweenStop;
-      other.DisabledDevices = this.DisabledDevices;
+      WallpaperBase otherWallpaperBase = (WallpaperBase)other;
+      otherWallpaperBase.IsActivated = this.IsActivated;
+      otherWallpaperBase.IsMultiscreen = this.IsMultiscreen;
+      otherWallpaperBase.Placement = this.Placement;
+      otherWallpaperBase.Scale = this.Scale;
+      otherWallpaperBase.Offset = this.Offset;
+      otherWallpaperBase.Effects = this.Effects;
+      otherWallpaperBase.Priority = this.Priority;
+      otherWallpaperBase.BackgroundColor = this.BackgroundColor;
+      otherWallpaperBase.OnlyCycleBetweenStart = this.OnlyCycleBetweenStart;
+      otherWallpaperBase.OnlyCycleBetweenStop = this.OnlyCycleBetweenStop;
+      otherWallpaperBase.DisabledDevices = this.DisabledDevices;
     }
     #endregion
   }

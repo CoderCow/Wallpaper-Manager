@@ -32,11 +32,11 @@ namespace UnitTests {
       return fixture.Create<WallpaperDefaultSettings>();
     }
 
-    public static WallpaperBaseImpl WallpaperBaseFromFixture(Fixture fixture = null) {
+    public static WallpaperBase WallpaperBaseFromFixture(Fixture fixture = null) {
       if (fixture == null)
         fixture = WallpaperFixture();
 
-      return fixture.Create<WallpaperBaseImpl>();
+      return fixture.Create<WallpaperBase>();
     }
 
     public static Wallpaper WallpaperFromFixture(Fixture fixture = null) {

@@ -344,7 +344,7 @@ namespace WallpaperManager.Models {
     }
 
     private IWallpaperDefaultSettings WallpaperDefaultSettingsFromXmlElement(XmlElement xmlElement) {
-      Wallpaper baseSettings = new Wallpaper(new Path("dummypath"));
+      WallpaperBase baseSettings = new WallpaperBase();
       this.AssignWallpaperBaseFromXmlElement(xmlElement, baseSettings);
 
       IWallpaperDefaultSettings resultingSettings = new WallpaperDefaultSettings(baseSettings, this.displayInfo);

@@ -3,6 +3,7 @@
 // All other rights reserved.
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Drawing;
@@ -79,26 +80,25 @@ namespace WallpaperManager.Models {
     /// <inheritdoc />
     public override object Clone() {
       Wallpaper clone = (Wallpaper)this.MemberwiseClone();
-
-      clone.DisabledDevices = new Collection<string>();
-      foreach (string uniqueDeviceId in this.DisabledDevices)
-        clone.DisabledDevices.Add(uniqueDeviceId);
+      clone.DisabledDevices = new List<string>(this.DisabledDevices);
 
       return clone;
     }
 
     /// <inheritdoc />
-    protected override void AssignTo(WallpaperBase other) {
+    public override void AssignTo(object other) {
+      Contract.Requires<ArgumentException>(other is WallpaperBase || other is Wallpaper);
+
       base.AssignTo(other);
 
-      Wallpaper wallpaperInstance = (other as Wallpaper);
-      if (wallpaperInstance != null) {
-        wallpaperInstance.ImagePath = this.ImagePath;
-        wallpaperInstance.ImageSize = this.ImageSize;
-        wallpaperInstance.TimeAdded = this.TimeAdded;
-        wallpaperInstance.TimeLastCycled = this.TimeLastCycled;
-        wallpaperInstance.CycleCountTotal = this.CycleCountTotal;
-        wallpaperInstance.CycleCountWeek = this.CycleCountWeek;
+      Wallpaper otherWallpaper = (other as Wallpaper);
+      if (otherWallpaper != null) {
+        otherWallpaper.ImagePath = this.ImagePath;
+        otherWallpaper.ImageSize = this.ImageSize;
+        otherWallpaper.TimeAdded = this.TimeAdded;
+        otherWallpaper.TimeLastCycled = this.TimeLastCycled;
+        otherWallpaper.CycleCountTotal = this.CycleCountTotal;
+        otherWallpaper.CycleCountWeek = this.CycleCountWeek;
       }
     }
     #endregion

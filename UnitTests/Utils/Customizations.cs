@@ -13,7 +13,7 @@ namespace UnitTests {
   public class WallpaperCustomization: ICustomization {
     public void Customize(IFixture fixture) {
       fixture.Register(() => 
-        fixture.Build<WallpaperBaseImpl>()
+        fixture.Build<WallpaperBase>()
         .Without((x) => x.OnlyCycleBetweenStart)
         .Without((x) => x.OnlyCycleBetweenStop)
         .Without((x) => x.BackgroundColor)
@@ -37,7 +37,6 @@ namespace UnitTests {
 
       fixture.Register(() => new Size(10, 10));
 
-      fixture.Register<WallpaperBase>(fixture.Create<WallpaperBaseImpl>);
       fixture.Register<IWallpaperBase>(fixture.Create<WallpaperBase>);
       fixture.Register<IWallpaper>(fixture.Create<Wallpaper>);
       fixture.Register<IWallpaperCategory>(fixture.Create<WallpaperCategory>);

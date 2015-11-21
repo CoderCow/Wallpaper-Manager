@@ -146,7 +146,6 @@
     <Compile Include="Models\WallpaperData\WallpaperBaseTest.cs" />
     <Compile Include="Models\WallpaperData\WallpaperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\WallpaperData\Stubs\WallpaperBaseImpl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
