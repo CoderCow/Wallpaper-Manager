@@ -4,6 +4,8 @@
 
 A powerful tool for Windows allowing you to organize your wallpapers properly. Designed for multi-monitor systems.
 
+![Main Window Screenshot](https://raw.githubusercontent.com/CoderCow/Wallpaper-Manager/master/docs/assets/main-window.jpg)
+
 ## Features
 
 * Either apply one wallpaper per monitor or one over all your monitors at once!
