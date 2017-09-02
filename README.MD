@@ -1,6 +1,8 @@
 ﻿# Wallpaper Manager
 
-A tool for Windows allowing you to organize all your wallpapers just like you've always wanted to.
+**Note:** This is an old project of mine and has been abandoned. The application should still run fine on most Windows systems though.
+
+A powerful tool for Windows allowing you to organize your wallpapers properly. Designed for multi-monitor systems.
 
 ## Features
 
