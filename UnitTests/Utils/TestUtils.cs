@@ -1,3 +1,6 @@
+using System;
+using System.Windows.Threading;
+using Moq;
 using Ploeh.AutoFixture;
 using UnitTests;
 using WallpaperManager.Models;
@@ -51,6 +54,13 @@ namespace UnitTests {
       fixture.Customize(new WallpaperCustomization());
 
       return fixture;
+    }
+
+    public static Mock<Dispatcher> LocalInvokationDispatcherMock() {
+      var dispatcherMock = new Mock<Dispatcher>();
+      dispatcherMock.Setup((x) => x.Invoke(It.IsAny<Action>())).Callback<Action>((invocationCallback) => invocationCallback());
+
+      return dispatcherMock;
     }
   }
 }

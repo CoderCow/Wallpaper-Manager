@@ -57,15 +57,15 @@ namespace WallpaperManager.Models {
     /// <value>
     ///   The <see cref="Dispatcher" /> used to invoke operations in another thread.
     /// </value>
-    public Dispatcher InvokeDispatcher { get; }
+    public IDispatcher InvokeDispatcher { get; }
 
     /// <summary>
-    ///   Gets the path of the directory being watched.
+    ///   Gets the directory being watched.
     /// </summary>
     /// <value>
-    ///   The path of the directory being watched.
+    ///   The directory being watched.
     /// </value>
-    public Path DirectoryPath { get; }
+    public DirectoryInfo Directory { get; }
 
     /// <summary>
     ///   Gets the <see cref="FileSystemWatcher" /> instance used to observe the file system's directory.
@@ -82,14 +82,14 @@ namespace WallpaperManager.Models {
     /// </summary>
     /// <inheritdoc cref="WallpaperCategory(string, IEnumerable{IWallpaper})"
     ///   select='param[@name="name"]' />
-    /// <param name="directoryPath">
+    /// <param name="directory">
     ///   The path of the directory to be watched.
     /// </param>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="name" /> or <paramref name="directoryPath" /> is <c>null</c>.
+    ///   <paramref name="name" /> or <paramref name="directory" /> is <c>null</c>.
     /// </exception>
     /// <exception cref="DirectoryNotFoundException">
-    ///   The directory where <paramref name="directoryPath" /> is refering to doesn't exist.
+    ///   The directory where <paramref name="directory" /> is refering to doesn't exist.
     /// </exception>
     /// <permission cref="SecurityAction.LinkDemand">
     ///   for full trust for the immediate caller. This member cannot be used by partially trusted code.
@@ -103,19 +103,19 @@ namespace WallpaperManager.Models {
     /// </overloads>
     [PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust")]
     [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")]
-    public WallpaperCategoryFileSynchronizer(IWallpaperCategory wallpaperCategory, Path directoryPath, Dispatcher invokeDispatcher) {
+    public WallpaperCategoryFileSynchronizer(IWallpaperCategory wallpaperCategory, DirectoryInfo directory, IDispatcher invokeDispatcher) {
       Contract.Requires<ArgumentNullException>(wallpaperCategory != null);
-      Contract.Requires<ArgumentException>(directoryPath != Path.Invalid);
-      Contract.Requires<DirectoryNotFoundException>(Directory.Exists(directoryPath));
+      Contract.Requires<ArgumentException>(directory != null);
+      Contract.Requires<DirectoryNotFoundException>(directory.Exists);
       Contract.Requires<ArgumentNullException>(invokeDispatcher != null);
 
       this.WallpaperCategory = wallpaperCategory;
-      this.DirectoryPath = directoryPath;
+      this.Directory = directory;
       this.InvokeDispatcher = invokeDispatcher;
 
-      this.FileSystemWatcher = new FileSystemWatcher();
+      this.FileSystemWatcher = this.CreateFileSystemWatcher();
       this.FileSystemWatcher.BeginInit();
-      this.FileSystemWatcher.Path = directoryPath;
+      this.FileSystemWatcher.Path = directory.FullName;
       this.FileSystemWatcher.IncludeSubdirectories = false;
       this.FileSystemWatcher.NotifyFilter = (NotifyFilters.FileName | NotifyFilters.Size | NotifyFilters.DirectoryName);
       this.FileSystemWatcher.EnableRaisingEvents = true;
@@ -128,6 +128,10 @@ namespace WallpaperManager.Models {
       this.Resynchronize();
     }
 
+    protected virtual FileSystemWatcher CreateFileSystemWatcher() {
+      return new FileSystemWatcher();
+    }
+
     /// <summary>
     ///   Checks whether all properties have valid values.
     /// </summary>
@@ -135,7 +139,7 @@ namespace WallpaperManager.Models {
     private void CheckInvariants() {
       Contract.Invariant(WallpaperCategoryFileSynchronizer.WallpaperFileExtensions != null);
       Contract.Invariant(this.InvokeDispatcher != null);
-      Contract.Invariant(this.DirectoryPath != Path.Invalid);
+      Contract.Invariant(this.Directory != null);
       Contract.Invariant(this.FileSystemWatcher != null);
     }
 
@@ -147,11 +151,12 @@ namespace WallpaperManager.Models {
     public void Resynchronize() {
       Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
 
-      string[] filesNames = Directory.GetFiles(this.DirectoryPath);
+      FileInfo[] files = this.Directory.GetFiles();
+      HashSet<string> filePaths = new HashSet<string>(files.Select((file) => file.FullName));
 
       // Add wallpapers not in the category yet.
-      foreach (string fileName in filesNames) {
-        Path filePath = new Path(fileName);
+      foreach (FileInfo file in files) {
+        Path filePath = new Path(file.FullName);
 
         if (WallpaperCategoryFileSynchronizer.IsImageFileExtensionSupported(filePath))
           this.AddIfNotExist(filePath);
@@ -159,7 +164,7 @@ namespace WallpaperManager.Models {
   
       // Remove wallpapers which are in this category but don't exist on the hard disk.
       foreach (IWallpaper wallpaper in this.WallpaperCategory.Wallpapers)
-        if (!filesNames.Contains(wallpaper.ImagePath))
+        if (!filePaths.Contains(wallpaper.ImagePath))
           this.WallpaperCategory.Wallpapers.Remove(wallpaper);
     }
 
@@ -170,12 +175,10 @@ namespace WallpaperManager.Models {
     /// <commondoc select='All/Methods/EventHandlers[@Params="Object,+EventArgs"]/*' />
     private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e) {
       Path filePath = new Path(e.FullPath);
-      if (!WallpaperCategoryFileSynchronizer.IsImageFileExtensionSupported(filePath)) 
+      if (!IsImageFileExtensionSupported(filePath)) 
         return;
       
-      this.InvokeDispatcher.Invoke(() => {
-        this.AddIfNotExist(filePath);
-      }, DispatcherPriority.Background);
+      this.InvokeDispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => this.AddIfNotExist(filePath)));
     }
 
     /// <summary>
@@ -186,11 +189,11 @@ namespace WallpaperManager.Models {
     private void FileSystemWatcher_Deleted(object sender, FileSystemEventArgs e) {
       Path filePath = new Path(e.FullPath);
 
-      this.InvokeDispatcher.Invoke(() => {
+      this.InvokeDispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => {
         IWallpaper existingWallpaper = this.WallpaperCategory.Wallpapers.FirstOrDefault(wp => wp.ImagePath == filePath);
         if (existingWallpaper != null)
           this.WallpaperCategory.Wallpapers.Remove(existingWallpaper);
-      }, DispatcherPriority.Background);
+      }));
     }
 
     /// <summary>
@@ -205,13 +208,13 @@ namespace WallpaperManager.Models {
       Path oldFilePath = new Path(e.OldFullPath);
       Path newFilePath = new Path(e.FullPath);
 
-      this.InvokeDispatcher.Invoke(() => {
+      this.InvokeDispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => {
         IWallpaper existingWallpaper = this.WallpaperCategory.Wallpapers.FirstOrDefault(wp => wp.ImagePath == oldFilePath);
         if (existingWallpaper != null)
           existingWallpaper.ImagePath = newFilePath;
         else
           this.WallpaperCategory.Wallpapers.Add(new Wallpaper(newFilePath));
-      }, DispatcherPriority.Background);
+      }));
     }
 
     private void AddIfNotExist(Path filePath) {
