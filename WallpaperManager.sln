@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Wallpaper Manager.FxCop = Wallpaper Manager.FxCop
 	EndProjectSection
 EndProject
+#Could you please share with me these modules?
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common Library", "..\..\Framework\Common Library\Common Library\Common Library.csproj", "{030C8ED2-1861-416D-AFD9-1A01E8B515BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.IO.Serialization", "..\..\Framework\Common Library\Common.IO.Serialization\Common.IO.Serialization.csproj", "{1D28819B-B35E-4C74-A193-B8B8F79D16B7}"
