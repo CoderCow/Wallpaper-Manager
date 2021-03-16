@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{030C8ED2-1861-416D-AFD9-1A01E8B515BE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Common</RootNamespace>
+    <AssemblyName>Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>False</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>False</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>False</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>False</CodeContractsCacheAnalysisResults>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppArgumentCollection.cs">
+      <DependentUpon>AppEnvironment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AppEnvironment.cs" />
+    <Compile Include="Custom Basic Types\Percentage.cs" />
+    <Compile Include="Diagnostics\DebugHelper.cs" />
+    <Compile Include="Drawing\GraphicsExtensions.cs" />
+    <Compile Include="Drawing\RectangleExtensions.cs" />
+    <Compile Include="EventArgs\ExceptionEventArgs.cs" />
+    <Compile Include="EventArgs\RequestCloseEventArgs.cs" />
+    <Compile Include="ExceptionHelper.cs" />
+    <Compile Include="General Extensions\CharEx.cs" />
+    <Compile Include="General Extensions\CollectionEx.cs" />
+    <Compile Include="General Extensions\DelegateEx.cs" />
+    <Compile Include="General Extensions\DependencyObjectEx.cs" />
+    <Compile Include="General Extensions\MD5Ex.cs" />
+    <Compile Include="General Extensions\NumberEx.cs" />
+    <Compile Include="General Extensions\RandomEx.cs" />
+    <Compile Include="General Extensions\UriEx.cs" />
+    <Compile Include="IAssignable.cs" />
+    <Compile Include="IO\FileInfo.cs" />
+    <Compile Include="IO\FileSystemElementType.cs" />
+    <Compile Include="IO\Path.cs" />
+    <Compile Include="IO\PathException.cs">
+      <DependentUpon>Path.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IO\Serialization\XML\Attributes\XmlItemDefAttribute.cs" />
+    <Compile Include="IO\Serialization\XML\Attributes\XmlItemDefAttributeCollection.cs" />
+    <Compile Include="IO\Serialization\XML\Attributes\XmlNodeAttribute.cs" />
+    <Compile Include="IO\Serialization\XML\Attributes\XmlNodeTypeDefAttribute.cs" />
+    <Compile Include="IO\Serialization\XML\Attributes\XmlRootAttribute.cs" />
+    <Compile Include="IO\Serialization\XML\Attributes\XmlTypeDefAttributeCollection.cs" />
+    <Compile Include="IO\Serialization\XML\Interfaces\IXmlCustomSerialized.cs" />
+    <Compile Include="IO\Serialization\XML\Interfaces\IXmlSerializer.cs" />
+    <Compile Include="IO\Serialization\XML\Interfaces\IXmlSerializerInternal.cs" />
+    <Compile Include="IO\Serialization\XML\Interfaces\IXmlSerializer{T}.cs" />
+    <Compile Include="IO\Serialization\XML\XmlDeserializationProvider.cs" />
+    <Compile Include="IO\Serialization\XML\XmlMemberInfo.cs" />
+    <Compile Include="IO\Serialization\XML\XmlSerializableMember.cs" />
+    <Compile Include="IO\Serialization\XML\XmlSerializableMemberCollection.cs" />
+    <Compile Include="IO\Serialization\XML\XmlSerializationException.cs" />
+    <Compile Include="IO\Serialization\XML\XmlSerializationProvider.cs" />
+    <Compile Include="IO\Serialization\XML\XmlSerializationProviderBase.cs" />
+    <Compile Include="IO\Serialization\XML\XmlSerializationSettings.cs" />
+    <Compile Include="IO\Serialization\XML\XmlSerializer.cs" />
+    <Compile Include="IO\XmlUtil.cs" />
+    <Compile Include="ObjectModel\CollectionSynchronizer.cs" />
+    <Compile Include="ObjectModel\Collections\IKeyedItem.cs" />
+    <Compile Include="ObjectModel\Collections\INamedAttribute.cs" />
+    <Compile Include="ObjectModel\Collections\KeyedCollection.cs" />
+    <Compile Include="ObjectModel\Collections\NamedAttributeCollection.cs" />
+    <Compile Include="ObjectModel\Collections\ReadOnlyKeyedCollection.cs" />
+    <Compile Include="ObjectModel\LightBoundProperty.cs" />
+    <Compile Include="ObjectModel\LightPropertyBinding.BoundPropertyData.cs">
+      <DependentUpon>LightPropertyBinding.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ObjectModel\LightPropertyBinding.cs" />
+    <Compile Include="ObjectModel\LightPropertyBindingManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\Cryptography\CRC32.cs" />
+    <Compile Include="SmartWeakEvent.cs" />
+    <Compile Include="Test\FileAssert.cs" />
+    <Compile Include="Text\CommandParser.cs" />
+    <Compile Include="Text\CommandParseSettings.cs" />
+    <Compile Include="Text\StringGenerator.cs" />
+    <Compile Include="Text\StringlistParser.cs" />
+    <Compile Include="Text\StringlistParseSettings.cs" />
+    <Compile Include="Validation\ValidationException.cs" />
+    <Compile Include="Windows\Autostart.cs" />
+    <Compile Include="Windows\AutostartEntryCollection.cs" />
+    <Compile Include="Windows\AutostartEntryCollection.Enumerator.cs">
+      <DependentUpon>AutostartEntryCollection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Desktop.cs" />
+    <Compile Include="Windows\WallpaperArrangement.cs" />
+    <Compile Include="Windows\WinAPI.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Validation\Enumerations\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
