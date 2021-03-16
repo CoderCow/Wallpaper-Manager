@@ -594,8 +594,8 @@ namespace WallpaperManager.ViewModels {
     ///   </summary>
     /// </overloads>
     public ConfigWallpaperVM(GeneralConfig generalConfiguration, ICollection<Wallpaper> wallpapers, bool parentIsSynchronizedCategory) {
-      Contract.Requires<ArgumentOutOfRangeException>(wallpapers.Count > 0);
-      Contract.Requires<ArgumentException>(!wallpapers.Contains(null));
+      if (wallpapers.Count == 0) throw new ArgumentOutOfRangeException();
+      if (wallpapers.Contains(null)) throw new ArgumentException();
 
       this.GeneralConfiguration = generalConfiguration;
       this.ConfigurationMode = ConfigWallpaperMode.ConfigureWallpapers;
@@ -631,7 +631,7 @@ namespace WallpaperManager.ViewModels {
     /// </exception>
     /// <seealso cref="WallpaperDefaultSettings">WallpaperDefaultSettings Class</seealso>
     public ConfigWallpaperVM(WallpaperDefaultSettings wallpaperDefaultSettings) {
-      Contract.Requires<ArgumentNullException>(wallpaperDefaultSettings != null);
+      if (wallpaperDefaultSettings == null) throw new ArgumentNullException();
 
       this.ConfigurationMode = ConfigWallpaperMode.ConfigureDefaultSettings;
       this.ScreensCycleState = new ObservableCollection<bool?>();
@@ -659,7 +659,7 @@ namespace WallpaperManager.ViewModels {
     /// </exception>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
     public ConfigWallpaperVM(Wallpaper staticWallpaper) {
-      Contract.Requires<ArgumentNullException>(staticWallpaper != null);
+      if (staticWallpaper == null) throw new ArgumentNullException();
 
       this.ConfigurationMode = ConfigWallpaperMode.ConfigureStaticWallpaper;
       this.ScreensCycleState = new ObservableCollection<bool?>();
@@ -846,7 +846,7 @@ namespace WallpaperManager.ViewModels {
     ///   The <see cref="WallpaperSettingsBase">wallpaper base settings</see> where the current settings should be assigned to.
     /// </param>
     private void ToWallpaperSettings(WallpaperSettingsBase baseSettings) {
-      Contract.Requires<ArgumentNullException>(baseSettings != null);
+      if (baseSettings == null) throw new ArgumentNullException();
 
       Wallpaper wallpaperSettings = (baseSettings as Wallpaper);
       WallpaperDefaultSettings wallpaperDefaultSettings = (baseSettings as WallpaperDefaultSettings);
@@ -978,14 +978,14 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="RequestClose">RequestClose Event</seealso>
     /// <seealso cref="RequestCloseEventArgs">RequestCloseEventArgs Class</seealso>
     protected virtual void OnRequestClose(RequestCloseEventArgs e) {
-      Contract.Requires<ArgumentNullException>(e != null);
+      if (e == null) throw new ArgumentNullException();
 
       this.RequestClose?.Invoke(this, e);
     }
 
     /// <commondoc select='ViewModels/Methods/OnUnhandledCommandException/*' />
     protected virtual void OnUnhandledCommandException(CommandExceptionEventArgs e) {
-      Contract.Requires<ArgumentNullException>(e != null);
+      if (e == null) throw new ArgumentNullException();
 
       this.UnhandledCommandException?.ReverseInvoke(this, e);
     }

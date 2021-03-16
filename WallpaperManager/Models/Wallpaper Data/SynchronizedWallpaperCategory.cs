@@ -106,7 +106,7 @@ namespace WallpaperManager.Models {
     [PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust")]
     [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")]
     public SynchronizedWallpaperCategory(string name, Path synchronizedDirectoryPath, IEnumerable<Wallpaper> wallpapers) : base(name) {
-      Contract.Requires<DirectoryNotFoundException>(Directory.Exists(synchronizedDirectoryPath));
+      if (!Directory.Exists(synchronizedDirectoryPath)) throw new DirectoryNotFoundException();
 
       if (wallpapers != null) {
         foreach (Wallpaper wallpaper in wallpapers)
@@ -159,7 +159,7 @@ namespace WallpaperManager.Models {
     /// </summary>
     /// <commondoc select='IDisposable/Methods/All/*' />
     public void Resynchronize() {
-      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
+      if (this.IsDisposed) throw new ObjectDisposedException("this");
 
       string[] existingFiles = Directory.GetFiles(this.SynchronizedDirectoryPath);
 
@@ -243,7 +243,7 @@ namespace WallpaperManager.Models {
     ///   <paramref name="filePath" /> is <c>null</c>.
     /// </exception>
     private static bool IsImageFileExtensionSupported(Path filePath) {
-      Contract.Requires<ArgumentException>(filePath != Path.None);
+      if (filePath == Path.None) throw new ArgumentException();
 
       string fileNameString = filePath.FileName;
       if (!fileNameString.Contains('.'))
@@ -272,7 +272,7 @@ namespace WallpaperManager.Models {
     ///   <paramref name="imagePath" /> is <c>null</c>.
     /// </exception>
     private void AddAsync(Path imagePath) {
-      Contract.Requires<ArgumentException>(imagePath != Path.None);
+      if (imagePath == Path.None) throw new ArgumentException();
 
       BackgroundWorker worker = new BackgroundWorker();
       worker.DoWork += (sender, e) => {

@@ -460,8 +460,8 @@ namespace WallpaperManager.Models {
     ///   <paramref name="other" /> is not castable to the <see cref="WallpaperTextOverlay" /> type.
     /// </exception>
     public virtual void AssignTo(object other) {
-      Contract.Requires<ArgumentNullException>(other != null);
-      Contract.Requires<ArgumentException>(other is WallpaperTextOverlay);
+      if (other == null) throw new ArgumentNullException();
+      if (!(other is WallpaperTextOverlay)) throw new ArgumentException();
 
       WallpaperTextOverlay otherInstance = (WallpaperTextOverlay)other;
       otherInstance.Format = this.Format;

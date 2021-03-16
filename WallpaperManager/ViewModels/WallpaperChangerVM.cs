@@ -96,7 +96,7 @@ namespace WallpaperManager.ViewModels {
 
     /// <commondoc select='ViewModels/Methods/OnUnhandledCommandException/*' />
     protected virtual void OnUnhandledCommandException(CommandExceptionEventArgs e) {
-      Contract.Requires<ArgumentNullException>(e != null);
+      if (e == null) throw new ArgumentNullException();
 
       this.UnhandledCommandException?.ReverseInvoke(this, e);
     }

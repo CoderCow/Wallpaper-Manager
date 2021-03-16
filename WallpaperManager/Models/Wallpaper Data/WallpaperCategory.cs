@@ -120,7 +120,7 @@ namespace WallpaperManager.Models {
         return this.isActivated;
       }
       set {
-        Contract.Requires<ArgumentNullException>(value != null);
+        if (value == null) throw new ArgumentNullException();
 
         foreach (Wallpaper wallpaper in this.Items)
           wallpaper.IsActivated = value.Value;
@@ -153,8 +153,8 @@ namespace WallpaperManager.Models {
     public string Name {
       get { return this.name; }
       set {
-        Contract.Requires<ArgumentOutOfRangeException>(value.Length.IsBetween(WallpaperCategory.Name_MinLength, WallpaperCategory.Name_MaxLength));
-        Contract.Requires<ArgumentException>(!WallpaperCategory.Name_InvalidChars.Any(value.Contains));
+        if (!value.Length.IsBetween(WallpaperCategory.Name_MinLength, WallpaperCategory.Name_MaxLength)) throw new ArgumentOutOfRangeException();
+        if (WallpaperCategory.Name_InvalidChars.Any(value.Contains)) throw new ArgumentException();
 
         this.name = value;
         this.OnPropertyChanged("Name");
@@ -206,8 +206,8 @@ namespace WallpaperManager.Models {
     ///   <seealso cref="Wallpaper">Wallpaper Class</seealso>
     /// </overloads>
     public WallpaperCategory(string name, IEnumerable<Wallpaper> wallpapers = null) {
-      Contract.Requires<ArgumentOutOfRangeException>(name.Length.IsBetween(WallpaperCategory.Name_MinLength, WallpaperCategory.Name_MaxLength));
-      Contract.Requires<ArgumentException>(!WallpaperCategory.Name_InvalidChars.Any(name.Contains));
+      if (!name.Length.IsBetween(WallpaperCategory.Name_MinLength, WallpaperCategory.Name_MaxLength)) throw new ArgumentOutOfRangeException();
+      if (WallpaperCategory.Name_InvalidChars.Any(name.Contains)) throw new ArgumentException();
 
       this.name = name;
       if (wallpapers != null) {
@@ -283,7 +283,7 @@ namespace WallpaperManager.Models {
     /// <inheritdoc />
     protected override void InsertItem(int index, Wallpaper item) {
       // TODO: Throwing this exception is not allowed here.
-      Contract.Requires<ArgumentNullException>(item != null);
+      if (item == null) throw new ArgumentNullException();
 
       if (item.IsBlank) {
         this.WallpaperDefaultSettings.AssignTo(item);
@@ -300,7 +300,7 @@ namespace WallpaperManager.Models {
     /// <inheritdoc />
     protected override void SetItem(int index, Wallpaper item) {
       // TODO: Throwing this exception is not allowed here.
-      Contract.Requires<ArgumentNullException>(item != null);
+      if (item == null) throw new ArgumentNullException();
 
       Wallpaper oldItem = this.TryGetItem(index);
 

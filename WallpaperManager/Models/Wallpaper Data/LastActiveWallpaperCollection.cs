@@ -83,7 +83,7 @@ namespace WallpaperManager.Models {
     /// </exception>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
     public void AddRange(IEnumerable<Wallpaper> range) {
-      Contract.Requires<ArgumentNullException>(range != null);
+      if (range == null) throw new ArgumentNullException();
 
       foreach (Wallpaper wallpaper in range)
         this.Add(wallpaper);
@@ -95,7 +95,7 @@ namespace WallpaperManager.Models {
     /// </exception>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
     protected override void InsertItem(int index, Wallpaper item) {
-      Contract.Requires<ArgumentOutOfRangeException>(index == this.Count);
+      if (index != this.Count) throw new ArgumentOutOfRangeException();
 
       if (this.Count == this.MaximumSize) {
         // Pull items up.

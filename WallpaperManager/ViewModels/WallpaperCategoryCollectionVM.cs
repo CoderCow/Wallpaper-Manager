@@ -182,7 +182,7 @@ namespace WallpaperManager.ViewModels {
 
     /// <commondoc select='ViewModels/Methods/OnUnhandledCommandException/*' />
     protected virtual void OnUnhandledCommandException(CommandExceptionEventArgs e) {
-      Contract.Requires<ArgumentNullException>(e != null);
+      if (e == null) throw new ArgumentNullException();
 
       this.UnhandledCommandException?.ReverseInvoke(this, e);
     }
@@ -193,7 +193,7 @@ namespace WallpaperManager.ViewModels {
     /// </exception>
     protected override void InsertItem(int index, WallpaperCategoryVM item) {
       // TODO: Throwing this exception is not allowed here.
-      Contract.Requires<ArgumentNullException>(item != null);
+      if (item == null) throw new ArgumentNullException();
 
       // If we change the Category internally we don't have to observe our own changes.
       this.handleCategoriesCollectionChanged = false;
@@ -211,7 +211,7 @@ namespace WallpaperManager.ViewModels {
     /// <inheritdoc />
     protected override void SetItem(int index, WallpaperCategoryVM item) {
       // TODO: Throwing this exception is not allowed here.
-      Contract.Requires<ArgumentNullException>(item != null);
+      if (item == null) throw new ArgumentNullException();
 
       // If we change the Category internally we don't have to observe our own changes.
       this.handleCategoriesCollectionChanged = false;
@@ -352,7 +352,7 @@ namespace WallpaperManager.ViewModels {
     /// </exception>
     /// <seealso cref="AddCategoryCommand" />
     protected void AddCategoryCommand_Execute(WallpaperCategory wallpaperCategory) {
-      Contract.Requires<ArgumentNullException>(wallpaperCategory != null);
+      if (wallpaperCategory == null) throw new ArgumentNullException();
 
       try {
         this.Add(this.RequestWallpaperCategoryVM(wallpaperCategory));

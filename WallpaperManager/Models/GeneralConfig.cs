@@ -390,8 +390,8 @@ namespace WallpaperManager.Models {
     ///   <paramref name="other" /> is not castable to the <see cref="GeneralConfig" /> type.
     /// </exception>
     public virtual void AssignTo(object other) {
-      Contract.Requires<ArgumentNullException>(other != null);
-      Contract.Requires<ArgumentException>(other is GeneralConfig);
+      if (other == null) throw new ArgumentNullException();
+      if (!(other is GeneralConfig)) throw new ArgumentException();
 
       GeneralConfig otherInstance = (GeneralConfig)other;
       otherInstance.CycleAfterStartup = this.CycleAfterStartup;

@@ -233,15 +233,6 @@ namespace WallpaperManager.Models {
       Contract.Invariant(this.AppliedWallpaperFilePath != Path.None);
     }
 
-    /// <inheritdoc />
-    protected override void DebugWriteAppInfoInternal() {
-      base.DebugWriteAppInfoInternal();
-
-      Debug.WriteLine("Multiscreen system: " + AppEnvironment.IsMultiscreenSystem);
-      Debug.WriteLine("Use default settings defined: " + this.IsUseDefaultSettingsDefined);
-      Debug.WriteLine("No Auto termination defined: " + this.IsNoAutoTerminateDefined);
-    }
-
     /// <summary>
     ///   Gets an <see cref="Icon" /> instance from an embedded icons resource.
     /// </summary>
@@ -262,7 +253,7 @@ namespace WallpaperManager.Models {
     /// </exception>
     /// <inheritdoc cref="Assembly.GetManifestResourceStream(string)" select='exception/*' />
     public static Icon IconFromEmbeddedResource(string resourceName) {
-      Contract.Requires<ArgumentNullException>(resourceName != null);
+      if (resourceName == null) throw new ArgumentNullException();
 
       Assembly thisAssembly = Assembly.GetAssembly(typeof(AppEnvironment));
       Stream iconStream = null;

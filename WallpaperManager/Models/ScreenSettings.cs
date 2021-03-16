@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Windows;
 using System.Windows.Forms;
 using Common;
+using Common.Text;
 
 namespace WallpaperManager.Models {
   /// <summary>
@@ -192,8 +193,8 @@ namespace WallpaperManager.Models {
     ///   <paramref name="other" /> is not castable to the <see cref="ScreenSettings" /> type.
     /// </exception>
     public virtual void AssignTo(object other) {
-      Contract.Requires<ArgumentNullException>(other != null);
-      Contract.Requires<ArgumentException>(other is ScreenSettings);
+      if (other == null) throw new ArgumentNullException();
+      if (!(other is ScreenSettings)) throw new ArgumentException();
 
       ScreenSettings otherInstance = (ScreenSettings)other;
       otherInstance.CycleRandomly = this.CycleRandomly;

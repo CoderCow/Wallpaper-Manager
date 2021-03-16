@@ -103,7 +103,7 @@ namespace WallpaperManager.Models {
     /// </exception>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
     public Image CreateMultiscreenFromSingle(Wallpaper multiscreenWallpaper, float scaleFactor, bool useWindowsFix) {
-      Contract.Requires<ArgumentNullException>(multiscreenWallpaper != null);
+      if (multiscreenWallpaper == null) throw new ArgumentNullException();
 
       Rectangle fullScreenBounds = WallpaperBuilderBase.FullScreenBounds;
       Bitmap wallpaperImage = new Bitmap((int)(fullScreenBounds.Width * scaleFactor), (int)(fullScreenBounds.Height * scaleFactor));
@@ -240,9 +240,9 @@ namespace WallpaperManager.Models {
     ///   The image file where on of the <see cref="Wallpaper" /> objects refers to could not be found.
     /// </exception>
     protected Image CreateMultiscreenFromMultipleInternal(IList<Wallpaper> wallpapers, float scaleFactor, bool useWindowsFix) {
-      Contract.Requires<ArgumentNullException>(wallpapers != null);
-      Contract.Requires<ArgumentException>(wallpapers.Count > 0);
-      Contract.Requires<ArgumentException>(!wallpapers.Contains(null));
+      if (wallpapers == null) throw new ArgumentNullException();
+      if (wallpapers.Count == 0) throw new ArgumentException();
+      if (wallpapers.Contains(null)) throw new ArgumentException();
 
       Rectangle fullScreenBounds = WallpaperBuilderBase.FullScreenBounds;
       int screenCount = Screen.AllScreens.Length;
@@ -330,9 +330,9 @@ namespace WallpaperManager.Models {
     /// <seealso cref="WallpaperPlacement">WallpaperPlacement Enumeration</seealso>
     /// .
     protected static void DrawWallpaper(Graphics destGraphics, Rectangle destScreenRect, Wallpaper wallpaper, WallpaperPlacement placement) {
-      Contract.Requires<ArgumentNullException>(destGraphics != null);
-      Contract.Requires<ArgumentNullException>(wallpaper != null);
-      Contract.Requires<ArgumentException>(Enum.IsDefined(typeof(WallpaperPlacement), placement));
+      if (destGraphics == null) throw new ArgumentNullException();
+      if (wallpaper == null) throw new ArgumentNullException();
+      if (!Enum.IsDefined(typeof(WallpaperPlacement), placement)) throw new ArgumentException();
 
       using (SolidBrush backgroundBrush = new SolidBrush(wallpaper.BackgroundColor))
         destGraphics.FillRectangle(backgroundBrush, destScreenRect);
@@ -515,8 +515,8 @@ namespace WallpaperManager.Models {
     /// <seealso cref="Graphics">Graphics Class</seealso>
     /// <seealso cref="Bitmap">Bitmap Class</seealso>
     protected static void DrawFullWallpaperFixed(Graphics destGraphics, Image wallpaperImage) {
-      Contract.Requires<ArgumentNullException>(destGraphics != null);
-      Contract.Requires<ArgumentNullException>(wallpaperImage != null);
+      if (destGraphics == null) throw new ArgumentNullException();
+      if (wallpaperImage == null) throw new ArgumentNullException();
 
       float scaleFactor = ((float)wallpaperImage.Width / WallpaperBuilderBase.FullScreenBounds.Width);
       Rectangle scaledFullScreenBounds = WallpaperBuilderBase.FullScreenBounds.ScaleFull(scaleFactor);
@@ -581,9 +581,9 @@ namespace WallpaperManager.Models {
     /// <seealso cref="WallpaperTextOverlay">WallpaperTextOverlay Class</seealso>
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
     private static void DrawOverlayTexts(Graphics destGraphics, Rectangle rect, IList<Wallpaper> wallpapers, IList<WallpaperTextOverlay> overlayTexts) {
-      Contract.Requires<ArgumentNullException>(destGraphics != null);
-      Contract.Requires<ArgumentNullException>(wallpapers != null);
-      Contract.Requires<ArgumentNullException>(overlayTexts != null);
+      if (destGraphics == null) throw new ArgumentNullException();
+      if (wallpapers == null) throw new ArgumentNullException();
+      if (overlayTexts == null) throw new ArgumentNullException();
       if (overlayTexts.Count == 0)
         return;
 
@@ -666,9 +666,9 @@ namespace WallpaperManager.Models {
     public WallpaperBuilderBaseContracts(ScreenSettingsCollection screensSettings) : base(screensSettings) {}
 
     public override Image CreateMultiscreenFromMultiple(IList<IList<Wallpaper>> wallpapers, float scaleFactor, bool useWindowsFix) {
-      Contract.Requires<ArgumentNullException>(wallpapers != null);
-      Contract.Requires<ArgumentException>(wallpapers.Count > 0);
-      Contract.Requires<ArgumentException>(!wallpapers.Contains(null));
+      if (wallpapers == null) throw new ArgumentNullException();
+      if (wallpapers.Count == 0) throw new ArgumentException();
+      if (wallpapers.Contains(null)) throw new ArgumentException();
 
       throw new NotImplementedException();
     }

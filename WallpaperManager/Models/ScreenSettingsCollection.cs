@@ -80,7 +80,7 @@ namespace WallpaperManager.Models {
     /// </exception>
     /// <seealso cref="ScreenSettings">ScreenSettings Class</seealso>
     public ScreenSettingsCollection(IList<ScreenSettings> screenSettings) : base(new ScreenSettings[Screen.AllScreens.Length]) {
-      Contract.Requires<ArgumentException>(screenSettings.Count == Screen.AllScreens.Length);
+      if (screenSettings.Count != Screen.AllScreens.Length) throw new ArgumentException();
 
       for (int i = 0; i < Screen.AllScreens.Length; i++)
         this.Items[i] = screenSettings[i];
@@ -109,8 +109,8 @@ namespace WallpaperManager.Models {
     ///   <paramref name="other" /> is not castable to the <see cref="ScreenSettingsCollection" /> type.
     /// </exception>
     public void AssignTo(object other) {
-      Contract.Requires<ArgumentNullException>(other != null);
-      Contract.Requires<ArgumentException>(other is ScreenSettingsCollection);
+      if (other == null) throw new ArgumentNullException();
+      if (!(other is ScreenSettingsCollection)) throw new ArgumentException();
 
       ScreenSettingsCollection otherInstance = (ScreenSettingsCollection)other;
       for (int i = 0; i < this.Count; i++) {

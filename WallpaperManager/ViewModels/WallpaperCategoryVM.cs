@@ -214,8 +214,8 @@ namespace WallpaperManager.ViewModels {
     /// </exception>
     /// <inheritdoc cref="System.IO.File.Copy(string, string)" />
     public virtual void AddSynchronizedImage(Path imagePath, bool overwriteOnExist) {
-      Contract.Requires<ArgumentException>(imagePath != Path.None);
-      Contract.Requires<InvalidOperationException>(this.IsSynchronizedCategory);
+      if (imagePath == Path.None) throw new ArgumentException();
+      if (!this.IsSynchronizedCategory) throw new InvalidOperationException();
 
       SynchronizedWallpaperCategory synchronizedCategory = (this.Category as SynchronizedWallpaperCategory);
       if (synchronizedCategory != null)
@@ -224,7 +224,7 @@ namespace WallpaperManager.ViewModels {
 
     /// <commondoc select='ViewModels/Methods/OnUnhandledCommandException/*' />
     protected virtual void OnUnhandledCommandException(CommandExceptionEventArgs e) {
-      Contract.Requires<ArgumentNullException>(e != null);
+      if (e == null) throw new ArgumentNullException();
 
       this.UnhandledCommandException?.ReverseInvoke(this, e);
     }
@@ -241,7 +241,7 @@ namespace WallpaperManager.ViewModels {
     /// <inheritdoc />
     protected override void InsertItem(int index, WallpaperVM item) {
       // TODO: Throwing this exception is not allowed here.
-      Contract.Requires<ArgumentNullException>(item != null);
+      if (item == null) throw new ArgumentNullException();
 
       // If we change the Category internally we don't have to observe our own changes.
       this.handleCategoryCollectionChanged = false;
@@ -257,7 +257,7 @@ namespace WallpaperManager.ViewModels {
     /// <inheritdoc />
     protected override void SetItem(int index, WallpaperVM item) {
       // TODO: Throwing this exception is not allowed here.
-      Contract.Requires<ArgumentNullException>(item != null);
+      if (item == null) throw new ArgumentNullException();
 
       // If we change the Category internally we don't have to observe our own changes.
       this.handleCategoryCollectionChanged = false;

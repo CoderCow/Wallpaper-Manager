@@ -490,7 +490,7 @@ namespace WallpaperManager.Views {
     ///   <paramref name="filePath" /> is <c>Path.None</c>.
     /// </exception>
     private void AddWallpaper(Path filePath) {
-      Contract.Requires<ArgumentException>(filePath != Path.None);
+      if (filePath == Path.None) throw new ArgumentException();
 
       if (this.ApplicationVM.WallpaperCategoryCollectionVM.SelectedCategoryVM.IsSynchronizedCategory) {
         bool doOverwrite = false;

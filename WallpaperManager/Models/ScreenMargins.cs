@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
 using Common;
+using Common.Text;
 
 namespace WallpaperManager.Models {
   /// <summary>
@@ -116,8 +117,8 @@ namespace WallpaperManager.Models {
     ///   <paramref name="other" /> is not castable to the <see cref="ScreenMargins" /> type.
     /// </exception>
     public void AssignTo(object other) {
-      Contract.Requires<ArgumentNullException>(other != null);
-      Contract.Requires<ArgumentException>(other is ScreenMargins);
+      if (other == null) throw new ArgumentNullException();
+      if (!(other is ScreenMargins)) throw new ArgumentException();
 
       ScreenMargins otherInstance = (ScreenMargins)other;
       otherInstance.Left = this.Left;

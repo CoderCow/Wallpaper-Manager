@@ -233,7 +233,7 @@ namespace WallpaperManager.Models {
     ///   <paramref name="other" /> is <c>null</c>.
     /// </exception>
     protected override void AssignTo(WallpaperSettingsBase other) {
-      Contract.Requires<ArgumentNullException>(other != null);
+      if (other == null) throw new ArgumentNullException();
 
       // Assign all members defined by WallpaperSettingsBase.
       base.AssignTo(other);

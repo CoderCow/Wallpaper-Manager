@@ -22,7 +22,7 @@ namespace WallpaperManager.Views {
 
     /// <inheritdoc />
     public LocalizedStringExtension(string entryName) : base(entryName) {
-      Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(entryName));
+      if (string.IsNullOrWhiteSpace(entryName)) throw new ArgumentNullException();
 
       this.Context = LocalizationManager.DefaultContext;
     }

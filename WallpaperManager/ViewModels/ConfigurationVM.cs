@@ -158,14 +158,14 @@ namespace WallpaperManager.ViewModels {
     /// <seealso cref="RequestClose">RequestClose Event</seealso>
     /// <seealso cref="RequestCloseEventArgs">RequestCloseEventArgs Class</seealso>
     protected virtual void OnRequestClose(RequestCloseEventArgs e) {
-      Contract.Requires<ArgumentNullException>(e != null);
+      if (e == null) throw new ArgumentNullException();
 
       this.RequestClose?.Invoke(this, e);
     }
 
     /// <commondoc select='ViewModels/Methods/OnUnhandledCommandException/*' />
     protected virtual void OnUnhandledCommandException(CommandExceptionEventArgs e) {
-      Contract.Requires<ArgumentNullException>(e != null);
+      if (e == null) throw new ArgumentNullException();
 
       this.UnhandledCommandException?.ReverseInvoke(this, e);
     }

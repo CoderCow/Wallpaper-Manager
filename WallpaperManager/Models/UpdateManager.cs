@@ -204,7 +204,7 @@ namespace WallpaperManager.Models {
     [PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust")]
     [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")]
     public void ApplyUpdate() {
-      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
+      if (this.IsDisposed) throw new ObjectDisposedException("this");
 
       Path setupPath = Path.Concat(this.Environment.SystemTempPath, UpdateManager.Update_SetupDestFileName);
       if (!File.Exists(setupPath))
@@ -297,8 +297,8 @@ namespace WallpaperManager.Models {
     /// <seealso cref="IsVersionChecking">IsVersionChecking Property</seealso>
     /// <seealso cref="AbortVersionCheck">AbortVersionCheck Method</seealso>
     public void BeginVersionCheck() {
-      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
-      Contract.Requires<InvalidOperationException>(!this.IsVersionChecking);
+      if (this.IsDisposed) throw new ObjectDisposedException("this");
+      if (this.IsVersionChecking) throw new InvalidOperationException();
 
       this.currentVersionCheckWorker = new BackgroundWorker();
       this.currentVersionCheckWorker.WorkerSupportsCancellation = true;
@@ -404,8 +404,8 @@ namespace WallpaperManager.Models {
     /// <commondoc select='IDisposable/Methods/All/*' />
     /// <seealso cref="IsVersionChecking">IsVersionChecking Property</seealso>
     public void AbortVersionCheck() {
-      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
-      Contract.Requires<InvalidOperationException>(this.IsVersionChecking);
+      if (this.IsDisposed) throw new ObjectDisposedException("this");
+      if (!this.IsVersionChecking) throw new InvalidOperationException();
 
       this.currentVersionCheckWorker.CancelAsync();
       this.currentVersionCheckWorker.Dispose();
@@ -450,7 +450,7 @@ namespace WallpaperManager.Models {
     /// <seealso cref="IsDownloadingUpdate">IsDownloadingUpdate Property</seealso>
     /// <seealso cref="AbortDownloadUpdate">AbortDownloadUpdate Method</seealso>
     public void BeginDownloadUpdate() {
-      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
+      if (this.IsDisposed) throw new ObjectDisposedException("this");
       if (UpdateManager.currentUpdateDownloadWebClient != null)
         return;
 
@@ -504,7 +504,7 @@ namespace WallpaperManager.Models {
     /// <commondoc select='IDisposable/Methods/All/*' />
     /// <seealso cref="IsDownloadingUpdate">IsDownloadingUpdate Property</seealso>
     public void AbortDownloadUpdate() {
-      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
+      if (this.IsDisposed) throw new ObjectDisposedException("this");
       if ((!UpdateManager.IsDownloadingUpdate) && (UpdateManager.currentUpdateDownloadCaller == this))
         return;
 
@@ -519,7 +519,7 @@ namespace WallpaperManager.Models {
     /// </summary>
     /// <commondoc select='All/Methods/EventRaisers[@Params="ExceptionEventArgs"]/*' params='EventName=DownloadUpdateError' />
     protected virtual void OnDownloadUpdateError(ExceptionEventArgs e) {
-      Contract.Requires<ArgumentNullException>(e != null);
+      if (e == null) throw new ArgumentNullException();
 
       this.DownloadUpdateError?.Invoke(this, e);
     }
@@ -540,7 +540,7 @@ namespace WallpaperManager.Models {
     /// </summary>
     /// <commondoc select='All/Methods/EventRaisers[@Params="+EventArgs"]/*' params='EventName=VersionCheckSuccessful' />
     protected virtual void OnVersionCheckSuccessful(VersionCheckSuccessfulEventArgs e) {
-      Contract.Requires<ArgumentNullException>(e != null);
+      if (e == null) throw new ArgumentNullException();
 
       this.VersionCheckSuccessful?.Invoke(this, e);
     }
@@ -550,7 +550,7 @@ namespace WallpaperManager.Models {
     /// </summary>
     /// <commondoc select='All/Methods/EventRaisers[@Params="ExceptionEventArgs"]/*' params='EventName=VersionCheckError' />
     protected virtual void OnVersionCheckError(ExceptionEventArgs e) {
-      Contract.Requires<ArgumentNullException>(e != null);
+      if (e == null) throw new ArgumentNullException();
 
       this.VersionCheckError?.Invoke(this, e);
     }

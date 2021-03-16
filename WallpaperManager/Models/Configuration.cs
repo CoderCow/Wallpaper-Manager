@@ -114,8 +114,8 @@ namespace WallpaperManager.Models {
     /// </overloads>
     /// <seealso cref="Stream">Stream Class</seealso>
     public static Configuration Read(Stream sourceStream) {
-      Contract.Requires<ArgumentNullException>(sourceStream != null);
-      Contract.Requires<IOException>(sourceStream.CanRead);
+      if (sourceStream == null) throw new ArgumentNullException();
+      if (!sourceStream.CanRead) throw new IOException();
 
       XmlDocument document = new XmlDocument();
       document.Load(sourceStream);
@@ -379,7 +379,7 @@ namespace WallpaperManager.Models {
     /// <inheritdoc cref="Read(Stream)" select='returns' />
     /// <seealso cref="Path">Path Class</seealso>
     public static Configuration Read(Path filePath) {
-      Contract.Requires<ArgumentException>(filePath != Path.None);
+      if (filePath == Path.None) throw new ArgumentException();
 
       using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
         return Configuration.Read(fileStream);
@@ -405,8 +405,8 @@ namespace WallpaperManager.Models {
     ///   The XML Data are invalid.
     /// </exception>
     protected static WallpaperSettingsBase GetWallpaperDataFromXmlElement(XmlElement element, Type wallpaperSettingsType) {
-      Contract.Requires<ArgumentNullException>(element != null);
-      Contract.Requires<ArgumentNullException>(wallpaperSettingsType != null);
+      if (element == null) throw new ArgumentNullException();
+      if (wallpaperSettingsType == null) throw new ArgumentNullException();
 
       WallpaperSettingsBase settings = null;
       WallpaperDefaultSettings defaultSettings = null;
@@ -530,8 +530,8 @@ namespace WallpaperManager.Models {
     /// </exception>
     /// <seealso cref="Path">Path Class</seealso>
     public void Write(Stream destStream) {
-      Contract.Requires<ArgumentNullException>(destStream != null);
-      Contract.Requires<IOException>(destStream.CanWrite);
+      if (destStream == null) throw new ArgumentNullException();
+      if (!destStream.CanWrite) throw new IOException();
 
       XmlDocument document = new XmlDocument();
       XmlDeclaration declaration = document.CreateXmlDeclaration("1.0", "utf-8", null);
@@ -742,7 +742,7 @@ namespace WallpaperManager.Models {
     /// <inheritdoc cref="Write(Stream)" select='exception[@cref="IOException"]|exception[@cref="InvalidOperationException"]' />
     /// <seealso cref="Path">Path Class</seealso>
     public void Write(Path filePath) {
-      Contract.Requires<ArgumentException>(filePath != Path.None);
+      if (filePath == Path.None) throw new ArgumentException();
 
       using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
         this.Write(fileStream);
@@ -765,9 +765,9 @@ namespace WallpaperManager.Models {
     ///   <c>null</c>.
     /// </exception>
     protected static void AddWallpaperDataToXmlElement(XmlDocument document, XmlElement element, WallpaperSettingsBase wallpaperBaseSettings) {
-      Contract.Requires<ArgumentNullException>(document != null);
-      Contract.Requires<ArgumentNullException>(element != null);
-      Contract.Requires<ArgumentNullException>(wallpaperBaseSettings != null);
+      if (document == null) throw new ArgumentNullException();
+      if (element == null) throw new ArgumentNullException();
+      if (wallpaperBaseSettings == null) throw new ArgumentNullException();
 
       Wallpaper wallpaperSettings = (wallpaperBaseSettings as Wallpaper);
       WallpaperDefaultSettings defaultSettings = (wallpaperBaseSettings as WallpaperDefaultSettings);

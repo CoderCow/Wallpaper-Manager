@@ -201,7 +201,6 @@ namespace WallpaperManager.Views {
         Application.Current.Environment = new AppEnvironment();
         Debug.Listeners.Add(new TextWriterTraceListener(Application.Current.Environment.DebugFilePath));
         Debug.WriteLine("Listeners registered.");
-        Application.Current.Environment.DebugWriteAppInfo();
 
         Application.Current.InitializeComponent();
         Application.Current.Run();
@@ -411,7 +410,7 @@ namespace WallpaperManager.Views {
     /// <commondoc select='IDisposable/Methods/All/*' />
     /// <seealso cref="Configuration">Configuration Class</seealso>
     protected void WriteConfigFile() {
-      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
+      if (this.IsDisposed) throw new ObjectDisposedException("this");
 
       try {
         // Note: If the directory already exists this method will simply do nothing.
@@ -582,7 +581,7 @@ namespace WallpaperManager.Views {
     /// <seealso cref="WallpaperCategory">WallpaperCategory Class</seealso>
     /// <seealso cref="WallpaperCategoryVM">WallpaperCategoryVM Class</seealso>
     private WallpaperCategoryVM WallpaperCategoryCollectionVM_RequestWallpaperCategoryVM(WallpaperCategory category) {
-      Contract.Requires<ArgumentNullException>(category != null);
+      if (category == null) throw new ArgumentNullException();
 
       // Provide the View Model with a new WallpaperCategoryVM object.
       return new WallpaperCategoryVM(
@@ -604,7 +603,7 @@ namespace WallpaperManager.Views {
     /// </exception>
     /// <seealso cref="WallpaperCategoryVM">WallpaperCategoryVM Class</seealso>
     private void WallpaperCategoryVM_RequestConfigureSelected(WallpaperCategoryVM categoryVM) {
-      Contract.Requires<ArgumentNullException>(categoryVM != null);
+      if (categoryVM == null) throw new ArgumentNullException();
 
       var wallpapersToConfigure = new Wallpaper[categoryVM.SelectedWallpaperVMs.Count];
       for (int i = 0; i < categoryVM.SelectedWallpaperVMs.Count; i++)
@@ -640,7 +639,7 @@ namespace WallpaperManager.Views {
     /// </exception>
     /// <seealso cref="WallpaperCategoryVM">WallpaperCategoryVM Class</seealso>
     private void WallpaperCategoryVM_RequestConfigureDefaultSettings(WallpaperCategoryVM categoryVM) {
-      Contract.Requires<ArgumentNullException>(categoryVM != null);
+      if (categoryVM == null) throw new ArgumentNullException();
 
       ConfigWallpaperVM configWallpaperVM = new ConfigWallpaperVM(categoryVM.Category.WallpaperDefaultSettings);
       configWallpaperVM.UnhandledCommandException += this.ConfigWallpaperVM_UnhandledCommandException;
@@ -848,7 +847,7 @@ namespace WallpaperManager.Views {
     ///   <paramref name="exception" /> is <c>null</c>
     /// </exception>
     protected bool HandleCycleException(Exception exception, bool occurredWhenAutocycling = false) {
-      Contract.Requires<ArgumentNullException>(exception != null);
+      if (exception == null) throw new ArgumentNullException();
 
       if (exception is InvalidOperationException) {
         if ((occurredWhenAutocycling) && (this.WallpaperChanger.IsAutocycling)) {

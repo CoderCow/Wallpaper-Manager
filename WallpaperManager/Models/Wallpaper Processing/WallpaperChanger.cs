@@ -393,9 +393,9 @@ namespace WallpaperManager.Models {
     ///   <see cref="FileIOPermissionAccess.Write" />.
     /// </permission>
     protected void BuildAndApplyWallpaper(IList<IList<Wallpaper>> wallpapersToUse, bool applyMultiple) {
-      Contract.Requires<ArgumentNullException>(wallpapersToUse != null);
-      Contract.Requires<ArgumentException>(wallpapersToUse.Count > 0);
-      Contract.Requires<ArgumentException>(!wallpapersToUse.Contains(null));
+      if (wallpapersToUse == null) throw new ArgumentNullException();
+      if (wallpapersToUse.Count == 0) throw new ArgumentException();
+      if (wallpapersToUse.Contains(null)) throw new ArgumentException();
 
       // Is there already an asynchronous build in progress?
       if ((WallpaperChanger.buildWallpaperWorker != null) && (WallpaperChanger.buildWallpaperWorker.IsBusy))
@@ -495,7 +495,7 @@ namespace WallpaperManager.Models {
     /// </summary>
     /// <commondoc select='IDisposable/Methods/All/*' />
     public void StartCycling() {
-      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
+      if (this.IsDisposed) throw new ObjectDisposedException("this");
 
       if (this.IsAutocycling)
         return;
@@ -510,7 +510,7 @@ namespace WallpaperManager.Models {
     /// </summary>
     /// <commondoc select='IDisposable/Methods/All/*' />
     public void StopCycling() {
-      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
+      if (this.IsDisposed) throw new ObjectDisposedException("this");
 
       if (!this.IsAutocycling)
         return;
@@ -524,7 +524,7 @@ namespace WallpaperManager.Models {
     /// </summary>
     /// <commondoc select='IDisposable/Methods/All/*' />
     public void ResetAutocycling() {
-      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
+      if (this.IsDisposed) throw new ObjectDisposedException("this");
 
       if (this.AutocycleTimer.IsEnabled) {
         this.AutocycleTimer.Stop();
@@ -652,7 +652,7 @@ namespace WallpaperManager.Models {
     ///   <seealso cref="Wallpaper">Wallpaper Class</seealso>
     /// </overloads>
     public void CycleNextRandomly(IList<Wallpaper> wallpapersToPickFrom) {
-      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
+      if (this.IsDisposed) throw new ObjectDisposedException("this");
 
       Debug.WriteLine("-- Starting random wallpaper picking --");
       Debug.Indent();
@@ -961,7 +961,7 @@ namespace WallpaperManager.Models {
     /// <commondoc select='IDisposable/Methods/All/*' />
     /// <seealso cref="Wallpaper">Wallpaper Class</seealso>
     public void CycleNext(IList<Wallpaper> wallpapersToUse) {
-      Contract.Requires<ObjectDisposedException>(!this.IsDisposed);
+      if (this.IsDisposed) throw new ObjectDisposedException("this");
 
       Debug.WriteLine("-- Starting non-random wallpaper picking --");
       Debug.Indent();
@@ -1103,7 +1103,7 @@ namespace WallpaperManager.Models {
     /// <commondoc select='All/Methods/EventRaisers[@Params="ExceptionEventArgs"]/*' params="EventName=AutocycleException" />
     /// <seealso cref="ExceptionEventArgs">ExceptionEventArgs Class</seealso>
     protected virtual void OnAutocycleException(ExceptionEventArgs e) {
-      Contract.Requires<ArgumentNullException>(e != null);
+      if (e == null) throw new ArgumentNullException();
 
       this.AutocycleException?.Invoke(this, e);
     }
@@ -1114,7 +1114,7 @@ namespace WallpaperManager.Models {
     /// </summary>
     /// <commondoc select='All/Methods/EventRaisers[@Params="ExceptionEventArgs"]/*' params="EventName=BuildException" />
     protected virtual void OnBuildException(ExceptionEventArgs e) {
-      Contract.Requires<ArgumentNullException>(e != null);
+      if (e == null) throw new ArgumentNullException();
 
       this.BuildException?.Invoke(this, e);
     }

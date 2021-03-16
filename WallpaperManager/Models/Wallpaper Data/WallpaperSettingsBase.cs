@@ -277,7 +277,7 @@ namespace WallpaperManager.Models {
     ///   <paramref name="instance" /> is <c>null</c>.
     /// </exception>
     protected void Clone(WallpaperSettingsBase instance) {
-      Contract.Requires<ArgumentNullException>(instance != null);
+      if (instance == null) throw new ArgumentNullException();
 
       this.AssignTo(instance);
 
@@ -301,8 +301,8 @@ namespace WallpaperManager.Models {
     ///   <paramref name="other" /> is not castable to <see cref="WallpaperSettingsBase" />.
     /// </exception>
     public void AssignTo(object other) {
-      Contract.Requires<ArgumentNullException>(other != null);
-      Contract.Requires<ArgumentException>(other is WallpaperSettingsBase);
+      if (other == null) throw new ArgumentNullException();
+      if (!(other is WallpaperSettingsBase)) throw new ArgumentException();
 
       WallpaperSettingsBase otherInstance = (WallpaperSettingsBase)other;
       this.AssignTo(otherInstance);
@@ -313,7 +313,7 @@ namespace WallpaperManager.Models {
     ///   <paramref name="other" /> is <c>null</c>.
     /// </exception>
     protected virtual void AssignTo(WallpaperSettingsBase other) {
-      Contract.Requires<ArgumentNullException>(other != null);
+      if (other == null) throw new ArgumentNullException();
 
       other.IsActivated = this.IsActivated;
       other.IsMultiscreen = this.IsMultiscreen;

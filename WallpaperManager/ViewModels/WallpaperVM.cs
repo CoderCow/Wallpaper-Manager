@@ -208,7 +208,7 @@ namespace WallpaperManager.ViewModels {
     ///   <paramref name="source" /> is <c>null</c>.
     /// </exception>
     protected virtual ImageSource GetThumbnailInternal(Image source) {
-      Contract.Requires<ArgumentNullException>(source != null);
+      if (source == null) throw new ArgumentNullException();
 
       ImageSource thumbnail;
 

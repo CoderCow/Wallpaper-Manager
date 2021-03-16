@@ -45,8 +45,8 @@ namespace WallpaperManager.Models {
     ///   The given <paramref name="context" /> is invalid.
     /// </exception>
     public static void RegisterContext(string context, ResourceManager resourceManager) {
-      Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(context));
-      Contract.Requires<ArgumentNullException>(resourceManager != null);
+      if (string.IsNullOrWhiteSpace(context)) throw new ArgumentNullException();
+      if (resourceManager == null) throw new ArgumentNullException();
 
       LocalizationManager.databases.Add(context, resourceManager);
     }
@@ -64,8 +64,8 @@ namespace WallpaperManager.Models {
     ///   The localized string.
     /// </returns>
     public static string GetLocalizedString(string context, string entryName) {
-      Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(context));
-      Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(entryName));
+      if (string.IsNullOrWhiteSpace(context)) throw new ArgumentNullException();
+      if (string.IsNullOrWhiteSpace(entryName)) throw new ArgumentNullException();
 
       ResourceManager resourceManager;
       if (!LocalizationManager.databases.TryGetValue(context, out resourceManager))
@@ -82,7 +82,7 @@ namespace WallpaperManager.Models {
 
     /// <inheritdoc />
     public static string GetLocalizedString(string entryName) {
-      Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(entryName));
+      if (string.IsNullOrWhiteSpace(entryName)) throw new ArgumentNullException();
 
       return LocalizationManager.GetLocalizedString(LocalizationManager.DefaultContext, entryName);
     }

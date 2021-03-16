@@ -94,7 +94,7 @@ namespace WallpaperManager.Models {
     /// <inheritdoc />
     protected override void InsertItem(int index, WallpaperCategory item) {
       // TODO: Throwing this exception is not allowed here.
-      Contract.Requires<ArgumentNullException>(item != null);
+      if (item == null) throw new ArgumentNullException();
 
       base.InsertItem(index, item);
 
@@ -115,7 +115,7 @@ namespace WallpaperManager.Models {
     /// <inheritdoc />
     protected override void SetItem(int index, WallpaperCategory item) {
       // TODO: Throwing this exception is not allowed here.
-      Contract.Requires<ArgumentNullException>(item != null);
+      if (item == null) throw new ArgumentNullException();
 
       WallpaperCategory oldItem = this.TryGetItem(index);
 
